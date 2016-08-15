@@ -20,7 +20,7 @@ import com.youlb.entity.access.CardRecord;
 
 /** 
  * @ClassName: CardrecordCtrl.java 
- * @Description: app开锁记录 dfdfdfd
+ * @Description: app开锁记录
  * @author: Pengjy
  * @date: 2016-3-6
  * 
