@@ -90,7 +90,7 @@ public class WorkerCtrl extends BaseCtrl{
     			return  super.message;
     		}
     		//判断手机号是否已经注册
-    		boolean b = workerBiz.checkPhoneExist(worker.getPhone());
+    		boolean b = workerBiz.checkPhoneExist(worker.getPhone(),worker.getId());
     		if(b){
     			super.message = "该手机号码已经被注册！";
     			return  super.message;

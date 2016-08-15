@@ -27,6 +27,12 @@
                     <input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>
                 </div></td>
               </tr>
+              <tr>
+                  <td><div class="leftFont"><span class="starColor">*</span>APP名称：</div></td>
+                  <td><div>
+                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
+                  </div></td>
+              </tr>
               <c:if test="${appManage.appType == 6}">
                 <c:choose>
                    <c:when test="${appManage.opraterType == 1}">

@@ -20,6 +20,6 @@ public interface IWorkerBiz extends IBaseBiz<Worker> {
 	 * @param phone
 	 * @return
 	 */
-	boolean checkPhoneExist(String phone);
+	boolean checkPhoneExist(String phone,String id);
 
 }

@@ -29,6 +29,12 @@ var phoneAppManageTable ={
             valign: 'middle',
             sortable: false
         },{
+            field: 'appName',
+            title: 'APP名称',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'versionName',
             title: '版本名称',
             align: 'center',

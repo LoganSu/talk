@@ -165,9 +165,15 @@ public class WorkerBizImpl implements IWorkerBiz {
      * @see com.youlb.biz.management.IWorkerBiz#checkPhoneExist(java.lang.String)
      */
 	@Override
-	public boolean checkPhoneExist(String phone) {
+	public boolean checkPhoneExist(String phone,String id) {
 		String hql = "select phone from Worker where phone=? ";
-		List<String> find = workerDao.find(hql, new Object[]{phone});
+		List<Object> values = new ArrayList<Object>();
+	    values.add(phone);
+		if(StringUtils.isNotBlank(id)){
+			hql+= " and id !=?";
+			values.add(id);
+		}
+		List<String> find = workerDao.find(hql, values.toArray());
 		if(find!=null&&!find.isEmpty()){
 			return true;
 		}

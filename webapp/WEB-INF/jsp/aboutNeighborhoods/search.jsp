@@ -18,8 +18,8 @@
             <r:role auth="关于小区/修改">
                 <li><button class="btn btn-warning btn-sm aboutNeighborhoodsSaveOrUpdateBtn">修改</button></li>
             </r:role>
-            <r:role auth="关于小区/发布">
-                <li><button class="btn btn-success btn-sm aboutNeighborhoodsCheckBtn" value="2">发布</button></li>
+            <r:role auth="关于小区/重新发布">
+                <li><button class="btn btn-success btn-sm aboutNeighborhoodsCheckBtn" value="2">重新发布</button></li>
             </r:role>
              <r:role auth="关于小区/审核通过">
                 <li><button class="btn btn-success btn-sm aboutNeighborhoodsCheckBtn" value="3">审核通过</button></li>
