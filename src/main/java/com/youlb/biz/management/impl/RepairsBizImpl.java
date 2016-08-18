@@ -216,6 +216,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 		if(StringUtils.isBlank(repairs.getId())){
 			//封装对象
 			repairs = setRepairs(repairs);
+			repairs.setReminderCount(0);
 			repairsDao.add(repairs);
 		}else{
 			String sql = "select fentityid from t_domain where id =?";

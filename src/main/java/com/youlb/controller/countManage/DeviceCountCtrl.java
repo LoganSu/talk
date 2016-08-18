@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.countManage.IDeviceCountBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.privilege.OperatorCtrl;
 import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.countManage.QRInfo;
 import com.youlb.entity.privilege.Operator;
