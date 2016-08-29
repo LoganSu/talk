@@ -17,7 +17,7 @@ public class RealTimeMonitor extends BaseModel {
 	/**门口机*账号*/
 	@Column(name="fdevicecount")
     private String deviceCount;
-    /**警告类型*/
+    /**警告类9999999999999型*/
 	@Column(name="fwarn_type")
     private String warnType;
     /**状态*/
