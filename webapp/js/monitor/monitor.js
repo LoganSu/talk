@@ -1,6 +1,4 @@
   $(function(){
-	  //设置页面定时刷新
-	  window.setInterval("flushPage()",3000);
 	  //处理告警事件
 	  $(document).on("click",".disposeEvent",function(){
 		  var url =$path+"/mc/realTimeMonitor/toDisposeEvent.do";

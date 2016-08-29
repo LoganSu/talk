@@ -19,6 +19,8 @@
 </body>
 <script type="text/javascript">
   $(function(){
+	    //设置页面定时刷新
+	    var flushPage = window.setInterval("flushPage()",3000);
 		 $("#realTimeMonitorTable").bootstrapTable({
 			    method: 'get',
 		        url: $path+'/mc/realTimeMonitor/showList.do',
