@@ -23,7 +23,6 @@
      <link href="${path}/css/common/peng.css" rel="stylesheet">
      <link href="${path}/css/common/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
-     
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
 <!--         <script type="text/javascript" src="docs/js/bootstrap-3.3.2.min.js"></script> -->
@@ -71,6 +70,7 @@
     <script src="${path}/js/management/management.js" ></script>
     <script src="${path}/js/management/aboutNeighborhoods.js" ></script>
     <script src="${path}/js/guidePage/guidePage.js" ></script>
+    <script src="${path}/js/monitor/monitor.js" ></script>
     
     <!-- table JS -->
 <%--     <script src="${path}/js/table/areaTable.js"></script> --%>
@@ -179,6 +179,24 @@
                    </div>
                </div>
            </r:role>
+           <r:role auth="安防监控">     
+               <div class="panel panel-primary">
+                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEleven">
+                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <a class="accordion-toggle">安防监控</a>
+                   </div>
+                   <div id="collapseEleven" class="panel-collapse collapse" style="height: 0px;">
+                       <div class="panel-body">
+                           <ul class="nav nav-pills nav-stacked">
+                             <r:role auth="实时监控">
+                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do">实时监控</a></li>
+                             </r:role>
+                           </ul>
+                       </div>
+                   </div>
+               </div>
+             </r:role>
 	        <r:role auth="住户管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEight">

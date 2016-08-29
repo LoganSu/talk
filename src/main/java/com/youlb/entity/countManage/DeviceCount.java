@@ -55,6 +55,13 @@ public class DeviceCount extends BaseModel {
 	/**二维码路径*/
 	@Column(name="fqr_path")
 	private String qrPath;
+	/**经度*/
+	@Column(name="flongitude")
+	private Double longitude;
+	/**纬度*/
+	@Column(name="flatitude")
+	private Double latitude;
+	
 	@Transient
 	private String address;
 	@Transient
@@ -97,6 +104,18 @@ public class DeviceCount extends BaseModel {
 		return countStatusStr;
 	}
 	
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
 	public String getQrPath() {
 		return qrPath;
 	}

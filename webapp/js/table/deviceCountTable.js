@@ -53,6 +53,18 @@ var deviceCountTable ={
             valign: 'middle',
             sortable: false
         },{
+            field: 'longitude',
+            title: '经度',
+            align: 'center',
+            valign: 'middle',
+            sortable: false
+        },{
+            field: 'latitude',
+            title: '纬度',
+            align: 'center',
+            valign: 'middle',
+            sortable: false
+        },{
             field: 'endTime',
             title: '部署截止时间',
             align: 'center',

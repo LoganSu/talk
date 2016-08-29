@@ -17,6 +17,12 @@
                     <td><div><input name="deviceCountDesc" class="form-control" maxlength="20" value="${deviceCount.deviceCountDesc}"/></div></td>
               </tr>
               <tr>
+                    <td><div class="firstFont">经度：</div></td>
+                    <td><div><input name="longitude" class="form-control"  value="${deviceCount.longitude}"/></div></td>
+                    <td><div class="leftFont">纬度：</div></td>
+                    <td><div><input name="latitude" class="form-control"  value="${deviceCount.latitude}"/></div></td>
+              </tr>
+              <tr>
 	                <td><div class="firstFont">账号类型：</div></td>
 	                <td><div>
 	                   <select name="countType" class="form-control countType">
