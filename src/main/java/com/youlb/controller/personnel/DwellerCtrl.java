@@ -120,6 +120,13 @@ public class DwellerCtrl extends BaseCtrl {
     				return  super.message;
     			}
     		}
+    		//验证邮箱
+    		if(StringUtils.isNotBlank(dweller.getEmail())){
+    			if(!RegexpUtils.checkEmail(dweller.getEmail())){
+    				super.message = "请填写正确的邮箱";
+    				return  super.message;
+    			}
+    		}
     		 //检查手机号码是否已经被注册
     	    if(StringUtils.isNotBlank(dweller.getPhone())&&StringUtils.isBlank(dweller.getId())){
     	    	boolean b = dwellerBiz.checkPhoneExistWebShow(dweller.getPhone(),dweller.getCarrierId());

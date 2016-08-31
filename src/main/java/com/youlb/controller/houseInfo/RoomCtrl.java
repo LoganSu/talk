@@ -137,6 +137,7 @@ public class RoomCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,Room room,Model model){
     	if(ids!=null&&ids.length>0){
     		room = roomBiz.get(ids[0]);
+    		room.setParentId(domainBiz.getParentIdByEntityId(ids[0]));
     	}
     	
     	model.addAttribute("room",room);

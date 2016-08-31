@@ -61,4 +61,6 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	 */
 	String hasChild(String[] ids);
 
+	String getParentIdByEntityId(String string);
+
 }

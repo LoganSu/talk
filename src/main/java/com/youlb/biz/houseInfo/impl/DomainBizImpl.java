@@ -278,8 +278,15 @@ public class DomainBizImpl implements IDomainBiz {
 	 */
 	@Override
 	public String getDomainByParentId(Room room) {
-		String sql="select d.fremark from t_domain d where d.fparentid=? and d.fremark=?";
-		List<String> list = domainSqlDao.pageFindBySql(sql, new Object[]{room.getParentId(),room.getRoomNum()});
+		String sql="select d.fremark from t_domain d where d.fparentid=? and d.fremark=? ";
+		List<Object> values = new ArrayList<Object>();
+		values.add(room.getParentId());
+		values.add(room.getRoomNum());
+		if(StringUtils.isNotBlank(room.getId())){
+			sql+=" and d.fentityid != ? ";
+			values.add(room.getId());
+		}
+		List<String> list = domainSqlDao.pageFindBySql(sql, values.toArray());
 		if(list!=null&&!list.isEmpty()){
 			return list.get(0);
 		}
@@ -308,6 +315,16 @@ public class DomainBizImpl implements IDomainBiz {
 			}
 		}
 		
+		return null;
+	}
+
+	@Override
+	public String getParentIdByEntityId(String entityid) {
+		String sql="select d.fparentid from t_domain d where d.fentityid=?";
+		List<String> list = domainSqlDao.pageFindBySql(sql, new Object[]{entityid});
+		if(list!=null&&!list.isEmpty()){
+			return list.get(0);
+		}
 		return null;
 	}
 }
