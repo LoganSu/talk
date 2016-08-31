@@ -124,7 +124,7 @@ public class SHAEncrypt {
 	    MessageDigest md5 = MessageDigest.getInstance("MD5");
 	    byte[] digest = md5.digest(uploadBytes);
 	    String hashString = DecodUtils.bytesToHexString(digest);
-	    return hashString.toUpperCase();
+	    return hashString.toUpperCase(); 
 	}
 	
 	    
