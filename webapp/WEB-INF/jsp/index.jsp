@@ -71,6 +71,7 @@
     <script src="${path}/js/management/aboutNeighborhoods.js" ></script>
     <script src="${path}/js/guidePage/guidePage.js" ></script>
     <script src="${path}/js/monitor/monitor.js" ></script>
+    <script src="${path}/js/IPManage/IPManage.js" ></script>
     
     <!-- table JS -->
 <%--     <script src="${path}/js/table/areaTable.js"></script> --%>
@@ -108,6 +109,8 @@
     <script src="${path}/js/table/sipCountAllTable.js"></script>
     <script src="${path}/js/table/aboutNeighborhoodsTable.js"></script>
     <script src="${path}/js/table/deviceCountSipTable.js"></script>
+    <script src="${path}/js/table/IPManageTable.js"></script>
+    
     
     <!-- 导入自己的js文件-->
 <%--     <script src="${path}/js/room/room.js" ></script> --%>
@@ -181,11 +184,11 @@
            </r:role>
            <r:role auth="安防监控">     
                <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEleven">
+                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThirteen">
                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                        <a class="accordion-toggle">安防监控</a>
                    </div>
-                   <div id="collapseEleven" class="panel-collapse collapse" style="height: 0px;">
+                   <div id="collapseThirteen" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
                            <ul class="nav nav-pills nav-stacked">
                              <r:role auth="实时监控">
@@ -418,6 +421,10 @@
                              <r:role auth="静态参数">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/staticParam/staticParamListshowPage.do?module=staticParamTable&modulePath=/staticParam">静态参数</a></li>
+                             </r:role>
+                             <r:role auth="服务器IP管理">
+                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li>
                              </r:role>
                            </ul>
                        </div>

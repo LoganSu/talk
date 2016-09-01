@@ -16,5 +16,10 @@ public interface IUsersBiz extends IBaseBiz<Users> {
 	 * @param users
 	 */
 	void saveOrUpdate(Users users);
+	/**
+	 * 暂停用户使用
+	 * @param id
+	 */
+	void update(Integer id,String status);
 
 }

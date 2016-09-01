@@ -1,9 +1,9 @@
 //search.jsp 与controller 类@RequestMapping路径一致
 //var testseachPath = "/test";
 //table js
-var usersTable ={
+var IPManageTable ={
 		method: 'get',
-        url: $path+'/mc/users/showList.do',
+        url: $path+'/mc/IPManage/showList.do',
         cache: false,
 //        height: 600,
 //        width:'1000',
@@ -26,65 +26,55 @@ var usersTable ={
             field: 'index',
             title: '序号',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: false
         },{
-            field: 'username',
-            title: '用户名',
-            align: 'center',
-            width: '60',
-            valign: 'middle',
-            sortable: true
-        },{
-            field: 'mobilePhone',
-            title: '手机号',
-            align: 'center',
-            width: '60',
-            valign: 'middle',
-            sortable: true
-        },{
-            field: 'statusStr',
-            title: '用户状态',
-            align: 'center',
-            width: '60',
-            valign: 'middle',
-            sortable: true
-        },{
-            field: 'email',
-            title: '电子邮箱',
+            field: 'platformName',
+            title: '平台名称',
             align: 'center',
             valign: 'middle',
             sortable: true
         },{
-            field: 'emailStatusStr',
-            title: '电子邮箱状态',
+            field: 'neibName',
+            title: '社区名称',
             align: 'center',
             valign: 'middle',
             sortable: true
         },{
-            field: 'realName',
-            title: '真实姓名',
+            field: 'platformTypeStr',
+            title: '平台类型',
             align: 'center',
             valign: 'middle',
             sortable: true
         },{
-            field: 'createTimeStr',
-            title: '注册时间',
+            field: 'ip',
+            title: 'IP地址',
             align: 'center',
             valign: 'middle',
             sortable: true
         },{
-            field: 'oprator',
+            field: 'port',
+            title: '端口',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'remark',
+            title: '备注',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'operate',
             title: '操作',
             align: 'center',
             valign: 'middle',
-            sortable: false
+            sortable: true
         }]
 }
 
 
 	function queryParams(params) {
-	   return initSearchParams("usersSearchForm",params);
+	   return initSearchParams("",params);
 	}
 

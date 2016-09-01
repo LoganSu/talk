@@ -59,8 +59,8 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 	@Override
 	public List<RealTimeMonitor> showList(RealTimeMonitor target, Operator loginUser)throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select d.fdomainid,r.id,r.fwarn_type,r.fstatus,r.fcreatetime from t_real_time_monitor r")
-		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount order by r.fstatus,r.fcreatetime desc");
+		sb.append("select d.fdomainid,r.id,s.fvalue,r.fstatus,r.fcreatetime from t_real_time_monitor r")
+		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type order by r.fstatus,r.fcreatetime desc");
 		List<Object[]> listObj = realTimeMonitorDao.pageFindBySql(sb.toString(), new Object[]{}, target.getPager());
 		List<RealTimeMonitor> list = new ArrayList<RealTimeMonitor>();
 		if(listObj!=null&&!listObj.isEmpty()){

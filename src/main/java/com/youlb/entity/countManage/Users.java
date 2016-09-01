@@ -74,7 +74,15 @@ public class Users extends Model{
     private Date createTime;
     
     public String getOprator() {
-		return "<a class='usersDelete' rel='"+getId()+"' href='javascript:void(0)'>删除</a>";
+    	StringBuilder sb = new StringBuilder();
+    	if("0".equals(status)){
+    		sb.append("<a class='usersActivate' rel='"+getId()+"' href='javascript:void(0)'>启用</a>&nbsp;");
+    	}
+    	if("1".equals(status)){
+    	    sb.append("<a class='usersStop' rel='"+getId()+"' href='javascript:void(0)'>暂停使用</a>&nbsp;");
+    	}
+	   	sb.append("<a class='usersDelete' rel='"+getId()+"' href='javascript:void(0)'>删除</a>&nbsp;");
+			return sb.toString();
 	}
     
     public String getCreateTimeStr() {
@@ -147,6 +155,8 @@ public class Users extends Model{
 		String statusStr ="";
 		if(status!=null&&status.equals("1")){
 			 statusStr = "正常";
+		}else if(status!=null&&status.equals("0")){
+			 statusStr = "暂停使用";
 		}
 		return statusStr;
 	}

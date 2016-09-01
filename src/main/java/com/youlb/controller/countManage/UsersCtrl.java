@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -100,6 +101,28 @@ public class UsersCtrl extends BaseCtrl {
 				e.printStackTrace();
 				super.message =  "删除出错";
 			}
+		}
+		return super.message;
+	}
+	
+	/**
+     * 暂停用户使用
+     * @param ids
+     * @param model
+     * @return
+     */
+	@RequestMapping("/usersStop.do")
+	@ResponseBody
+	public String usersStop(Integer id,String status,Model model){
+		if(id!=null&&StringUtils.isNotBlank(status)){
+			try {
+				usersBiz.update(id,status);
+			} catch (Exception e) {
+				e.printStackTrace();
+				super.message =  "操作失败";
+			}
+		}else{
+			super.message =  "参数为空";
 		}
 		return super.message;
 	}

@@ -107,7 +107,7 @@ public class UsersBizImpl implements IUsersBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		List<Users> list = new ArrayList<Users>();
-		sb.append("select * from (SELECT u.id id,u.fusername username,u.fmobile_phone mobilePhone,u.femail email,u.frealname realName,u.fcreatetime createTime,u.femail_status emailStatus ")
+		sb.append("select * from (SELECT u.id id,u.fusername username,u.fmobile_phone mobilePhone,u.femail email,u.frealname realName,u.fcreatetime createTime,u.femail_status emailStatus,u.fstatus statusStr")
 //		.append(" from t_users u INNER JOIN t_dweller dw on dw.fphone=u.fmobile_phone INNER JOIN t_domain_dweller tdd on tdd.fdwellerid=dw.id where 1=1");
 		.append(" from t_users u left JOIN (SELECT dw.fphone fphone,tdd.fdomainid fdomainid  from t_dweller dw INNER  JOIN t_domain_dweller tdd on tdd.fdwellerid=dw.id ) t ")
 		.append("  on t.fphone=u.fmobile_phone where 1=1");
@@ -139,6 +139,7 @@ public class UsersBizImpl implements IUsersBiz {
 				user.setRealName(obj[4]==null?"":(String)obj[4]);
 				user.setCreateTime(obj[5]==null?null:(Date)obj[5]);
 				user.setEmailStatus(obj[6]==null?"":(String)obj[6]);
+				user.setStatus(obj[7]==null?"":(String)obj[7]);
 				list.add(user);
 			}
 		}
@@ -153,6 +154,16 @@ public class UsersBizImpl implements IUsersBiz {
 	public void saveOrUpdate(Users users) {
 		// TODO Auto-generated method stub
 		
+	}
+    /**
+     * 暂停用户使用
+     * @param id
+     * @see com.youlb.biz.countManage.IUsersBiz#update(java.lang.String)
+     */
+	@Override
+	public void update(Integer id,String status) {
+		String hql ="update Users set status = ? where id=?";
+		usersSqlDao.update(hql, new Object[]{status,id});
 	}
 
 }
