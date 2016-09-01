@@ -40,7 +40,9 @@ hr{
 	margin-left: 30px;
 /* 	margin-top: 10px; */
 }
-
+#tableShowList{
+	margin-top: -41px !important
+}
 .tableTitle{
 	margin-bottom: -10px
 }
