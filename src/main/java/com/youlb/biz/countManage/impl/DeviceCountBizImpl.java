@@ -344,4 +344,10 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 		List<String> list =  query.list();
 		return list.get(0);
 	}
+
+	@Override
+	public DeviceCount getByCount(String deviceCount) {
+		String hql ="from DeviceCount where deviceCount=?";
+		return deviceCountSqlDao.findObject(hql, new Object[]{deviceCount});
+	}
 }

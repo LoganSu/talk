@@ -26,5 +26,11 @@ public interface IDeviceCountBiz extends IBaseBiz<DeviceCount> {
 	 * @return
 	 */
 	String getOrderNum();
+	/**
+	 * 通过账号获取对象
+	 * @param deviceCount
+	 * @return
+	 */
+	DeviceCount getByCount(String deviceCount);
 
 }

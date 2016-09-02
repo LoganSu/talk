@@ -17,8 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
-import com.youlb.utils.common.SysStatic;
 
 @Controller
 @Scope("prototype")

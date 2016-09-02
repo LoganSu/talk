@@ -16,6 +16,7 @@
 		<table id="realTimeMonitorTable"></table>
       </div>
   </div>
+<EMBED id="warnAudio" src="" loop="8" width=0 height=0>
 </body>
 <script type="text/javascript">
   $(function(){
@@ -83,10 +84,9 @@
 		            sortable: true
 		        }]		 
 	 })
-	 
 	 //引用百度地图
-     var script = document.createElement("script");  
-     //script.src = "http://api.map.baidu.com/api?v=2.0&ak=v5MOhIsz4tPIROKshVmD4WC9UFH5UFcX&callback=initialize";//此为v2.0版本的引用方式  
+     var script = document.createElement("script"); 
+//      script.src = "http://api.map.baidu.com/api?v=2.0&ak=v5MOhIsz4tPIROKshVmD4WC9UFH5UFcX&callback=initialize";//此为v2.0版本的引用方式  
      script.src = "http://api.map.baidu.com/api?v=1.4&ak=v5MOhIsz4tPIROKshVmD4WC9UFH5UFcX&callback=initialize";//此为v1.4版本的引用方式  
      document.body.appendChild(script);
   })

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.servlet.ServletContext;
 
@@ -19,10 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youlb.biz.countManage.IDeviceCountBiz;
 import com.youlb.biz.monitor.IRealTimeMonitorBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.infoPublish.AdPublish;
-import com.youlb.entity.management.Repairs;
 import com.youlb.entity.monitor.PointInfo;
 import com.youlb.entity.monitor.RealTimeMonitor;
 /**
@@ -42,6 +41,11 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
     private IRealTimeMonitorBiz realTimeMonitorBiz;
 	public void setRealTimeMonitorBiz(IRealTimeMonitorBiz realTimeMonitorBiz) {
 		this.realTimeMonitorBiz = realTimeMonitorBiz;
+	}
+	 @Autowired
+	private IDeviceCountBiz deviceCountBiz;
+	public void setDeviceCountBiz(IDeviceCountBiz deviceCountBiz) {
+		this.deviceCountBiz = deviceCountBiz;
 	}
 	
 	@Autowired
@@ -111,6 +115,9 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
     @RequestMapping("/toDisposeEvent.do")
   	public String toDisposeEvent(String id,AdPublish adPublish,Model model){
 	   RealTimeMonitor realTimeMonitor = realTimeMonitorBiz.get(id);
+	   DeviceCount deviceCount = deviceCountBiz.getByCount(realTimeMonitor.getDeviceCount());
+	   realTimeMonitor.setLatitude(deviceCount.getLatitude());
+	   realTimeMonitor.setLongitude(deviceCount.getLongitude());
 	    model.addAttribute("realTimeMonitor", realTimeMonitor);
   		return "/realTimeMonitor/disposeEvent";
   	}

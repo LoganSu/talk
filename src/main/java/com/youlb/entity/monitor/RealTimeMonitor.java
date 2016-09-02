@@ -31,6 +31,31 @@ public class RealTimeMonitor extends BaseModel {
     /**地址*/
     @Transient
     private String address;
+    /**经度*/
+    @Transient
+	private Double longitude;
+	/**纬度*/
+    @Transient
+	private Double latitude;
+    
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public String getDeviceCount() {
+		return deviceCount;
+	}
+	public void setDeviceCount(String deviceCount) {
+		this.deviceCount = deviceCount;
+	}
 	public String getRemark() {
 		return remark;
 	}

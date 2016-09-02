@@ -9,6 +9,8 @@
 <body>
    <form id="disposeEventForm" action="">
       <input type="hidden" name="id" value="${realTimeMonitor.id}"/>
+      <input type="hidden" class="longitude" value="${realTimeMonitor.longitude}"/>
+      <input type="hidden" class="latitude" value="${realTimeMonitor.latitude}"/>
       <textarea maxlength="200" style="width: 800px;height: 130px" name="remark" rows="" cols="" title="内容不能为空！" class="form-control required">${realTimeMonitor.remark}</textarea>  
       <div class="modal-footer">
          <!--操作按钮 -->
