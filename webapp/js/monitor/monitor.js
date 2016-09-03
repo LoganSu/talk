@@ -43,7 +43,7 @@
     //生成地图
     function initialize() {
 	 	map = new BMap.Map("containers");  
-		map.centerAndZoom(new BMap.Point(113.383748,23.148225), 18);  
+		map.centerAndZoom(new BMap.Point(113.2714040000,23.1352440000), 13);  
 		map.enableScrollWheelZoom();
 		map.clearOverlays();//清除标注
 //			  $.post($path+"/mc/realTimeMonitor/getData.do",function($data){

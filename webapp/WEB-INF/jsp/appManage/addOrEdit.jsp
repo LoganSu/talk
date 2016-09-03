@@ -22,9 +22,25 @@
                       <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option>
                     </select>
                 </div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>App上传：</div></td>
-                <td colspan="1"><div>
-                    <input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>
+                <td><div class="leftFont"><span class="starColor">*</span>
+                   <c:choose>
+                     <c:when test="${appManage.appType == 6}">
+                        <select><option class="android">apk上传</option><option <c:if test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">selected="selected"</c:if> class="ios">IOS地址</option></select>
+                     </c:when>
+                     <c:otherwise>
+                       apk上传
+                     </c:otherwise>
+                   </c:choose>
+                                               ：</div></td>
+                <td colspan="1"><div class="changeInputDiv">
+                    <c:choose>
+                      <c:when test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">
+                         <input type="text" value="${appManage.serverAddr}" name="serverAddr" style="width: 300px" class="form-control"/>
+                      </c:when>
+                    <c:otherwise>
+                         <input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>
+                    </c:otherwise>
+                    </c:choose>
                 </div></td>
               </tr>
               <tr>
@@ -182,6 +198,15 @@
 				  $("#appManageShowTree ."+obj.trim()).prop('checked',true);
 			  });
 		}
+		
+		$("#appManagesaveForm .android").on("click",function(){
+			$("#appManagesaveForm .changeInputDiv input").remove();
+			$("#appManagesaveForm .changeInputDiv").append('<input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>');
+		})
+		$("#appManagesaveForm .ios").on("click",function(){
+			$("#appManagesaveForm .changeInputDiv input").remove();
+			$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
+		})
   })
 </script>
 </html>

@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.youlb.entity.common.BaseModel;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.helper.DateHelper;
@@ -215,8 +217,10 @@ public class AppManage extends BaseModel {
 	 
 	 public String getOperate() {
 	   	StringBuilder sb = new StringBuilder();
-	   	sb.append("<a class='appmanageDetail' rel='"+getId()+"' href='javascript:void(0)'>详细</a>&nbsp;")
-	   	.append("<a class='appmanageSingleDown' rel='"+getId()+"' href='"+SysStatic.PATH+"/mc/appManage/singleDown.do?id="+getId()+"'>APP下载</a>&nbsp;");
+	   	sb.append("<a class='appmanageDetail' rel='"+getId()+"' href='javascript:void(0)'>详细</a>&nbsp;");
+	   	if(StringUtils.isNotBlank(relativePath)){
+	   		sb.append("<a class='appmanageSingleDown' rel='"+getId()+"' href='"+SysStatic.PATH+"/mc/appManage/singleDown.do?id="+getId()+"'>APP下载</a>&nbsp;");
+	   	}
 //	   	.append("<a class='appmanageUpdate' rel='"+getId()+"' cardStatus='1' href='javascript:void(0)'>修改</a>&nbsp;")
 //	   	.append("<a class='appmanageDelete' rel='"+getId()+"' cardStatus='3' href='javascript:void(0)'>删除</a>&nbsp;");
 	   

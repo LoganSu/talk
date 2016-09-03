@@ -146,60 +146,37 @@ public class AppManageCtrl extends BaseCtrl {
 //				}
 //    		}
     		
-    		// Create a factory for disk-based file items  
-//            FileItemFactory factory = new DiskFileItemFactory();  
-//    		ServletFileUpload upload = new ServletFileUpload(factory);
-//    		FileUploadProgressListener listener = new FileUploadProgressListener(session);
-//    		upload.setProgressListener(listener);
-    		
-    		
-    		//http://localhost:8080
-//    		System.out.println(strBackUrl);
-//    		String requestURI = request.getRemoteAddr();
-//    		System.out.println(requestURI);
-//    		InetAddress localHost = InetAddress.getLocalHost();
-//    		String hostAddress = localHost.getHostAddress();
-//    		System.out.println(hostAddress);
-//    		String localAddr = SysStatic.FILEUPLOADPATH;
-//    		System.out.println(localAddr);
-//    		String servletPath = request.getServletPath();
-//    		System.out.println(servletPath);
     		//服务器地址
 			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP+ request.getContextPath();      //项目名称  
     		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
     		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
     		MultipartFile appIcon = multipartRequest.getFile("appIcon");
-    		//app存储名称
-    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-    		String appSaveName =sd.format(new Date());
-    		String name = multipartFile.getOriginalFilename();
-			String suffix = name.substring(name.lastIndexOf("."));
-			if(!".apk".equalsIgnoreCase(suffix)){
-				super.message = "请选择正确的App类型！";
-    			model.addAttribute("message", super.message);
-    			return INPUT;
-			}
-			appSaveName+=suffix;
-    		appManage.setAppSaveName(appSaveName);
-    		long fileSize = 0;
-//    		if(StringUtils.isBlank(appManage.getVersionNum())){
-//    			super.message = "软件版本不能为空！";
-//    			model.addAttribute("message", super.message);
-//    			return INPUT; 
-//    		}
-    		//MD5
-    		String md5 = SHAEncrypt.fileMd5(multipartFile);
-    		appManage.setMd5Value(md5);
-    		//添加的时检查版本是否已经存在
-    		if(StringUtils.isBlank(appManage.getId())){
-    			boolean b = appManageBiz.checkVersion(md5);
-    			if(b){
-    				super.message = "软件版本已经存在！";
-    				model.addAttribute("message", super.message);
-    				return INPUT;
-    			}
-    		}
-    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
+    		if(multipartFile!=null&&!multipartFile.isEmpty()&&StringUtils.isBlank(appManage.getServerAddr())) {
+	    		//app存储名称
+	    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+	    		String appSaveName =sd.format(new Date());
+	    		String name = multipartFile.getOriginalFilename();
+				String suffix = name.substring(name.lastIndexOf("."));
+				if(!".apk".equalsIgnoreCase(suffix)){
+					super.message = "请选择正确的App类型！";
+	    			model.addAttribute("message", super.message);
+	    			return INPUT;
+				}
+				appSaveName+=suffix;
+	    		appManage.setAppSaveName(appSaveName);
+	    		long fileSize = 0;
+	    		//MD5
+	    		String md5 = SHAEncrypt.fileMd5(multipartFile);
+	    		appManage.setMd5Value(md5);
+	    		//添加的时检查版本是否已经存在
+	    		if(StringUtils.isBlank(appManage.getId())){
+	    			boolean b = appManageBiz.checkVersion(md5);
+	    			if(b){
+	    				super.message = "软件版本已经存在！";
+	    				model.addAttribute("message", super.message);
+	    				return INPUT;
+	    			}
+	    		}
 //    			session.setAttribute("file", multipartFile);
     			fileSize = multipartFile.getSize();
     			//相对路径
@@ -254,8 +231,10 @@ public class AppManageCtrl extends BaseCtrl {
 				}
 				appManage.setAppSize(fileSize);
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
+    		}else if(multipartFile==null&&StringUtils.isNotBlank(appManage.getServerAddr())){
+				appManageBiz.saveOrUpdate(appManage,getLoginUser());
     		}else{
-    			super.message = "请选择上传app！";
+    			super.message = "请选择上传apk文件或者ios地址！";
     			model.addAttribute("message", super.message);
     			return INPUT;
     		}
