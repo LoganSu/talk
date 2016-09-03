@@ -169,7 +169,7 @@ public class AppManageCtrl extends BaseCtrl {
 				}
 				appIcon.transferTo(file);//上传图标
     		}
-    		if(SysStatic.six.equals(appManage.getAppType())&&appIcon==null||appIcon.isEmpty()){
+    		if(SysStatic.six.equals(appManage.getAppType())&&(appIcon==null||appIcon.isEmpty())){
     			super.message = "请选择图标！";
     			model.addAttribute("message", super.message);
     			return INPUT;
