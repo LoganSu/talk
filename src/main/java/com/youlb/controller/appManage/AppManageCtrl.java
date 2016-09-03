@@ -151,9 +151,31 @@ public class AppManageCtrl extends BaseCtrl {
     		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
     		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
     		MultipartFile appIcon = multipartRequest.getFile("appIcon");
+    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+    		if(appIcon!=null&&!appIcon.isEmpty()){
+				String iconRealName = appIcon.getOriginalFilename();
+    			String iconSuffix = iconRealName.substring(iconRealName.indexOf("."));
+    			if(!".jpg".equalsIgnoreCase(iconSuffix)&&!".jpeg".equalsIgnoreCase(iconSuffix)&&!".png".equalsIgnoreCase(iconSuffix)){
+    				super.message = "图标请选择.jpg、.jpeg、.png文件类型！";
+        			model.addAttribute("message", super.message);
+        			return INPUT;
+    			}
+    			String  iconName = sd.format(new Date())+iconSuffix;
+    			String iconPath = SysStatic.APPDIR+SysStatic.OTHERAPP;
+    			appManage.setIconUrl(strBackUrl+iconPath.substring(iconPath.indexOf("appDir")-1)+iconName);
+    			File file = new File(iconPath+iconName);
+				if(!file.exists()){
+					file.mkdirs();
+				}
+				appIcon.transferTo(file);//上传图标
+    		}
+    		if(SysStatic.six.equals(appManage.getAppType())&&appIcon==null||appIcon.isEmpty()){
+    			super.message = "请选择图标！";
+    			model.addAttribute("message", super.message);
+    			return INPUT;
+    		}
     		if(multipartFile!=null&&!multipartFile.isEmpty()&&StringUtils.isBlank(appManage.getServerAddr())) {
 	    		//app存储名称
-	    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
 	    		String appSaveName =sd.format(new Date());
 	    		String name = multipartFile.getOriginalFilename();
 				String suffix = name.substring(name.lastIndexOf("."));
@@ -194,23 +216,6 @@ public class AppManageCtrl extends BaseCtrl {
     			}else if(SysStatic.six.equals(appManage.getAppType())){
     				relativePath=SysStatic.APPDIR+SysStatic.OTHERAPP+appSaveName;
     			}
-    			if(appIcon!=null&&!appIcon.isEmpty()){
-    				String iconRealName = appIcon.getOriginalFilename();
-        			String iconSuffix = iconRealName.substring(iconRealName.indexOf("."));
-        			if(!".jpg".equalsIgnoreCase(iconSuffix)&&!".jpeg".equalsIgnoreCase(iconSuffix)&&!".png".equalsIgnoreCase(iconSuffix)){
-        				super.message = "图标请选择.jpg、.jpeg、.png文件类型！";
-            			model.addAttribute("message", super.message);
-            			return INPUT;
-        			}
-        			String  iconName = sd.format(new Date())+iconSuffix;
-        			String iconPath = SysStatic.APPDIR+SysStatic.OTHERAPP;
-        			appManage.setIconUrl(strBackUrl+iconPath.substring(iconPath.indexOf("appDir")-1)+iconName);
-        			File file = new File(iconPath+iconName);
-    				if(!file.exists()){
-    					file.mkdirs();
-    				}
-    				appIcon.transferTo(file);//上传图标
-        		}
     			
     			log.info("服务器地址 ： http://" + SysStatic.FILEUPLOADIP );
     			appManage.setServerAddr(strBackUrl);
@@ -231,7 +236,7 @@ public class AppManageCtrl extends BaseCtrl {
 				}
 				appManage.setAppSize(fileSize);
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
-    		}else if(multipartFile==null&&StringUtils.isNotBlank(appManage.getServerAddr())){
+    		}else if(multipartFile==null||multipartFile.isEmpty()&&StringUtils.isNotBlank(appManage.getServerAddr())){
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
     		}else{
     			super.message = "请选择上传apk文件或者ios地址！";
