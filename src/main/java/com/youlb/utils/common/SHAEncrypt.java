@@ -71,7 +71,7 @@ public class SHAEncrypt {
 	/**
 	 * 判断密码是不是相等，默认的加密算法是MD5
 	 * 
-	 * @param beforePwd
+	 * @param beforePwdd
 	 *            要判断的密码
 	 * @param afterPwd
 	 *            加密后的数据库密码
