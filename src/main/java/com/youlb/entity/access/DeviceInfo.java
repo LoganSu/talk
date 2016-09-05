@@ -63,7 +63,9 @@ public class DeviceInfo extends BaseModel{
    /**设备密码*/
    @Column(name="fdevicepws")
    private String devicePws;
-
+   /**备注*/
+   @Column(name="fremark")
+   private String remark;
 	public String getOprator() {
 		return "<a class='deviceInfoSetPws' rel='"+getId()+"' href='javascript:void(0)'>设置密码</a>";
 	}
@@ -103,6 +105,12 @@ public class DeviceInfo extends BaseModel{
 		return deviceStatusStr;
 	}
 	
+	public String getRemark() {
+		return remark;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 	public String getDeviceNum() {
 		return deviceNum;
 	}

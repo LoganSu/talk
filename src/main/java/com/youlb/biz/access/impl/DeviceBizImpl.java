@@ -140,8 +140,8 @@ public class DeviceBizImpl implements IDeviceBiz {
 	 */
 	@Override
 	public String saveOrUpdate(DeviceInfo device, Operator loginUser) {
-		 String update = "update DeviceInfo set deviceStatus=?,deviceFactory=?,deviceBorn=? where id=?";
-		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),device.getDeviceFactory(),device.getDeviceBorn(),device.getId()});
+		 String update = "update DeviceInfo set deviceStatus=?,deviceFactory=?,deviceBorn=?,remark=? where id=?";
+		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),device.getDeviceFactory(),device.getDeviceBorn(),device.getRemark(),device.getId()});
 		return null;
 	}
 
