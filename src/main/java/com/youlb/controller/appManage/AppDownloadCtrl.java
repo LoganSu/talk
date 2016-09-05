@@ -27,7 +27,7 @@ import com.youlb.utils.common.SysStatic;
 
 /** 
  * @ClassName: AppDownloadCtrl.java 
- * @Description: TODO 
+ * @Description: app下载 
  * @author: Pengjy
  * @date: 2016-3-3
  * 
