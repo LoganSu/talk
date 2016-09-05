@@ -18,7 +18,7 @@ import com.youlb.utils.helper.OrderHelperUtils;
 
 /** 
  * @ClassName: DeviceBizImpl.java 
- * @Description: 设备管理业务实现类 cao
+ * @Description: 设备管理业务实现类 
  * @author: Pengjy
  * @date: 2015-11-23
  * 
