@@ -18,7 +18,7 @@ public interface IDwellerBiz extends IBaseBiz<Dweller> {
 	/**
 	 * @param dweller
 	 */
-	void saveOrUpdate(Dweller dweller,Operator loginUser);
+	void saveOrUpdate(Dweller dweller,Operator loginUser)throws Exception;
 
 	/**判断房子是否已经被别人选择过
 	 * @param dweller

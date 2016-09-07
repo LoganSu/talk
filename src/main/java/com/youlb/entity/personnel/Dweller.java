@@ -61,6 +61,8 @@ public class Dweller extends BaseModel {
 	private List<String> treecheckbox;
 	@Transient
 	private String address;
+	@Transient
+	private String phoneCity;
 	/**住户类型 1:户主；0：非户主*/
 //	@Column(name="fdwellertype")
 	@Transient
@@ -96,6 +98,12 @@ public class Dweller extends BaseModel {
 	 }
 	 
 	    
+	public String getPhoneCity() {
+		return phoneCity;
+	}
+	public void setPhoneCity(String phoneCity) {
+		this.phoneCity = phoneCity;
+	}
 	public String getCarrierId() {
 		return carrierId;
 	}

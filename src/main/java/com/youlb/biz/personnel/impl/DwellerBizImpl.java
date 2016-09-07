@@ -12,6 +12,7 @@ import com.youlb.biz.personnel.IDwellerBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.MobileLocationUtil;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.OrderHelperUtils;
@@ -70,8 +71,8 @@ public class DwellerBizImpl implements IDwellerBiz {
 				}else{
 					dwellerSqlDao.executeSql(insert, new Object[]{domainid,dweller.getId(),"1"});//户主
 					//设置房间的被叫号码默认是户主
-					String updateCallNum= "update t_room set fcallednumber=? where id=(select d.fentityid from t_domain d where d.id=?)";
-					dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),domainid});
+					String updateCallNum= "update t_room set fcallednumber=?,fphone_city=? where id=(select d.fentityid from t_domain d where d.id=?)";
+					dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 				}
 			}
 		}
@@ -210,13 +211,20 @@ public class DwellerBizImpl implements IDwellerBiz {
 
 	/**
 	 * @param hostInfo
+	 * @throws Exception 
 	 * @see com.youlb.biz.personnel.IDwellerBiz#saveOrUpdate(com.youlb.entity.personnel.HostInfo)
 	 */
 	@Override
-	public void saveOrUpdate(Dweller dweller,Operator loginUser) {
+	public void saveOrUpdate(Dweller dweller,Operator loginUser) throws Exception {
 //		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values ((select d.id from t_domain d where d.fentityid=?),?,?)";
 		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values (?,?,?)";
-		
+		if(StringUtils.isNotBlank(dweller.getPhone())){
+			String mobileLocation = MobileLocationUtil.getMobileLocation(dweller.getPhone());
+			if(mobileLocation!=null){
+				mobileLocation = mobileLocation.split(",")[0];
+				dweller.setPhoneCity(mobileLocation);
+			}
+		}
 		if(StringUtils.isBlank(dweller.getId())){
 			//检查手机号码是否已经注册
 //			String id = checkPhoneExist(dweller.getPhone(),loginUser);
@@ -238,8 +246,9 @@ public class DwellerBizImpl implements IDwellerBiz {
 						}else{
 							dwellerSqlDao.executeSql(insert, new Object[]{domainid,dwellerId,"1"});//户主
 							//设置房间的被叫号码默认是户主
-							String updateCallNum= "update t_room set fcallednumber=? where id=(select d.fentityid from t_domain d where d.id=?)";
-							dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),domainid});
+							
+							String updateCallNum= "update t_room set fcallednumber=?,fphone_city=? where id=(select d.fentityid from t_domain d where d.id=?)";
+							dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 						}
 					}
 				}
