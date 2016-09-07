@@ -31,6 +31,15 @@
                 <td><div class="leftFont">备注：</div></td>
                 <td><div><input name="remark" class="form-control" maxlength="100" value="${iPManage.remark}"/></div></td>
               </tr>
+              <tr>
+                <td><div class="firstFont"><span class="starColor">*</span>开通物业功能：</div></td>
+                <td><div>
+                   <select name="management" class="form-control">
+                     <option <c:if test="${iPManage.management eq false}">selected="selected"</c:if> value="false">否</option>
+                     <option <c:if test="${iPManage.management eq true}">selected="selected"</c:if> value="true">是</option>
+                   </select>
+                </div></td>
+              </tr>
            </table>
          </form>
 	   </div>

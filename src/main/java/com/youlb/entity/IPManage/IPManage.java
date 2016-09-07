@@ -36,6 +36,17 @@ public class IPManage extends BaseModel {
    /**社区名称*/
    @Column(name="fneib_name")
    private String neibName;
+   /**是否开通物业功能*/
+   @Column(name="fmanagement")
+   private Boolean management;
+   
+   
+	public Boolean getManagement() {
+		return management;
+	}
+	public void setManagement(Boolean management) {
+		this.management = management;
+	}
 	public String getIp() {
 		return ip;
 	}
@@ -89,5 +100,15 @@ public class IPManage extends BaseModel {
 		   	sb.append("<a class='IPManageDetail' rel='"+getId()+"' href='javascript:void(0)'>详情</a>&nbsp;");
 				return sb.toString();
 		}   
-   
+	 public String getManagementStr() {
+		 String managementStr = "";
+		 if(management!=null){
+			 if(management){
+				 managementStr="是";
+			 }else{
+				 managementStr="否";
+			 }
+		 }
+			return managementStr;
+		}
 }

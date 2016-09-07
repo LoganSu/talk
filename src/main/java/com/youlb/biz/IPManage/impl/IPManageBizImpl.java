@@ -1,4 +1,4 @@
-package com.youlb.biz.IPManage;
+package com.youlb.biz.IPManage.impl;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.youlb.biz.IPManage.IIPManageBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.IPManage.IPManage;
 import com.youlb.entity.privilege.Operator;

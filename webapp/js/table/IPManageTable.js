@@ -59,6 +59,12 @@ var IPManageTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'managementStr',
+            title: '开通物业功能',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'remark',
             title: '备注',
             align: 'center',
