@@ -48,16 +48,7 @@ var deviceTable ={
             width: '60',
             valign: 'middle',
             sortable: true
-        }
-//        ,{
-//            field: 'deviceNameStr',
-//            title: '设备名称',
-//            align: 'center',
-//            width: '60',
-//            valign: 'middle',
-//            sortable: true
-//        }
-        ,{
+        },{
             field: 'deviceModel',
             title: '设备型号',
             align: 'center',
@@ -85,6 +76,12 @@ var deviceTable ={
         },{
             field: 'deviceModel',
             title: '系统版本',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'remark',
+            title: '备注',
             align: 'center',
             valign: 'middle',
             sortable: true

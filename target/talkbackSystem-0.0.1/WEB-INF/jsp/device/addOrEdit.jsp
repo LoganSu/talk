@@ -54,6 +54,11 @@
 	                <td><div><input name="deviceBorn" class="form-control datepicker"  value="${device.deviceBorn}"/></div></td>
               
               </tr>
+              <tr>
+                    <td><div class="firstFont">备注：</div></td>
+	                <td colspan="3"><div><input name="remark" class="form-control" style="width: 300px" value="${device.remark}"/></div></td>
+
+              </tr>
            </table>
            </div>
          </form>

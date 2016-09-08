@@ -201,6 +201,7 @@ public class TodayNewsCtrl extends BaseCtrl {
 	    			if("<body>".equals(line)){
 	    				bw.write("\r\n");
 	    				bw.write(detail);
+	    				log.info(detail);
 	    				bw.write("\r\n");
 	    			}
 	    		}

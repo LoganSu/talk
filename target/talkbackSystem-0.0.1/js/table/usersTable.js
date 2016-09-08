@@ -43,16 +43,14 @@ var usersTable ={
             width: '60',
             valign: 'middle',
             sortable: true
-        }
-//        ,{
-//            field: 'statusStr',
-//            title: '用户状态',
-//            align: 'center',
-//            width: '60',
-//            valign: 'middle',
-//            sortable: true
-//        }
-        ,{
+        },{
+            field: 'statusStr',
+            title: '用户状态',
+            align: 'center',
+            width: '60',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'email',
             title: '电子邮箱',
             align: 'center',
