@@ -143,7 +143,7 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(TodayNews todayNews, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException {
+	public void saveOrUpdate(TodayNews todayNews, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException, BizException {
 		//目标设备暂时是手机客户端
 		todayNews.setTargetDevice("2");
 		//设置添加人
@@ -196,10 +196,11 @@ public class TodayNewsImpl implements ITodayNewsBiz {
      * @throws IOException
      * @throws ParseException
      * @throws JsonException
+	 * @throws BizException 
      * @see com.youlb.biz.infoPublish.ITodayNewsBiz#publish(java.lang.String[], com.youlb.entity.privilege.Operator)
      */
 	@Override
-	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ClientProtocolException, IOException,ParseException, JsonException {
+	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ClientProtocolException, IOException,ParseException, JsonException, BizException {
 		if(ids!=null){
 			for(String id:ids){
 				TodayNews todayNews = get(id);
@@ -256,9 +257,10 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 	 * @param treecheckbox
 	 * @param loginUser 全部时过滤运营商
 	 * @return
+	 * @throws BizException 
 	 */
 	 
-	private List<String> getTagList(TodayNews target,Operator loginUser) {
+	private List<String> getTagList(TodayNews target,Operator loginUser) throws BizException {
 		 //全部推送==是按该运营商下面的所以社区tag
 		 if("1".equals(target.getSendType())){
 			 StringBuilder sb = new StringBuilder();

@@ -117,9 +117,10 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 }
 		return list;
 	}
-	/**获取地址*/
+	/**获取地址
+	 * @throws BizException */
 	@Override
-	public String getAddressByDomainId(String domainId) {
+	public String getAddressByDomainId(String domainId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
@@ -131,7 +132,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 	}
     
 	@Override
-	public List<SipCount> showAllList(SipCount target, Operator loginUser) {
+	public List<SipCount> showAllList(SipCount target, Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select * from ( SELECT to_char(u.user_sip,'999999999999999') sipUser,tu.fusername username,d.id domainId,u.sip_type sip_type")
@@ -180,7 +181,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 	}
 
 	@Override
-	public List<SipCount> deviceCountSipShowList(SipCount target,Operator loginUser) {
+	public List<SipCount> deviceCountSipShowList(SipCount target,Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 //		 sb.append("SELECT * from (SELECT sr.sip_user sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")

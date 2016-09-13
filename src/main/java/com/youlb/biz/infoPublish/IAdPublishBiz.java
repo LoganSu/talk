@@ -12,6 +12,7 @@ import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.infoPublish.AdPublish;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
 /** 
@@ -27,29 +28,29 @@ public interface IAdPublishBiz extends IBaseBiz<AdPublish> {
 	 * @param infoPublish
 	 * @param loginUser
 	 */
-	void saveOrUpdate(AdPublish adPublish, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ParseException, JsonException, IOException;
+	void saveOrUpdate(AdPublish adPublish, Operator loginUser)throws BizException,IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ParseException, JsonException, IOException;
 
 	/**添加图片记录
 	 * @param adPic
 	 * @return
 	 */
-	String addPicture(AdPublishPicture adPic);
+	String addPicture(AdPublishPicture adPic)throws BizException;
 
 	/**删除图片
 	 * @param picId
 	 */
-	void deletePicture(String picId);
+	void deletePicture(String picId)throws BizException;
 	/**
 	 * 发布
 	 * @param ids
 	 * @param loginUser
 	 */
-	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
+	public void publish(String[] ids, Operator loginUser)throws BizException, IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
     /**
      * 通过关联id获取图片列表
      * @param id
      * @return
      */
-	List<AdPublishPicture> getPicByAdpublishId(String id);
+	List<AdPublishPicture> getPicByAdpublishId(String id)throws BizException;
 
 }

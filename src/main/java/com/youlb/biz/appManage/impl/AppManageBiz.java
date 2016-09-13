@@ -160,11 +160,12 @@ public class AppManageBiz implements IAppManageBiz {
 	 * @throws JsonException 
 	 * @throws ParseException 
 	 * @throws IOException 
+	 * @throws BizException 
 	 * @throws IllegalStateException 
 	 * @see com.youlb.biz.appManage.IAppManageBiz#saveOrUpdate(com.youlb.entity.appManage.AppManage, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void saveOrUpdate(AppManage appManage, Operator loginUser) throws ParseException, JsonException, IOException {
+	public void saveOrUpdate(AppManage appManage, Operator loginUser) throws ParseException, JsonException, IOException, BizException {
 		String sql="insert into t_domain_appmanage(fappmanageid,fdomainid) values (?,?)";
 		 //add
 		 if(StringUtils.isBlank(appManage.getId())){
@@ -256,10 +257,11 @@ public class AppManageBiz implements IAppManageBiz {
 
 	/**获取需要升级的版本
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.appManage.IAppManageBiz#getOldVersion()
 	 */
 	@Override
-	public List<AppManage> getOldVersion() {
+	public List<AppManage> getOldVersion() throws BizException {
 		String hql = "from AppManage t where t.appType = ? order by t.createTime";
 		return appManageSqlDao.find(hql, new Object[]{SysStatic.two});
 	}
@@ -267,10 +269,11 @@ public class AppManageBiz implements IAppManageBiz {
 	/**
 	 * @param appManage
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.appManage.IAppManageBiz#checkVersion(com.youlb.entity.appManage.AppManage)
 	 */
 	@Override
-	public boolean checkVersion(String md5Value) {
+	public boolean checkVersion(String md5Value) throws BizException {
 		String hql="from AppManage a where a.md5Value=?";
 		List<AppManage> list = appManageSqlDao.find(hql, new Object[]{md5Value});
 		if(list!=null&&!list.isEmpty()){
@@ -281,10 +284,11 @@ public class AppManageBiz implements IAppManageBiz {
 
 	/**获取最新的app包
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.appManage.IAppManageBiz#lastVersion()
 	 */
 	@Override
-	public AppManage lastVersion(String type) {
+	public AppManage lastVersion(String type) throws BizException {
 		String sql ="from AppManage t where t.appType= ? ORDER BY t.createTime DESC";
 		List<AppManage> list = appManageSqlDao.find(sql, new Object[]{type});
 		if(list!=null&&!list.isEmpty()){
@@ -298,9 +302,10 @@ public class AppManageBiz implements IAppManageBiz {
 	 * @param appManage
 	 * @param loginUser 
 	 * @return
+	 * @throws BizException 
 	 */
 	 
-	private List<String> getTagList(AppManage appManage,Operator loginUser) {
+	private List<String> getTagList(AppManage appManage,Operator loginUser) throws BizException {
 		 //手机端按社区id  tag推送   门口机和管理机的全部按社区id推送
 		 if("2".equals(appManage.getAppType())||"5".equals(appManage.getAppType())||"1".equals(appManage.getUpgradeType())){
 			 StringBuilder sb = new StringBuilder();

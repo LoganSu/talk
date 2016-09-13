@@ -125,10 +125,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 
 	/**
 	 * @param login
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#loginOut(com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void loginOut(Operator login) {
+	public void loginOut(Operator login) throws BizException {
 		if(login!=null){
 			String update = "update Operator t set t.loginStatus=?,t.logOutTime=? where id=?";
 //			login.setLoginStatus(0);//离线状态
@@ -140,6 +141,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 	/**
 	 * @param user
 	 * @return
+	 * @throws BizException 
 	 * @throws JsonException 
 	 * @throws IOException 
 	 * @throws ParseException 
@@ -147,7 +149,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @see com.youlb.biz.privilege.IOperatorBiz#login(com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public Operator login(Operator user,String code){
+	public Operator login(Operator user,String code) throws BizException{
 		if(user!=null&&StringUtils.isNotBlank(user.getLoginName())&&StringUtils.isNotBlank(user.getPassword())
 				&&user.getCarrier()!=null&&StringUtils.isNotBlank(user.getCarrier().getCarrierNum())){
 			
@@ -227,10 +229,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	/**保存、更新
 	 * @param user
 	 * @param loginUser
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#saveOrUpdate(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void saveOrUpdate(Operator user) {
+	public void saveOrUpdate(Operator user) throws BizException {
 		String sql = "insert into T_OPERATOR_ROLE (FOPERATORID,FROLEID) values (?,?)";
 		//add
 		if(StringUtils.isBlank(user.getId())){
@@ -347,10 +350,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @param loginUser
 	 * @param user
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#getRoleList(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Role> getRoleList(Operator loginUser, Operator user) {
+	public List<Role> getRoleList(Operator loginUser, Operator user) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 List<Role> roleList = new ArrayList<Role>();
@@ -392,10 +396,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @param user
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#carrierShowList(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Operator> carrierShowList(Operator target, Operator loginUser) {
+	public List<Operator> carrierShowList(Operator target, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		List<Operator> list = new ArrayList<Operator>();
@@ -458,10 +463,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @param user
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#chickLoginNameExist(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public boolean chickLoginNameExist(Operator user, Operator loginUser) {
+	public boolean chickLoginNameExist(Operator user, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT o.floginname from t_operator o INNER JOIN t_operator_role tor on tor.foperatorid=o.id INNER JOIN t_role r on")
 		.append(" r.id =tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid where o.floginname=? and c.fcarriernum=?");
@@ -476,10 +482,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	/**修改密码
 	 * @param user
 	 * @param loginUser
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#update(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public int update(Operator user, String id) {
+	public int update(Operator user, String id) throws BizException {
 		String pasw = SHAEncrypt.digestPassword(user.getNewPassword());
 		String update ="update Operator set password =? where id=?";
 		int i =operatorSqlDao.update(update, new Object[]{pasw,id});
@@ -491,10 +498,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @param user
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IOperatorBiz#getUser(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public String getUser(Operator user, Operator loginUser) {
+	public String getUser(Operator user, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT o.id from t_operator o INNER JOIN t_operator_role tor on tor.foperatorid=o.id INNER JOIN t_role r on")
 		.append(" r.id =tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid where o.floginname=? and c.fcarriernum=? and o.fpassword=?");
@@ -513,10 +521,11 @@ public class OperatorBizImpl implements IOperatorBiz {
      * @throws ClientProtocolException 
      * @throws JsonException 
      * @throws ParseException 
+     * @throws BizException 
      * @see com.youlb.biz.privilege.IOperatorBiz#getVerificationCode(com.youlb.entity.privilege.Operator)
      */
 	@Override
-	public String getVerificationCode(Operator user,String expireTime) throws ClientProtocolException, IOException, ParseException, JsonException {
+	public String getVerificationCode(Operator user,String expireTime) throws ClientProtocolException, IOException, ParseException, JsonException, BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT o.fphone from t_operator o INNER JOIN t_operator_role tor on tor.foperatorid=o.id INNER JOIN t_role r on")
 		.append(" r.id =tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid where o.floginname=? and c.fcarriernum=?");
@@ -538,8 +547,9 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @throws ParseException
 	 * @throws JsonException
 	 * @throws IOException
+	 * @throws BizException 
 	 */
-	private String getVerificationCode(Map<String,String> values) throws ParseException, JsonException, IOException{
+	private String getVerificationCode(Map<String,String> values) throws ParseException, JsonException, IOException, BizException{
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		HttpPost request = new HttpPost(SysStatic.HTTP+"/publish/getVerificationCode.json");
 		List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
@@ -560,7 +570,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 	}
 
 	@Override
-	public boolean chickLoginNameExist(Operator user) {
+	public boolean chickLoginNameExist(Operator user) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT o.floginname from t_operator o INNER JOIN t_operator_role tor on tor.foperatorid=o.id INNER JOIN t_role r on")
 		.append(" r.id =tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid where o.floginname=? and c.fcarriernum=?");

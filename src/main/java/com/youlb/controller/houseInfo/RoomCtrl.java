@@ -23,6 +23,7 @@ import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.houseInfo.Room;
 import com.youlb.entity.houseInfo.Unit;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: RoomCtrl.java 
@@ -73,8 +74,13 @@ public class RoomCtrl extends BaseCtrl {
      */
     @RequestMapping("/roomCardListshowPage.do")
     public String roomCardListshowPage(Model model) {
-    	List<Neighborhoods> neighborList = neighborBiz.getNeighborList(getLoginUser());
-    	model.addAttribute("neighborList", neighborList);
+		try {
+			List<Neighborhoods> neighborList = neighborBiz.getNeighborList(getLoginUser());
+			model.addAttribute("neighborList", neighborList);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //    	if(neighborList!=null&&!neighborList.isEmpty()){
 //    		List<Building> buildingList = getBuildingListByNeibId(neighborList.get(0).getId());
 //    		model.addAttribute("buildingList", buildingList);
@@ -93,7 +99,13 @@ public class RoomCtrl extends BaseCtrl {
     @RequestMapping("/getBuildingListByNeibId.do")
     @ResponseBody
     public List<Building> getBuildingListByNeibId(String neighborId){
-    	return buildingBiz.getBuildingListByNeibId(neighborId);
+    	try {
+			return buildingBiz.getBuildingListByNeibId(neighborId);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
     
     /**
@@ -104,7 +116,13 @@ public class RoomCtrl extends BaseCtrl {
     @RequestMapping("/getUnitListBybuildingId.do")
     @ResponseBody
     public List<Unit> getUnitListBybuildingId(String buildingId){
-    	return unitBiz.getUnitListBybuildingId(buildingId);
+    	try {
+			return unitBiz.getUnitListBybuildingId(buildingId);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
     }
     
 	/**
@@ -116,12 +134,12 @@ public class RoomCtrl extends BaseCtrl {
 	public  Map<String, Object> showList(Room room){
 		List<Room> list = new ArrayList<Room>();
 		//处理发卡页面查询参数
-		if(StringUtils.isNotBlank(room.getUnitId())){
-			String domainId = domainBiz.getDomainIdByEntityId(room.getUnitId());
-			room.setParentId(domainId);
-		}
 		try {
-			list = roomBiz.showList(room,getLoginUser());
+			if(StringUtils.isNotBlank(room.getUnitId())){
+				String domainId = domainBiz.getDomainIdByEntityId(room.getUnitId());
+				room.setParentId(domainId);
+			}
+				list = roomBiz.showList(room,getLoginUser());
 		} catch (Exception e) {
 			//TODO log
 		}
@@ -136,8 +154,13 @@ public class RoomCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Room room,Model model){
     	if(ids!=null&&ids.length>0){
-    		room = roomBiz.get(ids[0]);
-    		room.setParentId(domainBiz.getParentIdByEntityId(ids[0]));
+    		try {
+    		    room = roomBiz.get(ids[0]);
+				room.setParentId(domainBiz.getParentIdByEntityId(ids[0]));
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	
     	model.addAttribute("room",room);
@@ -244,7 +267,12 @@ public class RoomCtrl extends BaseCtrl {
 	@RequestMapping("/getAddressByDomainId.do")
 	@ResponseBody
 	public String getAddressByDomainId(String domainId){
-		String address = roomBiz.getAddressByDomainId(domainId);
-		return address;
+		try {
+			return roomBiz.getAddressByDomainId(domainId);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

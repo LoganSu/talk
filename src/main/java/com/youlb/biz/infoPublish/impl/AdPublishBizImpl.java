@@ -209,10 +209,11 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 	 * @throws IOException 
 	 * @throws JsonException 
 	 * @throws ParseException 
+	 * @throws BizException 
 	 * @see com.youlb.biz.adPublish.IAdPublishBiz#saveOrUpdate(com.youlb.entity.adPublish.adPublish, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void saveOrUpdate(AdPublish adPublish, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ParseException, JsonException, IOException {
+	public void saveOrUpdate(AdPublish adPublish, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ParseException, JsonException, IOException, BizException {
 		//设置图片对象
 		if(adPublish.getPicId()!=null){
 			StringBuffer sb = new StringBuffer();
@@ -300,7 +301,7 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 	}
 	
 	@Override
-	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ClientProtocolException, IOException,ParseException, JsonException {
+	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException, ClientProtocolException, IOException,ParseException, JsonException, BizException {
 		if(ids!=null){
 			for(String id:ids){
 				AdPublish adPublish = get(id);
@@ -369,9 +370,10 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 	 * @param treecheckbox
 	 * @param loginUser 全部时过滤运营商
 	 * @return
+	 * @throws BizException 
 	 */
 	 
-	private List<String> getTagList(AdPublish adPublish,Operator loginUser) {
+	private List<String> getTagList(AdPublish adPublish,Operator loginUser) throws BizException {
 		 //全部推送==是按该运营商下面的所以社区tag
 		 if("1".equals(adPublish.getSendType())){
 			 StringBuilder sb = new StringBuilder();
@@ -402,25 +404,27 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 	/**添加图片记录
 	 * @param adPic
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.infoPublish.IAdPublishBiz#addPicture(com.youlb.entity.infoPublish.AdPublishPicture)
 	 */
 	@Override
-	public String addPicture(AdPublishPicture adPic) {
+	public String addPicture(AdPublishPicture adPic) throws BizException {
 		String id = (String) adPiclDao.add(adPic);
 		return id;
 	}
 
 	/**删除图片
 	 * @param picId
+	 * @throws BizException 
 	 * @see com.youlb.biz.infoPublish.IAdPublishBiz#deletePicture(java.lang.String)
 	 */
 	@Override
-	public void deletePicture(String picId) {
+	public void deletePicture(String picId) throws BizException {
 		adPiclDao.delete(picId);
 	}
 
 	@Override
-	public List<AdPublishPicture> getPicByAdpublishId(String id) {
+	public List<AdPublishPicture> getPicByAdpublishId(String id) throws BizException {
 		//图片列表数据
 		String find = "from AdPublishPicture t where t.adpublishId=?";
 		List<AdPublishPicture> adPics = adPiclDao.find(find, new Object[]{id});

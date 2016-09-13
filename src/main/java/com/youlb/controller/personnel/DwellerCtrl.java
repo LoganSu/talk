@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: DwellerCtrl.java 
@@ -31,6 +34,8 @@ import com.youlb.utils.common.SysStatic;
 @Scope("prototype")
 @RequestMapping("/mc/dweller")
 public class DwellerCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(DwellerCtrl.class);
+
 	@Autowired
     private IDwellerBiz dwellerBiz;
 	public void setDwellerBiz(IDwellerBiz dwellerBiz) {
@@ -60,16 +65,13 @@ public class DwellerCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Dweller dweller,Model model){
     	if(ids!=null&&ids.length>0){
-    		dweller = dwellerBiz.get(ids[0]);
+    		try {
+				dweller = dwellerBiz.get(ids[0]);
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
     	}
-    	//获取父节点
-//    	if(StringUtils.isNotBlank(domain.getParentId())){
-//    		Domain parentDomain = domainBiz.get(domain.getParentId());
-//    		domain.setParentName(parentDomain.getName());//父节点名称
-//    		domain.setLevel(parentDomain.getLevel());//父节点等级
-//    	}else{
-//    		domain.setParentId("1");
-//    	}
     	model.addAttribute("dweller",dweller);
    		return "/dweller/addOrEdit";
    	}

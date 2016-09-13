@@ -186,10 +186,11 @@ public class CarrierBizImpl implements ICarrierBiz {
 
 	/**
 	 * @param carrier
+	 * @throws BizException 
 	 * @see com.youlb.biz.baseInfo.ICarrierBiz#saveOrUpdate(com.youlb.entity.baseInfo.Carrier)
 	 */
 	@Override
-	public void saveOrUpdate(Carrier carrier) {
+	public void saveOrUpdate(Carrier carrier) throws BizException {
 		String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
 		//add
 		if(StringUtils.isBlank(carrier.getId())){
@@ -258,10 +259,11 @@ public class CarrierBizImpl implements ICarrierBiz {
 	/**判断运营商简称是否存在 
 	 * @param carrier
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.baseInfo.ICarrierBiz#checkCarrierNumExist(com.youlb.entity.baseInfo.Carrier)
 	 */
 	@Override
-	public boolean checkCarrierNumExist(Carrier carrier) {
+	public boolean checkCarrierNumExist(Carrier carrier) throws BizException {
 		StringBuilder sb = new StringBuilder("from Carrier t where t.carrierNum=? ");
 		List<Object> values = new ArrayList<Object>();
 		values.add(carrier.getCarrierNum());
@@ -280,9 +282,10 @@ public class CarrierBizImpl implements ICarrierBiz {
      * 检查社区是否已经绑定运营商  如果绑定返回社区名称 没绑定返回空
      * @param treecheckbox
      * @return
+	 * @throws BizException 
      */
 	@Override
-	public String checkHasChecked(List<String> treecheckbox) {
+	public String checkHasChecked(List<String> treecheckbox) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT array_to_string(ARRAY( ")
 		.append("SELECT d.fremark from t_carrier_domain tcd INNER JOIN t_domain d on d.id=tcd.fdomainid ")

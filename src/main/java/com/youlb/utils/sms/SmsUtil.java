@@ -50,7 +50,12 @@ public class SmsUtil {
 	}
 	
 	public static void main(String[] args) {
-		String s = random();
+		try {
+			String s = random();
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		String message = "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈";
 		Boolean b = sendSMS("13610068576", message);
 		System.out.println(b);

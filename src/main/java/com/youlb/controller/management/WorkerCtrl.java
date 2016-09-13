@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -20,11 +22,14 @@ import com.youlb.entity.management.Worker;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SHAEncrypt;
+import com.youlb.utils.exception.BizException;
 
 @Controller
 @Scope("prototype")
 @RequestMapping("/mc/worker")
 public class WorkerCtrl extends BaseCtrl{
+	private static Logger log = LoggerFactory.getLogger(WorkerCtrl.class);
+
 	@Autowired
     private IWorkerBiz workerBiz;
 	public void setWorkerBiz(IWorkerBiz workerBiz) {
@@ -59,12 +64,22 @@ public class WorkerCtrl extends BaseCtrl{
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
-    		Worker worker = workerBiz.get(ids[0]);
-    		model.addAttribute("worker", worker);
+			try {
+				Worker worker = workerBiz.get(ids[0]);
+				model.addAttribute("worker", worker);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     	}
-    	List<DepartmentTree> topList = departmentBiz.showListDepartmentTree(new DepartmentTree(),getLoginUser());
-		List<DepartmentTree> children = getDepartmentList(topList,getLoginUser());
-		model.addAttribute("departmentTree", JsonUtils.toJson(children));
+		try {
+			List<DepartmentTree> topList = departmentBiz.showListDepartmentTree(new DepartmentTree(),getLoginUser());
+			List<DepartmentTree> children = getDepartmentList(topList,getLoginUser());
+			model.addAttribute("departmentTree", JsonUtils.toJson(children));
+		} catch (BizException e) {
+			log.error("获取部门数据失败");
+			e.printStackTrace();
+		}
    		return "/worker/addOrEdit";
    	}
     /**
@@ -128,10 +143,14 @@ public class WorkerCtrl extends BaseCtrl{
 	
 	@Override
 	public String showPage(Model model) {
-		List<DepartmentTree> topList = departmentBiz.showListDepartmentTree(new DepartmentTree(),getLoginUser());
-		List<DepartmentTree> children = getDepartmentList(topList,getLoginUser());
-		System.out.println(JsonUtils.toJson(children));
-		model.addAttribute("departmentTree", JsonUtils.toJson(children));
+		try {
+			List<DepartmentTree> topList = departmentBiz.showListDepartmentTree(new DepartmentTree(),getLoginUser());
+			List<DepartmentTree> children = getDepartmentList(topList,getLoginUser());
+			model.addAttribute("departmentTree", JsonUtils.toJson(children));
+		} catch (BizException e) {
+			log.error("获取部门数据失败");
+ 			e.printStackTrace();
+		}
 		return super.showPage(model);
 	}
 	/**
@@ -145,15 +164,20 @@ public class WorkerCtrl extends BaseCtrl{
     	if(list!=null&&!list.isEmpty()){
 			for(DepartmentTree a:list){
 				a.setParentId(a.getId());
-				List<DepartmentTree> departLis = departmentBiz.showListDepartmentTree(a,loginUser);
-				if(departLis!=null){
-					DepartmentTree atree = new DepartmentTree();
-					List<DepartmentTree> authorityList = getDepartmentList(departLis, loginUser);
-					atree.setId(a.getId());
-					atree.setDepartmentName(a.getDepartmentName());
-					atree.setLayer(a.getLayer());
-					atree.setDepartmentTree(authorityList);
-					treeList.add(atree);
+				try {
+					List<DepartmentTree> departLis = departmentBiz.showListDepartmentTree(a,loginUser);
+					if(departLis!=null){
+						DepartmentTree atree = new DepartmentTree();
+						List<DepartmentTree> authorityList = getDepartmentList(departLis, loginUser);
+						atree.setId(a.getId());
+						atree.setDepartmentName(a.getDepartmentName());
+						atree.setLayer(a.getLayer());
+						atree.setDepartmentTree(authorityList);
+						treeList.add(atree);
+					}
+				} catch (BizException e) {
+					log.error("获取部门数据失败");
+ 					e.printStackTrace();
 				}
 			}
 		}

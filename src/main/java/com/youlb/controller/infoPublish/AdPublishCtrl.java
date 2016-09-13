@@ -33,7 +33,6 @@ import com.youlb.entity.infoPublish.AdPublish;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SysStatic;
-import com.youlb.utils.common.Utils;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.DateHelper;
@@ -81,21 +80,18 @@ public class AdPublishCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,AdPublish adPublish,Model model){
     	String opraterType = adPublish.getOpraterType();
     	if(ids!=null&&ids.length>0){
-    		adPublish = adPublishBiz.get(ids[0]);
+    		try {
+				adPublish = adPublishBiz.get(ids[0]);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     		//如果是全部推送类型不需要返回标签
     		if("1".equals(adPublish.getSendType())){
     			adPublish.setTreecheckbox(null);
     		}
     		adPublish.setOpraterType(opraterType);
     	}
-    	//获取父节点
-//    	if(StringUtils.isNotBlank(domain.getParentId())){
-//    		Domain parentDomain = domainBiz.get(domain.getParentId());
-//    		domain.setParentName(parentDomain.getName());//父节点名称
-//    		domain.setLevel(parentDomain.getLevel());//父节点等级
-//    	}else{
-//    		domain.setParentId("1");
-//    	}
     	model.addAttribute("adPublish",adPublish);
    		return "/adPublish/addOrEdit";
    	}
@@ -223,6 +219,9 @@ public class AdPublishCtrl extends BaseCtrl {
 				super.message="发布出错";
 				e.printStackTrace();
 			} catch (IOException e) {
+				super.message="发布出错";
+				e.printStackTrace();
+			} catch (BizException e) {
 				super.message="发布出错";
 				e.printStackTrace();
 			}

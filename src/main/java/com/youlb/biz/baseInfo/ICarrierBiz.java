@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.baseInfo.Carrier;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: ICarrierBiz.java 
@@ -17,20 +18,20 @@ public interface ICarrierBiz extends IBaseBiz<Carrier> {
 	/**
 	 * @param carrier
 	 */
-	void saveOrUpdate(Carrier carrier);
+	void saveOrUpdate(Carrier carrier)throws BizException;
 
 
 	/**检查运营商简称是否已经存在
 	 * @param carrier
 	 * @return
 	 */
-	boolean checkCarrierNumExist(Carrier carrier);
+	boolean checkCarrierNumExist(Carrier carrier)throws BizException;
 
     /**
      * 检查社区是否已经绑定运营商  如果绑定返回社区名称 没绑定返回空
      * @param treecheckbox
      * @return
      */
-	String checkHasChecked(List<String> treecheckbox);
+	String checkHasChecked(List<String> treecheckbox)throws BizException;
     
 }

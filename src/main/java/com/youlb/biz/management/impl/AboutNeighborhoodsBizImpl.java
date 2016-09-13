@@ -76,7 +76,7 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
 	}
     
 	@Override
-	public void saveOrUpdate(AboutNeighborhoods target,Operator loginUser) {
+	public void saveOrUpdate(AboutNeighborhoods target,Operator loginUser) throws BizException {
 		if(StringUtils.isBlank(target.getId())){
 		    StringBuilder sb = new StringBuilder();
 			sb.append("insert into t_about_neighborhoods (id,fheadline,ficon,fupdate_time,fstatus,forder,fhtml_url,fneighbor_domain_id,fcreatetime,fdeleteflag)values(?,?,?,now(),?,")
@@ -92,7 +92,7 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
 	}
 
 	@Override
-	public void orderUp(AboutNeighborhoods aboutNeighborhoods) {
+	public void orderUp(AboutNeighborhoods aboutNeighborhoods) throws BizException {
 		String updateUp ="update t_about_neighborhoods set forder=forder-1 where id=?";
 		String updateDown ="update t_about_neighborhoods set forder=forder+1 where fneighbor_domain_id=? and forder=?";
 		synchronized (aboutNeighborhoods) {
@@ -104,7 +104,7 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
 	}
 
 	@Override
-	public int getMinOrder(AboutNeighborhoods aboutNeighborhoods) {
+	public int getMinOrder(AboutNeighborhoods aboutNeighborhoods) throws BizException {
 		 String sql =" select min(forder) from t_about_neighborhoods where fneighbor_domain_id=?";
 		 List<Integer> list = aboutNeighborDao.pageFindBySql(sql, new Object[]{aboutNeighborhoods.getNeighborDomainId()});
 		 if(list!=null&&!list.isEmpty()){
@@ -114,7 +114,7 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
 	}
 
 	@Override
-	public int getMaxOrder(AboutNeighborhoods aboutNeighborhoods) {
+	public int getMaxOrder(AboutNeighborhoods aboutNeighborhoods) throws BizException {
 		 String sql =" select max(forder) from t_about_neighborhoods where fneighbor_domain_id=?";
 		 List<Integer> list = aboutNeighborDao.pageFindBySql(sql, new Object[]{aboutNeighborhoods.getNeighborDomainId()});
 		 if(list!=null&&!list.isEmpty()){
@@ -124,7 +124,7 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
 	}
 
 	@Override
-	public void orderDown(AboutNeighborhoods aboutNeighborhoods) {
+	public void orderDown(AboutNeighborhoods aboutNeighborhoods) throws BizException {
 		String updateUp ="update t_about_neighborhoods set forder=forder+1 where id=?";
 		String updateDown ="update t_about_neighborhoods set forder=forder-1 where fneighbor_domain_id=? and forder=?";
 		synchronized (aboutNeighborhoods) {
@@ -193,10 +193,11 @@ public class AboutNeighborhoodsBizImpl implements IAboutNeighborhoodsBiz {
      * 查出备注列表
      * @param aboutNeighborhoods
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IAboutNeighborhoodsBiz#showRemarkList(com.youlb.entity.management.AboutNeighborhoods)
      */
 	@Override
-	public List<AboutNeighborhoodsRemark> showRemarkList(AboutNeighborhoods aboutNeighborhoods) {
+	public List<AboutNeighborhoodsRemark> showRemarkList(AboutNeighborhoods aboutNeighborhoods) throws BizException {
 		 String hql = "from AboutNeighborhoodsRemark where mainId=? order by createTime desc";
 		return aboutNeighborRemarkDao.pageFind(hql, new Object[]{aboutNeighborhoods.getId()}, aboutNeighborhoods.getPager());
 	}

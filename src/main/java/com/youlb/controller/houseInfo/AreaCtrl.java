@@ -17,6 +17,7 @@ import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Address;
 import com.youlb.entity.houseInfo.Area;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: AreaCtrller.java 
@@ -67,8 +68,13 @@ public class AreaCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
     		
-    		Area area = areaBiz.get(ids[0]);
-    		model.addAttribute("area", area);
+			try {
+				Area area = areaBiz.get(ids[0]);
+				model.addAttribute("area", area);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	List<Address> provinceList = getAddressByParentId(null);
     	model.addAttribute("provinceList", provinceList);
@@ -179,8 +185,14 @@ public class AreaCtrl extends BaseCtrl {
 	@RequestMapping("/getAddressByParentId.do")
 	@ResponseBody
 	public List<Address> getAddressByParentId(String parentId){
+		try {
 		List<Address> list = areaBiz.getAddressByParentId(parentId);
 		return list;
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	/**
 	 * 获取社区编号
@@ -190,7 +202,13 @@ public class AreaCtrl extends BaseCtrl {
 	@RequestMapping("/getAreaCode.do")
 	@ResponseBody
 	public String getAreaCode(String city){
-		String areaCode = areaBiz.getAreaCode(city);
-		return areaCode;
+		try {
+			String areaCode = areaBiz.getAreaCode(city);
+			return areaCode;
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

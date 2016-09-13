@@ -107,10 +107,11 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 	 * 只能删除本运营商的公告
 	 * @param ids
 	 * @param loginUser
+	 * @throws BizException 
 	 * @see com.youlb.biz.infoPublish.IInfoPublishBiz#delete(java.lang.String[], com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void delete(String[] ids, Operator loginUser) {
+	public void delete(String[] ids, Operator loginUser) throws BizException {
 		 String delete ="delete from t_infopublish where id=? and fcarrierid=?";
 		 if(ids!=null){
 				for(String id:ids){
@@ -217,10 +218,11 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 	 * @throws IllegalAccessException 
 	 * @throws JsonException 
 	 * @throws ParseException 
+	 * @throws BizException 
 	 * @see com.youlb.biz.infoPublish.IInfoPublishBiz#saveOrUpdate(com.youlb.entity.infoPublish.InfoPublish, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void saveOrUpdate(InfoPublish infoPublish, Operator loginUser) throws ClientProtocolException, IOException, IllegalAccessException, InvocationTargetException, ParseException, JsonException {
+	public void saveOrUpdate(InfoPublish infoPublish, Operator loginUser) throws ClientProtocolException, IOException, IllegalAccessException, InvocationTargetException, ParseException, JsonException, BizException {
 		
 //		设置运营商
 		infoPublish.setCarrierId(loginUser.getCarrier().getId());
@@ -302,9 +304,10 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 	 * @throws ClientProtocolException 
 	 * @throws JsonException 
 	 * @throws ParseException 
+	 * @throws BizException 
      */
 	@Override
-	public void publish(String[] ids, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException {
+	public void publish(String[] ids, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException, BizException {
 		if(ids!=null){
 			for(String id:ids){
 				InfoPublish infoPublish = get(id);
@@ -361,8 +364,9 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
      * 获取域的级别
      * @param domainId
      * @return
+     * @throws BizException 
      */
-	private Integer getDomainLayerById(String domainId) {
+	private Integer getDomainLayerById(String domainId) throws BizException {
 		String sql ="select t.flayer from t_domain t where t.id=?";
 		List<Integer> list = infoPublishSqlDao.pageFindBySql(sql, new Object[]{domainId});
 		if(list!=null&&!list.isEmpty()){
@@ -415,9 +419,10 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 	 * @param treecheckbox
 	 * @param loginUser 全部时过滤运营商
 	 * @return
+	 * @throws BizException 
 	 */
 	 
-	private List<String> getTagList(InfoPublish infoPublish,Operator loginUser) {
+	private List<String> getTagList(InfoPublish infoPublish,Operator loginUser) throws BizException {
 		 //全部推送==是按该运营商下面的所以社区tag
 		 if("1".equals(infoPublish.getSendType())){
 			 StringBuilder sb = new StringBuilder();

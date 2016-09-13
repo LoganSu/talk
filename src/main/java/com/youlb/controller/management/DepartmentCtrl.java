@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.management.IDepartmentBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.controller.infoPublish.TodayNewsCtrl;
 import com.youlb.entity.management.Department;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 /**
 * @ClassName: DepartmentCtrl.java 
 * @Description: 部门controller 
@@ -27,6 +31,8 @@ import com.youlb.utils.common.RegexpUtils;
 @Scope("prototype")
 @RequestMapping("/mc/department")
 public class DepartmentCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(DepartmentCtrl.class);
+
 	@Autowired
     private IDepartmentBiz departmentBiz;
 	public void setDepartmentBiz(IDepartmentBiz departmentBiz) {
@@ -55,13 +61,18 @@ public class DepartmentCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Model model,String parentId){
     	Department department = new Department();
-    	if(ids!=null&&ids.length>0){
-    		 department = departmentBiz.get(ids[0]);
-    		 model.addAttribute("department", department);
-    	}
-    	if(StringUtils.isNotBlank(parentId)){
-    		department = departmentBiz.get(parentId);
-    		model.addAttribute("parentDepartment", department);
+    	try {
+	    	if(ids!=null&&ids.length>0){
+	    		 department = departmentBiz.get(ids[0]);
+	    		 model.addAttribute("department", department);
+	    	}
+	    	if(StringUtils.isNotBlank(parentId)){
+					department = departmentBiz.get(parentId);
+	    		model.addAttribute("parentDepartment", department);
+	    	}
+    	} catch (BizException e) {
+			log.error("获取单条数据失败");
+    		e.printStackTrace();
     	}
    		return "/department/addOrEdit";
    	}
@@ -74,8 +85,13 @@ public class DepartmentCtrl extends BaseCtrl {
    	public String toCompanySaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
     		
-    		Department department = departmentBiz.get(ids[0]);
-    		model.addAttribute("department", department);
+			try {
+				Department department = departmentBiz.get(ids[0]);
+				model.addAttribute("department", department);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     	}
    		return "/departmentCompany/addOrEdit";
    	}

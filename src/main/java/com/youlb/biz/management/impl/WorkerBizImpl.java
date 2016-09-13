@@ -131,7 +131,7 @@ public class WorkerBizImpl implements IWorkerBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(Worker worker, Operator loginUser) {
+	public void saveOrUpdate(Worker worker, Operator loginUser) throws BizException {
 		if(StringUtils.isBlank(worker.getId())){
 			String id = (String) workerDao.add(worker);
 			//添加sip账号
@@ -151,10 +151,11 @@ public class WorkerBizImpl implements IWorkerBiz {
      * 通过部门获取员工列表
      * @param departmentId
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IWorkerBiz#getWorkerList(java.lang.String)
      */
 	@Override
-	public List<Worker> getWorkerList(String departmentId) {
+	public List<Worker> getWorkerList(String departmentId) throws BizException {
 		 String hql = "from Worker where departmentId=? order by workerName";
 		return workerDao.find(hql, new Object[]{departmentId});
 	}
@@ -162,10 +163,11 @@ public class WorkerBizImpl implements IWorkerBiz {
      * 检查手机号码是否被注册
      * @param phone
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IWorkerBiz#checkPhoneExist(java.lang.String)
      */
 	@Override
-	public boolean checkPhoneExist(String phone,String id) {
+	public boolean checkPhoneExist(String phone,String id) throws BizException {
 		String hql = "select phone from Worker where phone=? ";
 		List<Object> values = new ArrayList<Object>();
 	    values.add(phone);

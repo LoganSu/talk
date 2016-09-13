@@ -106,7 +106,7 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(WorkerGroup workerGroup, Operator loginUser) {
+	public void saveOrUpdate(WorkerGroup workerGroup, Operator loginUser) throws BizException {
 		String insert ="insert into t_worker_to_group(fgroup_id,fworker_id) values(?,?)";
 		 //add
 		 if(StringUtils.isBlank(workerGroup.getId())){
@@ -135,10 +135,11 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
      * 获取登录用户的物业公司
      * @param loginUser
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IWorkerGroupBiz#getCompanyList(com.youlb.entity.privilege.Operator)
      */
 	@Override
-	public List<Department> getCompanyList(Operator loginUser) {
+	public List<Department> getCompanyList(Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("SELECT d.id,d.fdepartmentname from  t_department_domain tdd INNER JOIN t_department d on d.id=tdd.fdepartmentid ");
@@ -166,10 +167,11 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
      * @param groupId
      * @param loginUser
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IWorkerGroupBiz#showgroupWorkerList(java.lang.String, com.youlb.entity.privilege.Operator)
      */
 	@Override
-	public List<Worker> showgroupWorkerList(WorkerGroup workerGroup) {
+	public List<Worker> showgroupWorkerList(WorkerGroup workerGroup) throws BizException {
 		List<Worker> list = new ArrayList<Worker>();
 		if(StringUtils.isNotBlank(workerGroup.getId())){
 			StringBuilder sb = new StringBuilder();
@@ -196,10 +198,11 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
       * 添加分组员工
       * @param workerGroup
       * @param loginUser
+     * @throws BizException 
       * @see com.youlb.biz.management.IWorkerGroupBiz#addWorker(com.youlb.entity.management.WorkerGroup, com.youlb.entity.privilege.Operator)
       */
 	@Override
-	public void addWorker(WorkerGroup workerGroup, Operator loginUser) {
+	public void addWorker(WorkerGroup workerGroup, Operator loginUser) throws BizException {
 		String insert ="insert into t_worker_to_group(fgroup_id,fworker_id) values(?,?)";
 		 //删掉历史关系
 		 String delete = "delete from t_worker_to_group where fgroup_id=?";

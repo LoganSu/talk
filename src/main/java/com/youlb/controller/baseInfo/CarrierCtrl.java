@@ -22,6 +22,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.vo.QJson;
 import com.youlb.entity.vo.QTree;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: CarrierCtrl.java 
@@ -56,7 +57,12 @@ public class CarrierCtrl extends BaseCtrl {
 	public  Map<String, Object> showList(Carrier carrier){
 		List<Carrier> list = new ArrayList<Carrier>();
 		Operator loginUser = getLoginUser();
-		list = carrierBiz.showList(carrier, loginUser);
+		try {
+			list = carrierBiz.showList(carrier, loginUser);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return setRows(list);
 	}
@@ -70,7 +76,12 @@ public class CarrierCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,Carrier carrier,Model model){
     	
     	if(ids!=null&&ids.length>0){
-    		carrier = carrierBiz.get(ids[0]);
+    		try {
+				carrier = carrierBiz.get(ids[0]);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 //    	Operator loginUser = getLoginUser();
     	//获取权限列表
@@ -201,20 +212,25 @@ public class CarrierCtrl extends BaseCtrl {
 	public QJson domainList(Carrier carrier){
 		QJson json = new QJson();
 		if(StringUtils.isNotBlank(carrier.getId())){
-			carrier = carrierBiz.get(carrier.getId());
-		}
-		//获取权限列表
-		List<Domain> domainList = domainBiz.getDomainList(carrier, getLoginUser());
+			try {
+				carrier = carrierBiz.get(carrier.getId());
+				//获取权限列表
+				List<Domain> domainList = domainBiz.getDomainList(carrier, getLoginUser());
 //    	List<Privilege> privilegeList = roleBiz.getPrivilegeList(loginUser,role);
-    	QTree t = new QTree();
-		t.setText("选择区域");
-		t.setUrl("checkfalse");
-		List<QTree> children = objToTree(domainList);
-		t.setChildren(children);;
-		json.setMsg("OK");
-		json.setObject(t);
-		json.setSuccess(true);
-		json.setType("1");
+				QTree t = new QTree();
+				t.setText("选择区域");
+				t.setUrl("checkfalse");
+				List<QTree> children = objToTree(domainList);
+				t.setChildren(children);;
+				json.setMsg("OK");
+				json.setObject(t);
+				json.setSuccess(true);
+				json.setType("1");
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
    		return json;
 	}
 	

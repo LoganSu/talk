@@ -72,7 +72,12 @@ public class PermissionCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,CardInfo cardInfo,Model model){
     	if(ids!=null&&ids.length>0){
-    		cardInfo = permissionBiz.get(ids[0]);
+    		try {
+				cardInfo = permissionBiz.get(ids[0]);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	//获取父节点
 //    	if(StringUtils.isNotBlank(domain.getParentId())){
@@ -146,8 +151,13 @@ public class PermissionCtrl extends BaseCtrl {
    	public String toOpenCard(CardInfo cardInfo,Model model){
     	//获取人的地址列表
     	if(StringUtils.isNotBlank(cardInfo.getRoomId())){
-    		String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
-    		model.addAttribute("address",address);
+			try {
+				String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
+				model.addAttribute("address",address);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
 //    	String ic_cardKey = (String) servletContext.getAttribute("ic_cardKey");
 //    	System.out.println(ic_cardKey);
@@ -160,14 +170,19 @@ public class PermissionCtrl extends BaseCtrl {
     @RequestMapping("/cardInfoLossUnlossDestroy.do")
    	public String cardInfoLossUnlossDestroy(CardInfo cardInfo,Model model){
     	//获取card map  key=cardSn value=CardInfo
-    	Map<String,CardInfo> cardMap = permissionBiz.cardMap(cardInfo);
-    	//获取人的地址列表
-    	if(StringUtils.isNotBlank(cardInfo.getRoomId())){
-    		String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
-    		model.addAttribute("address",address);
-    	}
-    	model.addAttribute("cardInfo",cardInfo);
-    	model.addAttribute("cardMap",cardMap);
+		try {
+			Map<String, CardInfo> cardMap = permissionBiz.cardMap(cardInfo);
+			//获取人的地址列表
+			if(StringUtils.isNotBlank(cardInfo.getRoomId())){
+				String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
+				model.addAttribute("address",address);
+			}
+			model.addAttribute("cardInfo",cardInfo);
+			model.addAttribute("cardMap",cardMap);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
    		return "/permission/cardInfoLossUnlossDestroy";
    	}
     
@@ -215,8 +230,13 @@ public class PermissionCtrl extends BaseCtrl {
      */
     @RequestMapping("/cardInfoPermission.do")
    	public String cardInfoPermission(CardInfo cardInfo,Model model){
+    	try {
     	List<CardInfo> addressList = permissionBiz.findAddressByCardSn(cardInfo);
     	model.addAttribute("addressList",addressList);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
    		return "/permission/cardInfoPermission";
    	}
     /**
@@ -228,10 +248,15 @@ public class PermissionCtrl extends BaseCtrl {
     @RequestMapping("/connectCardMachine.do")
     @ResponseBody
     public CardInfo connectCardMachine(CardInfo cardInf,Model model){
-    	boolean b = permissionBiz.checkCardExist(cardInf.getCardSn()+"");
-    	if(b){
-    		return null;
-    	}
+		try {
+			boolean b = permissionBiz.checkCardExist(cardInf.getCardSn()+"");
+			if(b){
+				return null;
+			}
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	return cardInf;
     }
     
@@ -246,12 +271,12 @@ public class PermissionCtrl extends BaseCtrl {
     @ResponseBody
     public String writeCard(CardInfo cardInfo,Model model){
     	//检查卡片是否已经使用
+    	try {
     	boolean b = permissionBiz.checkCardExist(cardInfo.getCardSn());
     	if(b){
     		super.message="1";
     		return super.message;
     	}
-    	try {
     		int i = permissionBiz.writeCard(cardInfo);
 			super.message=i+"";
 		} catch (IllegalAccessException e) {

@@ -83,23 +83,28 @@ public class AppManageCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,AppManage appManage,Model model){
     	String opraterType = appManage.getOpraterType();
-    	if(ids!=null&&ids.length>0){
-    		appManage = appManageBiz.get(ids[0]);
-    		appManage.setOpraterType(opraterType);
+    	try {
+	    	if(ids!=null&&ids.length>0){
+					appManage = appManageBiz.get(ids[0]);
+	    		appManage.setOpraterType(opraterType);
+	    	}
+	    	if(SysStatic.two.equals(appManage.getAppType())){
+	    		List<AppManage> appList = appManageBiz.getOldVersion();
+	    		model.addAttribute("appList",appList);
+	    	}
+	    	//获取父节点
+	//    	if(StringUtils.isNotBlank(domain.getParentId())){
+	//    		Domain parentDomain = domainBiz.get(domain.getParentId());
+	//    		domain.setParentName(parentDomain.getName());//父节点名称
+	//    		domain.setLevel(parentDomain.getLevel());//父节点等级
+	//    	}else{
+	//    		domain.setParentId("1");
+	//    	}
+	    	model.addAttribute("appManage",appManage);
+    	} catch (BizException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
     	}
-    	if(SysStatic.two.equals(appManage.getAppType())){
-    		List<AppManage> appList = appManageBiz.getOldVersion();
-    		model.addAttribute("appList",appList);
-    	}
-    	//获取父节点
-//    	if(StringUtils.isNotBlank(domain.getParentId())){
-//    		Domain parentDomain = domainBiz.get(domain.getParentId());
-//    		domain.setParentName(parentDomain.getName());//父节点名称
-//    		domain.setLevel(parentDomain.getLevel());//父节点等级
-//    	}else{
-//    		domain.setParentId("1");
-//    	}
-    	model.addAttribute("appManage",appManage);
    		return "/appManage/addOrEdit";
    	}
     /**
@@ -154,7 +159,7 @@ public class AppManageCtrl extends BaseCtrl {
     		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
     		if(appIcon!=null&&!appIcon.isEmpty()){
 				String iconRealName = appIcon.getOriginalFilename();
-    			String iconSuffix = iconRealName.substring(iconRealName.indexOf("."));
+    			String iconSuffix = iconRealName.substring(iconRealName.lastIndexOf("."));
     			if(!".jpg".equalsIgnoreCase(iconSuffix)&&!".jpeg".equalsIgnoreCase(iconSuffix)&&!".png".equalsIgnoreCase(iconSuffix)){
     				super.message = "图标请选择.jpg、.jpeg、.png文件类型！";
         			model.addAttribute("message", super.message);
@@ -279,34 +284,37 @@ public class AppManageCtrl extends BaseCtrl {
     public ModelAndView download(HttpServletRequest request,HttpServletResponse response,String id,Model model) {
     	//获取项目根目录
 //    	String rootPath = request.getSession().getServletContext().getRealPath("/");
-    	AppManage appManage = appManageBiz.get(id);
-    	String fileName=appManage.getVersionName()+".apk";
-        File file = new File(SysStatic.APPDIR.substring(0,SysStatic.APPDIR.indexOf("appDir")-1)+appManage.getRelativePath());
-        if(!file.exists()){
-        	super.message = "该文件不存在！";
-			model.addAttribute("message", super.message);
-        	return new ModelAndView("/common/input");
-        }
-        long fileLength = file.length();  
-        BufferedInputStream bis = null;
-        BufferedOutputStream out = null;
-        try {
-            bis = new BufferedInputStream(new FileInputStream(file));
-            out = new BufferedOutputStream(response.getOutputStream());
-            setFileDownloadHeader(request,response, fileName,fileLength);
-            byte[] buff = new byte[1024];
-            while (true) {
-              int bytesRead;
-              if (-1 == (bytesRead = bis.read(buff, 0, buff.length))){
-                  break;
-              }
-              out.write(buff, 0, bytesRead);
-            }
-//            file.deleteOnExit();
-        }
+    	BufferedInputStream bis = null;
+    	BufferedOutputStream out = null;
+    	try {
+	    	AppManage appManage = appManageBiz.get(id);
+	    	String fileName=appManage.getVersionName()+".apk";
+	        File file = new File(SysStatic.APPDIR.substring(0,SysStatic.APPDIR.indexOf("appDir")-1)+appManage.getRelativePath());
+	        if(!file.exists()){
+	        	super.message = "该文件不存在！";
+				model.addAttribute("message", super.message);
+	        	return new ModelAndView("/common/input");
+	        }
+	        long fileLength = file.length();  
+	            bis = new BufferedInputStream(new FileInputStream(file));
+	            out = new BufferedOutputStream(response.getOutputStream());
+	            setFileDownloadHeader(request,response, fileName,fileLength);
+	            byte[] buff = new byte[1024];
+	            while (true) {
+	              int bytesRead;
+	              if (-1 == (bytesRead = bis.read(buff, 0, buff.length))){
+	                  break;
+	              }
+	              out.write(buff, 0, bytesRead);
+	            }
+	//            file.deleteOnExit();
+	        }
         catch (IOException e) {
 			e.printStackTrace();
-        }
+        } catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         finally{
             try {
                 if(bis != null){

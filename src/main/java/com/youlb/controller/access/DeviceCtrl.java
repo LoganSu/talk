@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.access.IDeviceBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.access.DeviceInfo;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: DeviceCtrl.java 
@@ -54,7 +55,12 @@ public class DeviceCtrl extends BaseCtrl{
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,DeviceInfo device,Model model){
     	if(ids!=null&&ids.length>0){
-    		 device = deviceBiz.get(ids[0]);
+    		 try {
+				device = deviceBiz.get(ids[0]);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
     	//获取父节点
 //    	if(StringUtils.isNotBlank(domain.getParentId())){

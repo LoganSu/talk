@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.biz.management.IRepairsBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.management.Repairs;
+import com.youlb.utils.exception.BizException;
 
 /**
  * 
@@ -32,6 +35,8 @@ import com.youlb.entity.management.Repairs;
 @Scope("prototype")
 @RequestMapping("/mc/repairs")
 public class RepairsCtrl extends BaseCtrl{
+	private static Logger log = LoggerFactory.getLogger(BaseCtrl.class);
+
 	@Autowired
 	private IRepairsBiz repairsBiz;
 	public void setRepairsBiz(IRepairsBiz repairsBiz) {
@@ -64,8 +69,13 @@ public class RepairsCtrl extends BaseCtrl{
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
-    		Repairs repairs = repairsBiz.get(ids[0]);
-    		model.addAttribute("repairs",repairs);
+			try {
+				Repairs repairs = repairsBiz.get(ids[0]);
+				model.addAttribute("repairs",repairs);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     	}
    		return "/repairs/addOrEdit";
    	}
@@ -103,28 +113,21 @@ public class RepairsCtrl extends BaseCtrl{
 		}
     	 return  super.message;
     }
-//    @Override
-//    public String search(String modulePath, Model model) {
-//    	HttpServletRequest request = getRequest();
-//    	String orderNature = request.getParameter("orderNature");
-//    	//获取展现数字数据
-//    	String[] countArr = repairsBiz.countArr(Integer.parseInt(orderNature));
-//    	model.addAttribute("all", countArr[0]);
-//    	model.addAttribute("finish", countArr[1]);
-//    	model.addAttribute("unfinish", countArr[2]);
-//    	model.addAttribute("finishing", countArr[3]);
-//    	return super.search(modulePath, model);
-//    }
     @Override
     public String showPage(Model model) {
     	HttpServletRequest request = getRequest();
     	String orderNature = request.getParameter("orderNature");
     	//获取展现数字数据
-    	String[] countArr = repairsBiz.countArr(Integer.parseInt(orderNature),getLoginUser());
-    	model.addAttribute("all", countArr[0]);
-    	model.addAttribute("finish", countArr[1]);
-    	model.addAttribute("unfinish", countArr[2]);
-    	model.addAttribute("finishing", countArr[3]);
+		try {
+			String[] countArr = repairsBiz.countArr(Integer.parseInt(orderNature),getLoginUser());
+	    	model.addAttribute("all", countArr[0]);
+	    	model.addAttribute("finish", countArr[1]);
+	    	model.addAttribute("unfinish", countArr[2]);
+	    	model.addAttribute("finishing", countArr[3]);
+		} catch (NumberFormatException | BizException e) {
+			log.error("获取数字显示出错");
+			e.printStackTrace();
+		}
     	return super.showPage(model);
     }
 	

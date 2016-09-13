@@ -233,10 +233,11 @@ public class AreaBizImpl implements IAreaBiz {
 	 * 通过父id获取地址
 	 * @param parentId
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IAreaBiz#getAddressByParentId(java.lang.String)
 	 */
 	@Override
-	public List<Address> getAddressByParentId(String parentId) {
+	public List<Address> getAddressByParentId(String parentId) throws BizException {
 		 String sql = "select id, fshortname from t_address where fparentid=? ";
 		 //城市级
 		 if(StringUtils.isBlank(parentId)){
@@ -258,10 +259,11 @@ public class AreaBizImpl implements IAreaBiz {
 	 * 获取社区编号
 	 * @param city
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IAreaBiz#getAreaCode(java.lang.String)
 	 */
 	@Override
-	public String getAreaCode(String city) {
+	public String getAreaCode(String city) throws BizException {
 		String sql = "select num from t_areacode where address=?";
 		List<String> list = areaSqlDao.pageFindBySql(sql, new Object[]{city});
 		if(list!=null&&!list.isEmpty()){
@@ -275,7 +277,7 @@ public class AreaBizImpl implements IAreaBiz {
 	}
 	
 	@Override
-	public List<Area> getAreaList(Area area) {
+	public List<Area> getAreaList(Area area) throws BizException {
 		 StringBuilder sb = new StringBuilder("from Area where province=? and city=? and areaNum=? ");
 		 List<Object> values = new ArrayList<Object>();
 			values.add(area.getProvince());

@@ -10,29 +10,29 @@ import com.youlb.utils.exception.BizException;
 
 public interface IAboutNeighborhoodsBiz extends IBaseBiz<AboutNeighborhoods> {
 
-	void saveOrUpdate(AboutNeighborhoods aboutNeighborhoods, Operator loginUser);
+	void saveOrUpdate(AboutNeighborhoods aboutNeighborhoods, Operator loginUser)throws BizException;
     /**
      * 向上箭头排序
      * @param aboutNeighborhoods
      */
-	void orderUp(AboutNeighborhoods aboutNeighborhoods);
+	void orderUp(AboutNeighborhoods aboutNeighborhoods)throws BizException;
     /**
      * 获取最小值
      * @param aboutNeighborhoods
      * @return
      */
-	int getMinOrder(AboutNeighborhoods aboutNeighborhoods);
+	int getMinOrder(AboutNeighborhoods aboutNeighborhoods)throws BizException;
 	 /**
      * 获取最大值
      * @param aboutNeighborhoods
      * @return
      */
-	int getMaxOrder(AboutNeighborhoods aboutNeighborhoods);
+	int getMaxOrder(AboutNeighborhoods aboutNeighborhoods)throws BizException;
 	/**
      * 向下箭头排序
      * @param aboutNeighborhoods
      */
-	void orderDown(AboutNeighborhoods aboutNeighborhoods);
+	void orderDown(AboutNeighborhoods aboutNeighborhoods)throws BizException;
 	/**
 	 * 更新状态
 	 * @param aboutNeighborhoods
@@ -40,6 +40,6 @@ public interface IAboutNeighborhoodsBiz extends IBaseBiz<AboutNeighborhoods> {
 	 */
 	int updateCheck(AboutNeighborhoods aboutNeighborhoods,Operator loginUser)throws BizException;
 	List<AboutNeighborhoodsRemark> showRemarkList(
-			AboutNeighborhoods aboutNeighborhoods);
+			AboutNeighborhoods aboutNeighborhoods)throws BizException;
    
 }

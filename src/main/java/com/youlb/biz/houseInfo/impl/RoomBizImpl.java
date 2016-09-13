@@ -120,10 +120,12 @@ public class RoomBizImpl implements IRoomBiz {
 
 	/**
 	 * @param room
+	 * @throws BizException 
+	 * @throws NumberFormatException 
 	 * @see com.youlb.biz.room.IRoomBiz#saveOrUpdate(com.youlb.entity.room.Room)
 	 */
 	@Override
-	public void saveOrUpdate(Room room,Operator loginUser) {
+	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException {
 		//add
 		if(StringUtils.isBlank(room.getId())){
 			String sipNum = getSipNum(room.getParentId());
@@ -170,8 +172,9 @@ public class RoomBizImpl implements IRoomBiz {
 	/**
 	 * @param domainId
 	 * @return
+	 * @throws BizException 
 	 */
-	private String getSipNum(String domainId) {
+	private String getSipNum(String domainId) throws BizException {
 		String sql ="select d.id,d.flayer from t_domain d where d.id=?";
 		List<Object[]> list = domainSqlDao.pageFindBySql(sql, new Object[]{domainId});
 		StringBuilder sb = new StringBuilder();
@@ -182,8 +185,9 @@ public class RoomBizImpl implements IRoomBiz {
 	/**
 	 * @param obj
 	 * @return
+	 * @throws BizException 
 	 */
-	private Object[] getSipNumDetail(Object[] obj,StringBuilder sb) {
+	private Object[] getSipNumDetail(Object[] obj,StringBuilder sb) throws BizException {
 		if(obj!=null){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT td.id,td.flayer,");
@@ -236,10 +240,11 @@ public class RoomBizImpl implements IRoomBiz {
 
 	/**解除绑定户主
 	 * @param room
+	 * @throws BizException 
 	 * @see com.youlb.biz.room.IRoomBiz#unbindingRoom(com.youlb.entity.room.Room)
 	 */
 	@Override
-	public void unbindingRoom(Room room) {
+	public void unbindingRoom(Room room) throws BizException {
 		String hql ="update Room t set t.hostInfoId = null where t.id = ?"; 
 		roomSqlDao.update(hql, new Object[]{room.getId()});
 	}
@@ -321,7 +326,7 @@ public class RoomBizImpl implements IRoomBiz {
 	}
 
 	@Override 
-	public String getAddressByDomainId(String domainId) {
+	public String getAddressByDomainId(String domainId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer >0 ORDER BY flayer),'')");

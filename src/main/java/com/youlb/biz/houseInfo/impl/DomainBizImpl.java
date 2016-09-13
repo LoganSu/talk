@@ -142,10 +142,11 @@ public class DomainBizImpl implements IDomainBiz {
 	/**获取子节点
 	 * @param id
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IDomainBiz#getDomainByParentId(java.lang.String)
 	 */
 	@Override
-	public List<Domain> getDomainByParentId(String id,Operator loginUser,String dwellerId) {
+	public List<Domain> getDomainByParentId(String id,Operator loginUser,String dwellerId) throws BizException {
 		List<Domain> list = new ArrayList<Domain>();
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
@@ -181,10 +182,11 @@ public class DomainBizImpl implements IDomainBiz {
 
 	/**deleteByEntityId
 	 * @param id
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IDomainBiz#deleteByEntityId(java.io.Serializable)
 	 */
 	@Override
-	public void deleteByEntityId(Serializable id) {
+	public void deleteByEntityId(Serializable id) throws BizException {
 		String sql ="delete from t_domain t where t.fentityid = ?";
 		domainSqlDao.executeSql(sql, new Object[]{id});
 	}
@@ -193,10 +195,11 @@ public class DomainBizImpl implements IDomainBiz {
 	 * @param carrier
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IDomainBiz#getDomainList(com.youlb.entity.baseInfo.Carrier, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Domain> getDomainList(Carrier carrier, Operator loginUser) {
+	public List<Domain> getDomainList(Carrier carrier, Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("from Domain t where t.parentId=? ");
@@ -231,8 +234,9 @@ public class DomainBizImpl implements IDomainBiz {
 	 * 递归获取权限列表
 	 * @param pList
 	 * @return
+	 * @throws BizException 
 	 */
-	private List<Domain> getDomainList(List<Domain> dList,Carrier carrier,Operator loginUser){
+	private List<Domain> getDomainList(List<Domain> dList,Carrier carrier,Operator loginUser) throws BizException{
 		if(dList!=null){
 			for(Domain domain:dList){
 				StringBuilder sb = new StringBuilder();
@@ -263,7 +267,7 @@ public class DomainBizImpl implements IDomainBiz {
 	
 	
 	@Override
-	public String getDomainIdByEntityId(String entityid) {
+	public String getDomainIdByEntityId(String entityid) throws BizException {
 		String sql="select d.id from t_domain d where d.fentityid=?";
 		List<String> list = domainSqlDao.pageFindBySql(sql, new Object[]{entityid});
 		if(list!=null&&!list.isEmpty()){
@@ -275,9 +279,10 @@ public class DomainBizImpl implements IDomainBiz {
 	 * 获取单元下面的房间号，判断房号是否已经存在
 	 * @param room
 	 * @return
+	 * @throws BizException 
 	 */
 	@Override
-	public String getDomainByParentId(Room room) {
+	public String getDomainByParentId(Room room) throws BizException {
 		String sql="select d.fremark from t_domain d where d.fparentid=? and d.fremark=? ";
 		List<Object> values = new ArrayList<Object>();
 		values.add(room.getParentId());
@@ -296,9 +301,10 @@ public class DomainBizImpl implements IDomainBiz {
 	 * 通过entityid 获取有子节点的域名称
 	 * @param ids
 	 * @return
+	 * @throws BizException 
 	 */
 	@Override
-	public String hasChild(String[] ids) {
+	public String hasChild(String[] ids) throws BizException {
 		String sql="WITH RECURSIVE r AS (SELECT d.* FROM t_domain d WHERE d.fentityid =? union all SELECT t_domain.* FROM t_domain, r WHERE t_domain.fparentid = r.id)"
 				  + " SELECT r.id FROM r where r.fentityid!=?";
 		if(ids!=null){
@@ -319,7 +325,7 @@ public class DomainBizImpl implements IDomainBiz {
 	}
 
 	@Override
-	public String getParentIdByEntityId(String entityid) {
+	public String getParentIdByEntityId(String entityid) throws BizException {
 		String sql="select d.fparentid from t_domain d where d.fentityid=?";
 		List<String> list = domainSqlDao.pageFindBySql(sql, new Object[]{entityid});
 		if(list!=null&&!list.isEmpty()){

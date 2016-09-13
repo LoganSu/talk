@@ -10,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.infoPublish.TodayNews;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
 
@@ -22,14 +23,14 @@ import com.youlb.utils.exception.JsonException;
  */
 public interface ITodayNewsBiz extends IBaseBiz<TodayNews> {
 
-	public void saveOrUpdate(TodayNews todayNews, Operator loginUser) throws IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException ;
+	public void saveOrUpdate(TodayNews todayNews, Operator loginUser) throws BizException, IllegalAccessException, InvocationTargetException, ClientProtocolException, IOException, ParseException, JsonException ;
 
 	/**
 	 * 发布
 	 * @param ids
 	 * @param loginUser
 	 */
-	public void publish(String[] ids, Operator loginUser)throws IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
+	public void publish(String[] ids, Operator loginUser)throws BizException, IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
 
 
  

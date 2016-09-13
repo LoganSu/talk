@@ -244,10 +244,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * @throws IOException 
 	 * @throws JsonException 
 	 * @throws ParseException 
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#writeCard(com.youlb.entity.access.CardInfo)
 	 */
 	@Override
-	public int writeCard(CardInfo cardInfo) throws ParseException, JsonException, IOException,BizException  {
+	public int writeCard(CardInfo cardInfo) throws ParseException, JsonException, IOException, BizException  {
 //		JNativeTest.writeBasicInfo(cardInfo);
 		//添加ic卡信息
 		//激活状态
@@ -316,10 +317,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**
 	 * @param cardSn
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#checkCardExist(java.lang.String)
 	 */
 	@Override
-	public boolean checkCardExist(String cardSn) {
+	public boolean checkCardExist(String cardSn) throws BizException {
 		String hql = "from CardInfo where cardSn=? and cardStatus !='3' ";//注销的可以重新发卡
 		List<CardInfo> cardList = cardSqlDao.find(hql, new Object[]{cardSn});
 		if(cardList.size()>0){
@@ -331,10 +333,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#cardMap(com.youlb.entity.access.CardInfo)
 	 */
 	@Override
-	public Map<String, CardInfo> cardMap(CardInfo cardInfo) {
+	public Map<String, CardInfo> cardMap(CardInfo cardInfo) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("from CardInfo t where t.roomId = ? ");
@@ -424,8 +427,9 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**通过卡片序列号找到该卡拥有权限的domainsn 多个使用,分隔
 	 * @param cardSn
 	 * @return
+	 * @throws BizException 
 	 */
-	private String findDomainSn(String cardSn) {
+	private String findDomainSn(String cardSn) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT dm.fdomainsn from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
 		.append("WITH RECURSIVE r AS ( ")
@@ -498,10 +502,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**获取地址信息
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
 	 */
 	@Override
-	public String findAddressByRoomId(String roomId) {
+	public String findAddressByRoomId(String roomId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
@@ -515,8 +520,9 @@ public class PermissionBizImpl implements IPermissionBiz {
      * 递归获取详细地址集合
      * @param map key=id-domainSn  value= StringBuilder
      * @return
+     * @throws BizException 
      */
-	private Map<String,StringBuilder> getAddress(Map<String,StringBuilder> map){
+	private Map<String,StringBuilder> getAddress(Map<String,StringBuilder> map) throws BizException{
 		    String sql="SELECT d.fparentid ,d.fremark from t_domain d where d.id=?";
 			boolean b=false;
 			Map<String,StringBuilder> newMap = new HashMap<String, StringBuilder>();
@@ -540,10 +546,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddressByCardSn(com.youlb.entity.access.CardInfo)
 	 */
 	@Override
-	public List<CardInfo> findAddressByCardSn(CardInfo cardInfo) {
+	public List<CardInfo> findAddressByCardSn(CardInfo cardInfo) throws BizException {
 		String sql="SELECT d.id,d.fdomainsn FROM t_domain_card dc INNER JOIN t_domain d on d.fdomainsn=dc.fdomainsn where dc.fcardsn=? ";
 		 List<Object[]> listObj = cardSqlDao.pageFindBySql(sql, new Object[]{cardInfo.getCardSn()});
 		 Map<String,StringBuilder> map = new HashMap<String, StringBuilder>();
@@ -570,10 +577,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * @param cardInfo
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#appRecordList(com.youlb.entity.access.CardInfo, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<CardRecord> appRecordList(CardRecord cardRecord, Operator loginUser) {
+	public List<CardRecord> appRecordList(CardRecord cardRecord, Operator loginUser) throws BizException {
 		cardRecord.setMode("5");//app开锁类型
 		List<CardRecord> list = cardRecord(cardRecord, loginUser);
 		return list;
@@ -582,10 +590,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * @param cardRecord
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#cardRecord(com.youlb.entity.access.CardInfo, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<CardRecord> cardRecord(CardRecord cardRecord, Operator loginUser) {
+	public List<CardRecord> cardRecord(CardRecord cardRecord, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		sb.append("select * from(SELECT cr.fcardsn cardsn,cr.ftime cardtime,cr.fpath imgpath,cr.id id,cr.fusername username,dc.fdomainid domainid")
@@ -636,10 +645,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	/**
 	 * @param cardSn
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#getImg(java.lang.String)
 	 */
 	@Override
-	public CardInfo getImg(Integer id) {
+	public CardInfo getImg(Integer id) throws BizException {
 		String sql ="select cr.fpath from t_cardrecord cr where cr.id=?";
 		List<String> path = cardSqlDao.pageFindBySql(sql, new Object[]{id});
 		CardInfo info = new CardInfo();

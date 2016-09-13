@@ -12,5 +12,7 @@
 	<bean id="iPManageDao" parent="sqlDao">
 		<property name="entityClass" value="com.youlb.entity.IPManage.IPManage"/>
 	</bean>
-	
+	<bean id="SMSManageDao" parent="sqlDao">
+		<property name="entityClass" value="com.youlb.entity.SMSManage.SMSManage"/>
+	</bean>
 </beans>

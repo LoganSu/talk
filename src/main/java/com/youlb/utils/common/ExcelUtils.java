@@ -163,7 +163,15 @@ public class ExcelUtils {
 
    }
    
-   
+   /**
+    * 
+    * @param title
+    * @param headersName
+    * @param headersId
+    * @param dtoList
+    * @param file
+    * @return
+    */
    public static <T extends Object>String exportExcel(String title, String[] headersName,String[] headersId,List<T> dtoList,String file) {
 		//表头
 		Map<Integer,String> map = new HashMap<Integer,String>();
@@ -271,4 +279,5 @@ public class ExcelUtils {
 		}
 		return file;
 	}
+   
 }

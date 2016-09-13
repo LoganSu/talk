@@ -172,10 +172,11 @@ public class RepairsBizImpl implements IRepairsBiz {
     /**
      * 获取展现数字数据
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.ICustomerServiceBiz#countArr()
      */
 	@Override
-	public String[] countArr(Integer orderNature,Operator loginUser) {
+	public String[] countArr(Integer orderNature,Operator loginUser) throws BizException {
 		String[] arr = new String[4];
 		 //总数
 		String sql = "select count(*) from t_repairs r inner join t_domain d on d.fentityid=r.froom_id where r.forder_nature=? ";
@@ -211,7 +212,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 
 
 	@Override
-	public void saveOrUpdate(Repairs repairs, Operator loginUser) {
+	public void saveOrUpdate(Repairs repairs, Operator loginUser) throws BizException {
 		//add
 		if(StringUtils.isBlank(repairs.getId())){
 			//封装对象
@@ -230,7 +231,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 	}
 
 
-	private Repairs setRepairs(Repairs repairs) {
+	private Repairs setRepairs(Repairs repairs) throws BizException {
 		repairs.setStatus(SysStatic.one);//未处理
 		repairs.setOrderNum(new Date().getTime()+"");//工单编号
 		String sql = "select fentityid from t_domain where id =?";
@@ -253,7 +254,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 	}
     
 
-	private String getAddressByDomainId(String roomId) {
+	private String getAddressByDomainId(String roomId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer >0 ORDER BY flayer),'')");

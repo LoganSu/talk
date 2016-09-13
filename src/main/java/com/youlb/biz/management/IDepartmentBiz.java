@@ -6,6 +6,7 @@ import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.management.Department;
 import com.youlb.entity.management.DepartmentTree;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 /**
  * 
 * @ClassName: IDepartmentBiz.java 
@@ -16,18 +17,18 @@ import com.youlb.entity.privilege.Operator;
  */
 public interface IDepartmentBiz extends IBaseBiz<Department> {
 
-	void saveOrUpdate(Department department, Operator loginUser);
+	void saveOrUpdate(Department department, Operator loginUser)throws BizException;
     /**
      * 获取部门树状结构数据
      * @param department
      * @param loginUser
      * @return
      */
-	List<DepartmentTree> showListDepartmentTree(DepartmentTree department,Operator loginUser);
+	List<DepartmentTree> showListDepartmentTree(DepartmentTree department,Operator loginUser)throws BizException;
 	/**
 	 * 检查社区是否已经绑定物业公司
 	 * @param domainId
 	 * @return
 	 */
-	String checkDomain(String domainId);
+	String checkDomain(String domainId)throws BizException;
 }

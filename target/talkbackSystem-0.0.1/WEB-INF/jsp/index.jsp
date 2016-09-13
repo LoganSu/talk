@@ -110,6 +110,7 @@
     <script src="${path}/js/table/aboutNeighborhoodsTable.js"></script>
     <script src="${path}/js/table/deviceCountSipTable.js"></script>
     <script src="${path}/js/table/IPManageTable.js"></script>
+    <script src="${path}/js/table/SMSManageTable.js"></script>
     
     
     <!-- 导入自己的js文件-->
@@ -425,6 +426,10 @@
                              <r:role auth="服务器IP管理">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li>
+                             </r:role>
+                             <r:role auth="短信网关配置">
+                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
                              </r:role>
                            </ul>
                        </div>

@@ -158,10 +158,11 @@ public class UsersBizImpl implements IUsersBiz {
     /**
      * 暂停用户使用
      * @param id
+     * @throws BizException 
      * @see com.youlb.biz.countManage.IUsersBiz#update(java.lang.String)
      */
 	@Override
-	public void update(Integer id,String status) {
+	public void update(Integer id,String status) throws BizException {
 		String hql ="update Users set status = ? where id=?";
 		usersSqlDao.update(hql, new Object[]{status,id});
 	}

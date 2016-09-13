@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.ServletConfig;
@@ -44,7 +46,7 @@ public class InitServlet extends HttpServlet {
 	 * 系统初始化参数
 	 * @param config 配置对象
 	 */
-	private static void initSysParam(ServletConfig config) {
+	private static void initSysParam(ServletConfig config) throws BizException{
 		ServletContext context = config.getServletContext();
 		//web根路径
 		String path = context.getContextPath();
@@ -55,7 +57,7 @@ public class InitServlet extends HttpServlet {
 		//初始化被锁用户名单容器
 		context.setAttribute("loockList", new ArrayList<String>());
 		//初始化发送短信超过指定次数集合用户
-//		context.setAttribute("exceedSendSmsMap", new HashMap<String,Map<String,Object>>());
+		context.setAttribute("exceedSendSmsMap", new HashMap<String,Map<String,Object>>());
 	}
 	
 	@Override
@@ -117,7 +119,7 @@ public class InitServlet extends HttpServlet {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private static void initSysProperties(ServletConfig config) throws FileNotFoundException, IOException {
+	private static void initSysProperties(ServletConfig config) throws FileNotFoundException, IOException, BizException{
 		String path = InitServlet.class.getClassLoader().getResource("").getPath(); 
 		Properties proper=new Properties();
 		proper.load(new FileInputStream(path+"config.properties"));

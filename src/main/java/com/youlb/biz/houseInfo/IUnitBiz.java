@@ -6,6 +6,7 @@ import java.util.List;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.houseInfo.Unit;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: IUnitBiz.java 
@@ -19,13 +20,13 @@ public interface IUnitBiz extends IBaseBiz<Unit>{
 	/**添加或更新
 	 * @param unit
 	 */
-	void saveOrUpdate(Unit unit,Operator loginUser);
+	void saveOrUpdate(Unit unit,Operator loginUser)throws BizException;
 
 	/**通过building id获取unit集合
 	 * @param id
 	 * @return
 	 */
-	List<Unit> getUnitListBybuildingId(String id);
+	List<Unit> getUnitListBybuildingId(String id)throws BizException;
 
 
 

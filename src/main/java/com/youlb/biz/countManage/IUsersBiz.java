@@ -2,6 +2,7 @@ package com.youlb.biz.countManage;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.countManage.Users;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: IUsersBiz.java 
@@ -20,6 +21,6 @@ public interface IUsersBiz extends IBaseBiz<Users> {
 	 * 暂停用户使用
 	 * @param id
 	 */
-	void update(Integer id,String status);
+	void update(Integer id,String status)throws BizException;
 
 }

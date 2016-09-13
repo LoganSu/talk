@@ -78,24 +78,25 @@ public class StaticParamBizImpl implements IStaticParamBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(StaticParam staticParam, Operator loginUser) {
+	public void saveOrUpdate(StaticParam staticParam, Operator loginUser) throws BizException {
 		 staticParamSqlDao.saveOrUpdate(staticParam);
 	}
     /**
      * 通过key获取参数对象
      * @param fkey
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.staticParam.IStaticParamBiz#getParamByKey(java.lang.String)
      */
 	@Override
-	public StaticParam getParamByKey(String fkey) {
+	public StaticParam getParamByKey(String fkey) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("from StaticParam t where t.fkey = ? ");
 		return staticParamSqlDao.findObject(sb.toString(), new Object[]{fkey});
 	}
 
 	@Override
-	public List<StaticParam> getParamByLikeKey(String fkey,Integer lenght) {
+	public List<StaticParam> getParamByLikeKey(String fkey,Integer lenght) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("from StaticParam t where substr(t.fkey, 0 ,?)=?");
 		return staticParamSqlDao.find(sb.toString(), new Object[]{lenght,fkey});

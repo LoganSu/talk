@@ -94,10 +94,11 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 
 	/**
 	 * @param privilege
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IPrivilegeBiz#saveOrUpdate(com.youlb.entity.privilege.Privilege)
 	 */
 	@Override
-	public void saveOrUpdate(Privilege privilege) {
+	public void saveOrUpdate(Privilege privilege) throws BizException {
 		//add
 		if(StringUtils.isBlank(privilege.getId())){
 			privilegeSqlDao.add(privilege);
@@ -111,10 +112,11 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 	 * @param privilege
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IPrivilegeBiz#showList(com.youlb.entity.privilege.Privilege, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Privilege> showList(Privilege privilege, Operator loginUser) {
+	public List<Privilege> showList(Privilege privilege, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		sb.append("from Privilege t where 1=1 ");
@@ -133,10 +135,11 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 	 * @param id
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IPrivilegeBiz#showListByParentId(java.lang.String, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Privilege> showListByParentId(String id, Operator loginUser) {
+	public List<Privilege> showListByParentId(String id, Operator loginUser) throws BizException {
 		if(StringUtils.isNotBlank(id)){
 			StringBuilder sb = new StringBuilder();
 			List<Object> values = new ArrayList<Object>();

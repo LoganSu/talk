@@ -93,8 +93,9 @@ public class DwellerBizImpl implements IDwellerBiz {
 	/**
 	 * 把被叫号码置null
 	 * @param dwellerId
+	 * @throws BizException 
 	 */
-	  private void updateCallednumberById(String dwellerId){
+	  private void updateCallednumberById(String dwellerId) throws BizException{
 		  String updateCallNum= "update t_room set fcallednumber=null where id in (SELECT d.fentityid from t_domain_dweller tdd INNER JOIN t_domain d on d.id=tdd.fdomainid  where tdd.fdwellerid=? )";
 		  int i=dwellerSqlDao.updateSQL(updateCallNum, new Object[]{dwellerId});
 //		  System.out.println(i);
@@ -196,9 +197,10 @@ public class DwellerBizImpl implements IDwellerBiz {
 	/**获取地址信息
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
 	 */
-	private String findAddressByRoomId(String roomId) {
+	private String findAddressByRoomId(String roomId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
@@ -305,8 +307,9 @@ public class DwellerBizImpl implements IDwellerBiz {
 	/**
 	 * @param dweller
 	 * @return
+	 * @throws BizException 
 	 */
-	private String checkDetail(Dweller dweller) {
+	private String checkDetail(Dweller dweller) throws BizException {
 		List<String> entityIds = dweller.getTreecheckbox();
 //		StringBuilder sb = new StringBuilder();
 //		sb.append("select * from t_domain_dweller t where t.fdomainin=?");
@@ -348,10 +351,11 @@ public class DwellerBizImpl implements IDwellerBiz {
      * 检查手机号是否已经被注册过滤 检查web页面需要显示的住户
      * @param phone
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.personnel.IDwellerBiz#checkPhoneExist(java.lang.String)
      */
 	@Override
-	public boolean checkPhoneExistWebShow(String phone,String carrierId) {
+	public boolean checkPhoneExistWebShow(String phone,String carrierId) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT w.fphone from t_dweller w INNER JOIN t_carrier c on c.id=w.fcarrier_id where w.fphone=? and c.id=?");
 		List<Object> values = new ArrayList<Object>();
@@ -368,9 +372,10 @@ public class DwellerBizImpl implements IDwellerBiz {
      * 检查手机号在本运营商下是否已经被注册过滤  检查全部用户
      * @param phone
      * @return
+	 * @throws BizException 
      * @see com.youlb.biz.personnel.IDwellerBiz#checkPhoneExist(java.lang.String)
      */
-	private String checkPhoneExist(String phone,Operator loginUser) {
+	private String checkPhoneExist(String phone,Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT w.fphone from t_dweller w INNER JOIN t_carrier c on c.id=w.fcarrier_id where w.fphone=? and c.id=?");
 		List<Object> values = new ArrayList<Object>();
@@ -384,7 +389,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 	}
 
 	@Override
-	public List<String> getCarrierByDomainId(List<String> treecheckbox) {
+	public List<String> getCarrierByDomainId(List<String> treecheckbox) throws BizException {
 		StringBuilder sb =new StringBuilder();
 		sb.append("SELECT fcarrierid from t_carrier_domain where 1=1");
 		sb.append(SearchHelper.jointInSqlOrHql(treecheckbox, " fdomainid "));

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import com.youlb.entity.privilege.Privilege;
 import com.youlb.entity.privilege.Role;
 import com.youlb.entity.vo.QJson;
 import com.youlb.entity.vo.QTree;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: RoleContrl 
@@ -34,7 +37,8 @@ import com.youlb.entity.vo.QTree;
 @RequestMapping("/mc/role")
 @Scope("prototype")
 public class RoleCtrl extends BaseCtrl{
-	
+	private static Logger log = LoggerFactory.getLogger(RoleCtrl.class);
+
 	@Autowired
 	private IRoleBiz roleBiz;
 	@Autowired
@@ -55,7 +59,12 @@ public class RoleCtrl extends BaseCtrl{
 	public  Map<String, Object> showList(Role role){
 		List<Role> list = new ArrayList<Role>();
 		Operator loginUser = getLoginUser();
-		list = roleBiz.showList(role, loginUser);
+		try {
+			list = roleBiz.showList(role, loginUser);
+		} catch (BizException e) {
+			log.error("获取列表数据失败");
+			e.printStackTrace();
+		}
 		
 		return setRows(list);
 	}
@@ -70,12 +79,12 @@ public class RoleCtrl extends BaseCtrl{
     	//先获取参数值
     	String isCarrier = role.getIsCarrier();
     	if(ids!=null&&ids.length>0){
-    		role = roleBiz.get(ids[0]);
-    	//add
-//		}else{
-//			Operator loginUser = getLoginUser();
-//			role.setCarrierId(loginUser.getCarrier().getId());
-			
+    		try {
+				role = roleBiz.get(ids[0]);
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
 		}
     	model.addAttribute("role", role);
     	//运营商用户管理
@@ -115,20 +124,30 @@ public class RoleCtrl extends BaseCtrl{
    	public QJson privilegeList(Role role){
     	QJson json = new QJson();
     	if(StringUtils.isNotBlank(role.getId())){
-    		role = roleBiz.get(role.getId());
+    		try {
+				role = roleBiz.get(role.getId());
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
 		}
     	Operator loginUser = getLoginUser();
     	//获取权限列表
-    	List<Privilege> privilegeList = roleBiz.getPrivilegeList(loginUser,role);
-    	QTree t = new QTree();
-		t.setText("操作权限");
-		t.setUrl("checkfalse");
-		 List<QTree> children = objToTree(privilegeList);
-		t.setChildren(children);;
-		json.setMsg("OK");
-		json.setObject(t);
-		json.setSuccess(true);
-		json.setType("1");
+		try {
+	    	List<Privilege> privilegeList = roleBiz.getPrivilegeList(loginUser,role);
+	    	QTree t = new QTree();
+	    	t.setText("操作权限");
+	    	t.setUrl("checkfalse");
+	    	List<QTree> children = objToTree(privilegeList);
+	    	t.setChildren(children);;
+	    	json.setMsg("OK");
+	    	json.setObject(t);
+	    	json.setSuccess(true);
+	    	json.setType("1");
+		} catch (BizException e) {
+			log.error("获取操作权限数据失败");
+			e.printStackTrace();
+		}
    		return json;
    	}
     /**

@@ -62,7 +62,7 @@ public class IPManageBizImpl implements IIPManageBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(IPManage iPManage, Operator loginUser) {
+	public void saveOrUpdate(IPManage iPManage, Operator loginUser) throws BizException {
 		 if(StringUtils.isBlank(iPManage.getId())){
 			 iPManageDao.add(iPManage);
 		 }else{

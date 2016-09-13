@@ -123,10 +123,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 
 	/**
 	 * @param neighborhoods
+	 * @throws BizException 
 	 * @see com.youlb.biz.neighborhoods.INeighborhoodsBiz#saveOrUpdate(com.youlb.entity.neighborhoods.Neighborhoods)
 	 */
 	@Override
-	public void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser) {
+	public void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser) throws BizException {
 		neighborhoods.setUseDate(DateHelper.strParseDate(neighborhoods.getUseDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setStartBuildDate(DateHelper.strParseDate(neighborhoods.getStartBuildDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setEndBuildDate(DateHelper.strParseDate(neighborhoods.getEndBuildDateStr(), "yyyy-mm-dd"));
@@ -178,8 +179,10 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	/**
 	 * 创建社区的sip账号
 	 * @param domainId
+	 * @throws BizException 
+	 * @throws NumberFormatException 
 	 */
-	private void createSipNum(String neibId){
+	private void createSipNum(String neibId) throws NumberFormatException, BizException{
 		Session session = domainSqlDao.getCurrSession();
 		SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 	    List<String> list =  query.list();
@@ -210,10 +213,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	/**通过neibId 获取areaId
 	 * @param parentId
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.building.IBuildingBiz#getAreaId(java.lang.String)
 	 */
 	@Override
-	public String getAreaId(String parentId) {
+	public String getAreaId(String parentId) throws BizException {
 		String hql ="select t.areaId from Neighborhoods t where t.id=?";
 		List<String> find = neighborSqlDao.find(hql, new Object[]{parentId});
 		if(find!=null&&!find.isEmpty()){
@@ -226,10 +230,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	/**通过areaId获取社区列表
 	 * @param areaId
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.neighborhoods.INeighborhoodsBiz#getNeiborListByAreaId(java.lang.String)
 	 */
 	@Override
-	public List<Neighborhoods> getNeiborListByAreaId(String areaId) {
+	public List<Neighborhoods> getNeiborListByAreaId(String areaId) throws BizException {
 		String hql = "from Neighborhoods t where t.areaId=? order by t.createTime";
 		return neighborSqlDao.find(hql, new Object[]{areaId});
 	}
@@ -300,10 +305,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	/**
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.INeighborhoodsBiz#getNeighborList(com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Neighborhoods> getNeighborList(Operator loginUser) {
+	public List<Neighborhoods> getNeighborList(Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 sb.append("select * from (select n.id id,n.FNEIBNAME neibName,n.FNEIBNUM neibNum,n.FCONTRACTOR contractor," )
 		 .append(" n.FADDRESS address,n.FSTARTBUILDDATE startBuildDate,n.FENDBUILDDATE endBuildDate,")

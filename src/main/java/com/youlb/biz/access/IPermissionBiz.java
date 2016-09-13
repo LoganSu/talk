@@ -28,33 +28,33 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param loginUser
 	 * @return
 	 */
-	String saveOrUpdate(CardInfo cardInfo, Operator loginUser);
+	String saveOrUpdate(CardInfo cardInfo, Operator loginUser)throws BizException ;
 
 
 	/**根据人员信息查询地址信息
 	 * @param cardInfo
 	 * @return
 	 */
-	List<CardInfo> findAddress(CardInfo cardInfo,Map<String, String> domainMap);
+	List<CardInfo> findAddress(CardInfo cardInfo,Map<String, String> domainMap) throws BizException;
 
 	/**写卡入库
 	 * @param cardInfo
 	 * @throws NativeException 
 	 * @throws IllegalAccessException 
 	 */
-	int writeCard(CardInfo cardInfo) throws IllegalAccessException, ParseException, JsonException, IOException;
+	int writeCard(CardInfo cardInfo) throws IllegalAccessException, ParseException, JsonException, IOException,BizException;
 
 	/**判断卡片是否已经存在
 	 * @param cardSn
 	 * @return
 	 */
-	boolean checkCardExist(String cardSn);
+	boolean checkCardExist(String cardSn) throws BizException;
 
 	/**根据相应条件 获取card map
 	 * @param cardInfo
 	 * @return
 	 */
-	Map<String, CardInfo> cardMap(CardInfo cardInfo);
+	Map<String, CardInfo> cardMap(CardInfo cardInfo) throws BizException;
 
 	/** 挂失 解挂 注销统一方法
 	 * @param cardInfo
@@ -66,14 +66,14 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param cardInfo
 	 * @return
 	 */
-	String findAddressByRoomId(String roomId);
+	String findAddressByRoomId(String roomId) throws BizException;
 
 
 	/**通过cardSn获取地址信息
 	 * @param cardInfo
 	 * @return
 	 */
-	List<CardInfo> findAddressByCardSn(CardInfo cardInfo);
+	List<CardInfo> findAddressByCardSn(CardInfo cardInfo) throws BizException;
 
 
 	/**
@@ -81,7 +81,7 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param loginUser
 	 * @return
 	 */
-	List<CardRecord> appRecordList(CardRecord cardRecord, Operator loginUser);
+	List<CardRecord> appRecordList(CardRecord cardRecord, Operator loginUser) throws BizException;
 
 
 	/**
@@ -89,13 +89,13 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param loginUser
 	 * @return
 	 */
-	List<CardRecord> cardRecord(CardRecord cardRecord, Operator loginUser);
+	List<CardRecord> cardRecord(CardRecord cardRecord, Operator loginUser) throws BizException;
 
 
 	/**
 	 * @param cardSn
 	 * @return
 	 */
-	CardInfo getImg(Integer id);
+	CardInfo getImg(Integer id) throws BizException;
    
 }

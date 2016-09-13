@@ -3,21 +3,28 @@ package com.youlb.controller.staticParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.staticParam.IStaticParamBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.staticParam.StaticParam;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 @Controller
 @Scope("prototype")
 @RequestMapping("/mc/staticParam")
 public class StaticParamCtrl extends BaseCtrl{
+	private static Logger log = LoggerFactory.getLogger(StaticParamCtrl.class);
+
 	@Autowired
     private IStaticParamBiz staticParamBiz;
 	public void setStaticParamBiz(IStaticParamBiz staticParamBiz) {
@@ -46,8 +53,13 @@ public class StaticParamCtrl extends BaseCtrl{
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
-    		StaticParam staticParam = staticParamBiz.get(ids[0]);
-    		model.addAttribute("staticParam", staticParam);
+			try {
+				StaticParam staticParam = staticParamBiz.get(ids[0]);
+				model.addAttribute("staticParam", staticParam);
+			} catch (BizException e) {
+				log.error("获取列表数据失败");
+				e.printStackTrace();
+			}
     	}
    		return "/staticParam/addOrEdit";
    	}

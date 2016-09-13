@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.IPManage.IIPManageBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.controller.infoPublish.TodayNewsCtrl;
 import com.youlb.entity.IPManage.IPManage;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 /**
  * 
 * @ClassName: IPManageCtrl.java 
@@ -28,6 +32,8 @@ import com.youlb.utils.common.RegexpUtils;
 @Scope("prototype")
 @RequestMapping("/mc/IPManage")
 public class IPManageCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(IPManageCtrl.class);
+
 	@Autowired
 	private IIPManageBiz iPManageBiz;
 	public void setiPManageBiz(IIPManageBiz iPManageBiz) {
@@ -58,8 +64,13 @@ public class IPManageCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
     		
-    		IPManage iPManage = iPManageBiz.get(ids[0]);
-    		model.addAttribute("iPManage", iPManage);
+			try {
+				IPManage iPManage = iPManageBiz.get(ids[0]);
+				model.addAttribute("iPManage", iPManage);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     	}
    		return "/IPManage/addOrEdit";
    	}
@@ -81,6 +92,10 @@ public class IPManageCtrl extends BaseCtrl {
     			super.message = "请填写正确的端口！";
     			return  super.message;
     		}
+    	}else{
+    		super.message = "端口不能为空！";
+			model.addAttribute("message", super.message);
+			return INPUT;
     	}
     	if(StringUtils.isBlank(iPManage.getPlatformName())){
     		super.message = "平台名称不能为空！";

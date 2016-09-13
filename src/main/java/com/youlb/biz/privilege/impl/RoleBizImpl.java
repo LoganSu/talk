@@ -115,10 +115,11 @@ public class RoleBizImpl implements IRoleBiz {
 
 	/**
 	 * @param role
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IRoleBiz#saveOrUpdate(com.youlb.entity.privilege.Role)
 	 */
 	@Override
-	public void saveOrUpdate(Role role) {
+	public void saveOrUpdate(Role role) throws BizException {
 //		roleSqlDao.saveOrUpdate(role);
 		String role_privilege ="insert into t_role_privilege (froleid,fprivilegeid) values(?,?)";
 		String role_domain ="insert into t_role_domain (froleid,fdomainid) values(?,?)";
@@ -234,10 +235,11 @@ public class RoleBizImpl implements IRoleBiz {
 	/**获取权限列表
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IRoleBiz#getPrivilegeList(com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Privilege> getPrivilegeList(Operator loginUser,Role role) {
+	public List<Privilege> getPrivilegeList(Operator loginUser,Role role) throws BizException {
 //		 String hql = "from Privilege t where t.parentId is null or t.parentId =''";
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
@@ -260,8 +262,9 @@ public class RoleBizImpl implements IRoleBiz {
 	 * 递归获取权限列表
 	 * @param pList
 	 * @return
+	 * @throws BizException 
 	 */
-	private List<Privilege> getPrivilegeList(List<Privilege> pList,Role role,Operator loginUser){
+	private List<Privilege> getPrivilegeList(List<Privilege> pList,Role role,Operator loginUser) throws BizException{
 		if(pList!=null){
 //			String hql = "from Privilege t where t.parentId=?";
 			 StringBuilder sb = new StringBuilder();
@@ -314,10 +317,11 @@ public class RoleBizImpl implements IRoleBiz {
 	 * @param role
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.privilege.IRoleBiz#carrierShowList(com.youlb.entity.privilege.Role, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public List<Role> carrierShowList(Role target, Operator loginUser) {
+	public List<Role> carrierShowList(Role target, Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 List<Role> roleList = new ArrayList<Role>();

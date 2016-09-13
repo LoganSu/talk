@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.controller.staticParam.StaticParamCtrl;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.houseInfo.Area;
@@ -26,6 +29,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.vo.QJson;
 import com.youlb.entity.vo.QTree;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 
 
 /**
@@ -40,6 +44,8 @@ import com.youlb.utils.common.SysStatic;
 @RequestMapping("/mc/aboutNeighborhoodsTree")
 @Scope("prototype")
 public class AboutNeighborhoodsTreeCtrl  extends BaseCtrl{
+	private static Logger log = LoggerFactory.getLogger(AboutNeighborhoodsTreeCtrl.class);
+
 	@Autowired
 	private ServletContext servletContext;
 	@Autowired
@@ -88,21 +94,26 @@ public class AboutNeighborhoodsTreeCtrl  extends BaseCtrl{
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
 	@ResponseBody 
     public QJson tree() {
-		//获取根路径
-		String path = servletContext.getContextPath();
-		Operator loginUser = getLoginUser();
 		QJson json = new QJson();
-		QTree t = new QTree();
-		t.setText("");
-		List<Domain> topList = domainBiz.showList(new Domain(),loginUser);
-		List<QTree> children = getDomainList(topList,loginUser,path);
-		t.setUrl("checkfalse");//url字段标识不需要显示多选框
-		t.setChildren(children);
-		t.setChecked(true);
-		json.setMsg("OK");
-		json.setObject(t);
-		json.setSuccess(true);
-		json.setType("1");
+		try {
+			//获取根路径
+			String path = servletContext.getContextPath();
+			Operator loginUser = getLoginUser();
+			QTree t = new QTree();
+			t.setText("");
+			List<Domain> topList = domainBiz.showList(new Domain(),loginUser);
+			List<QTree> children = getDomainList(topList,loginUser,path);
+			t.setUrl("checkfalse");//url字段标识不需要显示多选框
+			t.setChildren(children);
+			t.setChecked(true);
+			json.setMsg("OK");
+			json.setObject(t);
+			json.setSuccess(true);
+			json.setType("1");
+		} catch (BizException e) {
+			log.error("获取树状结构数据出错");
+ 			e.printStackTrace();
+		}
 		return json;
 	}
 	/**
@@ -112,9 +123,10 @@ public class AboutNeighborhoodsTreeCtrl  extends BaseCtrl{
 	 * @param path
 	 * @param isDweller
 	 * @return
+	 * @throws BizException 
 	 */
 	 
-	private List<QTree> getDomainList(List<Domain> list, Operator loginUser,String path) {
+	private List<QTree> getDomainList(List<Domain> list, Operator loginUser,String path) throws BizException {
 		List<QTree> treeList = new ArrayList<QTree>();
     	if(list!=null&&!list.isEmpty()){
 			for(Domain d:list){

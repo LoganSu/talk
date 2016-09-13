@@ -5,6 +5,7 @@ import java.util.List;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: INeighborhoodsBiz.java 
@@ -18,7 +19,7 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	/**添加或更新
 	 * @param neighborhoods
 	 */
-	void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser);
+	void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser)throws BizException;
 
 	/**查询地区数据
 	 * @return
@@ -29,19 +30,19 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	 * @param loginUser 
 	 * @return
 	 */
-	List<Neighborhoods> getNeighborList(Operator loginUser);
+	List<Neighborhoods> getNeighborList(Operator loginUser)throws BizException;
 
 	/**通过neibId 获取areaId
 	 * @param parentId
 	 * @return
 	 */
-	String getAreaId(String parentId);
+	String getAreaId(String parentId)throws BizException;
 
 	/**通过areaId获取社区列表
 	 * @param areaId
 	 * @return
 	 */
-	List<Neighborhoods> getNeiborListByAreaId(String areaId);
+	List<Neighborhoods> getNeiborListByAreaId(String areaId)throws BizException;
 
 	
 }

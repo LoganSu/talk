@@ -16,6 +16,7 @@ import com.youlb.biz.countManage.IUsersBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.countManage.Users;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: UsersCtrl.java 
@@ -43,7 +44,12 @@ public class UsersCtrl extends BaseCtrl {
 	public  Map<String, Object> showList(Users users){
 		List<Users> list = new ArrayList<Users>();
 		Operator loginUser = getLoginUser();
-		list = usersBiz.showList(users, loginUser);
+		try {
+			list = usersBiz.showList(users, loginUser);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return setRows(list);
 	}
@@ -57,7 +63,12 @@ public class UsersCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,Users users,Model model){
     	
     	if(ids!=null&&ids.length>0){
-    		users = usersBiz.get(ids[0]);
+    		try {
+				users = usersBiz.get(ids[0]);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 //    	Operator loginUser = getLoginUser();
     	//获取权限列表

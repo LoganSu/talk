@@ -81,9 +81,10 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 	/**获取地址信息
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
 	 */
-	private String findAddressByRoomId(String domainId) {
+	private String findAddressByRoomId(String domainId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
@@ -97,10 +98,11 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
      * 获取告警地址信息
      * @param ids
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.monitor.IRealTimeMonitorBiz#getData(java.lang.String[])
      */
 	@Override
-	public List<PointInfo> getData(String[] ids) {
+	public List<PointInfo> getData(String[] ids) throws BizException {
 		if(ids!=null&&ids.length>0){
 			List<PointInfo> list = new ArrayList<PointInfo>();
 			StringBuffer sb = new StringBuffer();

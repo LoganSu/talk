@@ -3,6 +3,7 @@ package com.youlb.biz.management;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.management.Repairs;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 /**
  * 
 * @ClassName: ICustomerServiceBiz.java 
@@ -14,8 +15,8 @@ import com.youlb.entity.privilege.Operator;
 public interface IRepairsBiz extends IBaseBiz<Repairs> {
 
 
-	String[] countArr(Integer orderNatue,Operator loginUser);
+	String[] countArr(Integer orderNatue,Operator loginUser)throws BizException;
    
-	void saveOrUpdate(Repairs repairs, Operator loginUser);
+	void saveOrUpdate(Repairs repairs, Operator loginUser)throws BizException;
 
 }

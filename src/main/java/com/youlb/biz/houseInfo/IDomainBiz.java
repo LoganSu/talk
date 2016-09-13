@@ -23,19 +23,19 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	 * @param id
 	 * @return
 	 */
-	List<Domain> getDomainByParentId(String id,Operator loginUser,String dwellerId);
+	List<Domain> getDomainByParentId(String id,Operator loginUser,String dwellerId)throws BizException;
 
 	/**通过实体id删除domain对象
 	 * @param id
 	 */
-	void deleteByEntityId(Serializable id);
+	void deleteByEntityId(Serializable id)throws BizException;
 
 	/**获取与对象集合
 	 * @param carrier
 	 * @param loginUser
 	 * @return
 	 */
-	List<Domain> getDomainList(Carrier carrier, Operator loginUser);
+	List<Domain> getDomainList(Carrier carrier, Operator loginUser)throws BizException;
 
 	/**更新与对象名称 公共方法
 	 * @param entityId
@@ -47,20 +47,20 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	 * @param buildingBiz
 	 * @return
 	 */
-	String getDomainIdByEntityId(String unitId);
+	String getDomainIdByEntityId(String unitId)throws BizException;
 	/**
 	 * 获取单元下面的房间号，判断房号是否已经存在
 	 * @param room
 	 * @return
 	 */
-	String getDomainByParentId(Room room);
+	String getDomainByParentId(Room room)throws BizException;
 	/**
 	 * 通过entityid 获取有子节点的域名称
 	 * @param ids
 	 * @return
 	 */
-	String hasChild(String[] ids);
+	String hasChild(String[] ids)throws BizException;
 
-	String getParentIdByEntityId(String string);
+	String getParentIdByEntityId(String string)throws BizException;
 
 }

@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.ParseException;
 import org.slf4j.Logger;
@@ -29,11 +31,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.youlb.biz.infoPublish.ITodayNewsBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.TodayNews;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.common.Utils;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
 /** 
@@ -79,7 +83,12 @@ public class TodayNewsCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(HttpServletRequest request,String[] ids,TodayNews todayNews,Model model){
     	String opraterType = todayNews.getOpraterType();
     	if(ids!=null&&ids.length>0){
-    		todayNews = todayNewsBiz.get(ids[0]);
+    		try {
+				todayNews = todayNewsBiz.get(ids[0]);
+			} catch (BizException e1) {
+				log.error("获取单条数据失败");
+				e1.printStackTrace();
+			}
     		//如果是全部推送类型不需要返回标签
     		if("1".equals(todayNews.getSendType())){
     			todayNews.setTreecheckbox(null);
@@ -229,6 +238,10 @@ public class TodayNewsCtrl extends BaseCtrl {
 				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (JsonException e) {
+				super.message="发布头条出错";
+				request.setAttribute("message", message);
+				e.printStackTrace();
+			} catch (BizException e) {
 				super.message="发布头条出错";
 				request.setAttribute("message", message);
 				e.printStackTrace();

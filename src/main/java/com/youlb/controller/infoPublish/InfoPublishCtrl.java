@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.infoPublish.IInfoPublishBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.InfoPublish;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.DateHelper;
 
 /** 
@@ -27,6 +32,8 @@ import com.youlb.utils.helper.DateHelper;
 @Scope("prototype")
 @RequestMapping("/mc/infoPublish")
 public class InfoPublishCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(InfoPublishCtrl.class);
+
 	@Autowired
     private IInfoPublishBiz infoPublishBiz;
 	public void setInfoPublishBiz(IInfoPublishBiz infoPublishBiz) {
@@ -57,21 +64,18 @@ public class InfoPublishCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,InfoPublish infoPublish,Model model){
     	String opraterType = infoPublish.getOpraterType();
     	if(ids!=null&&ids.length>0){
-    		infoPublish = infoPublishBiz.get(ids[0]);
+    		try {
+				infoPublish = infoPublishBiz.get(ids[0]);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
     		//如果是全部推送类型不需要返回标签
     		if("1".equals(infoPublish.getSendType())){
     			infoPublish.setTreecheckbox(null);
     		}
     		infoPublish.setOpraterType(opraterType);
     	}
-    	//获取父节点
-//    	if(StringUtils.isNotBlank(domain.getParentId())){
-//    		Domain parentDomain = domainBiz.get(domain.getParentId());
-//    		domain.setParentName(parentDomain.getName());//父节点名称
-//    		domain.setLevel(parentDomain.getLevel());//父节点等级
-//    	}else{
-//    		domain.setParentId("1");
-//    	}
     	model.addAttribute("infoPublish",infoPublish);
    		return "/infoPublish/addOrEdit";
    	}

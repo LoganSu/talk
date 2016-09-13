@@ -24,6 +24,7 @@ import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.appManage.AppManage;
 import com.youlb.utils.common.MatrixToImageWriter;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: AppDownloadCtrl.java 
@@ -59,13 +60,13 @@ public class AppDownloadCtrl extends BaseCtrl {
     		}else if("doormachine".equals(type)){
     			appType="1";
     		}
+    		BufferedInputStream bis = null;
+    		BufferedOutputStream out = null;
+    		try {
     		AppManage appManage = appManageBiz.lastVersion(appType);//拿手机最新版
     		String fileName=appManage.getVersionName()+".apk";
     		File file = new File(SysStatic.APPDIR.substring(0,SysStatic.APPDIR.indexOf("appDir")-1)+appManage.getRelativePath());
     		long fileLength = file.length();  
-    		BufferedInputStream bis = null;
-    		BufferedOutputStream out = null;
-    		try {
     			response = setFileDownloadHeader(request,response, fileName,fileLength);
     			bis = new BufferedInputStream(new FileInputStream(file));
     			out = new BufferedOutputStream(response.getOutputStream());
@@ -78,7 +79,10 @@ public class AppDownloadCtrl extends BaseCtrl {
     			e1.printStackTrace();
     		} catch (IOException e) {
     			e.printStackTrace();
-    		}finally{
+    		} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
     			try {
     				if(bis != null){
     					bis.close();
@@ -99,15 +103,21 @@ public class AppDownloadCtrl extends BaseCtrl {
     
     @RequestMapping("/downAppPage.do") 
     public String downAppPage(HttpServletRequest request,HttpServletResponse response,Model model) {
-    	AppManage appManage = appManageBiz.lastVersion("2");//拿手机最新版
-    	model.addAttribute("appManage", appManage);
-    	//生成二维码
-    	//服务器地址
-		String strBackUrl = "http://" +  SysStatic.FILEUPLOADIP           //端口号  
-                + request.getContextPath();
-		String content = strBackUrl+"/appManage/singleDownPhone.do?type=android";
-		String path = request.getSession().getServletContext().getRealPath("/");
-    	MatrixToImageWriter.createQRCode(content,path+"/imgs/","newDownloadApp");
+		try {
+			//拿手机最新版
+			AppManage appManage = appManageBiz.lastVersion("2");
+			model.addAttribute("appManage", appManage);
+			//生成二维码
+			//服务器地址
+			String strBackUrl = "http://" +  SysStatic.FILEUPLOADIP           //端口号  
+					+ request.getContextPath();
+			String content = strBackUrl+"/appManage/singleDownPhone.do?type=android";
+			String path = request.getSession().getServletContext().getRealPath("/");
+			MatrixToImageWriter.createQRCode(content,path+"/imgs/","newDownloadApp");
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	return "/appManage/downAppPage";
     }
     

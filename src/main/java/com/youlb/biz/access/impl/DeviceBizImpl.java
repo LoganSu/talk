@@ -136,10 +136,11 @@ public class DeviceBizImpl implements IDeviceBiz {
 	 * @param device
 	 * @param loginUser
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IDeviceBiz#saveOrUpdate(com.youlb.entity.access.DeviceInfo, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public String saveOrUpdate(DeviceInfo device, Operator loginUser) {
+	public String saveOrUpdate(DeviceInfo device, Operator loginUser) throws BizException {
 		 String update = "update DeviceInfo set deviceStatus=?,deviceFactory=?,deviceBorn=?,remark=? where id=?";
 		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),device.getDeviceFactory(),device.getDeviceBorn(),device.getRemark(),device.getId()});
 		return null;

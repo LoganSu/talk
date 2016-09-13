@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.countManage.ISipCountBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.countManage.SipCount;
+import com.youlb.utils.exception.BizException;
 @Controller
 @Scope("prototype")
 @RequestMapping("/mc/sipCount")
@@ -78,7 +79,13 @@ public class SipCountCtrl extends BaseCtrl {
 	@RequestMapping("/getAddressByDomainId.do")
 	@ResponseBody
 	public String getAddressByDomainId(String domainId){
-		String address = sipCountBiz.getAddressByDomainId(domainId);
-		return address;
+		try {
+			String address = sipCountBiz.getAddressByDomainId(domainId);
+			return address;
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

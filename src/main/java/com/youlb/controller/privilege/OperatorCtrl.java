@@ -2,6 +2,8 @@ package com.youlb.controller.privilege;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Role;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
 /** 
@@ -148,6 +151,9 @@ public class OperatorCtrl extends BaseCtrl{
 		} catch (ParseException | IOException | JsonException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (BizException e) {
+			logger.error("获取验证码失败");
+			e.printStackTrace();
 		}
 		return message;
     }
@@ -172,15 +178,25 @@ public class OperatorCtrl extends BaseCtrl{
     	String isCarrier = user.getIsCarrier();
     	//更新
     	if(ids!=null&&ids.length>0){
-    	    user = operatorBiz.get(ids[0]);
+    	    try {
+				user = operatorBiz.get(ids[0]);
+				model.addAttribute("user", user);
+			} catch (BizException e) {
+				logger.error("获取单个数据失败");
+				e.printStackTrace();
+			}
     	}
-    	model.addAttribute("user", user);
     	//运营商用户管理
     	if(StringUtils.isNotBlank(isCarrier)){
     		return "/carrierOperator/addOrEdit";
     	} 
-		List<Role> roleList = operatorBiz.getRoleList(loginUser,user);
-		model.addAttribute("roleList", roleList);
+		try {
+			List<Role> roleList = operatorBiz.getRoleList(loginUser,user);
+			model.addAttribute("roleList", roleList);
+		} catch (BizException e) {
+			logger.error("获取角色数据失败");
+			e.printStackTrace();
+		}
    		return "/operator/addOrEdit";
    	}
 	 /**
@@ -338,8 +354,13 @@ public class OperatorCtrl extends BaseCtrl{
     @RequestMapping("/toUpdatePasw.do")
    	public String toUpdatePasw(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
-    		Operator user = operatorBiz.get(ids[0]);
-    		model.addAttribute("user", user);
+			try {
+				Operator user = operatorBiz.get(ids[0]);
+				model.addAttribute("user", user);
+			} catch (BizException e) {
+				logger.error("获取单个数据失败");
+				e.printStackTrace();
+			}
     	}
    		return "/carrierOperator/updatePasw";
    	}
@@ -376,25 +397,25 @@ public class OperatorCtrl extends BaseCtrl{
     @ResponseBody
     public String getVerificationCode(Operator user){
     	try {
-//    		Map<String,Map<String,Object>> map =  (Map<String, Map<String, Object>>) servletContext.getAttribute("exceedSendSmsMap");
-//    		Map<String,Object> subMap = map.get(user.getCarrier().getCarrierNum()+user.getLoginName());
-//    		if(subMap!=null){
-//    			Integer count = (Integer) subMap.get("count");
-//    			if(count>5){
-//    				super.message = "您发送验证码太频繁，请休息一下再试！";
-//    				return super.message;
-//    			}else{
-//    				++count;
-//    				subMap.put("count", count);
-//    				subMap.put("time", new Date());
-//    				map.put(user.getCarrier().getCarrierNum()+user.getLoginName(), subMap);
-//    			}
-//    		}else{
-//    			Map<String,Object> newMap = new HashMap<String, Object>();
-//    			newMap.put("count", 1);
-//    			newMap.put("time", new Date());
-//    			map.put(user.getCarrier().getCarrierNum()+user.getLoginName(), newMap);
-//    		}
+    		Map<String,Map<String,Object>> map =  (Map<String, Map<String, Object>>) servletContext.getAttribute("exceedSendSmsMap");
+    		Map<String,Object> subMap = map.get(user.getCarrier().getCarrierNum()+user.getLoginName());
+    		if(subMap!=null){
+    			Integer count = (Integer) subMap.get("count");
+    			if(count>5){
+    				super.message = "您发送验证码太频繁，请休息一下再试！";
+    				return super.message;
+    			}else{
+    				++count;
+    				subMap.put("count", count);
+    				subMap.put("time", new Date());
+    				map.put(user.getCarrier().getCarrierNum()+user.getLoginName(), subMap);
+    			}
+    		}else{
+    			Map<String,Object> newMap = new HashMap<String, Object>();
+    			newMap.put("count", 1);
+    			newMap.put("time", new Date());
+    			map.put(user.getCarrier().getCarrierNum()+user.getLoginName(), newMap);
+    		}
     		//判断账号是否存在
     		boolean b = operatorBiz.chickLoginNameExist(user);
     		if(!b){
@@ -416,6 +437,10 @@ public class OperatorCtrl extends BaseCtrl{
 			e.printStackTrace();
 			super.message = "验证码发送失败！";
 			logger.error(super.message);
+		} catch (BizException e) {
+			super.message = "验证码发送失败！";
+			logger.error(super.message);
+			e.printStackTrace();
 		}  
     	return super.message;
     }

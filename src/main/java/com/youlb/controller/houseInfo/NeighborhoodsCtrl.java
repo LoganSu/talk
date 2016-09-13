@@ -19,6 +19,7 @@ import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: NeighborhoodsCtrl.java 
@@ -71,9 +72,14 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Neighborhoods neighborhoods,Model model){
     	if(ids!=null&&ids.length>0){
-    		 neighborhoods = neighborBiz.get(ids[0]);
+    		 try {
+				neighborhoods = neighborBiz.get(ids[0]);
+				model.addAttribute("neighborhoods", neighborhoods);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
-    	model.addAttribute("neighborhoods", neighborhoods);
    		return "/neighborhoods/addOrEdit";
    	}
     /**

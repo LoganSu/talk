@@ -30,6 +30,7 @@ import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.MatrixToImageWriter;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.DateHelper;
 
 /** 
@@ -66,7 +67,12 @@ public class DeviceCountCtrl extends BaseCtrl {
 	public  Map<String, Object> showList(DeviceCount deviceCount){
 		List<DeviceCount> list = new ArrayList<DeviceCount>();
 		Operator loginUser = getLoginUser();
-		list = deviceCountBiz.showList(deviceCount, loginUser);
+		try {
+			list = deviceCountBiz.showList(deviceCount, loginUser);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return setRows(list);
 	}
@@ -80,7 +86,12 @@ public class DeviceCountCtrl extends BaseCtrl {
    	public String toSaveOrUpdate(String[] ids,DeviceCount deviceCount,Model model){
     	
     	if(ids!=null&&ids.length>0){
-    		deviceCount = deviceCountBiz.get(ids[0]);
+    		try {
+				deviceCount = deviceCountBiz.get(ids[0]);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     		//domainId转换成entityid
 //    		Domain domain = domainBiz.get(deviceCount.getDomainId());
 //    		if(domain!=null){
@@ -212,21 +223,27 @@ public class DeviceCountCtrl extends BaseCtrl {
    	public String toSendOrders(String[] ids,DeviceCount deviceCount,Model model){
     	
     	if(ids!=null&&ids.length>0){
-    		deviceCount = deviceCountBiz.get(ids[0]);
-    		Operator loginUser = getLoginUser();
-    		 //设置添加人
-    		String operator = "";
-    		//普通管理员 的真实姓名已经包含 admin
-    		if(SysStatic.NORMALADMIN.equals(loginUser.getIsAdmin())){
-    			operator= loginUser.getRealName();
-    		}else{
-    			operator = loginUser.getRealName()+"("+loginUser.getLoginName()+")";
-    		}		
-    		deviceCount.setPrintPerson(operator);
-    		deviceCount.setPrintTime(DateHelper.dateFormat(new Date(), "yyyy-MM-dd"));
-    		String orderNum = deviceCountBiz.getOrderNum();//获取派单序列
-    		deviceCount.setOrderNum(orderNum);
-    	    model.addAttribute("deviceCount", deviceCount);
+    		try {
+	    		deviceCount = deviceCountBiz.get(ids[0]);
+	    		Operator loginUser = getLoginUser();
+	    		 //设置添加人
+	    		String operator = "";
+	    		//普通管理员 的真实姓名已经包含 admin
+	    		if(SysStatic.NORMALADMIN.equals(loginUser.getIsAdmin())){
+	    			operator= loginUser.getRealName();
+	    		}else{
+	    			operator = loginUser.getRealName()+"("+loginUser.getLoginName()+")";
+	    		}		
+	    		deviceCount.setPrintPerson(operator);
+	    		deviceCount.setPrintTime(DateHelper.dateFormat(new Date(), "yyyy-MM-dd"));
+	    		String orderNum;
+					orderNum = deviceCountBiz.getOrderNum();
+	    		deviceCount.setOrderNum(orderNum);
+	    	    model.addAttribute("deviceCount", deviceCount);
+    		} catch (BizException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}//获取派单序列
    	   }
     	return "/deviceCount/sendOrders";
     }

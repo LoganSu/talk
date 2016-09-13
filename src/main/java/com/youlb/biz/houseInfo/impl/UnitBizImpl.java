@@ -117,10 +117,11 @@ public class UnitBizImpl implements IUnitBiz {
 
 	/**
 	 * @param unit
+	 * @throws BizException 
 	 * @see com.youlb.biz.unit.IUnitBiz#saveOrUpdate(com.youlb.entity.unit.Unit)
 	 */
 	@Override
-	public void saveOrUpdate(Unit unit,Operator loginUser) {
+	public void saveOrUpdate(Unit unit,Operator loginUser) throws BizException {
 		//add
 		if(StringUtils.isBlank(unit.getId())){
 			String unitId = (String) unitSqlDao.add(unit);
@@ -193,10 +194,11 @@ public class UnitBizImpl implements IUnitBiz {
 	/**
 	 * @param id
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.houseInfo.IUnitBiz#getUnitListBybuildingId(java.lang.String)
 	 */
 	@Override
-	public List<Unit> getUnitListBybuildingId(String buildingId) {
+	public List<Unit> getUnitListBybuildingId(String buildingId) throws BizException {
 		List<Unit> list = new ArrayList<Unit>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT u.id,u.FUNITNUM,u.FUNITNAME,u.FREMARK,u.fcreatetime ")

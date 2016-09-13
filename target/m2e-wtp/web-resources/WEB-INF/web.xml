@@ -33,7 +33,6 @@
   </filter-mapping>
   
   
-  
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:spring/applicationContext.xml,classpath:daoProperties/application-*-biz.xml</param-value>

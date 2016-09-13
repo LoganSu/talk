@@ -9,7 +9,7 @@ import java.util.Arrays;
  * @date: 2015-2-3
  * 
  */
-public class BizException extends RuntimeException {
+public class BizException extends Exception {
 
 	/**
 	 * 

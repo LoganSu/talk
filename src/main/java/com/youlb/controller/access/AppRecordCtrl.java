@@ -17,6 +17,7 @@ import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.access.CardRecord;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: CardrecordCtrl.java 
@@ -66,7 +67,11 @@ public class AppRecordCtrl extends BaseCtrl {
 	@ResponseBody
 	public CardInfo getImg(CardInfo cardInfo){
 		if(cardInfo.getId()!=null){
-			cardInfo = permissionBiz.getImg(cardInfo.getId());
+			try {
+				cardInfo = permissionBiz.getImg(cardInfo.getId());
+			} catch (BizException e) {
+				e.printStackTrace();
+			}
 		}
 		return cardInfo;
 	}

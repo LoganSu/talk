@@ -18,6 +18,7 @@ import com.youlb.biz.houseInfo.INeighborhoodsBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Building;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: AreaCtrller.java 
@@ -71,9 +72,14 @@ public class BuildingCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Building building,Model model){
     	if(ids!=null&&ids.length>0){
-    		 building = buildingBiz.get(ids[0]);
+    		 try {
+				building = buildingBiz.get(ids[0]);
+				model.addAttribute("building",building);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
-    	model.addAttribute("building",building);
    		return "/building/addOrEdit";
    	}
     /**
@@ -161,7 +167,14 @@ public class BuildingCtrl extends BaseCtrl {
 	@RequestMapping("/getBuildingListByNeibId.do")
 	@ResponseBody
 	public List<Building> getBuildingListByNeibId(String neibId,Model model){
-		 List<Building> buildingList = buildingBiz.getBuildingListByNeibId(neibId);
-		return buildingList;
+		try {
+			 List<Building> buildingList = buildingBiz.getBuildingListByNeibId(neibId);
+			 return buildingList;
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 return null;
+
 	}
 }

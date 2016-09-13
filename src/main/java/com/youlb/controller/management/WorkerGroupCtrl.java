@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -17,10 +19,12 @@ import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.management.Department;
 import com.youlb.entity.management.Worker;
 import com.youlb.entity.management.WorkerGroup;
+import com.youlb.utils.exception.BizException;
 @Controller
 @Scope("prototype")
 @RequestMapping("/mc/workerGroup")
 public class WorkerGroupCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(WorkerGroupCtrl.class);
 	@Autowired
     private IWorkerGroupBiz workerGroupBiz;
 	public void setWorkerGroupBiz(IWorkerGroupBiz workerGroupBiz) {
@@ -49,11 +53,21 @@ public class WorkerGroupCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Model model){
     	if(ids!=null&&ids.length>0){
-    		WorkerGroup workerGroup = workerGroupBiz.get(ids[0]);
-    		model.addAttribute("workerGroup",workerGroup);
+			try {
+				WorkerGroup workerGroup = workerGroupBiz.get(ids[0]);
+				model.addAttribute("workerGroup",workerGroup);
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
     	}
-    	List<Department> companyList = workerGroupBiz.getCompanyList(getLoginUser());
-		model.addAttribute("companyList", companyList);
+		try {
+			List<Department> companyList = workerGroupBiz.getCompanyList(getLoginUser());
+			model.addAttribute("companyList", companyList);
+		} catch (BizException e) {
+			log.error("获取部门数据失败");
+			e.printStackTrace();
+		}
    		return "/workerGroup/addOrEdit";
    	}
     /**
@@ -109,8 +123,13 @@ public class WorkerGroupCtrl extends BaseCtrl {
     @RequestMapping("/toAddWorker.do")
    	public String toAddWorker(String id,Model model){
     	if(StringUtils.isNotBlank(id)){
-    		WorkerGroup workerGroup = workerGroupBiz.get(id);
-    		model.addAttribute("workerGroup",workerGroup);
+			try {
+				WorkerGroup workerGroup = workerGroupBiz.get(id);
+				model.addAttribute("workerGroup",workerGroup);
+			} catch (BizException e) {
+				log.error("获取员工组数据失败");
+				e.printStackTrace();
+			}
     	}
     	
    		return "/workerGroup/toAddWorker";

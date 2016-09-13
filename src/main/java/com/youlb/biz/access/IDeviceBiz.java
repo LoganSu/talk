@@ -3,6 +3,7 @@ package com.youlb.biz.access;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.access.DeviceInfo;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: IDeviceBiz.java 
@@ -18,7 +19,7 @@ public interface IDeviceBiz extends IBaseBiz<DeviceInfo> {
 	 * @param loginUser
 	 * @return
 	 */
-	String saveOrUpdate(DeviceInfo device, Operator loginUser);
+	String saveOrUpdate(DeviceInfo device, Operator loginUser)throws BizException ;
 
 
 }

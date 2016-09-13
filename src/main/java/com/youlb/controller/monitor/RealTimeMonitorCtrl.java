@@ -24,6 +24,7 @@ import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.infoPublish.AdPublish;
 import com.youlb.entity.monitor.PointInfo;
 import com.youlb.entity.monitor.RealTimeMonitor;
+import com.youlb.utils.exception.BizException;
 /**
  * 
 * @ClassName: RealTimeMonitorCtrl.java 
@@ -114,11 +115,16 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
     */
     @RequestMapping("/toDisposeEvent.do")
   	public String toDisposeEvent(String id,AdPublish adPublish,Model model){
-	   RealTimeMonitor realTimeMonitor = realTimeMonitorBiz.get(id);
-	   DeviceCount deviceCount = deviceCountBiz.getByCount(realTimeMonitor.getDeviceCount());
-	   realTimeMonitor.setLatitude(deviceCount.getLatitude());
-	   realTimeMonitor.setLongitude(deviceCount.getLongitude());
-	    model.addAttribute("realTimeMonitor", realTimeMonitor);
+    	try {
+		   RealTimeMonitor realTimeMonitor = realTimeMonitorBiz.get(id);
+		   DeviceCount deviceCount;
+		   deviceCount = deviceCountBiz.getByCount(realTimeMonitor.getDeviceCount());
+		   realTimeMonitor.setLatitude(deviceCount.getLatitude());
+		   realTimeMonitor.setLongitude(deviceCount.getLongitude());
+		    model.addAttribute("realTimeMonitor", realTimeMonitor);
+    	} catch (BizException e) {
+    		e.printStackTrace();
+    	}
   		return "/realTimeMonitor/disposeEvent";
   	}
     
@@ -155,10 +161,15 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
         @ResponseBody
         public List<PointInfo> getData(String[] ids,Model model){
         	System.out.println(ids);
-        	List<PointInfo> info =  realTimeMonitorBiz.getData(ids);
+			try {
+	        	return realTimeMonitorBiz.getData(ids);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 //        	 List<PointInfo> info = new ArrayList<PointInfo>();
 //        	 PointInfo p = new PointInfo(113.383748,23.148225, "顺盈大厦", "广州市天河区棠福路1号", "020-88888888");
 //        	 info.add(p);
-        	return info;
+        	return null;
         }
 }

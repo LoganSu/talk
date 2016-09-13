@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.biz.privilege.IRoleBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.controller.personnel.DwellerCtrl;
 import com.youlb.entity.privilege.Privilege;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: AuthorityCtrl.java 
@@ -27,6 +31,8 @@ import com.youlb.entity.privilege.Privilege;
 @RequestMapping("/mc/privilege")
 @Scope("prototype")
 public class PrivilegeCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(PrivilegeCtrl.class);
+
 	@Autowired
 	private IPrivilegeBiz privilegeBiz;
 	@Autowired
@@ -46,9 +52,14 @@ public class PrivilegeCtrl extends BaseCtrl {
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Privilege privilege,Model model){
     	if(ids!=null&&ids.length>0){
-    		 privilege = privilegeBiz.get(ids[0]);
+    		 try {
+				privilege = privilegeBiz.get(ids[0]);
+				model.addAttribute("privilege", privilege);
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
 		}
-    	model.addAttribute("privilege", privilege);
    		return "/privilege/addOrEdit";
    	}
     /**

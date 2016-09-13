@@ -39,11 +39,9 @@ import com.youlb.biz.infoPublish.IAdPublishBiz;
 import com.youlb.biz.management.IAboutNeighborhoodsBiz;
 import com.youlb.biz.staticParam.IStaticParamBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.infoPublish.AdPublishCtrl;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.entity.management.AboutNeighborhoods;
 import com.youlb.entity.management.AboutNeighborhoodsRemark;
-import com.youlb.entity.staticParam.StaticParam;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
@@ -90,9 +88,10 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 	 /**
      * 跳转到添加、更新页面
      * @return
+	 * @throws BizException 
      */
     @RequestMapping("/toSaveOrUpdate.do")
-   	public String toSaveOrUpdate(HttpServletRequest request,String[] ids,String neighborDomainId,Model model){
+   	public String toSaveOrUpdate(HttpServletRequest request,String[] ids,String neighborDomainId,Model model) throws BizException{
     	model.addAttribute("neighborDomainId", neighborDomainId);
 //    	List<StaticParam> iconList = staticParamBiz.getParamByLikeKey("neighborhoods_icon",19);
 //    	if(iconList!=null&&!iconList.isEmpty()){
@@ -234,6 +233,9 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}finally{
 				if(in!=null){
 					try {
@@ -302,12 +304,17 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 	@ResponseBody
 	public String orderUp(AboutNeighborhoods aboutNeighborhoods,Model model){
 		//检查是否已经是最小值
-		int minOrder = aboutNeighborBiz.getMinOrder(aboutNeighborhoods);
-		if(aboutNeighborhoods.getForder()==minOrder){
-			 super.message="亲，已经到顶了";
-			return super.message;
+		try {
+			int minOrder = aboutNeighborBiz.getMinOrder(aboutNeighborhoods);
+			if(aboutNeighborhoods.getForder()==minOrder){
+				 super.message="亲，已经到顶了";
+				return super.message;
+			}
+				aboutNeighborBiz.orderUp(aboutNeighborhoods);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		aboutNeighborBiz.orderUp(aboutNeighborhoods);
 		return super.message;
 	}
 	/**
@@ -319,13 +326,18 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 	@RequestMapping("/orderDown.do")
 	@ResponseBody
 	public String orderDown(AboutNeighborhoods aboutNeighborhoods,Model model){
-		//检查是否已经是最大值
-		int minOrder = aboutNeighborBiz.getMaxOrder(aboutNeighborhoods);
-		if(aboutNeighborhoods.getForder()==minOrder){
-			 super.message="亲，已经到底了";
-			return super.message;
+		try {
+			//检查是否已经是最大值
+			int minOrder = aboutNeighborBiz.getMaxOrder(aboutNeighborhoods);
+			if(aboutNeighborhoods.getForder()==minOrder){
+				 super.message="亲，已经到底了";
+				return super.message;
+			}
+			aboutNeighborBiz.orderDown(aboutNeighborhoods);
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		aboutNeighborBiz.orderDown(aboutNeighborhoods);
 		return super.message;
 	}
 	
@@ -370,9 +382,10 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
      * @param id
      * @param model
      * @return
+	 * @throws BizException 
      */
 	@RequestMapping("/showHtml.do")
-	public String showHtml(HttpServletRequest request,String id,Model model){
+	public String showHtml(HttpServletRequest request,String id,Model model) throws BizException{
 		if(StringUtils.isNotBlank(id) ){
 			AboutNeighborhoods aboutNeighborhoods = aboutNeighborBiz.get(id);
 			String urlStr = aboutNeighborhoods.getHtmlUrl();
@@ -445,8 +458,14 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 	@RequestMapping("/toAddFirstPage.do")
 	public String toAddFirstPage(AboutNeighborhoods aboutNeighborhoods,Model model){
 		if(StringUtils.isNotBlank(aboutNeighborhoods.getNeighborDomainId())&&!"undefined".equals(aboutNeighborhoods.getNeighborDomainId())){
-			List<AdPublishPicture> picList = adPublishBiz.getPicByAdpublishId(aboutNeighborhoods.getNeighborDomainId());
-			model.addAttribute("picList", picList);
+			
+			try {
+				List<AdPublishPicture> picList = adPublishBiz.getPicByAdpublishId(aboutNeighborhoods.getNeighborDomainId());
+				model.addAttribute("picList", picList);
+			} catch (BizException e) {
+				log.error("获取图片列表失败");
+				e.printStackTrace();
+			}
 		}
 		return "/aboutNeighborhoods/toAddFirstPage";
 	}
@@ -494,17 +513,15 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     		}
     		resp.setContentType("text/html");
     		resp.getWriter().write(JsonUtils.toJson(adPic)); 
-    	} catch (BizException e) {
-			super.message = "操作失败！";
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
+    	} catch (IllegalStateException e) {
 			super.message = "媒体文件上传失败！";
 			e.printStackTrace();
 		} catch (IOException e) {
 			super.message = "媒体文件上传失败！";
 			e.printStackTrace();
+		}catch (BizException e) {
+			super.message = "媒体文件上传失败！";
+			e.printStackTrace();
 		}
-//    	resp.getWriter().write("Ok");
-//		return adPic;
     }
 }

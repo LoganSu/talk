@@ -181,10 +181,11 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 
 	/**
 	 * @param deviceCount
+	 * @throws BizException 
 	 * @see com.youlb.biz.countManage.IDeviceCountBiz#saveOrUpdate(com.youlb.entity.countManage.DeviceCount)
 	 */
 	@Override
-	public void saveOrUpdate(DeviceCount deviceCount) {
+	public void saveOrUpdate(DeviceCount deviceCount) throws BizException {
 		//entityid转换成domainid
 //		String sql ="SELECT d.id from t_domain d where d.fentityid=?";
 //		List<String> slist = deviceCountSqlDao.pageFindBySql(sql, new Object[]{deviceCount.getTreecheckbox().get(0)});
@@ -255,8 +256,9 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 	/**
 	 * @param domainId
 	 * @return
+	 * @throws BizException 
 	 */
-	private String getSipNum(String domainId) {
+	private String getSipNum(String domainId) throws BizException {
 		String sql ="select d.id,d.flayer from t_domain d where d.id=?";
 		List<Object[]> list = deviceCountSqlDao.pageFindBySql(sql, new Object[]{domainId});
 		StringBuilder sb = new StringBuilder();
@@ -267,8 +269,9 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 	/**
 	 * @param obj
 	 * @return
+	 * @throws BizException 
 	 */
-	private Object[] getSipNumDetail(Object[] obj,StringBuilder sb) {
+	private Object[] getSipNumDetail(Object[] obj,StringBuilder sb) throws BizException {
 		if(obj!=null){
 			StringBuilder sql = new StringBuilder();
 			sql.append("SELECT td.id,td.flayer,");
@@ -313,19 +316,21 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
     /**
      * /**添加截止日期
      * @param endTime
+     * @throws BizException 
      * @see com.youlb.biz.countManage.IDeviceCountBiz#update(java.lang.String)
      */
 	@Override
-	public void updateById(String endTime,String ramdonCode,String orderNum,String qrPath,String id) {
+	public void updateById(String endTime,String ramdonCode,String orderNum,String qrPath,String id) throws BizException {
 		String hql ="update DeviceCount set endTime=?,ramdonCode=?,orderNum=?,qrPath=?,createTime=? where id=?";
 		deviceCountSqlDao.update(hql, new Object[]{endTime,ramdonCode,orderNum,qrPath,new Date(),id});
 	}
 	/**获取地址信息
 	 * @param cardInfo
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
 	 */
-	private String findAddressByRoomId(String domainId) {
+	private String findAddressByRoomId(String domainId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
@@ -346,7 +351,7 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 	}
 
 	@Override
-	public DeviceCount getByCount(String deviceCount) {
+	public DeviceCount getByCount(String deviceCount) throws BizException {
 		String hql ="from DeviceCount where deviceCount=?";
 		return deviceCountSqlDao.findObject(hql, new Object[]{deviceCount});
 	}

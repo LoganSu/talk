@@ -999,15 +999,10 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 */
 	public List find(String selectClause, String fromClause, Object[] values, OrderHelper orderHelper, Pager pager, Class entityClass, RowMapper<?> rowMapper, Map<String, Object> params) throws BizException {
 		if(pager!=null&&pager.getPageSize()!=0){
-			try {
-				if(params != null) {
-					pager.setTotalRows(getCountForSql(fromClause, params));
-				} else {
-					pager.setTotalRows(getCountForSql(fromClause, values));
-				}
-			} catch (BizException e) {
-				//e.printStackTrace();
-				throw new HibernateException("--查询记录总数失败--",e);
+			if(params != null) {
+				pager.setTotalRows(getCountForSql(fromClause, params));
+			} else {
+				pager.setTotalRows(getCountForSql(fromClause, values));
 			}
 		}
 		StringBuilder sb = new StringBuilder();
@@ -1084,13 +1079,7 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 */
 	public  <T> List<T> findsqlReturnT(String selectClause, String fromClause, String withClause, Object[] values, OrderHelper orderHelper, Pager pager, Class<T> objectClass) throws BizException {
 		if(pager!=null&&pager.getPageSize()!=0){
-			try {
-			   pager.setTotalRows(getCountForSql(fromClause,withClause, values));
-				 
-			} catch (BizException e) {
-				//e.printStackTrace();
-				throw new HibernateException("--查询记录总数失败--",e);
-			}
+			pager.setTotalRows(getCountForSql(fromClause,withClause, values));
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(withClause);
@@ -1279,7 +1268,7 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 		return find(obj, shs, null);
 	}
 	
-	private String getQueryHql(Object obj,List<SearchHelper> shs,List<OrderHelper> orderHelperList,List<Object> valueList){
+	private String getQueryHql(Object obj,List<SearchHelper> shs,List<OrderHelper> orderHelperList,List<Object> valueList) throws BizException{
 		return getQueryHql(obj, shs, orderHelperList, valueList, false);
 	}
 	
@@ -1295,8 +1284,9 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 * @param valueList 参数值集合
 	 * @param isDistinct 是否唯一
 	 * @return
+	 * @throws BizException 
 	 */
-	private String getQueryHql(Object obj,List<SearchHelper> shs,List<OrderHelper> orderHelperList,List<Object> valueList, boolean isDistinct){
+	private String getQueryHql(Object obj,List<SearchHelper> shs,List<OrderHelper> orderHelperList,List<Object> valueList, boolean isDistinct) throws BizException{
 		if(obj==null){
 			throw new BizException("obj为空");
 		}
@@ -1506,8 +1496,9 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 * @param orderHelper 排序帮助对象
 	 * @param valueList 参数值集合
 	 * @return
+	 * @throws BizException 
 	 */
-	private String getQueryHql(Object obj,List<SearchHelper> shs,OrderHelper orderHelper,List<Object> valueList){
+	private String getQueryHql(Object obj,List<SearchHelper> shs,OrderHelper orderHelper,List<Object> valueList) throws BizException{
 		List<OrderHelper> orderHelperList = new ArrayList<OrderHelper>();
 		if(orderHelper!=null){
 			orderHelperList.add(orderHelper);
@@ -1524,9 +1515,10 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 * @param obj 指定的javaBean对象
 	 * @param property 指定的属性。请保证在指定对象下存在get...（）方法
 	 * @return
+	 * @throws BizException 
 	 */
 	@SuppressWarnings("unchecked")
-	private Object getPropertyValue(Object obj,String property){
+	private Object getPropertyValue(Object obj,String property) throws BizException{
 		String[] propertyChain = property.split("\\.");//获取属性链
 		////System.out.println("propertyChain:"+propertyChain.length);
 		Object result = null;
@@ -1566,8 +1558,9 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 	 * @CreateDate:2013-6-7 下午5:45:07
 	 * @param ids 主键集合
 	 * @param nums 展现次序
+	 * @throws BizException 
 	 */
-	public void updateGradation(Serializable[] ids,int[] nums){
+	public void updateGradation(Serializable[] ids,int[] nums) throws BizException{
 		String hql = "update "+ entityClass.getName()+" o set o.gradation =? where o.id=?";
 		for(int i =0;i<ids.length;i++){
 			update(hql, new Object[]{nums[i],ids[i]});

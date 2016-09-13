@@ -112,10 +112,11 @@ public class BuildingBizImpl implements IBuildingBiz {
 
 	/**
 	 * @param building
+	 * @throws BizException 
 	 * @see com.youlb.biz.building.IBuildingBiz#saveOrUpdate(com.youlb.entity.area.Area)
 	 */
 	@Override
-	public void saveOrUpdate(Building building,Operator loginUser) {
+	public void saveOrUpdate(Building building,Operator loginUser) throws BizException {
 		//add
 		if(StringUtils.isBlank(building.getId())){
 			String buildId = (String) buildingSqlDao.add(building);
@@ -140,10 +141,11 @@ public class BuildingBizImpl implements IBuildingBiz {
 	/**通过buildId获取neibId
 	 * @param parentId
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.building.IBuildingBiz#getBuildId(java.lang.String)
 	 */
 	@Override
-	public String getNeibId(String parentId) {
+	public String getNeibId(String parentId) throws BizException {
 		String hql ="select t.neibId from Building t where t.id=?";
 		List<String> find = buildingSqlDao.find(hql, new Object[]{parentId});
 		if(find!=null&&!find.isEmpty()){
@@ -156,10 +158,11 @@ public class BuildingBizImpl implements IBuildingBiz {
 	/**通过neibId获取楼栋列表
 	 * @param neibId
 	 * @return
+	 * @throws BizException 
 	 * @see com.youlb.biz.building.IBuildingBiz#getBuildingListByNeibId(java.lang.String)
 	 */
 	@Override
-	public List<Building> getBuildingListByNeibId(String neibId) {
+	public List<Building> getBuildingListByNeibId(String neibId) throws BizException {
 		List<Building> list = new ArrayList<Building>();
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT b.id,b.fbuildingnum,b.fbuildingname,b.ftotalFloor,b.fbuildheight,b.fbuildtype,b.fremark,b.fcreatetime ")

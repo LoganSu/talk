@@ -5,6 +5,7 @@ import java.util.List;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.monitor.PointInfo;
 import com.youlb.entity.monitor.RealTimeMonitor;
+import com.youlb.utils.exception.BizException;
 
 public interface IRealTimeMonitorBiz extends IBaseBiz<RealTimeMonitor> {
     /**
@@ -12,6 +13,6 @@ public interface IRealTimeMonitorBiz extends IBaseBiz<RealTimeMonitor> {
      * @param ids
      * @return
      */
-	List<PointInfo> getData(String[] ids);
+	List<PointInfo> getData(String[] ids)throws BizException;
 
 }

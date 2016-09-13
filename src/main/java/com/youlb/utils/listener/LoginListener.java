@@ -13,6 +13,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.youlb.biz.privilege.IOperatorBiz;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
 
 
 /** 
@@ -70,7 +71,11 @@ public class LoginListener implements ServletContextListener,HttpSessionListener
 		HttpSession session =arg0.getSession();
 		Operator login = (Operator) session.getAttribute(SysStatic.LOGINUSER);
 		IOperatorBiz operatorBiz = (IOperatorBiz) context.getBean("operatorBiz");
-		operatorBiz.loginOut(login);//退出登入
+		try {
+			operatorBiz.loginOut(login);
+		} catch (BizException e) {
+			e.printStackTrace();
+		}//退出登入
 		
 	}
 

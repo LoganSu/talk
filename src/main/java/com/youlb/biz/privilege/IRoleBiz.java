@@ -7,6 +7,7 @@ import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.entity.privilege.Role;
+import com.youlb.utils.exception.BizException;
 
 /** 
  * @ClassName: IRoleBiz.java 
@@ -21,19 +22,19 @@ public interface IRoleBiz extends IBaseBiz<Role> {
 	/**
 	 * @param role
 	 */
-	void saveOrUpdate(Role role);
+	void saveOrUpdate(Role role)throws BizException;
 
 	/**获取权限列表
 	 * @param loginUser
 	 * @return
 	 */
-	List<Privilege> getPrivilegeList(Operator loginUser,Role role);
+	List<Privilege> getPrivilegeList(Operator loginUser,Role role)throws BizException;
 
 	/**运营商角色table数据
 	 * @param role
 	 * @param loginUser
 	 * @return
 	 */
-	List<Role> carrierShowList(Role role, Operator loginUser);
+	List<Role> carrierShowList(Role role, Operator loginUser)throws BizException;
 
 }

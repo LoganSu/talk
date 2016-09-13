@@ -119,7 +119,7 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 	}
 
 	@Override
-	public void saveOrUpdate(Department department, Operator loginUser) {
+	public void saveOrUpdate(Department department, Operator loginUser) throws BizException {
 		String department_domain = "insert into t_department_domain(fdepartmentid,fdomainid) values(?,?)";
 		 //添加
 		 if(StringUtils.isBlank(department.getId())){
@@ -159,9 +159,10 @@ public class DepartmentBizImpl implements IDepartmentBiz {
      * @param department
      * @param loginUser
      * @return
+     * @throws BizException 
      */
 	@Override
-	public List<DepartmentTree> showListDepartmentTree(DepartmentTree department,Operator loginUser) {
+	public List<DepartmentTree> showListDepartmentTree(DepartmentTree department,Operator loginUser) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select d.id,d.fdepartmentname,d.fparentid,d.flayer,d.fcreatetime ")
@@ -198,10 +199,11 @@ public class DepartmentBizImpl implements IDepartmentBiz {
      * 检查社区是否已经绑定物业公司
      * @param domainId
      * @return
+     * @throws BizException 
      * @see com.youlb.biz.management.IDepartmentBiz#checkDomain(java.lang.String)
      */
 	@Override
-	public String checkDomain(String domainId) {
+	public String checkDomain(String domainId) throws BizException {
 		String sql ="select fdepartmentid from t_department_domain where fdomainid=?";
 		List<String> departmentId = departmentDao.pageFindBySql(sql, new Object[]{domainId});
 		if(departmentId!=null&&!departmentId.isEmpty()){
