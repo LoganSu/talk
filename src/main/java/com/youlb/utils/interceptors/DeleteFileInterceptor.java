@@ -28,12 +28,10 @@ public class DeleteFileInterceptor implements HandlerInterceptor {
 		 Map<String, Object> model = modelAndView.getModel();
 		 File file =  (File) model.get("file");
 		 log.info(file.getAbsolutePath());
-//		 if(file.exists()){
-//			 file.delete();
-//		 }
-//		 modelAndView.clear();
-//		 System.out.println(model);
-//		 modelAndView=null;
+		 if(file!=null&&file.exists()){
+			 file.delete();
+		 }
+		 modelAndView.clear();
 
 	}
 

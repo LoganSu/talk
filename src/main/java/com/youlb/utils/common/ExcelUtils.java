@@ -1,5 +1,6 @@
 package com.youlb.utils.common;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -24,15 +26,20 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ExcelUtils {
-   
+	private static Logger log = LoggerFactory.getLogger(ExcelUtils.class);
+
    /**
     * 读取Excel表格表头的内容
     * @param InputStream
     * @return String 表头内容的数组
     */
    public static String[] readExcelTitle(InputStream is) {
+	   
        try {
     	   POIFSFileSystem fs = new POIFSFileSystem(is);
     	   HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -40,7 +47,7 @@ public class ExcelUtils {
     	   HSSFRow row = sheet.getRow(0);
 	       // 标题总列数
 	       int colNum = row.getPhysicalNumberOfCells();
-	       System.out.println("colNum:" + colNum);
+//	       System.out.println("colNum:" + colNum);
 	       String[] title = new String[colNum];
 	       for (int i = 0; i < colNum; i++) {
 	           //title[i] = getStringCellValue(row.getCell((short) i));
@@ -264,10 +271,10 @@ public class ExcelUtils {
 				
 			}
 		}
-		
 		try {
+			log.info("新文件路径："+file);
 			FileOutputStream xls = new FileOutputStream(file);
-			wb.write(xls); 
+			wb.write(xls);
 			xls.close();
 //			JOptionPane.showMessageDialog(null, "导出成功!");
 		} catch (FileNotFoundException e) {

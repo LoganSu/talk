@@ -274,7 +274,7 @@ public class SMSManageCtrl extends BaseCtrl {
     	 ModelAndView m= new ModelAndView();
     	try {
     		String path = SMSManageCtrl.class.getClassLoader().getResource("").getPath();
-    		path=path.substring(1,path.indexOf("WEB-INF"));
+    		path=path.substring(0,path.indexOf("WEB-INF"));
 			List<SMSWhiteList> list = SMSManageBiz.getWhiteListBySMSMangeId(id);
 			String randomUUID = UUID.randomUUID().toString();
 			randomUUID = randomUUID.replace("-", "");
