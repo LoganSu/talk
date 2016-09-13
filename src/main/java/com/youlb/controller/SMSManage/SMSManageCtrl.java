@@ -273,11 +273,14 @@ public class SMSManageCtrl extends BaseCtrl {
     public ModelAndView singleDownfile(HttpServletRequest request,HttpServletResponse response,String id,Model model) {
     	 ModelAndView m= new ModelAndView();
     	try {
-    		String path = SMSManageCtrl.class.getClassLoader().getResource("").getPath().substring(1); 
+    		String path = SMSManageCtrl.class.getClassLoader().getResource("").getPath();
+    		path=path.substring(1,path.indexOf("WEB-INF"));
 			List<SMSWhiteList> list = SMSManageBiz.getWhiteListBySMSMangeId(id);
 			String randomUUID = UUID.randomUUID().toString();
 			randomUUID = randomUUID.replace("-", "");
-			String temPath = ExcelUtils.exportExcel("smsWhiteList.xls", new String[]{"电话号码"}, new String[]{"phone"}, list, path+"tem/"+randomUUID+".xls");
+			log.info("path="+path);
+			String temPath = ExcelUtils.exportExcel("smsWhiteList.xls", new String[]{"电话号码"}, new String[]{"phone"}, list, path+"tems/"+randomUUID+".xls");
+			log.info("temPath="+temPath);
 			File file = new File(temPath);
 	    	//获取项目根目录
 //	    	String rootPath = request.getSession().getServletContext().getRealPath("/");

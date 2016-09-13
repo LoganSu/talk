@@ -9,15 +9,15 @@
 	<div class="functionBut">
          <ul class="list-unstyled list-inline">
             <!-- 添加saveOrUpdateBtn类 跳转到自己定义的add页面  rel跳转页面url  saveUrl 保存到数据库url -->
-            <r:role auth="区域/添加">
-                <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/area/toSaveOrUpdate.do" saveUrl="${path}/mc/area/saveOrUpdate.do">添加</button></li>
+            <r:role auth="短信网关配置/添加">
+                <li><button class="btn btn-success btn-sm SMSManageAdd">添加</button></li>
             </r:role>
-            <r:role auth="区域/修改">
-                <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/area/toSaveOrUpdate.do" saveUrl="${path}/mc/area/saveOrUpdate.do">修改</button></li>
+            <r:role auth="短信网关配置/修改">
+                <li><button class="btn btn-warning btn-sm SMSManageAdd">修改</button></li>
             </r:role>
-            <r:role auth="区域/删除">
+            <r:role auth="短信网关配置/删除">
 	            <!--delete类 公共删除  -->
-	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/area/delete.do">删除</button></li>
+	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/SMSManage/delete.do">删除</button></li>
             </r:role>
          </ul>
 	 </div>

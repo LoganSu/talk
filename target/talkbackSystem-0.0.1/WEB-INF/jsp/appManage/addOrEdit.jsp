@@ -4,7 +4,7 @@
 <body>
 <div>
 	   <div>
-	   <form id="appManagesaveForm" name="appManagesaveForm" action="/mc/appManage/saveOrUpdate.do" target="appManageSubmitFrame" enctype="multipart/form-data" method="post">
+	   <form id="appManagesaveForm" name="appManagesaveForm" action="${path}/mc/appManage/saveOrUpdate.do" target="appManageSubmitFrame" enctype="multipart/form-data" method="post">
 		   <input type="hidden" name="id" value="${appManage.id}"/>
 		   <input type="hidden" name="appType" value="${appManage.appType}"/>
 		   <input type="hidden" id="appManageDomainIds" value="${appManage.treecheckbox}"/>

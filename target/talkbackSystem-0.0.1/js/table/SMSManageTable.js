@@ -26,33 +26,35 @@ var SMSManageTable ={
             field: 'index',
             title: '序号',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: false
         },{
-            field: 'province',
-            title: '省份',
+            field: 'ip',
+            title: 'IP地址',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: true
         },{
-            field: 'city',
-            title: '城市',
+            field: 'port',
+            title: '端口',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: true
         },{
-            field: 'areaNum',
-            title: '地区编号',
+            field: 'username',
+            title: '用户名',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: true
         },{
-            field: 'remark',
-            title: '备注',
+            field: 'sign',
+            title: '公司签名unicode编码',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'operate',
+            title: '操作',
             align: 'center',
             valign: 'middle',
             sortable: true
