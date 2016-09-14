@@ -85,7 +85,7 @@ public class AppManageCtrl extends BaseCtrl {
     	String opraterType = appManage.getOpraterType();
     	try {
 	    	if(ids!=null&&ids.length>0){
-					appManage = appManageBiz.get(ids[0]);
+				appManage = appManageBiz.get(ids[0]);
 	    		appManage.setOpraterType(opraterType);
 	    	}
 	    	if(SysStatic.two.equals(appManage.getAppType())){
@@ -244,7 +244,11 @@ public class AppManageCtrl extends BaseCtrl {
     		}else if(multipartFile==null||multipartFile.isEmpty()&&StringUtils.isNotBlank(appManage.getServerAddr())){
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
     		}else{
-    			super.message = "请选择上传apk文件或者ios地址！";
+    			if(SysStatic.six.equals(appManage.getAppType())){
+    				super.message = "请选择上传apk文件或者ios地址！";
+    			}else{
+    				super.message = "请选择上传apk文件！";
+    			}
     			model.addAttribute("message", super.message);
     			return INPUT;
     		}

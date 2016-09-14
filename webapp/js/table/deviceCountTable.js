@@ -65,6 +65,18 @@ var deviceCountTable ={
             valign: 'middle',
             sortable: false
         },{
+            field: 'warnPhone',
+            title: '告警电话',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'warnEmail',
+            title: '告警邮箱',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'endTime',
             title: '部署截止时间',
             align: 'center',

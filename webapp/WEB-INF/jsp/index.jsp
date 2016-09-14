@@ -72,6 +72,8 @@
     <script src="${path}/js/guidePage/guidePage.js" ></script>
     <script src="${path}/js/monitor/monitor.js" ></script>
     <script src="${path}/js/IPManage/IPManage.js" ></script>
+    <script src="${path}/js/SMSManage/SMSManage.js" ></script>
+    
     
     <!-- table JS -->
 <%--     <script src="${path}/js/table/areaTable.js"></script> --%>

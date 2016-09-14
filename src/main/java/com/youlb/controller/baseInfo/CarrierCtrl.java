@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.impl.Log4jLoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.baseInfo.ICarrierBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
+import com.youlb.controller.appManage.AppManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
@@ -35,6 +39,8 @@ import com.youlb.utils.exception.BizException;
 @RequestMapping("/mc/carrier")
 @Scope("prototype")
 public class CarrierCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(CarrierCtrl.class);
+
 	@Autowired
 	private ICarrierBiz carrierBiz;
 	@Autowired
@@ -212,24 +218,28 @@ public class CarrierCtrl extends BaseCtrl {
 	public QJson domainList(Carrier carrier){
 		QJson json = new QJson();
 		if(StringUtils.isNotBlank(carrier.getId())){
-			try {
-				carrier = carrierBiz.get(carrier.getId());
-				//获取权限列表
-				List<Domain> domainList = domainBiz.getDomainList(carrier, getLoginUser());
-//    	List<Privilege> privilegeList = roleBiz.getPrivilegeList(loginUser,role);
-				QTree t = new QTree();
-				t.setText("选择区域");
-				t.setUrl("checkfalse");
-				List<QTree> children = objToTree(domainList);
-				t.setChildren(children);;
-				json.setMsg("OK");
-				json.setObject(t);
-				json.setSuccess(true);
-				json.setType("1");
-			} catch (BizException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					carrier = carrierBiz.get(carrier.getId());
+				} catch (BizException e) {
+					log.error("获取运营商信息出错");
+					e.printStackTrace();
+				}
 			}
+				
+		try {
+			List<Domain> domainList = domainBiz.getDomainList(carrier, getLoginUser());
+			QTree t = new QTree();
+			t.setText("选择区域");
+			t.setUrl("checkfalse");
+			List<QTree> children = objToTree(domainList);
+			t.setChildren(children);;
+			json.setMsg("OK");
+			json.setObject(t);
+			json.setSuccess(true);
+			json.setType("1");
+		} catch (BizException e) {
+			log.error("获取区域数据出错");
+			e.printStackTrace();
 		}
    		return json;
 	}

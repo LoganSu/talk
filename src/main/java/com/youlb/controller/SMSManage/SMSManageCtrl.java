@@ -72,6 +72,21 @@ public class SMSManageCtrl extends BaseCtrl {
 		}
 		return setRows(list);
 	}
+	/**
+	 * 显示白名单table数据
+	 * @return
+	 */
+	@RequestMapping("/showWhiteList.do")
+	@ResponseBody
+	public  Map<String, Object> showWhiteList(String id){
+		List<SMSManage> list = new ArrayList<SMSManage>();
+		try {
+//			list = SMSManageBiz.showWhiteList(id);
+		} catch (Exception e) {
+			//TODO log
+		}
+		return setRows(list);
+	}
 	
 	 /**
      * 跳转到添加、更新页面
@@ -90,6 +105,25 @@ public class SMSManageCtrl extends BaseCtrl {
     	}
    		return "/SMSManage/addOrEdit";
    	}
+    
+
+	 /**
+    * 跳转到白名单列表
+    * @return
+    */
+   @RequestMapping("/toWhiteList.do")
+  	public String toWhiteList(String id,Model model){
+   	if(StringUtils.isNotBlank(id)){
+			try {
+				SMSManage SMSManage = SMSManageBiz.get(id);
+				model.addAttribute("SMSManage", SMSManage);
+			} catch (BizException e) {
+				log.error("获取单个数据失败");
+				e.printStackTrace();
+			}
+   	}
+  		return "/SMSManage/whiteList";
+  	}
     /**
      * 保存或修改
      * @param user
@@ -332,4 +366,5 @@ public class SMSManageCtrl extends BaseCtrl {
     	
     	return m;
     }
+    
 }

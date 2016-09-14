@@ -12,7 +12,7 @@
                 <td><div class="firstFont"><span class="starColor">*</span>服务器IP：</div></td>
                 <td><div><input name="ip" class="form-control required" title="请填写正确的ip地址"  maxlength="100" value="${iPManage.ip}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>端口：</div></td>
-                <td><div><input name="port" class="form-control required" title="端口不能为空" maxlength="5" value="${iPManage.port}"/></div></td>
+                <td><div><input name="port" class="form-control number" title="请填写正确的端口" maxlength="5" value="${iPManage.port}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>平台名称：</div></td>

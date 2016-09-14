@@ -14,5 +14,11 @@ public interface IRealTimeMonitorBiz extends IBaseBiz<RealTimeMonitor> {
      * @return
      */
 	List<PointInfo> getData(String[] ids)throws BizException;
+    /**
+     * 获取告警信息发送短信
+     * @param id
+     * @return
+     */
+	RealTimeMonitor getWarnInfoById(String id)throws BizException;
 
 }

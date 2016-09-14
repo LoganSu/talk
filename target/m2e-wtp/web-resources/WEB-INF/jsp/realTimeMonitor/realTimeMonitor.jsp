@@ -77,6 +77,12 @@
 		            valign: 'middle',
 		            sortable: true
 		        },{
+		            field: 'warnPhone',
+		            title: '告警电话',
+		            align: 'center',
+		            valign: 'middle',
+		            sortable: true
+		        },{
 		            field: 'operate',
 		            title: '操作',
 		            align: 'center',

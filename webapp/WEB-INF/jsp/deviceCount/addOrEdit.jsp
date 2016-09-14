@@ -39,6 +39,12 @@
                         </select>
 	                </div></td>
               </tr>
+               <tr>
+                    <td><div class="firstFont">告警电话：</div></td>
+                    <td><div><input name="warnPhone" class="form-control"  value="${deviceCount.warnPhone}"/></div></td>
+                    <td><div class="leftFont">告警邮箱：</div></td>
+                    <td><div><input name="warnEmail" class="form-control"  value="${deviceCount.warnEmail}"/></div></td>
+              </tr>
            </table>
            </div>
            <div class="firstFont">地址选择：</div>

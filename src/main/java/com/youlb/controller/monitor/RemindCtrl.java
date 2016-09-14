@@ -17,6 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youlb.biz.monitor.IRealTimeMonitorBiz;
+import com.youlb.entity.monitor.RealTimeMonitor;
+import com.youlb.utils.common.SysStatic;
+import com.youlb.utils.exception.BizException;
+import com.youlb.utils.sms.SmsUtil;
+
 
 @Controller
 @Scope("prototype")
@@ -29,7 +35,11 @@ public class RemindCtrl {
 	public void setServletContext(ServletContext servletContext) {
 		this.servletContext = servletContext;
 	}
-
+	@Autowired
+    private IRealTimeMonitorBiz realTimeMonitorBiz;
+	public void setRealTimeMonitorBiz(IRealTimeMonitorBiz realTimeMonitorBiz) {
+		this.realTimeMonitorBiz = realTimeMonitorBiz;
+	}
 	/**
 	 * 接口通知有警告消息
 	 * @return
@@ -48,14 +58,25 @@ public class RemindCtrl {
 //			logger.error("非指定ip");
 //			return "非指定ip";
 //		}
-		List<String> list = (List<String>) servletContext.getAttribute("realTimeMonitorIds");
-		if(list==null){
-			list = new ArrayList<String>();
-			list.add(id);
-		}else{
-			list.add(id);
+		//发送短信
+		try {
+		    RealTimeMonitor realTimeMonitor = realTimeMonitorBiz.getWarnInfoById(id);
+		    if(realTimeMonitor!=null){
+		    	if(StringUtils.isNotBlank(realTimeMonitor.getWarnPhone())){
+		    		SmsUtil.sendSMS(realTimeMonitor.getWarnPhone(), "你好！"+realTimeMonitor.getAddress()+"发生"+realTimeMonitor.getWarnType()+"告警。");
+		    	}
+		    }
+			List<String> list = (List<String>) servletContext.getAttribute("realTimeMonitorIds");
+			if(list==null){
+				list = new ArrayList<String>();
+				list.add(id);
+			}else{
+				list.add(id);
+			}
+			servletContext.setAttribute("realTimeMonitorIds", list);
+		} catch (BizException e) {
+			e.printStackTrace();
 		}
-		servletContext.setAttribute("realTimeMonitorIds", list);
 		return null;
 	}
 	

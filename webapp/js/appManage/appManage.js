@@ -1,7 +1,7 @@
 $(function(){
 	//添加、修改
-	$(document).on("click",".SMSManageAdd",function(){
-		var url =$path+"/mc/SMSManage/toSaveOrUpdate.do";
+	$(document).on("click",".appManageAdd",function(){
+		var url =$path+"/mc/appManage/toSaveOrUpdate.do";
 		var title = $(this).html();
 		var data="";
 		//修改保存共用（修改需要传参数）
@@ -14,6 +14,9 @@ $(function(){
 				 hiAlert("提示","请选择一条操作数据！");
 				 return false;
 			 }
+		}else{
+			var appType = $("#appManageAppType").val();
+			data="appType="+appType;
 		}
 		$.post(url,data,function(addHtml){
 			//设置标题

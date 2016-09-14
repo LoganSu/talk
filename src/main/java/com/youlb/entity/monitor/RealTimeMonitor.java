@@ -37,7 +37,16 @@ public class RealTimeMonitor extends BaseModel {
 	/**纬度*/
     @Transient
 	private Double latitude;
+    /**告警电话*/
+    @Transient
+	private String warnPhone;
     
+	public String getWarnPhone() {
+		return warnPhone;
+	}
+	public void setWarnPhone(String warnPhone) {
+		this.warnPhone = warnPhone;
+	}
 	public Double getLongitude() {
 		return longitude;
 	}

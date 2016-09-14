@@ -59,7 +59,7 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 	@Override
 	public List<RealTimeMonitor> showList(RealTimeMonitor target, Operator loginUser)throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select d.fdomainid,r.id,s.fvalue,r.fstatus,r.fcreatetime from t_real_time_monitor r")
+		sb.append("select d.fdomainid,r.id,s.fvalue,r.fstatus,r.fcreatetime,d.fwarn_phone from t_real_time_monitor r")
 		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type order by r.fstatus,r.fcreatetime desc");
 		List<Object[]> listObj = realTimeMonitorDao.pageFindBySql(sb.toString(), new Object[]{}, target.getPager());
 		List<RealTimeMonitor> list = new ArrayList<RealTimeMonitor>();
@@ -72,6 +72,7 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 				r.setWarnType(obj[2]==null?"":(String)obj[2]);
 				r.setStatus(obj[3]==null?"":(String)obj[3]);
 				r.setCreateTime(obj[4]==null?null:(Date)obj[4]);
+				r.setWarnPhone(obj[5]==null?"":(String)obj[5]);
 				list.add(r);
 			}
 		}
@@ -122,6 +123,30 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
             	 return list;
              }
              
+		}
+		return null;
+	}
+
+
+	@Override
+	public RealTimeMonitor getWarnInfoById(String id) throws BizException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("select d.fdomainid,r.id,s.fvalue,r.fstatus,r.fcreatetime,d.fwarn_phone from t_real_time_monitor r")
+		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type where r.id=?");
+		List<Object[]> listObj = realTimeMonitorDao.pageFindBySql(sb.toString(), new Object[]{id});
+		List<RealTimeMonitor> list = new ArrayList<RealTimeMonitor>();
+		if(listObj!=null&&!listObj.isEmpty()){
+			for(Object[] obj:listObj){
+				RealTimeMonitor r = new RealTimeMonitor();
+				r.setAddress(obj[0]==null?"":findAddressByRoomId((String)obj[0]));
+				r.setId(obj[1]==null?"":(String)obj[1]);
+				r.setWarnType(obj[2]==null?"":(String)obj[2]);
+				r.setStatus(obj[3]==null?"":(String)obj[3]);
+				r.setCreateTime(obj[4]==null?null:(Date)obj[4]);
+				r.setWarnPhone(obj[5]==null?"":(String)obj[5]);
+				list.add(r);
+				return r;
+			}
 		}
 		return null;
 	}

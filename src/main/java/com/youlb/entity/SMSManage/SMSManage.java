@@ -1,8 +1,11 @@
 package com.youlb.entity.SMSManage;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.youlb.entity.common.BaseModel;
 import com.youlb.utils.common.SysStatic;
@@ -33,8 +36,16 @@ public class SMSManage extends BaseModel {
 	/**公司签名(【赛翼智能】unicode编码)*/
 	@Column(name="fsign")
     private String sign;
+	/**号码列表*/
+	@Transient
+	private List<String> phones;
 	
-	
+	public List<String> getPhones() {
+		return phones;
+	}
+	public void setPhones(List<String> phones) {
+		this.phones = phones;
+	}
 	public String getIp() {
 		return ip;
 	}

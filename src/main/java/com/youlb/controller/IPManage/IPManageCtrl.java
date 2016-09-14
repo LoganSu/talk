@@ -88,7 +88,7 @@ public class IPManageCtrl extends BaseCtrl {
     		return  super.message;
     	}
     	if(iPManage.getPort()!=null){
-    		if(iPManage.getPort()>10000||!RegexpUtils.checkNumber(iPManage.getPort()+"")){
+    		if(iPManage.getPort()>65535||!RegexpUtils.checkNumber(iPManage.getPort()+"")){
     			super.message = "请填写正确的端口！";
     			return  super.message;
     		}

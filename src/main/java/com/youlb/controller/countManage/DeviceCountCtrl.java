@@ -28,6 +28,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.MatrixToImageWriter;
+import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
@@ -116,6 +117,18 @@ public class DeviceCountCtrl extends BaseCtrl {
     @ResponseBody
     public String saveOrUpdate(DeviceCount deviceCount,Model model){
     	try {
+    		if(StringUtils.isNotBlank(deviceCount.getWarnPhone())){
+    			if(!RegexpUtils.checkMobile(deviceCount.getWarnPhone())){
+    				super.message = "请填写正确的手机号码！";
+    				return super.message;
+    			}
+    		}
+    		if(StringUtils.isNotBlank(deviceCount.getWarnEmail())){
+    			if(!RegexpUtils.checkEmail(deviceCount.getWarnEmail())){
+    				super.message = "请填写正确的邮箱！";
+    				return super.message;
+    			}
+    		}
     		if(deviceCount.getTreecheckbox()==null||deviceCount.getTreecheckbox().size()!=1){
     			return  "只能选择一个域！";
     		}

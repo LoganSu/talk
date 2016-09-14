@@ -62,6 +62,13 @@ public class DeviceCount extends BaseModel {
 	@Column(name="flatitude")
 	private Double latitude;
 	
+	/**告警电话*/
+	@Column(name="fwarn_phone")
+	private String warnPhone;
+	/**告警邮箱*/
+	@Column(name="fwarn_email")
+	private String warnEmail;
+	
 	@Transient
 	private String address;
 	@Transient
@@ -104,6 +111,22 @@ public class DeviceCount extends BaseModel {
 		return countStatusStr;
 	}
 	
+	public String getWarnPhone() {
+		return warnPhone;
+	}
+
+	public void setWarnPhone(String warnPhone) {
+		this.warnPhone = warnPhone;
+	}
+
+	public String getWarnEmail() {
+		return warnEmail;
+	}
+
+	public void setWarnEmail(String warnEmail) {
+		this.warnEmail = warnEmail;
+	}
+
 	public Double getLongitude() {
 		return longitude;
 	}
