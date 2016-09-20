@@ -10,4 +10,11 @@ $(function(){
 			$("#unnormalModal").modal("show");
 		})
 	});
+     //导入
+	$(document).on("click",".importDeviceInfo",function(){
+		 $("#importDeviceInfoForm").submit();
+//		 $("#tableShowList").bootstrapTable('refresh', {
+//			 url: $path+"/mc/device/showList.do",
+//		 });
+	})
 })

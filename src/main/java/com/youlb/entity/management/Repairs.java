@@ -119,7 +119,7 @@ public class Repairs extends BaseModel {
 			}else if("5".equals(status)){
 				comefromStr="结束";
 			}else if("6".equals(status)){
-				comefromStr="已评价";
+				comefromStr="取消工单";
 			}
 		}
 		return comefromStr;

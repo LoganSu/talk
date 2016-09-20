@@ -30,7 +30,7 @@ public class CardInfo extends Model {
    /**卡号*/
    @Column(name="fcardno")
    private Integer cardNo;
-   /**类型*/
+   /**类型 1:IC卡 2;身份证 3：银行卡 */
    @Column(name="fcardtype")
    private String cardType;
    /**操作类型*/

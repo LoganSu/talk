@@ -4,6 +4,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script src="${path}/js/common/jquery-1.12.3.js"></script>
+     <link href="${path}/css/common/bootstrap/bootstrap.css" rel="stylesheet">
+     <link href="${path}/css/common/bootstrap/bootstrap-table.css" rel="stylesheet">
+         <script src="${path}/js/common/bootstrap/bootstrap-table-all.js"></script>
+    <script src="${path}/js/common/bootstrap/bootstrap-table-locale-all.js"></script>
+    <script src="${path}/js/common/bootstrap/bootstrap-table-zh-CN.min.js"></script>
 </head>
 <script type="text/javascript">
    function a(b){
@@ -14,8 +20,8 @@
 	  }else{
         window.parent.window.refresh();
 		window.parent.window.hideModal("unnormalModal");
-		  
 	  }
+	  
    }
 </script>
 <body onLoad="a(this)">

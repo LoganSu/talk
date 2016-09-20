@@ -6,17 +6,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.youlb.biz.SMSManage.ISMSManageBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.SMSManage.SMSManage;
@@ -175,7 +171,7 @@ public class SMSManageCtrl extends BaseCtrl {
 		if(multipartFile!=null&&!multipartFile.isEmpty()){
 			String realName = multipartFile.getOriginalFilename();
 			String suffix = realName.substring(realName.lastIndexOf("."));
-			if(!".xlsx".equalsIgnoreCase(suffix)&&!".xls".equalsIgnoreCase(suffix)){
+			if(!".xls".equalsIgnoreCase(suffix)){
 				super.message = "请选择正确的文件类型！";
     			model.addAttribute("message", super.message);
     			return INPUT;
@@ -186,8 +182,10 @@ public class SMSManageCtrl extends BaseCtrl {
 					| InvocationTargetException | InstantiationException
 					| NoSuchMethodException | SecurityException
 					| ParseException | IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				super.message = "解析excel文件出错！";
+				model.addAttribute("message", super.message);
+				return INPUT;
 			}
 			
 		}
@@ -268,36 +266,9 @@ public class SMSManageCtrl extends BaseCtrl {
      
     }   
 
-	/**
-	 * 设置让浏览器弹出下载对话框的Header.
-	 * 根据浏览器的不同设置不同的编码格式  防止中文乱码
-	 * @param fileName 下载后的文件名.
-	 */
-	public HttpServletResponse setFileDownloadHeader(HttpServletRequest request,HttpServletResponse response, String fileName,long fileLength) {
-		try {
-		    //中文文件名支持
-		    String encodedfileName = null;
-		    String agent = request.getHeader("USER-AGENT");
-		    if(null != agent && -1 != agent.indexOf("MSIE")){//IE
-		        encodedfileName = java.net.URLEncoder.encode(fileName,"UTF-8");
-		    }else if(null != agent && -1 != agent.indexOf("Mozilla")){
-		        encodedfileName = new String (fileName.getBytes("UTF-8"),"iso-8859-1");
-		    }else{
-		        encodedfileName = java.net.URLEncoder.encode(fileName,"UTF-8");
-		    }
-		    response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedfileName + "\"");
-		    response.setContentType("application/octet-stream");
-		    response.setHeader("Content-Length", String.valueOf(fileLength));
-		    response.setContentType("text/x-plain");
-		    return response;
-		} catch (UnsupportedEncodingException e) {
-		    e.printStackTrace();
-		}
-		return response;
-	}
 	
 	 /**
-     * 
+     * 导出白名单
      * @param fileName
      * @param request
      * @param response
@@ -313,7 +284,7 @@ public class SMSManageCtrl extends BaseCtrl {
 			String randomUUID = UUID.randomUUID().toString();
 			randomUUID = randomUUID.replace("-", "");
 			log.info("path="+path);
-			String temPath = ExcelUtils.exportExcel("smsWhiteList.xls", new String[]{"电话号码"}, new String[]{"phone"}, list, path+"tems/"+randomUUID+".xls");
+			String temPath = ExcelUtils.exportExcel("电话号码", new String[]{"电话号码"}, new String[]{"phone"}, list, path+"tems/"+randomUUID+".xls");
 			log.info("temPath="+temPath);
 			File file = new File(temPath);
 	    	//获取项目根目录

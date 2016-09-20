@@ -13,7 +13,7 @@
               <tr>
                     <td><div class="firstFont">账号：</div></td>
                     <td><div><input name="deviceCount" readonly="readonly" class="form-control"  value="${deviceCount.deviceCount}"/></div></td>
-                    <td><div class="leftFont">描述：</div></td>
+                    <td><div class="leftFont">别名：</div></td>
                     <td><div><input name="deviceCountDesc" class="form-control" maxlength="20" value="${deviceCount.deviceCountDesc}"/></div></td>
               </tr>
               <tr>

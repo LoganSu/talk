@@ -1,5 +1,6 @@
 package com.youlb.controller.common;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Observable;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -163,5 +165,32 @@ public abstract class BaseCtrl extends Observable{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	/**
+	 * 设置让浏览器弹出下载对话框的Header.
+	 * 根据浏览器的不同设置不同的编码格式  防止中文乱码
+	 * @param fileName 下载后的文件名.
+	 */
+	public HttpServletResponse setFileDownloadHeader(HttpServletRequest request,HttpServletResponse response, String fileName,long fileLength) {
+		try {
+		    //中文文件名支持
+		    String encodedfileName = null;
+		    String agent = request.getHeader("USER-AGENT");
+		    if(null != agent && -1 != agent.indexOf("MSIE")){//IE
+		        encodedfileName = java.net.URLEncoder.encode(fileName,"UTF-8");
+		    }else if(null != agent && -1 != agent.indexOf("Mozilla")){
+		        encodedfileName = new String (fileName.getBytes("UTF-8"),"iso-8859-1");
+		    }else{
+		        encodedfileName = java.net.URLEncoder.encode(fileName,"UTF-8");
+		    }
+		    response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedfileName + "\"");
+		    response.setContentType("application/octet-stream");
+		    response.setHeader("Content-Length", String.valueOf(fileLength));
+		    response.setContentType("text/x-plain");
+		    return response;
+		} catch (UnsupportedEncodingException e) {
+		    e.printStackTrace();
+		}
+		return response;
 	}
 }

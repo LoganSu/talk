@@ -1,7 +1,10 @@
 package com.youlb.biz.access;
 
+import java.util.List;
+
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.access.DeviceInfo;
+import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
 
@@ -20,6 +23,16 @@ public interface IDeviceBiz extends IBaseBiz<DeviceInfo> {
 	 * @return
 	 */
 	String saveOrUpdate(DeviceInfo device, Operator loginUser)throws BizException ;
+    /**
+     * 批量导入excel数据
+     * @param readExcelContent
+     */
+	void saveBatch(List<DeviceInfoDto> readExcelContent)throws BizException;
+	 /**
+	  * 获取设备信息
+	  * @return
+	  */
+	List<DeviceInfoDto> getDeviceInfoDto()throws BizException;
 
 
 }

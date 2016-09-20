@@ -60,31 +60,8 @@ $(function(){
 		   }else{
 			   hiAlert("提示","发卡器连接异常！");
 		   }
-// 		   var url =$path+"/mc/permission/connectCardMachine.do";
-// 		   $.post(url,function($data){
-// 			   if($data){
-// 				   if($data.cardSn==0){
-// 					   hiAlert("提示","请放入卡片！");
-// 				   }else if($data.cardSn==null){
-// 				       hiAlert("提示","发卡器连接异常！");
-// 				   }else{
-// 				      $("#openCardForm .cardSn").val($data.cardSn);
-// 				   }
-// 			   }else{
-// 				   hiAlert("提示","该卡已经被使用，请放入新卡！");
-// 			   }
-// 		   });
 	})
 	
-// 	//多选框变单选
-// 	$('#openCardForm .lesseeAddress').each(function(){
-// 		$(this).click(function(){
-// 			if($(this).is(':checked')){
-// 				$('#openCardForm .lesseeAddress').prop('checked',false);
-// 				$(this).prop('checked',true);
-// 			}
-// 		});
-// 	});
 	 //保存卡片信息
 	 $("#openCardDiv .sure").on("click",function(){
 		var data = $("#openCardForm").serialize();
@@ -93,58 +70,45 @@ $(function(){
 			hiAlert("提示","请链接发卡器！");
 			return false;
 		}
-// 		var frDate = $("#openCardForm .frDate").val();
-// 		var toDate = $("#openCardForm .toDate").val();
-// 		if(!frDate||!toDate){
-// 			hiAlert("提示","请填写有效时间！");
-// 			return false;
-// 		}
-// 		var domainSns = $("#openCardForm input[name='domainSns']:checked").length;
-// 		 if(domainSns<1){
-// 			 hiAlert("提示","请选择授权门禁！");
-// 				return false;
-// 		 }
 		//保存卡片信息
 		$.post($path+"/mc/permission/writeCard.do",data,function($data){
 			if($data=="1"){
 		       hiAlert("提示","该卡片已经被使用，请更换新卡！");
 		       return false;
 			}else if($data=="0"){
-// 				//写卡信息
-// 				var frDateArr = frDate.split("-");
-// 				var toDateArr = toDate.split("-");
-// 				var basicInfo = "{\"card_no\":"+cardSn+", \"card_type\":64, \"opr_type\":0, \"frDate\":{\"year\":"+frDateArr[0]+", \"month\":"+frDateArr[1]+", \"day\":"+frDateArr[2]+"}, \"toDate\":{\"year\":"+toDateArr[0]+", \"month\":"+toDateArr[1]+", \"day\":"+toDateArr[2]+"}}}";
-// 				var accessInfoArr =["{\"access\":["];
-// 				var domainSns = $("#openCardForm .domainSns");
-// 				$.each(domainSns,function(index,obj){
-// 					var domainSn = $(obj).val();
-// 					var whilteVersion = $(obj).attr("whilteVersion");
-// 					if(index!=domainSns.length-1){
-// 						accessInfoArr.push("{\"lid\":"+domainSn+", \"ver\":"+whilteVersion+"},");
-// 					}else{
-// 						accessInfoArr.push("{\"lid\":"+domainSn+", \"ver\":"+whilteVersion+"}");
-// 					}
-// 				});
-// 				accessInfoArr.push("]}");
-// 				var writeBasicInfo,writeAccessInfo;
-// 				try{
-// 				    writeBasicInfo = myactivex.WriteBasicInfo(basicInfo);
-// 				    writeAccessInfo = myactivex.WriteAccessInfo(accessInfoArr.join(""));
-// 				}catch(e){
-// 					hiAlert("提示","写入卡片信息出错！");
-// 					return false;
-// 				}
-// 				var writeBasicInfoJSON = jQuery.parseJSON(writeBasicInfo);
-// 				var writeAccessInfoJSON = jQuery.parseJSON(writeAccessInfo);
-// 				if(writeBasicInfoJSON.code=="0"&&writeAccessInfoJSON.code=="0"){
 				  hiAlert("提示","开卡成功！");
-// 				}
 			}else if($data=="2"){
 				hiAlert("提示","开卡失败！");
 			}
 		});
 		
 	 });
+	 
+	 $("#openCardForm .cardType").on("change",function(){
+		 var cardType = $(this)[0].options[$(this)[0].selectedIndex].value;
+		 var countTypeIntVal = parseInt(cardType);
+		 var readonly ='<td><div><input name="cardSn" readonly="readonly" class="form-control cardSn required"/></div></td><td><div class="leftFont"><button type="button" class="btn btn-info btn-sm connectCardMachine">连接发卡器</button></div></td>';
+		 var writeonly ='<td><div><input name="cardSn" class="form-control cardSn required"/></div></td><td><div class="leftFont"></div></td>';
+
+		 switch(countTypeIntVal){
+		  case 1:
+			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+			  $("#openCardForm table tr:eq(0)").append(readonly);
+			  break;
+          case 2:
+        	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+ 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+        	  $("#openCardForm table tr:eq(0)").append(writeonly);
+			  break;
+          default:
+        	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+			  $("#openCardForm table tr:eq(0)").append(readonly);
+		     break;
+		 }
+	 })
+	 
 })
 </script>
 
@@ -155,7 +119,12 @@ $(function(){
          <input type="hidden" name="roomId" value="${cardInfo.roomId}"/>
          <table>
             <tr>
-               <td><div class="firstFont"><span class="starColor">*</span>卡序列号：</div></td>
+               <td><div class="firstFont">
+               <select name="cardType" class="cardType form-control" style="width: 80px">
+                 <option value="1">IC卡</option>
+                 <option value="2">身份证</option>
+                 <option value="3">银行卡</option>
+               </select></div></td>
                <td><div><input name="cardSn" readonly="readonly" class="form-control cardSn required"/></div></td>
                <td><div class="leftFont">
                   <button type="button" class="btn btn-info btn-sm connectCardMachine">连接发卡器</button>

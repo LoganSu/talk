@@ -253,8 +253,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 		//添加ic卡信息
 		//激活状态
 		cardInfo.setCardStatus(SysStatic.LIVING);
-		//TODO 设置卡片类型
-		cardInfo.setCardType("1");
+//		设置卡片类型
+//		cardInfo.setCardType(SysStatic.ICCARD);
 		//生成序号8位数
 	    Session session = cardSqlDao.getCurrSession();
 	    SQLQuery query = session.createSQLQuery("SELECT '1'||substring('000000'||nextval('tbl_card_seq'),length(currval('tbl_card_seq')||'')) ");
