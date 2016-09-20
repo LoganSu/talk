@@ -22,16 +22,16 @@
                       <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option>
                     </select>
                 </div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>
+                <td><div class="leftFont">
                    <c:choose>
                      <c:when test="${appManage.appType == 6}">
-                        <select><option class="android">apk上传</option><option <c:if test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">selected="selected"</c:if> class="ios">IOS地址</option></select>
+                        <select class="appManageSeolect form-control" style="width: 80px"><option class="andriod">apk上传</option><option <c:if test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">selected="selected"</c:if> class="IOS">IOS地址</option></select>
                      </c:when>
                      <c:otherwise>
-                       apk上传
+                       <span class="starColor">*</span>apk上传：
                      </c:otherwise>
                    </c:choose>
-                                               ：</div></td>
+                  </div></td>
                 <td colspan="1"><div class="changeInputDiv">
                     <c:choose>
                       <c:when test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">
@@ -198,14 +198,16 @@
 				  $("#appManageShowTree ."+obj.trim()).prop('checked',true);
 			  });
 		}
-		
-		$("#appManagesaveForm .android").on("click",function(){
-			$("#appManagesaveForm .changeInputDiv input").remove();
-			$("#appManagesaveForm .changeInputDiv").append('<input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>');
-		})
-		$("#appManagesaveForm .ios").on("click",function(){
-			$("#appManagesaveForm .changeInputDiv input").remove();
-			$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
+		//
+		$("#appManagesaveForm .appManageSeolect").on("change",function(){
+			var className = $(this)[0].options[$(this)[0].selectedIndex].className;
+			if(className=="andriod"){
+				$("#appManagesaveForm .changeInputDiv input").remove();
+				$("#appManagesaveForm .changeInputDiv").append('<input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>');
+			}else{
+				$("#appManagesaveForm .changeInputDiv input").remove();
+				$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
+			}
 		})
   })
 </script>

@@ -82,7 +82,7 @@ var showAddress = function(){
 				checkbox:true,
 				checkboxLink:false,//是否联动多选框
 				checkboxPartShow:true,//显示部分多选框
-				layer: [3,4],
+				layer: [2,3,4],
 				showurl:false
 		});
 	     

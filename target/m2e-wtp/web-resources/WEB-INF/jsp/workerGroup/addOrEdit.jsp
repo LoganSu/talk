@@ -60,8 +60,8 @@ $(function(){
                 <td><div class="leftFont"><span class="starColor">*</span>组类别：</div></td>
                 <td ><div>
                    <select name="power" class="form-control">
-                     <option value="1">派单组</option>
-                     <option value="2">普通组</option>
+                     <option <c:if test="${workerGroup.power eq '1'}">selected="selected"</c:if> value="1">派单组</option>
+                     <option <c:if test="${workerGroup.power eq '2'}">selected="selected"</c:if> value="2">普通组</option>
                    </select>
                  </div></td>
               </tr>

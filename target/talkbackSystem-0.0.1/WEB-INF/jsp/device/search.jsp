@@ -5,6 +5,7 @@
  <script type="text/javascript">
 //时间控件
  $(".datepicker").datepicker();
+//  $('#importDeviceInfoForm input').fileinput("upload");
  </script>
 <body>
 	<!-- 功能按钮 div-->
@@ -20,6 +21,20 @@
 	            <!--delete类 公共删除  -->
                 <r:role auth="门禁设备管理/删除">
 	                 <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/device/delete.do">删除</button></li>
+	            </r:role>
+	            <r:role auth="门禁设备管理/模板下载">
+                    <li><a href="${path}/mc/device/singleDownModel.do"><button class="btn btn-primary btn-sm">模板下载</button></a></li>
+	            </r:role>
+	            <r:role auth="门禁设备管理/导出">
+                    <li><a href="${path}/mc/device/singleDownfile.do"><button class="btn btn-info btn-sm">导出</button></a></li>
+	            </r:role>
+	             <r:role auth="门禁设备管理/导入">
+                    <li style="padding-right: 0px"><button class="btn btn-success btn-sm importDeviceInfo">导入</button></li>
+                    <li style="padding-left: 0px;">
+                     <form id="importDeviceInfoForm" action="${path}/mc/device/importDeviceInfo.do" target="deviceInfoSubmitFrame" enctype="multipart/form-data" method="post">
+                       <input type="file" name="deviceInfo" class="file"/>
+                     </form>
+                   </li>
 	            </r:role>
          </ul>
 	 </div>	
@@ -60,4 +75,6 @@
            </table>
         </form>
        </div>
+       <!-- 隐藏iframe设置表单的目标为这个嵌入框架  使页面效果不会跳转 -->
+ <iframe style="width:0; height:0;display: none;" id="deviceInfoSubmitFrame" name="deviceInfoSubmitFrame"></iframe>
 </body>       

@@ -13,7 +13,7 @@
               <tr>
                     <td><div class="firstFont">账号：</div></td>
                     <td><div><input name="deviceCount" readonly="readonly" class="form-control"  value="${deviceCount.deviceCount}"/></div></td>
-                    <td><div class="leftFont">描述：</div></td>
+                    <td><div class="leftFont">别名：</div></td>
                     <td><div><input name="deviceCountDesc" class="form-control" maxlength="20" value="${deviceCount.deviceCountDesc}"/></div></td>
               </tr>
               <tr>
@@ -38,6 +38,12 @@
                          <option <c:if test="${deviceCount.countStatus=='2'}">selected="selected"</c:if> value="2">未激活</option>
                         </select>
 	                </div></td>
+              </tr>
+               <tr>
+                    <td><div class="firstFont">告警电话：</div></td>
+                    <td><div><input name="warnPhone" class="form-control"  value="${deviceCount.warnPhone}"/></div></td>
+                    <td><div class="leftFont">告警邮箱：</div></td>
+                    <td><div><input name="warnEmail" class="form-control"  value="${deviceCount.warnEmail}"/></div></td>
               </tr>
            </table>
            </div>
@@ -76,7 +82,7 @@ var showAddress = function(){
 				checkbox:true,
 				checkboxLink:false,//是否联动多选框
 				checkboxPartShow:true,//显示部分多选框
-				layer: [3,4],
+				layer: [2,3,4],
 				showurl:false
 		});
 	     

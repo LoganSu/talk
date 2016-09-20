@@ -16,6 +16,7 @@
      
      <script src="${path}/js/common/jquery-1.12.3.js"></script>
      <link href="${path}/css/common/bootstrap/bootstrap.css" rel="stylesheet">
+<%--      <link href="${path}/css/common/bootstrap/fileinput.min.css" rel="stylesheet"> --%>
      <link href="${path}/css/common/bootstrap/bootstrap-table.css" rel="stylesheet">
      <link href="${path}/css/common/bootstrap/bootstrap-datepicker.css" rel="stylesheet">
      <link href="${path}/css/common/bootstrap/bootstrap-treeview.css" rel="stylesheet">
@@ -34,6 +35,7 @@
 	<script src="${path}/js/common/ajaxfileupload.js"></script>
     <script src="${path}/js/common/init.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap.js"></script>
+<%--     <script src="${path}/js/common/bootstrap/fileinput.min.js"></script> --%>
     <script src="${path}/js/common/bootstrap/respond.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-table-all.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-table-locale-all.js"></script>
@@ -72,6 +74,8 @@
     <script src="${path}/js/guidePage/guidePage.js" ></script>
     <script src="${path}/js/monitor/monitor.js" ></script>
     <script src="${path}/js/IPManage/IPManage.js" ></script>
+    <script src="${path}/js/SMSManage/SMSManage.js" ></script>
+    
     
     <!-- table JS -->
 <%--     <script src="${path}/js/table/areaTable.js"></script> --%>
