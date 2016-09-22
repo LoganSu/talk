@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.monitor.IRealTimeMonitorBiz;
 import com.youlb.entity.monitor.RealTimeMonitor;
-import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.sms.SmsUtil;
 

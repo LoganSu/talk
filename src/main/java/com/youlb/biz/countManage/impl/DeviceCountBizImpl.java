@@ -189,41 +189,41 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 		//entityid转换成domainid
 //		String sql ="SELECT d.id from t_domain d where d.fentityid=?";
 //		List<String> slist = deviceCountSqlDao.pageFindBySql(sql, new Object[]{deviceCount.getTreecheckbox().get(0)});
-		//生成sip账号
-		String domainId = deviceCount.getTreecheckbox().get(0);
-		//同步
-		String sipNum="";
-		synchronized (deviceCount) {
-			//一个域可以绑定多个账号，避免重复sip账号
-			String sql = "SELECT max(fsipnum) from t_devicecount t where t.fdomainid=?";
-			List<String> maxList = deviceCountSqlDao.pageFindBySql(sql, new Object[]{domainId});
-			if(maxList!=null&&!maxList.isEmpty()&&!maxList.contains(null)){
-				String maxSip = maxList.get(0);
-				if(maxSip.contains("-")){
-					String[] maxArr = maxSip.split("-");
-					int parseInt = Integer.parseInt(maxArr[1]);
-					sipNum = maxArr[0]+"-"+ ++parseInt;
-				}else{
-					sipNum = maxSip+"-1";
-				}
-			}else{
-				sipNum = getSipNum(domainId);
-			}
-			//更新的操作
-			if(StringUtils.isNotBlank(deviceCount.getId())){
-				String update = "update users set local_sip=? where local_sip=? and sip_type=?";
-				String sipType = deviceCount.getCountType();
-			    if("3".equals(sipType)){
-			    	sipType="5";
-			    }else if("1".equals(sipType)){
-			    	sipType="2";
-			    }
-				deviceCountSqlDao.executeSql(update, new Object[]{sipNum,deviceCount.getSipNum(),sipType});
-			}
-		}
-		deviceCount.setSipNum(sipNum);//sipNum
-		deviceCount.setDomainId(domainId);
 		if(StringUtils.isBlank(deviceCount.getId())){
+			//生成sip账号
+			String domainId = deviceCount.getTreecheckbox().get(0);
+			deviceCount.setDomainId(domainId);
+			//同步
+			String sipNum="";
+			synchronized (deviceCount) {
+				//一个域可以绑定多个账号，避免重复sip账号
+				String sql = "SELECT max(fsipnum) from t_devicecount t where t.fdomainid=?";
+				List<String> maxList = deviceCountSqlDao.pageFindBySql(sql, new Object[]{domainId});
+				if(maxList!=null&&!maxList.isEmpty()&&!maxList.contains(null)){
+					String maxSip = maxList.get(0);
+					if(maxSip.contains("-")){
+						String[] maxArr = maxSip.split("-");
+						int parseInt = Integer.parseInt(maxArr[1]);
+						sipNum = maxArr[0]+"-"+ ++parseInt;
+					}else{
+						sipNum = maxSip+"-1";
+					}
+				}else{
+					sipNum = getSipNum(domainId);
+				}
+				//更新的操作
+				if(StringUtils.isNotBlank(deviceCount.getId())){
+					String update = "update users set local_sip=? where local_sip=? and sip_type=?";
+					String sipType = deviceCount.getCountType();
+				    if("3".equals(sipType)){
+				    	sipType="5";
+				    }else if("1".equals(sipType)){
+				    	sipType="2";
+				    }
+					deviceCountSqlDao.executeSql(update, new Object[]{sipNum,deviceCount.getSipNum(),sipType});
+				}
+			}
+			deviceCount.setSipNum(sipNum);//sipNum
 			deviceCount.setId(null);
 			//生成序号8位数
 		    Session session = deviceCountSqlDao.getCurrSession();

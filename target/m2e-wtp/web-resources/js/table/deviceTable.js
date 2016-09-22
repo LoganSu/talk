@@ -74,7 +74,7 @@ var deviceTable ={
             valign: 'middle',
             sortable: true
         },{
-            field: 'deviceModel',
+            field: 'system_version',
             title: '系统版本',
             align: 'center',
             valign: 'middle',

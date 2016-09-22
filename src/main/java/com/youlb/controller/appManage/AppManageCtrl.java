@@ -242,6 +242,7 @@ public class AppManageCtrl extends BaseCtrl {
 				appManage.setAppSize(fileSize);
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
     		}else if(multipartFile==null||multipartFile.isEmpty()&&StringUtils.isNotBlank(appManage.getServerAddr())){
+    			appManage.setRelativePath("");//不能为null
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
     		}else{
     			if(SysStatic.six.equals(appManage.getAppType())){

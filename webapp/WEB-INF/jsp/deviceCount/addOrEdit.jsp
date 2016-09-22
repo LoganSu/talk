@@ -7,7 +7,7 @@
 		 <form id="deviceCountsaveForm" action="">
 		   <div>
 		    <input type="hidden" name="id" value="${deviceCount.id}"/>
-		    <input type="hidden" id="deviceCountDomainIds" value="${deviceCount.domainId}"/>
+		    <input type="hidden" name="domainId" id="deviceCountDomainIds" value="${deviceCount.domainId}"/>
 		    <input type="hidden" name="sipNum" value="${deviceCount.sipNum}"/>
             <table>
               <tr>
@@ -47,10 +47,12 @@
               </tr>
            </table>
            </div>
-           <div class="firstFont">地址选择：</div>
-           <div>
-             <p id="deviceCountShowTree"></p>
-           </div> 
+           <c:if test="${deviceCount.id == null}">
+	           <div class="firstFont">地址选择：</div>
+	           <div>
+	             <p id="deviceCountShowTree"></p>
+	           </div> 
+           </c:if>
          </form>
 	   </div>
  </div>
@@ -82,7 +84,7 @@ var showAddress = function(){
 				checkbox:true,
 				checkboxLink:false,//是否联动多选框
 				checkboxPartShow:true,//显示部分多选框
-				layer: [2,3,4],
+				layer: [1,2,3,4],
 				showurl:false
 		});
 	     

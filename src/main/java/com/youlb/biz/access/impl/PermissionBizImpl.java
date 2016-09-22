@@ -431,15 +431,15 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 */
 	private String findDomainSn(String cardSn) throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT dm.fdomainsn from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
+		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
 		.append("WITH RECURSIVE r AS ( ")
 		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.fentityid=ci.froomid where ci.fcardsn=? ")
 		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
 		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
-		List<Integer> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn});
+		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn});
 		if(deviceCountList!=null&&!deviceCountList.isEmpty()){
 			StringBuilder deviceCountStr = new StringBuilder();
-			for(Integer deviceCount:deviceCountList){
+			for(String deviceCount:deviceCountList){
 				deviceCountStr.append(deviceCount+",");
 			}
 			deviceCountStr.deleteCharAt(deviceCountStr.length()-1);
@@ -598,8 +598,13 @@ public class PermissionBizImpl implements IPermissionBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		sb.append("select * from(SELECT cr.fcardsn cardsn,cr.ftime cardtime,cr.fpath imgpath,cr.id id,cr.fusername username,dc.fdomainid domainid")
-		.append(" from t_cardrecord cr INNER JOIN t_devicecount dc on dc.fdevicecount=cr.fusername where cr.fmode=?");
-		values.add(cardRecord.getMode());//纪录类型
+		.append(" from t_cardrecord cr INNER JOIN t_devicecount dc on dc.fdevicecount=cr.fusername where 1=1 ");
+		if("5".equals(cardRecord.getMode())){
+			sb.append(" and cr.fmode in('5','7','8') ");
+		}else{
+			sb.append(" and cr.fmode =? ");
+			values.add(cardRecord.getMode());//纪录类型
+		}
 		if(StringUtils.isNotBlank(cardRecord.getCardsn())){
 			sb.append(" and cr.fcardsn like ?");
 			values.add("%"+cardRecord.getCardsn()+"%");

@@ -129,7 +129,7 @@ public class DeviceCountCtrl extends BaseCtrl {
     				return super.message;
     			}
     		}
-    		if(deviceCount.getTreecheckbox()==null||deviceCount.getTreecheckbox().size()!=1){
+    		if(StringUtils.isBlank(deviceCount.getId())&&(deviceCount.getTreecheckbox()==null||deviceCount.getTreecheckbox().size()!=1)){
     			return  "只能选择一个域！";
     		}
     		if(StringUtils.isNotBlank(deviceCount.getId())){
