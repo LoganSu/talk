@@ -9,6 +9,8 @@
 		    <input type="hidden" name="id" value="${deviceCount.id}"/>
 		    <input type="hidden" name="domainId" id="deviceCountDomainIds" value="${deviceCount.domainId}"/>
 		    <input type="hidden" name="sipNum" value="${deviceCount.sipNum}"/>
+		    <input type="hidden" name="orderNum" value="${deviceCount.orderNum}"/>
+		    
             <table>
               <tr>
                     <td><div class="firstFont">账号：</div></td>

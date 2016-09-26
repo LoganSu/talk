@@ -95,7 +95,12 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 	@Override
 	public DeviceCount get(Serializable id) throws BizException {
 		DeviceCount count = deviceCountSqlDao.get(id);
-		count.setAddress(findAddressByRoomId(count.getDomainId()));
+		String address = findAddressByRoomId(count.getDomainId());
+		if(StringUtils.isNotBlank(count.getDeviceCountDesc())){
+			count.setAddress(address+"-"+count.getDeviceCountDesc());
+		}else{
+			count.setAddress(address);
+		}
 		return count;
 	}
 

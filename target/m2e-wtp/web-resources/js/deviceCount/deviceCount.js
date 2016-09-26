@@ -63,6 +63,9 @@ $(function(){
 			   countTypeStr="管理机";
 			   remark="";
 		   }
+		   $("#tableShowList").bootstrapTable('refresh', {
+			   url: $path+"/mc/deviceCount/showList.do",
+		   });
 		   createPrintPage(countTypeStr, orderNum, address, datepicker, printTime, printPerson, remark, img);
 //		    var oPop = window.open('','oPop');
 //		    var str = '<!DOCTYPE html>'  

@@ -117,8 +117,7 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
   	public String toDisposeEvent(String id,AdPublish adPublish,Model model){
     	try {
 		   RealTimeMonitor realTimeMonitor = realTimeMonitorBiz.get(id);
-		   DeviceCount deviceCount;
-		   deviceCount = deviceCountBiz.getByCount(realTimeMonitor.getDeviceCount());
+		   DeviceCount deviceCount = deviceCountBiz.getByCount(realTimeMonitor.getDeviceCount());
 		   realTimeMonitor.setLatitude(deviceCount.getLatitude());
 		   realTimeMonitor.setLongitude(deviceCount.getLongitude());
 		    model.addAttribute("realTimeMonitor", realTimeMonitor);
@@ -139,7 +138,7 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
     public String save(RealTimeMonitor realTimeMonitor,Model model){
     	try {
     		if(StringUtils.isBlank(realTimeMonitor.getId())||StringUtils.isBlank(realTimeMonitor.getRemark())){
-    			super.message = "所需参数为空！";
+    			super.message = "内容不能为空！";
     			return  super.message;
     		}
     		realTimeMonitorBiz.update(realTimeMonitor);

@@ -100,8 +100,11 @@ public class RealTimeMonitor extends BaseModel {
 
 	 public String getOperate() {
 	   	StringBuilder sb = new StringBuilder();
-	   	sb.append("<a class='disposeEvent' rel='"+getId()+"' href='javascript:void(0)'>处理</a>&nbsp;");
-	   
+	   	if("0".equals(status)){
+			sb.append("<a class='disposeEvent' rel='"+getId()+"' href='javascript:void(0)'>处理</a>&nbsp;");
+		 }else if("1".equals(status)){
+			 sb.append("<a class='disposeEvent' rel='"+getId()+"' href='javascript:void(0)'>查看</a>&nbsp;");
+		 }
 			return sb.toString();
 	}
 	 
