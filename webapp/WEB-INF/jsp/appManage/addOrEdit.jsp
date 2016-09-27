@@ -127,9 +127,9 @@
          </form>
 	   </div>
  </div>
-<!-- 	<div class="progress"> -->
-<!-- 	    <div class="progress-bar" role="progressbar" data-transitiongoal="100"></div> -->
-<!-- 	</div> -->
+	<div class="progress">
+	    <div class="progress-bar" role="progressbar" data-transitiongoal="1"></div>
+	</div>
 
  <!-- 隐藏iframe设置表单的目标为这个嵌入框架  使页面效果不会跳转 -->
  <iframe style="width:0; height:0;display: none;" id="appManageSubmitFrame" name="appManageSubmitFrame"></iframe>
@@ -137,44 +137,22 @@
 <script type="text/javascript">
   $(function(){
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
-		  
 		  $("#appManagesaveForm").submit();
-		 //文件大小
-// 		 var file = document.getElementById("uploadFile");  
-// 		 var size = file.files[0].size;
-// 		 alert(size);
-// 		    $('.progress .progress-bar').progressbar({
-// 		    	transition_delay: 300,//延时
-// 		    	refresh_speed: 200,
-// 		    	display_text: 'center', 
-// 		    	use_percentage: false,
-// 		    	update: function(current_percentage, $this) {
-// // 		    		alert("update");
-// 		    		var eventFun = function(){  
-// 		                $.ajax({  
-// 		                    type: 'GET',  
-// 		                    url: $path+'/mc/appManage/progress.do',  
-// 		                    data: {},  
-// 		                    dataType: 'json',  
-// 		                    success : function(data){
-// // 		                    	   alert(data.toSource())
-// //                                     current_percentage=data.rate
-// 		                    	    $this.attr('data-transitiongoal',data.rate+' %');  
-// 		                    	    $this.empty();  
-// 		                    	    $this.append(data.show);   
-// 		                            if(data.rate == 100){
-// 		                                window.clearInterval(intId);  
-// 		                            }     
-// 		            }});};  
-// 		            var intId = window.setInterval(eventFun,500);
-// 		        },
-// 		        done:function(){
-// // 		    		alert("done");
-// 		    	},
-// 		        fail: function(){
-// 		    		alert("fail");
-// 		    	}
-// 		    	});
+		  //显示进度条
+		  var timer = setInterval(function(){
+			  $.ajax({
+                  type: 'GET',  
+                  url: $path+'/mc/appManage/progress.do',  
+                  data: {},  
+                  dataType: 'json',  
+                  success : function(data){
+	                  $(".progress .progress-bar").attr('data-transitiongoal',data.rate).progressbar({ display_text: 'fill' });
+				      if (data.rate>=100) {
+				          clearInterval(timer);
+				      }
+               }}); 
+		  }, 100);
+		  
 	  })
 	  
 	  

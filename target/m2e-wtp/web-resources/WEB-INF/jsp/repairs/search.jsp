@@ -41,7 +41,7 @@
            <input type="hidden" class="hiddenId" name="orderNature" value="${orderNature}"/>
            <table>
               <tr>
-                <td><div class="firstFont">工单号：</div></td>
+                <td><div class="firstFont">编号：</div></td>
                 <td><div><input name="orderNum" class="form-control"/></div></td>
                 <td><div class="leftFont">联系人：</div></td>
                 <td><div><input name="linkman" class="form-control"/></div></td>
