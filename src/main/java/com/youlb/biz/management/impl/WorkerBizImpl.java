@@ -135,7 +135,7 @@ public class WorkerBizImpl implements IWorkerBiz {
 		if(StringUtils.isBlank(worker.getId())){
 			String id = (String) workerDao.add(worker);
 			//添加sip账号
-			SQLQuery query = workerDao.getCurrSession().createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
+			SQLQuery query = workerDao.getCurrSession().createSQLQuery("SELECT '2'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 		    List<String> list =  query.list();
 		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";
 		    //使用uuid为sip密码

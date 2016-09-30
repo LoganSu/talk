@@ -65,6 +65,9 @@ public class Room extends BaseModel {
    /**开卡次数*/
 	@Column(name="fcardcount")
 	private Integer cardCount;
+	/**sip分组*/
+	@Column(name="fsip_group")
+	private Integer sipGroup;
    
    @Transient
    private String parentId;
@@ -95,6 +98,12 @@ public class Room extends BaseModel {
 	
 	
     
+	public Integer getSipGroup() {
+		return sipGroup;
+	}
+	public void setSipGroup(Integer sipGroup) {
+		this.sipGroup = sipGroup;
+	}
 	public Integer getCardCount() {
 		return cardCount;
 	}

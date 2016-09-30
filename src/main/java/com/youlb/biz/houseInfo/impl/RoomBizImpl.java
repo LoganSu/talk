@@ -128,13 +128,17 @@ public class RoomBizImpl implements IRoomBiz {
 	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException {
 		//add
 		if(StringUtils.isBlank(room.getId())){
+			Session session = domainSqlDao.getCurrSession();
 			String sipNum = getSipNum(room.getParentId());
 			room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
 			room.setPassword(SysStatic.ROOMDEFULTPASSWORD);//设置默认密码
+			//获取分组号
+			SQLQuery group = session.createSQLQuery("SELECT '8'||substring('0000000'||nextval('tbl_room_sip_group'),length(currval('tbl_room_sip_group')||'')) ");
+			List<String> groupList = group.list();
+			room.setSipGroup(Integer.parseInt(groupList.get(0)));
 			//插入sip账号到数据库注册
 			String roomId = (String) roomSqlDao.add(room);
 			//添加真正的sip账号fs拨号使用
-			Session session = domainSqlDao.getCurrSession();
 			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 		    List<String> list =  query.list();
 		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";

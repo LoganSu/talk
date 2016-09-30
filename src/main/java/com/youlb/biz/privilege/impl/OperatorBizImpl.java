@@ -166,7 +166,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 			    sb = new StringBuilder();
 			    sb.append("select c.id,c.fcarriername,c.fisnormal,c.fcarriernum")
 			   .append(" from t_carrier c INNER JOIN t_role r on r.fcarrierid=c.id INNER JOIN t_operator_role tor")
-			    .append(" on tor.froleid=r.id where tor.foperatorid=? GROUP BY c.id");
+			    .append(" on tor.froleid=r.id where tor.foperatorid=? GROUP BY c.id,c.fcarriername,c.fisnormal,c.fcarriernum");
 			    Object[] obj =  (Object[]) operatorSqlDao.findObjectBySql(sb.toString(), new Object[]{loginUser.getId()});
 			    Carrier carrier = new Carrier();
 			    if(obj!=null){
