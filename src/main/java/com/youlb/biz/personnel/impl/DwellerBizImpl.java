@@ -221,7 +221,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 //		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values ((select d.id from t_domain d where d.fentityid=?),?,?)";
 		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values (?,?,?)";
 		if(StringUtils.isNotBlank(dweller.getPhone())){
-			String mobileLocation = MobileLocationUtil.getMobileLocation(dweller.getPhone());
+			String mobileLocation = MobileLocationUtil.getFixPhoneLocation(dweller.getPhone());
 			if(mobileLocation!=null){
 				mobileLocation = mobileLocation.split(",")[0];
 				dweller.setPhoneCity(mobileLocation);
