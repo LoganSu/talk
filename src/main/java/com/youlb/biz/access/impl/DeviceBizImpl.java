@@ -169,7 +169,7 @@ public class DeviceBizImpl implements IDeviceBiz {
 				 if("激活".equals(dto.getDeviceStatus())){
 					 deviceStatu="1";
 				 }else if("未激活".equals(dto.getDeviceStatus())){
-					 deviceStatu="2";
+					 deviceStatu=null;
 				 }
 				 try {
 					deviceSqlDao.executeSql(sb.toString(), new Object[]{dto.getId(),dto.getDeviceNum(),dto.getDeviceModel(),dto.getDeviceFactory(),deviceStatu,dto.getApp_version(),
@@ -208,7 +208,7 @@ public class DeviceBizImpl implements IDeviceBiz {
 				 if(obj[4]!=null){
 					 if("1".equals(obj[4])){
 						 dto.setDeviceStatus("激活");
-					 }else if("2".equals(obj[4])){
+					 }else{
 						 dto.setDeviceStatus("未激活");
 					 }
 				 }else{

@@ -182,9 +182,9 @@ public class TodayNewsCtrl extends BaseCtrl {
 	    			todayNews.setPictureUrl(http+relativePath.substring(relativePath.indexOf("todayNews")-1));
 	    		}
 	    		String detail = todayNews.getTodayNewsDetail();
-	    		String ediorFile = http + "/ediorFile/";
+	    		String ediorFile ="\""+ http + "/ediorFile/";
 	    		//kindeditor 默认把url前面的  http://192.168.1.231:8080去掉了 所以要加上
-	    		detail = detail.replaceAll("/ediorFile/", ediorFile);
+	    		detail = detail.replaceAll("\"/ediorFile/", ediorFile);
 	    		String rootPath = request.getSession().getServletContext().getRealPath("/");
 	    		//拷贝原始的html文件
 	    		in = new FileReader(new File(rootPath+"origin.html"));

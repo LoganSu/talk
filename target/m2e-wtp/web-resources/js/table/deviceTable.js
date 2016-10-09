@@ -85,13 +85,15 @@ var deviceTable ={
             align: 'center',
             valign: 'middle',
             sortable: true
-        },{
-            field: 'oprator',
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            sortable: false
-        }]
+        }
+//        ,{
+//            field: 'oprator',
+//            title: '操作',
+//            align: 'center',
+//            valign: 'middle',
+//            sortable: false
+//        }
+        ]
 }
 
 
