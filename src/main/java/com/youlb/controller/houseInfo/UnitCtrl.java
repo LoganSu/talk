@@ -19,6 +19,7 @@ import com.youlb.biz.houseInfo.IUnitBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Unit;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
 /** 
@@ -99,6 +100,15 @@ public class UnitCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Unit unit,Model model){
+    	
+    	if(StringUtils.isBlank(unit.getUnitName())){
+    		super.message = "单元名称不能为空!";
+    		 return  super.message;
+    	}
+    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()!=2){
+    		super.message = "单元编号不能为空且为2位数字!";
+    		 return  super.message;
+    	}
     	try {
     		unitBiz.saveOrUpdate(unit,getLoginUser());
 		} catch (Exception e) {

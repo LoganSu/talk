@@ -105,7 +105,7 @@ public class BuildingCtrl extends BaseCtrl {
     			return  super.message;
     		}
     		if(StringUtils.isNotBlank(building.getBuildHeight())&&!RegexpUtils.checkDecimals(building.getBuildHeight())){
-    			super.message = "楼高为数字！";
+    			super.message = "楼高为数字类型！";
     			return  super.message;
     		}
     		buildingBiz.saveOrUpdate(building,getLoginUser());

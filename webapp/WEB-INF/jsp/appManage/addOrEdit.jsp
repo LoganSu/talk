@@ -127,7 +127,7 @@
          </form>
 	   </div>
  </div>
-	<div class="progress">
+	<div id="appManageProgress" class="progress">
 	    <div class="progress-bar" role="progressbar" data-transitiongoal="1"></div>
 	</div>
 
@@ -142,11 +142,11 @@
 		  var timer = setInterval(function(){
 			  $.ajax({
                   type: 'GET',  
-                  url: $path+'/mc/appManage/progress.do',  
+                  url: $path+'/mc/appManage/progress.do?aa='+ Math.random(),  
                   data: {},  
                   dataType: 'json',  
                   success : function(data){
-	                  $(".progress .progress-bar").attr('data-transitiongoal',data.rate).progressbar({ display_text: 'fill' });
+	                  $("#appManageProgress .progress-bar").attr('data-transitiongoal',data.rate).progressbar({ display_text: 'fill' });
 				      if (data.rate>=100) {
 				          clearInterval(timer);
 				      }

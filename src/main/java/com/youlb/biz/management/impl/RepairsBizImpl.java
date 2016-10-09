@@ -225,8 +225,8 @@ public class RepairsBizImpl implements IRepairsBiz {
 			if(listObj!=null&&!listObj.isEmpty()){
 				repairs.setRoomId(listObj.get(0));//绑定房间
 			}
-			String update ="update Repairs set linkman=?,phone=?,serviceContent=?,roomId=? where id=?";
-			repairsDao.update(update,new Object[]{repairs.getLinkman(),repairs.getPhone(),repairs.getServiceContent(),repairs.getRoomId(),repairs.getId()});
+			String update ="update Repairs set linkman=?,phone=?,serviceContent=?,roomId=?,comeFrom=? where id=?";
+			repairsDao.update(update,new Object[]{repairs.getLinkman(),repairs.getPhone(),repairs.getServiceContent(),repairs.getRoomId(),repairs.getComeFrom(),repairs.getId()});
 		}
 	}
 
