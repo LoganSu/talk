@@ -39,8 +39,27 @@ public class IPManage extends BaseModel {
    /**是否开通物业功能*/
    @Column(name="fmanagement")
    private Boolean management;
+   /**fs ip*/
+   @Column(name="ffs_ip")
+   private String fsIp;
+   /**fs端口*/
+   @Column(name="ffs_port")
+   private Integer fsPort;
    
    
+	 
+	public String getFsIp() {
+		return fsIp;
+	}
+	public void setFsIp(String fsIp) {
+		this.fsIp = fsIp;
+	}
+	public Integer getFsPort() {
+		return fsPort;
+	}
+	public void setFsPort(Integer fsPort) {
+		this.fsPort = fsPort;
+	}
 	public Boolean getManagement() {
 		return management;
 	}

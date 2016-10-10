@@ -65,6 +65,18 @@ var IPManageTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'fsIp',
+            title: 'FS IP地址',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'fsPort',
+            title: 'FS端口',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'remark',
             title: '备注',
             align: 'center',

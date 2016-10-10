@@ -43,6 +43,12 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	 * @return
 	 */
 	List<Neighborhoods> getNeiborListByAreaId(String areaId)throws BizException;
+	/**
+	 * 判断是否有重复的编号
+	 * @param parentId
+	 * @return
+	 */
+	boolean checkNeighborNum(Neighborhoods neighborhoods)throws BizException;
 
 	
 }

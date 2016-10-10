@@ -1,7 +1,6 @@
 package com.youlb.biz.houseInfo.impl;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -345,6 +344,22 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 				}
 			}
 		return neiborList;
+	}
+	/**
+	 * 判断是否有重复的编号
+	 * @param neighborhoods
+	 * @return
+	 * @throws BizException 
+	 * @see com.youlb.biz.houseInfo.INeighborhoodsBiz#checkNeighborNum(com.youlb.entity.houseInfo.Neighborhoods)
+	 */
+	@Override
+	public boolean checkNeighborNum(Neighborhoods neighborhoods) throws BizException {
+		 String sql = "SELECT n.fneibnum from t_domain d INNER JOIN t_neighborhoods n on n.id=d.fentityid where d.fparentid=? ";
+		 List<String> list = neighborSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getParentId()});
+		 if(list!=null&&!list.isEmpty()&&list.contains(neighborhoods.getNeibNum())){
+			 return true;
+		 }
+		return false;
 	}
 
 	/**根据所属小区查询社区列表

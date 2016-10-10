@@ -100,6 +100,13 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     			super.message = "社区编号不能为空且为5个数字！";
     			return  super.message;
     		}
+    		//同一个地区 社区编号不能相同
+    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
+    		if(b){
+    			super.message = "社区编号已经存在！";
+    			return  super.message;
+    		}
+    		
     		if(StringUtils.isBlank(neighborhoods.getAddress())){
     			super.message = "社区地址不能为空！";
     			return  super.message;

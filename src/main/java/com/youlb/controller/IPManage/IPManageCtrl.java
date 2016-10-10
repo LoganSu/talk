@@ -102,6 +102,21 @@ public class IPManageCtrl extends BaseCtrl {
     		super.message = "社区名称不能为空！";
     		return  super.message;
     	}
+    	
+    	if(StringUtils.isBlank(iPManage.getFsIp())||!RegexpUtils.checkIpAddress(iPManage.getFsIp())){
+    		super.message = "请填写正确的ip地址！";
+    		return  super.message;
+    	}
+    	if(iPManage.getFsPort()!=null){
+    		if(iPManage.getFsPort()>65535||!RegexpUtils.checkNumber(iPManage.getFsPort()+"")){
+    			super.message = "请填写正确的端口！";
+    			return  super.message;
+    		}
+    	}else{
+    		super.message = "端口不能为空！";
+			model.addAttribute("message", super.message);
+			return INPUT;
+    	}
     	try {
     		
     		iPManageBiz.saveOrUpdate(iPManage,getLoginUser());

@@ -67,6 +67,10 @@ $("#deviceCountSendOrders .sure").on('click',function(){
 					  return false;
 				  }
 				 $("#showQRcode").append('<img alt="" src="'+msg+'" height="300px"/>');
+				 //生成二维码之后刷新列表
+				 $("#tableShowList").bootstrapTable('refresh', {
+						url: $path+"/mc/deviceCount/showList.do",
+					});
 			   }
 
 		});

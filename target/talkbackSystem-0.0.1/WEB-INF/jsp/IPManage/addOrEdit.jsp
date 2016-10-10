@@ -26,6 +26,12 @@
                 </div></td>
               </tr>
               <tr>
+                <td><div class="firstFont"><span class="starColor">*</span>FS IP地址：</div></td>
+                <td><div><input name="fsIp" class="form-control required" title="FS IP地址不能为空" maxlength="100" value="${iPManage.fsIp}"/></div></td>
+                <td><div class="leftFont">FS端口：</div></td>
+                <td><div><input name="fsPort" class="form-control required" title="FS端口不能为空" maxlength="100" value="${iPManage.fsPort}"/></div></td>
+              </tr>
+              <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>小区名称：</div></td>
                 <td><div><input name="neibName" class="form-control required" title="小区名称不能为空" maxlength="100" value="${iPManage.neibName}"/></div></td>
                 <td><div class="leftFont">备注：</div></td>

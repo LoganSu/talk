@@ -38,12 +38,12 @@ $(function(){
               <tr>
                 <td><div class="firstFont">导入白名单：</div></td>
                 <td colspan="2"><div><input style="width: 200px" type="file" name="SMSManageWhiteFile" class="form-control"/></div></td>
-                <td><div><a href="${path}/mc/SMSManage/singleDownPhone.do"><input class="btn btn-success btn-sm SMSManageModel" type="button"  value="导出模板"/></a></div></td>
+                <td><div><a href="${path}/mc/SMSManage/singleDownPhone.do">模板下载</a></div></td>
               </tr>
            </table>
             <!-- 详情不显示按钮 -->
 	           <div class="modal-footer">
-		           <input type="button" class="btn btn-primary" value="确定"/> 
+		           <input type="submit" class="btn btn-primary" value="确定"/> 
 		           <input type="button" class="btn btn-default" data-dismiss="modal" value="关闭"/> 
 		       </div>
          </form>
