@@ -87,15 +87,15 @@ public class InitServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-//		try {
-//			initQuartzService(config);
-//		} catch (ClassNotFoundException e) {
-//			logger.error("初始定时器出错");
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			logger.error("初始定时器出错");
-//			e.printStackTrace();
-//		}
+		try {
+			initQuartzService(config);
+		} catch (ClassNotFoundException e) {
+			logger.error("初始定时器出错");
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.error("初始定时器出错");
+			e.printStackTrace();
+		}
  	}
 	
 	private static void initQuartzService(ServletConfig config) throws IOException, ClassNotFoundException{
