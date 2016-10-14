@@ -96,6 +96,7 @@ public class InitServlet extends HttpServlet {
 			logger.error("初始定时器出错");
 			e.printStackTrace();
 		}
+		
  	}
 	
 	private static void initQuartzService(ServletConfig config) throws IOException, ClassNotFoundException{
