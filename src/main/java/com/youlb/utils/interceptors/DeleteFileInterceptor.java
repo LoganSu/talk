@@ -27,8 +27,8 @@ public class DeleteFileInterceptor implements HandlerInterceptor {
 		//删除临时文件
 		 Map<String, Object> model = modelAndView.getModel();
 		 File file =  (File) model.get("file");
-		 log.info(file.getAbsolutePath());
 		 if(file!=null&&file.exists()){
+			 log.info(file.getAbsolutePath());
 			 file.delete();
 		 }
 		 modelAndView.clear();

@@ -104,23 +104,24 @@ public class AdPublishCtrl extends BaseCtrl {
      * @throws IOException 
      */
     @RequestMapping("/uploadFile.do")
-    public void upoadFile(HttpServletRequest request,HttpServletResponse resp,AdPublishPicture adPic,Model model) throws IOException{
+    @ResponseBody
+    public AdPublishPicture upoadFile(HttpServletRequest request,HttpServletResponse resp,AdPublishPicture adPic,Model model) throws IOException{
 //    	AdPublishPicture adPic = new AdPublishPicture();
 //    	System.out.println(adPic);
     	//获取项目根目录
 //    	String rootPath = request.getSession().getServletContext().getRealPath("/");
     	try {
-    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-    		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
-    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
-    			SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-        		String fileName =sd.format(new Date());
+//    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+//    		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
+//    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
+//    			SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+//        		String fileName =sd.format(new Date());
         		//按月份分文件夹
-        		String subDir =fileName.substring(0, 6);
-    			String riginalFilename = multipartFile.getOriginalFilename();
-    			BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());   
-    			int width = bufferedImage.getWidth();   
-    			int height = bufferedImage.getHeight();
+//        		String subDir =fileName.substring(0, 6);
+//    			String riginalFilename = multipartFile.getOriginalFilename();
+//    			BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());   
+//    			int width = bufferedImage.getWidth();   
+//    			int height = bufferedImage.getHeight();
     			//门口机
 //    			if(SysStatic.one.equals(adPic.getTargetDevice())){
 //    				//首页
@@ -141,36 +142,32 @@ public class AdPublishCtrl extends BaseCtrl {
 //    				}
 //    			}
     			//获取上传文件的后缀
-    			String suffix = riginalFilename.substring(riginalFilename.lastIndexOf("."), riginalFilename.length());
-    			//文件名按时间命名
-    			String relativePath= SysStatic.ADDIR+SysStatic.PICTURE+subDir+"/"+fileName+suffix;
-    			log.info("服务器地址 ： http://" +  SysStatic.FILEUPLOADIP );
-    			//服务器地址 
-    			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP  //192.168.1.222:8080
-                        + request.getContextPath();      //项目名称  
-				File file = new File(relativePath);
-				if(!file.exists()){
-					file.mkdirs();
-				}
-				multipartFile.transferTo(file);
-				adPic.setServerAddr(strBackUrl);
-				adPic.setRelativePath(relativePath.substring(relativePath.indexOf("adDir")-1));//文件相对路径
+//    			String suffix = riginalFilename.substring(riginalFilename.lastIndexOf("."), riginalFilename.length());
+//    			//文件名按时间命名
+//    			String relativePath= SysStatic.ADDIR+SysStatic.PICTURE+subDir+"/"+fileName+suffix;
+//    			log.info("服务器地址 ： http://" +  SysStatic.FILEUPLOADIP );
+//    			//服务器地址 
+//    			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP  //192.168.1.222:8080
+//                        + request.getContextPath();      //项目名称  
+//				File file = new File(relativePath);
+//				if(!file.exists()){
+//					file.mkdirs();
+//				}
+//				multipartFile.transferTo(file);
+//				adPic.setServerAddr(strBackUrl);
+//				adPic.setRelativePath(relativePath.substring(relativePath.indexOf("adDir")-1));//文件相对路径
 				adPic.setId(adPublishBiz.addPicture(adPic));
-    		}
-    		resp.setContentType("text/html");
-    		resp.getWriter().write(JsonUtils.toJson(adPic)); 
+//    		}
     	} catch (BizException e) {
 			super.message = "操作失败！";
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			super.message = "媒体文件上传失败！";
 			e.printStackTrace();
-		} catch (IOException e) {
-			super.message = "媒体文件上传失败！";
-			e.printStackTrace();
 		}
-//    	resp.getWriter().write("Ok");
-//		return adPic;
+    	resp.setContentType("text/html");
+    	adPic.setMessage(super.message);
+		return adPic;
     }
     
     public static void main(String[] args) {

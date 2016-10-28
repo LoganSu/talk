@@ -77,15 +77,6 @@ public class InitServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 //		SysStatic.FILEUPLOADPATH="125.46.73.49:8080";
-		try{
-			StaticParam paramByKey = staticParamBiz.getParamByKey("fileUploadIp");
-			if(paramByKey!=null){
-				SysStatic.FILEUPLOADIP = paramByKey.getFvalue();
-			}
-		}catch(BizException e){
-			logger.error("初始化文件上传地址");
-			e.printStackTrace();
-		}
 		
 		try {
 			initQuartzService(config);
@@ -128,34 +119,6 @@ public class InitServlet extends HttpServlet {
 		String http = (String) proper.get("YLBServer.http");
 		SysStatic.HTTP=http;
 		logger.info("接口服务地址YLBServer.http::"+http);
-		//app文件保存根目录
-		String appDir = (String) proper.get("app.dir");
-		SysStatic.APPDIR=appDir;
-		logger.info("app文件保存根目录app.dir::"+appDir);
-		//广告资源文件根目录
-		String adDir = (String) proper.get("ad.dir");
-		SysStatic.ADDIR=adDir;
-		logger.info("广告资源文件根目录ad.dir::"+adDir);
-		//二维码文件根目录
-		String qrDir = (String) proper.get("qr.dir");
-		SysStatic.QRDIR=qrDir;
-		logger.info("二维码文件根目录qr.dir::"+qrDir);
-		//编辑器文件根目录
-		String ediorFile = (String) proper.get("ediorFile.dir");
-		SysStatic.EDIORFILE=ediorFile;
-		logger.info("编辑器文件根目录ediorFile.dir::"+ediorFile);
-		//今日头条html文件根目录
-		String htmlFile = (String) proper.get("htmlFile.dir");
-		SysStatic.HTMLFILE=htmlFile;
-		logger.info("html文件根目录htmlFile.dir::"+htmlFile);
-		//头条图片保存地址
-		String todayNews = (String) proper.get("todayNews.dir");
-		SysStatic.TODAYNEWS=todayNews;
-		logger.info("头条图片保存地址todayNews.dir::"+todayNews);
-		//关于社区html文件目录
-		String aboutNeighborhoods = (String) proper.get("aboutNeighborhoods.dir");
-		SysStatic.ABOUTNEIGHBORHOODS=aboutNeighborhoods;
-		logger.info("头条图片保存地址todayNews.dir::"+aboutNeighborhoods);
 		//3des密码
 		String key = (String) proper.get("key");
 		SysStatic.KEYBYTES=DES3.hexStringToBytes(key);

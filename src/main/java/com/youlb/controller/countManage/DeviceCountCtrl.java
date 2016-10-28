@@ -1,5 +1,6 @@
 package com.youlb.controller.countManage;
 
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.countManage.IDeviceCountBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.controller.infoPublish.TodayNewsCtrl;
 import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.countManage.QRInfo;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.MatrixToImageWriter;
+import com.youlb.utils.common.QiniuUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
@@ -321,10 +324,21 @@ public class DeviceCountCtrl extends BaseCtrl {
     			//生成二维码图
     			String imgName = new Date().getTime()+"";//用时间戳命名是因为防止浏览器不重新加载新图片
 //    			System.out.println(JsonUtils.toJson(qr));
-    			MatrixToImageWriter.createQRCode(JsonUtils.toJson(qr),SysStatic.QRDIR,imgName);
-    			String qrPath = "http://"+SysStatic.FILEUPLOADIP+"/qrDir/"+imgName+".jpg";
-    			deviceCountBiz.updateById(DateHelper.dateFormat(endDate, "yyyy-MM-dd HH:mm:ss"),ramdonCode,orderNum,qrPath,deviceCount.getId());
-    			 return  qrPath;
+    			String path = TodayNewsCtrl.class.getClassLoader().getResource("").getPath();
+	    		path=path.substring(0,path.indexOf("WEB-INF"));
+	    		String temsPath = path+"/tems/";
+    			MatrixToImageWriter.createQRCode(JsonUtils.toJson(qr),temsPath,imgName);
+    			File file = new File(temsPath+imgName+".jpg");
+    			//把文件上传到七牛
+    			int code = QiniuUtils.upload(file.getAbsolutePath(), "web/qrDir/"+imgName+".jpg");
+    			if(code==200){
+    				String qrPath = QiniuUtils.URL+"web/qrDir/"+imgName+".jpg";
+    				deviceCountBiz.updateById(DateHelper.dateFormat(endDate, "yyyy-MM-dd HH:mm:ss"),ramdonCode,orderNum,qrPath,deviceCount.getId());
+//    				System.out.println(file.delete());
+	            	logger.info("删除临时二维码图片：："+file.delete());
+    				return qrPath;
+    			}
+    			 return  "";
     		}
 		} catch (Exception e) {
 			e.printStackTrace();
