@@ -74,7 +74,7 @@ public class RegexpUtils {
      * @return 验证成功返回true，验证失败返回false 
      */   
     public static boolean checkDecimals(String decimals) {   
-        String regex = "\\-?[1-9]\\d+(\\.\\d+)?";   
+        String regex = "\\-?[1-9](\\d+)?(\\.\\d+)?";   
         return Pattern.matches(regex,decimals);   
     }    
        
@@ -180,6 +180,6 @@ public class RegexpUtils {
     
 	  public static void main(String[] args) {
 		  
-		  System.out.println(checkPhone("020-5557555"));
+		  System.out.println(checkDecimals("4"));
 	}
 }

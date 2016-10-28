@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -112,35 +113,49 @@ public class AppManageCtrl extends BaseCtrl {
      * @param model
      * @return
      */
-    @RequestMapping("/saveOrUpdate.do")
+    @RequestMapping(value="/saveOrUpdate.do",method=RequestMethod.POST)
+    @ResponseBody
     public String save(HttpServletRequest request,HttpSession session,AppManage appManage,Model model){
     	try {
 //    		if("6".equals(appManage.getAppType())){
     		if(StringUtils.isBlank(appManage.getAppName())){
     			super.message = "APP名称不能为空！";
-    			model.addAttribute("message", super.message);
-    			return INPUT;
+    			return super.message;
+    		}
+    		if(StringUtils.isBlank(appManage.getVersionName())){
+    			super.message = "版本名称不能为空！";
+    			return super.message;
+    		}
+    		if(StringUtils.isBlank(appManage.getVersionCode())){
+    			super.message = "版本号不能为空！";
+    			return super.message;
+    		}
+    		if(StringUtils.isBlank(appManage.getAppName())){
+    			super.message = "APP名称不能为空！";
+    			return super.message;
     		}
 //    		}
     		if(StringUtils.isBlank(appManage.getVersionDes())){
     			super.message = "版本说明不能为空！";
-    			model.addAttribute("message", super.message);
-    			return INPUT;
+    			return super.message;
     		}else{
     			//过滤特殊字符
         		for(String s:SysStatic.SPECIALSTRING){
         			if(appManage.getVersionDes().contains(s)){
         				super.message="您提交的相关表单数据字符含有非法字符!";
-        				request.setAttribute("message", message);
-        				return INPUT;
+        				return super.message;
         			}
         		}
     		}
+    		boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
+			if(b){
+				super.message = "软件版本已经存在！";
+				return super.message;
+			}
     		List<String> treecheckbox = appManage.getTreecheckbox();
     		if(treecheckbox!=null&&treecheckbox.size()!=1){
     			super.message = "请选择一个域发布信息！";
-    			model.addAttribute("message", super.message);
-    			return INPUT;
+    			return super.message;
     		}
 //    		if(SysStatic.one.equals(appManage.getAppType())){
 //    			if(appManage.getTreecheckbox()==null||appManage.getTreecheckbox().isEmpty()){
@@ -151,107 +166,98 @@ public class AppManageCtrl extends BaseCtrl {
 //    		}
     		
     		//服务器地址
-			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP+ request.getContextPath();      //项目名称  
-    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-    		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
-    		MultipartFile appIcon = multipartRequest.getFile("appIcon");
-    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
-    		if(appIcon!=null&&!appIcon.isEmpty()){
-				String iconRealName = appIcon.getOriginalFilename();
-    			String iconSuffix = iconRealName.substring(iconRealName.lastIndexOf("."));
-    			if(!".jpg".equalsIgnoreCase(iconSuffix)&&!".jpeg".equalsIgnoreCase(iconSuffix)&&!".png".equalsIgnoreCase(iconSuffix)){
-    				super.message = "图标请选择.jpg、.jpeg、.png文件类型！";
-        			model.addAttribute("message", super.message);
-        			return INPUT;
-    			}
-    			String  iconName = sd.format(new Date())+iconSuffix;
-    			String iconPath = SysStatic.APPDIR+SysStatic.OTHERAPP;
-    			appManage.setIconUrl(strBackUrl+iconPath.substring(iconPath.indexOf("appDir")-1)+iconName);
-    			File file = new File(iconPath+iconName);
-				if(!file.exists()){
-					file.mkdirs();
-				}
-				appIcon.transferTo(file);//上传图标
-    		}
-    		if(SysStatic.six.equals(appManage.getAppType())&&(appIcon==null||appIcon.isEmpty())){
-    			super.message = "请选择图标！";
-    			model.addAttribute("message", super.message);
-    			return INPUT;
-    		}
-    		if(multipartFile!=null&&!multipartFile.isEmpty()&&StringUtils.isBlank(appManage.getServerAddr())) {
+//			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP+ request.getContextPath();      //项目名称  
+//    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+//    		MultipartFile appIcon = multipartRequest.getFile("appIcon");
+//    		SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+//    		if(appIcon!=null&&!appIcon.isEmpty()){
+//				String iconRealName = appIcon.getOriginalFilename();
+//    			String iconSuffix = iconRealName.substring(iconRealName.lastIndexOf("."));
+//    			if(!".jpg".equalsIgnoreCase(iconSuffix)&&!".jpeg".equalsIgnoreCase(iconSuffix)&&!".png".equalsIgnoreCase(iconSuffix)){
+//    				super.message = "图标请选择.jpg、.jpeg、.png文件类型！";
+//    				return super.message;
+//    			}
+//    			String  iconName = sd.format(new Date())+iconSuffix;
+//    			String iconPath = SysStatic.APPDIR+SysStatic.OTHERAPP;
+//    			appManage.setIconUrl(strBackUrl+iconPath.substring(iconPath.indexOf("appDir")-1)+iconName);
+//    			File file = new File(iconPath+iconName);
+//				if(!file.exists()){
+//					file.mkdirs();
+//				}
+//				appIcon.transferTo(file);//上传图标
+//    		}
+//    		if(SysStatic.six.equals(appManage.getAppType())&&(appIcon==null||appIcon.isEmpty())){
+//    			super.message = "请选择图标！";
+//    			return super.message;
+//    		}
+//    		if(multipartFile!=null&&!multipartFile.isEmpty()&&StringUtils.isBlank(appManage.getServerAddr())) {
 	    		//app存储名称
-	    		String appSaveName =sd.format(new Date());
-	    		String name = multipartFile.getOriginalFilename();
-				String suffix = name.substring(name.lastIndexOf("."));
-				if(!".apk".equalsIgnoreCase(suffix)){
-					super.message = "请选择正确的App类型！";
-	    			model.addAttribute("message", super.message);
-	    			return INPUT;
-				}
-				appSaveName+=suffix;
-	    		appManage.setAppSaveName(appSaveName);
-	    		long fileSize = 0;
+//	    		String appSaveName =sd.format(new Date());
+//	    		String name = multipartFile.getOriginalFilename();
+//				String suffix = name.substring(name.lastIndexOf("."));
+//				if(!".apk".equalsIgnoreCase(suffix)){
+//					super.message = "请选择正确的App类型！";
+//	    			model.addAttribute("message", super.message);
+//	    			return INPUT;
+//				}
+//				appSaveName+=suffix;
+//	    		appManage.setAppSaveName(appSaveName);
+//	    		long fileSize = 0;
 	    		//MD5
-	    		String md5 = SHAEncrypt.fileMd5(multipartFile);
-	    		appManage.setMd5Value(md5);
+//	    		String md5 = SHAEncrypt.fileMd5(multipartFile);
+//	    		appManage.setMd5Value(md5);
 	    		//添加的时检查版本是否已经存在
-	    		if(StringUtils.isBlank(appManage.getId())){
-	    			boolean b = appManageBiz.checkVersion(md5);
-	    			if(b){
-	    				super.message = "软件版本已经存在！";
-	    				model.addAttribute("message", super.message);
-	    				return INPUT;
-	    			}
-	    		}
+//	    		if(StringUtils.isBlank(appManage.getId())){
+//	    		}
 //    			session.setAttribute("file", multipartFile);
-    			fileSize = multipartFile.getSize();
+//    			fileSize = multipartFile.getSize();
     			//相对路径
-    			String relativePath ="";
+//    			String relativePath ="";
     			//手机app路径
-    			if(SysStatic.two.equals(appManage.getAppType())){
-    				relativePath=SysStatic.APPDIR+SysStatic.PHONE+appSaveName;
+//    			if(SysStatic.two.equals(appManage.getAppType())){
+//    				relativePath=SysStatic.APPDIR+SysStatic.PHONE+appSaveName;
     			//门口机app路径
-    			}else if(SysStatic.one.equals(appManage.getAppType())){
-    				relativePath=SysStatic.APPDIR+SysStatic.DEVICE+appSaveName;
-    			}else if(SysStatic.three.equals(appManage.getAppType())){
-    				relativePath=SysStatic.APPDIR+SysStatic.MANAGE_DEVICE+appSaveName;
-    			}else if(SysStatic.five.equals(appManage.getAppType())){
-    				relativePath=SysStatic.APPDIR+SysStatic.MANAGEMENT+appSaveName;
-    			}else if(SysStatic.six.equals(appManage.getAppType())){
-    				relativePath=SysStatic.APPDIR+SysStatic.OTHERAPP+appSaveName;
-    			}
+//    			}else if(SysStatic.one.equals(appManage.getAppType())){
+//    				relativePath=SysStatic.APPDIR+SysStatic.DEVICE+appSaveName;
+//    			}else if(SysStatic.three.equals(appManage.getAppType())){
+//    				relativePath=SysStatic.APPDIR+SysStatic.MANAGE_DEVICE+appSaveName;
+//    			}else if(SysStatic.five.equals(appManage.getAppType())){
+//    				relativePath=SysStatic.APPDIR+SysStatic.MANAGEMENT+appSaveName;
+//    			}else if(SysStatic.six.equals(appManage.getAppType())){
+//    				relativePath=SysStatic.APPDIR+SysStatic.OTHERAPP+appSaveName;
+//    			}
     			
-    			log.info("服务器地址 ： http://" + SysStatic.FILEUPLOADIP );
-    			appManage.setServerAddr(strBackUrl);
-    			appManage.setRelativePath(relativePath.substring(relativePath.indexOf("appDir")-1));//文件相对路径
-				File file = new File(relativePath);
-				if(!file.exists()){
-					file.mkdirs();
-				}
+//    			log.info("服务器地址 ： http://" + SysStatic.FILEUPLOADIP );
+//    			appManage.setServerAddr(strBackUrl);
+//    			appManage.setRelativePath(relativePath.substring(relativePath.indexOf("appDir")-1));//文件相对路径
+//				File file = new File(relativePath);
+//				if(!file.exists()){
+//					file.mkdirs();
+//				}
 //				session.setAttribute("file", file);
-				multipartFile.transferTo(file);//上传文件
+//				multipartFile.transferTo(file);//上传文件
 				
-				String[] unZip = ApkUtil.unZip(file);
-    			appManage.setVersionName(unZip[0]);//apk文件版本名称 1.1.1
-    			appManage.setPackageName(unZip[1]);//包名
-    			appManage.setVersionCode(unZip[2]);//apk文件版本号
-				if(fileSize!=0){
-					fileSize = fileSize/1024;
-				}
-				appManage.setAppSize(fileSize);
+//				String[] unZip = ApkUtil.unZip(file);
+//    			appManage.setVersionName(unZip[0]);//apk文件版本名称 1.1.1
+//    			appManage.setPackageName(unZip[1]);//包名
+//    			appManage.setVersionCode(unZip[2]);//apk文件版本号
+//				if(fileSize!=0){
+//					fileSize = fileSize/1024;
+//				}
+//				appManage.setAppSize(fileSize);
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
-    		}else if(multipartFile==null||multipartFile.isEmpty()&&StringUtils.isNotBlank(appManage.getServerAddr())){
-    			appManage.setRelativePath("");//不能为null
-				appManageBiz.saveOrUpdate(appManage,getLoginUser());
-    		}else{
-    			if(SysStatic.six.equals(appManage.getAppType())){
-    				super.message = "请选择上传apk文件或者ios地址！";
-    			}else{
-    				super.message = "请选择上传apk文件！";
-    			}
-    			model.addAttribute("message", super.message);
-    			return INPUT;
-    		}
+//    		}else if(multipartFile==null||multipartFile.isEmpty()&&StringUtils.isNotBlank(appManage.getServerAddr())){
+//    			appManage.setRelativePath("");//不能为null
+//				appManageBiz.saveOrUpdate(appManage,getLoginUser());
+//    		}else{
+//    			if(SysStatic.six.equals(appManage.getAppType())){
+//    				super.message = "请选择上传apk文件或者ios地址！";
+//    			}else{
+//    				super.message = "请选择上传apk文件！";
+//    			}
+//    			model.addAttribute("message", super.message);
+//    			return INPUT;
+//    		}
 //    		super.message = "app上传成功！";
 		} catch (BizException e) {
 			super.message = "操作失败！";
@@ -266,8 +272,7 @@ public class AppManageCtrl extends BaseCtrl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	 model.addAttribute("message", super.message);
-    	 return INPUT;
+    	 return super.message;
     }
     
     @RequestMapping("/progress.do")
@@ -277,66 +282,6 @@ public class AppManageCtrl extends BaseCtrl {
         Progress status = (Progress) session.getAttribute("upload_ps");
         return status;
     }
-    /**
-     * 
-     * @param fileName
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/singleDown.do")    
-    public ModelAndView download(HttpServletRequest request,HttpServletResponse response,String id,Model model) {
-    	//获取项目根目录
-//    	String rootPath = request.getSession().getServletContext().getRealPath("/");
-    	BufferedInputStream bis = null;
-    	BufferedOutputStream out = null;
-    	try {
-	    	AppManage appManage = appManageBiz.get(id);
-	    	String fileName=appManage.getVersionName()+".apk";
-	        File file = new File(SysStatic.APPDIR.substring(0,SysStatic.APPDIR.indexOf("appDir")-1)+appManage.getRelativePath());
-	        if(!file.exists()){
-	        	super.message = "该文件不存在！";
-				model.addAttribute("message", super.message);
-	        	return new ModelAndView("/common/input");
-	        }
-	        long fileLength = file.length();  
-	            bis = new BufferedInputStream(new FileInputStream(file));
-	            out = new BufferedOutputStream(response.getOutputStream());
-	            setFileDownloadHeader(request,response, fileName,fileLength);
-	            byte[] buff = new byte[1024];
-	            while (true) {
-	              int bytesRead;
-	              if (-1 == (bytesRead = bis.read(buff, 0, buff.length))){
-	                  break;
-	              }
-	              out.write(buff, 0, bytesRead);
-	            }
-	//            file.deleteOnExit();
-	        }
-        catch (IOException e) {
-			e.printStackTrace();
-        } catch (BizException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        finally{
-            try {
-                if(bis != null){
-                    bis.close();
-                }
-                if(out != null){
-                    out.flush();
-                    out.close();
-                }
-            }
-            catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-            }
-        }
-		return null;
-     
-    }   
     /**
      * 删除
      * @param ids
@@ -355,6 +300,27 @@ public class AppManageCtrl extends BaseCtrl {
 			}
 		}
 		return super.message;
+	}
+	
+	/**
+     * 软件版本已经存在
+     * @param appManage
+     * @return
+     */
+	@RequestMapping("/checkVersion.do")
+	@ResponseBody
+	public String checkVersion(AppManage appManage){
+		try {
+			boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
+			if(b){
+				super.message = "软件版本已经存在！";
+				return super.message;
+			}
+		} catch (BizException e) {
+			e.printStackTrace();
+		}
+		return message;
+		
 	}
 	
 	  /** 

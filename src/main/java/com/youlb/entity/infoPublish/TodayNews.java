@@ -32,7 +32,7 @@ public class TodayNews  extends BaseModel{
     private String sendType;
     /**编辑框内容*/
     @Transient
-    private String todayNewsDetail;
+    private String todayNewsDetailEditor;
     /**多选框*/
     @Transient
 	public List<String> treecheckbox;
@@ -168,11 +168,11 @@ public class TodayNews  extends BaseModel{
 	public void setTreecheckbox(List<String> treecheckbox) {
 		this.treecheckbox = treecheckbox;
 	}
-	public String getTodayNewsDetail() {
-		return todayNewsDetail;
+	public String getTodayNewsDetailEditor() {
+		return todayNewsDetailEditor;
 	}
-	public void setTodayNewsDetail(String todayNewsDetail) {
-		this.todayNewsDetail = todayNewsDetail;
+	public void setTodayNewsDetailEditor(String todayNewsDetailEditor) {
+		this.todayNewsDetailEditor = todayNewsDetailEditor;
 	}
 	public String getTitle() {
 		return title;
