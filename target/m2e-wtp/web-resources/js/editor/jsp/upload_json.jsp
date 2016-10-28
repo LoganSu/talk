@@ -1,4 +1,3 @@
-<%@page import="com.youlb.utils.common.QiniuUtils"%>
 <%@page import="com.youlb.utils.common.SysStatic"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*,java.io.*" %>
@@ -22,7 +21,7 @@
 String savePath = SysStatic.EDIORFILE;
 //文件保存目录URL
 // String saveUrl  = request.getContextPath() + "/attached/";
-String saveUrl  = "ediorFile/";
+String saveUrl  = "/ediorFile/";
 //定义允许上传的文件扩展名
 HashMap<String, String> extMap = new HashMap<String, String>();
 extMap.put("image", "gif,jpg,jpeg,png,bmp");
@@ -100,11 +99,8 @@ while (itr.hasNext()) {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
 		String newFileName = df.format(new Date()) + "_" + new Random().nextInt(1000) + "." + fileExt;
 		try{
-// 			File uploadedFile = new File(savePath, newFileName);
-			QiniuUtils.upload(item.get(), saveUrl+newFileName);//把编辑器文件上传到七牛
-// 			System.out.println(saveUrl+newFileName);
-// 			System.out.println(QiniuUtils.URL+ saveUrl + newFileName);
-// 			item.write(uploadedFile);
+			File uploadedFile = new File(savePath, newFileName);
+			item.write(uploadedFile);
 		}catch(Exception e){
 			out.println(getError("上传文件失败。"));
 			return;
@@ -112,7 +108,7 @@ while (itr.hasNext()) {
 
 		JSONObject obj = new JSONObject();
 		obj.put("error", 0);
-		obj.put("url",QiniuUtils.URL+ saveUrl + newFileName);
+		obj.put("url", saveUrl + newFileName);
 		out.println(obj.toJSONString());
 	}
 }
