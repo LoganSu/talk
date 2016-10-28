@@ -24,7 +24,7 @@ text-align: center;
 	                 <div>
 		                <table class="uploadFileTable"> 
 		                   <tr class="uploadFileTr">
-			                <td><div id="fileInput_idDiv"><input id="fileInput_id" type="file" name="uploadFile" style="width: 300px;" class="form-control fileInput"/></div></td>
+			                <td><input id="fileInput_id" type="file" name="uploadFile" style="width: 300px;" class="form-control fileInput"/></td>
 			                <td><input type="button" class="btn btn-sm btn-primary uoloadFileButton" value="上传"/></td>
 <!-- 			                <td><a><span class="glyphicon glyphicon-plus-sign subInputPlus" style="cursor:pointer;"></span></a></td> -->
 <!-- 			                <td><a><span class="glyphicon glyphicon-minus-sign subInputMinus" style="cursor:pointer;"></span></a></td> -->
@@ -59,6 +59,17 @@ text-align: center;
 					     </div>
 					  </c:forEach>
 					</c:if>
+				 <!--    <div class="col-sm-6 col-md-3">
+					         <input type="hidden" name="picId" value=""/>
+					         <a href="#" class="thumbnail">
+					           <img src="${path}/img/qq.jpg" alt="通用的占位符缩略图">
+					         </a>
+						     <div class="caption">
+						       <p>
+						         <a href="#" class="btn btn-xs btn-danger" role="button">删除</a>
+						       </p>
+						     </div>
+					     </div>-->
                  	</div>
               </div>
               <table>
@@ -109,79 +120,6 @@ text-align: center;
  //时间控件
  $(".datepicker").datepicker();
   $(function(){
-	  var uploader = Qiniu.uploader({
-		    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-		    browse_button: 'fileInput_id',         // 上传选择的点选按钮，必需
-		    uptoken_url: $path+'/mc/qiniu/token',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-		    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-		    domain: 'http://upload.gdsayee.com.cn/',     // bucket域名，下载资源时用到，必需
-		    container: 'fileInput_idDiv',             // 上传区域DOM ID，默认是browser_button的父元素
-		    max_file_size: '2mb',             // 最大文件体积限制
-		    flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-		    max_retries: 3,                     // 上传失败最大重试次数
-		    dragdrop: true,                     // 开启可拖曳上传
-		    drop_element: 'fileInput_idDiv',        // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-		    chunk_size: '2mb',                  // 分块上传时，每块的体积
-		    auto_start: false,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-		    multi_selection: false,
-		    filters : {
-		        max_file_size : '2mb',
-		        prevent_duplicates: true,
-		        mime_types: [
-		 		      {title : "Image files", extensions : "jpg,gif,png"} // 限定jpg,gif,png后
-		        ]
-		    },
-		    init: {
-		        'FilesAdded': function(up, files) {
-		        },
-		        'BeforeUpload': function(up, file) {
-		               // 每个文件上传前，处理相关的事情
-		        },
-		        'UploadProgress': function(up, file) {
-		        },
-		        'FileUploaded': function(up, file, info) {
-		               // 查看简单反馈
-		               var domain = up.getOption('domain');
-		               var res = jQuery.parseJSON(info);
-		     		  if(res.key){
-		    	    	 var position = $('.uploadFileTable .position').val();
-		    	    	 var targetDevice = $('#adPublishsaveForm .targetDevice').val();
-		    	    	 var param = "position="+position+"&targetDevice="+targetDevice+"&serverAddr="+domain+"&relativePath="+res.key;
-		     			 $.post($path+'/mc/adPublish/uploadFile.do',param,function(data){
-		     				var imgPath = data.serverAddr+data.relativePath;
-		  	            	if(!data.message&&imgPath){
-		 	 	            	var img = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail"><img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'"></a>'+
-		 	 	            	'<input type="hidden" name="picId" value="'+data.id+'"/>'+
-		 	 	            	'<div class="caption"><p><a href="javascript:void(0)" class="btn btn-xs btn-danger" role="button">删除</a></p></div></div></div> ';
-		 	 	            	$("#thumbnailDiv").append(img);
-		 	 	            	//清空输入框
-		 	 	            	$("#fileInput_id").val("");
-		  	            	}else{
-		  	            		if(data.message){
-		  	            			hiAlert("提示",data.message);
-		  	            		}else{
-		  	            		  hiAlert("提示","请选择需要上传的图片！");
-		  	            		}
-		  	            	}
-						 });
-		     		  }
-		        },
-		        'Error': function(up, err, errTip) {
-		               //上传出错时，处理相关的事情
-		        },
-		        'UploadComplete': function() {
-		               //队列文件处理完毕后，处理相关的事情
-		        },
-		        'Key': function(up, file) {
-		            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-		            // 该配置必须要在unique_names: false，save_key: false时才生效
-                	var key = "web/adImg/"+new Date().getTime();
-		            return key
-		        }
-		    }
-		});
-	  
-	  
 		// 普通tree
 		$('#adPublishShowTree').bstree({
 				url: $path+'/mc/carrier',
@@ -212,36 +150,46 @@ text-align: center;
  		 
  	    //选择文件之后执行上传  
  	    $('#adPublishsaveForm .uoloadFileButton').on('click', function() {
- 	    	   uploader.start();
-//  	    	var position = $('.uploadFileTable .position').val();
-//  	    	var targetDevice = $('#adPublishsaveForm .targetDevice').val();
-//  	        $.ajaxFileUpload({  
-//  	            url:$path+'/mc/adPublish/uploadFile.do',  
-//  	            secureuri:false,  
-//  	            fileElementId:'fileInput_id',//file标签的id  
-//  	            dataType: 'json',//返回数据的类型  
-//  	            data:{position:position,targetDevice:targetDevice},//一同上传的数据  
-//  	            success: function (data, status) {
-//  	            	var imgPath = data.serverAddr+data.relativePath;
-//  	            	if(!data.message&&imgPath){
-// 	 	            	var img = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail"><img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'"></a>'+
-// 	 	            	'<input type="hidden" name="picId" value="'+data.id+'"/>'+
-// 	 	            	'<div class="caption"><p><a href="javascript:void(0)" class="btn btn-xs btn-danger" role="button">删除</a></p></div></div></div> ';
-// 	 	            	$("#thumbnailDiv").append(img);
-// 	 	            	//清空输入框
-// 	 	            	$("#fileInput_id").val("");
-//  	            	}else{
-//  	            		if(data.message){
-//  	            			hiAlert("提示",data.message);
-//  	            		}else{
-//  	            		  hiAlert("提示","请选择需要上传的图片！");
-//  	            		}
-//  	            	}
-//  	            },  
-//  	            error: function (data, status, e) {  
-//  	                alert(e);  
-//  	            }  
-//  	        });  
+ 	    	var position = $('.uploadFileTable .position').val();
+ 	    	var targetDevice = $('#adPublishsaveForm .targetDevice').val();
+ 	        $.ajaxFileUpload({  
+ 	            url:$path+'/mc/adPublish/uploadFile.do',  
+ 	            secureuri:false,  
+ 	            fileElementId:'fileInput_id',//file标签的id  
+ 	            dataType: 'json',//返回数据的类型  
+ 	            data:{position:position,targetDevice:targetDevice},//一同上传的数据  
+ 	            success: function (data, status) {
+ 	            	var imgPath = data.serverAddr+data.relativePath;
+ 	            	if(!data.message&&imgPath){
+	 	            	var img = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail"><img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'"></a>'+
+	 	            	'<input type="hidden" name="picId" value="'+data.id+'"/>'+
+	 	            	'<div class="caption"><p><a href="javascript:void(0)" class="btn btn-xs btn-danger" role="button">删除</a></p></div></div></div> ';
+	 	            	$("#thumbnailDiv").append(img);
+	 	            	//清空输入框
+	 	            	$("#fileInput_id").val("");
+ 	            	}else{
+ 	            		if(data.message){
+ 	            			hiAlert("提示",data.message);
+ 	            		}else{
+ 	            		  hiAlert("提示","请选择需要上传的图片！");
+ 	            		}
+ 	            	}
+ 	                //把图片替换  
+//  	                var obj = jQuery.parseJSON(data);  
+//  	                $("#upload").attr("src", "../image/"+obj.fileName);  
+ 	      
+//  	                if(typeof(data.error) != 'undefined') {  
+//  	                    if(data.error != '') {  
+//  	                        alert(data.error);  
+//  	                    } else {  
+//  	                        alert(data.msg);  
+//  	                    }  
+//  	                }  
+ 	            },  
+ 	            error: function (data, status, e) {  
+ 	                alert(e);  
+ 	            }  
+ 	        });  
  	    });
  	    
  	    

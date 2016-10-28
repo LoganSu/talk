@@ -38,13 +38,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.youlb.biz.infoPublish.IAdPublishBiz;
 import com.youlb.biz.management.IAboutNeighborhoodsBiz;
 import com.youlb.biz.staticParam.IStaticParamBiz;
-import com.youlb.controller.SMSManage.SMSManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.entity.management.AboutNeighborhoods;
 import com.youlb.entity.management.AboutNeighborhoodsRemark;
 import com.youlb.utils.common.JsonUtils;
-import com.youlb.utils.common.QiniuUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.common.Utils;
@@ -151,10 +149,18 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
         		request.setAttribute("message", message);
         		return INPUT;
         	}else{
-    			if(aboutNeighborhoods.getHeadline().length()>4){
-    				super.message="栏目标题不能超过4个字符";
-    				request.setAttribute("message", message);
-    				return INPUT;
+        		//过滤特殊字符
+        		for(String s:SysStatic.SPECIALSTRING){
+        			if(aboutNeighborhoods.getHeadline().length()>4){
+        				super.message="栏目标题不能超过4个字符";
+        				request.setAttribute("message", message);
+        				return INPUT;
+        			}
+        			if(aboutNeighborhoods.getHeadline().contains(s)){
+        				super.message="您提交的相关表单数据字符含有非法字符!";
+        				request.setAttribute("message", message);
+        				return INPUT;
+        			}
         		}
         	}
         	if(StringUtils.isBlank(aboutNeighborhoods.getAboutNeighborhoodsDetail())){
@@ -166,20 +172,45 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
         	BufferedReader br=null;
         	FileWriter out=null;
         	BufferedWriter bw=null;
-        	File file =null;
-
         	try {
+    				//把映射目录全部加上访问地址
+    				String http = "http://"+ SysStatic.FILEUPLOADIP+ request.getContextPath(); //项目名称  ;
+//    				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+//    	    		MultipartFile multipartFile = multipartRequest.getFile("icon");
+//    	    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
+//    	    			String fileName = Utils.dateToString(new Date(), "yyyyMMddHHmmss");
+//    	    			String dir = fileName.substring(0,6);
+//    	    			//获取上传文件的后缀
+//    	    			String riginalFilename = multipartFile.getOriginalFilename();
+//    	    			String suffix = riginalFilename.substring(riginalFilename.lastIndexOf("."), riginalFilename.length());
+//    	    			//文件名按时间命名
+//    	    			String relativePath= SysStatic.TODAYNEWS+dir+"/"+fileName+suffix;
+//    	    			File file = new File(relativePath);
+//    	    			if(!file.exists()){
+//    	    				file.mkdirs();
+//    	    			}
+//    	    			multipartFile.transferTo(file);
+//    	    			aboutNeighborhoods.setIcon(http+relativePath.substring(relativePath.indexOf("aboutNeighborhoods")-1));
+//    	    		}
     	    		String detail = aboutNeighborhoods.getAboutNeighborhoodsDetail();
+    	    		String ediorFile = http + "/ediorFile/";
+    	    		//kindeditor 默认把url前面的  http://192.168.1.231:8080去掉了 所以要加上
+    	    		detail = detail.replaceAll("/ediorFile/", ediorFile);
     	    		String rootPath = request.getSession().getServletContext().getRealPath("/");
     	    		//拷贝原始的html文件
-					in = new FileReader(new File(rootPath+"origin.html"));
+    	    		
+						in = new FileReader(new File(rootPath+"origin.html"));
+					
     	    		br = new BufferedReader(in);
-    	    		String path = AboutNeighborhoodsCtrl.class.getClassLoader().getResource("").getPath();
-    	    		path=path.substring(0,path.indexOf("WEB-INF"));
+    	    		String htmlTargetPath = SysStatic.ABOUTNEIGHBORHOODS+Utils.dateToString(new Date(), "yyyyMM");
+    	    		//创建目录
+    	    		File dir = new File(htmlTargetPath);
+    	    		if(!dir.exists()){
+    	    			dir.mkdirs();
+    	    		}
     	    		//创建文件
-    	    		String htmlFileName = Utils.dateToString(new Date(), "yyyyMMddHHmmss")+".html";
-    	    		String htmlPath = path+"/tems/"+htmlFileName;
-    	    		 file = new File(htmlPath);
+    	    		String htmlPath = htmlTargetPath+"/"+Utils.dateToString(new Date(), "yyyyMMddHHmmss")+".html";
+    	    		File file = new File(htmlPath);
     	    		if(!file.exists()){
     	    			file.createNewFile();
     	    		}
@@ -196,10 +227,7 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     	    			}
     	    		}
     	    		bw.flush();
-    	    		 int code = QiniuUtils.upload(htmlPath, "aboutNeigh/html/"+htmlFileName);
-    		            if(code==200){
-    		            	aboutNeighborhoods.setHtmlUrl(QiniuUtils.URL+"aboutNeigh/html/"+htmlFileName);
-    		            }
+    	    		aboutNeighborhoods.setHtmlUrl(http+htmlPath.substring(htmlPath.indexOf("aboutNeighborhoods")-1));
     		        aboutNeighborBiz.saveOrUpdate(aboutNeighborhoods,getLoginUser());
         	} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -239,11 +267,6 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 				}
 				
 			}
-        	//删除临时文件
-			if(file!=null){
-//				System.out.println(file.delete());
-				log.info("删除临时文件：："+file.delete());
-			}	
     	 return  INPUT;
     }
     /**
@@ -454,17 +477,51 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
      * @throws IOException 
      */
     @RequestMapping("/uploadFile.do")
-    @ResponseBody
-    public AdPublishPicture upoadFile(HttpServletRequest request,HttpServletResponse resp,AdPublishPicture adPic,Model model) throws IOException{
+    public void upoadFile(HttpServletRequest request,HttpServletResponse resp,AdPublishPicture adPic,Model model) throws IOException{
+//    	AdPublishPicture adPic = new AdPublishPicture();
+//    	System.out.println(adPic);
+    	//获取项目根目录
+//    	String rootPath = request.getSession().getServletContext().getRealPath("/");
     	try {
+    		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+    		MultipartFile multipartFile = multipartRequest.getFile("uploadFile");
+    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
+    			SimpleDateFormat sd = new SimpleDateFormat("yyyyMMddHHmmss");
+        		String fileName =sd.format(new Date());
+        		//按月份分文件夹
+        		String subDir =fileName.substring(0, 6);
+    			String riginalFilename = multipartFile.getOriginalFilename();
+    			BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());   
+    			int width = bufferedImage.getWidth();   
+    			int height = bufferedImage.getHeight();
+    			//获取上传文件的后缀
+    			String suffix = riginalFilename.substring(riginalFilename.lastIndexOf("."), riginalFilename.length());
+    			//文件名按时间命名
+    			String relativePath= SysStatic.ADDIR+SysStatic.PICTURE+subDir+"/"+fileName+suffix;
+    			log.info("服务器地址 ： http://" + SysStatic.FILEUPLOADIP );
+    			//服务器地址 
+    			String strBackUrl = "http://" + SysStatic.FILEUPLOADIP         //端口号  
+                        + request.getContextPath();      //项目名称  
+				File file = new File(relativePath);
+				if(!file.exists()){
+					file.mkdirs();
+				}
+				multipartFile.transferTo(file);
+				adPic.setServerAddr(strBackUrl);
+				adPic.setRelativePath(relativePath.substring(relativePath.indexOf("adDir")-1));//文件相对路径
 				adPic.setId(adPublishBiz.addPicture(adPic));
+    		}
+    		resp.setContentType("text/html");
+    		resp.getWriter().write(JsonUtils.toJson(adPic)); 
     	} catch (IllegalStateException e) {
 			super.message = "媒体文件上传失败！";
 			e.printStackTrace();
-		} catch (BizException e) {
+		} catch (IOException e) {
+			super.message = "媒体文件上传失败！";
+			e.printStackTrace();
+		}catch (BizException e) {
 			super.message = "媒体文件上传失败！";
 			e.printStackTrace();
 		}
-    	return adPic;
     }
 }

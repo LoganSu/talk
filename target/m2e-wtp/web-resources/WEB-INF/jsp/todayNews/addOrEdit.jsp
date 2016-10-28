@@ -27,18 +27,16 @@ private String htmlspecialchars(String str) {
 <body>
 <div>
 	   <div>
-		 <form id="todayNewssaveForm" name="todayNewssaveForm" action="" target="todayNewsSubmitFrame" enctype="multipart/form-data" method="post">
+		 <form id="todayNewssaveForm" name="todayNewssaveForm" action="${path}/mc/todayNews/saveOrUpdate.do" target="todayNewsSubmitFrame" enctype="multipart/form-data" method="post">
 		   <input type="hidden" name="id" value="${todayNews.id}"/>
 		   <input type="hidden" id="todayNewssDomainIds" value="${todayNews.treecheckbox}"/>
-		   <input type="hidden" name="pictureUrl" value="${todayNews.pictureUrl}"/>
-		   
            <table>
                <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>标题名称：</div></td>
                 <td><div><input name="title" style="width: 320px" class="form-control required title" title="标题名称不能为空！" value="${todayNews.title}"/></div></td>
               </tr>
               <tr>
-                <td><div class="firstFont" id="todayNewsPictureDiv">上传标题图片：</div></td>
+                <td><div class="firstFont">上传标题图片：</div></td>
                 <td colspan="5"><div><input style="width: 320px" id="todayNewsPicture" name="picture" type="file" class="form-control"/></div></td>
               </tr>
               <c:if test="${todayNews.pictureUrl!=null}">
@@ -47,7 +45,7 @@ private String htmlspecialchars(String str) {
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>内容：</div></td>
                 <td colspan="5"><div>
-                    <textarea style="width: 680px;height: 400px" id="todayNewsDetail" name="todayNewsDetailEditor" rows="" cols="" class="form-control"><%=htmlspecialchars(htmlData)%></textarea>
+                    <textarea style="width: 680px;height: 400px" id="todayNewsDetail" name="todayNewsDetail" rows="" cols="" class="form-control"><%=htmlspecialchars(htmlData)%></textarea>
                 </div></td>
               </tr>
            </table>
@@ -72,7 +70,7 @@ private String htmlspecialchars(String str) {
 	           <div class="modal-footer">
 		            <!--操作按钮 -->
                     <c:if test="${todayNews.opraterType!=1}">
-		               <input type="button" class="btn btn-primary sure" value="确定"/> 
+		               <input type="submit" class="btn btn-primary sure" value="确定"/> 
 		            </c:if>
 		            <input type="button" class="btn btn-default" data-dismiss="modal" value="关闭"/> 
 		       </div>
@@ -87,95 +85,6 @@ private String htmlspecialchars(String str) {
     
     
   $(function(){
-		  var uploader = Qiniu.uploader({
-			    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-			    browse_button: 'todayNewsPicture',         // 上传选择的点选按钮，必需
-			    uptoken_url: $path+'/mc/qiniu/token',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-			    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-			    domain: 'http://upload.gdsayee.com.cn/',     // bucket域名，下载资源时用到，必需
-			    container: 'todayNewsPictureDiv',             // 上传区域DOM ID，默认是browser_button的父元素
-			    max_file_size: '2mb',             // 最大文件体积限制
-			    flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
-			    max_retries: 3,                     // 上传失败最大重试次数
-			    dragdrop: true,                     // 开启可拖曳上传
-			    drop_element: 'todayNewsPictureDiv',        // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
-			    chunk_size: '2mb',                  // 分块上传时，每块的体积
-			    auto_start: false,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-			    multi_selection: false,
-			    filters : {
-			        max_file_size : '2mb',
-			        prevent_duplicates: true,
-			        mime_types: [
-			 		      {title : "Image files", extensions : "jpg,gif,png"} // 限定jpg,gif,png后
-			        ]
-			    },
-			    init: {
-			        'FilesAdded': function(up, files) {
-			        },
-			        'BeforeUpload': function(up, file) {
-			               // 每个文件上传前，处理相关的事情
-			        },
-			        'UploadProgress': function(up, file) {
-			        },
-			        'FileUploaded': function(up, file, info) {
-			               // 查看简单反馈
-			              var domain = up.getOption('domain');
-			              var res = jQuery.parseJSON(info);
-			     		  if(res.key){
-				              $("#todayNewssaveForm [name='pictureUrl']").val(domain+res.key);
-			    	    	 var param = $("#todayNewssaveForm").serialize();
-			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param,function($data){
-			     				 if(!$data){
-									 window.hideModal("unnormalModal");
-									 refresh();
-								 }else{
-									 hiAlert("提示",$data);
-								 }
-							 });
-			     		  }
-			        },
-			        'Error': function(up, err, errTip) {
-			               //上传出错时，处理相关的事情
-			        },
-			        'UploadComplete': function() {
-			               //队列文件处理完毕后，处理相关的事情
-			        },
-			        'Key': function(up, file) {
-			            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-			            // 该配置必须要在unique_names: false，save_key: false时才生效
-	                	var key = "web/todayNewsImg/"+new Date().getTime();
-			            return key
-			        }
-			    }
-			});
-	  
-	  
-	  
-	  $("#todayNewssaveForm .sure").on("click",function(){
-		  var count=uploader.files.length;
-		   if(uploader.files[0]){
-			    if(count>1){
-			        hiAlert("提示","最多只能上传一个图标");
-			        return false;
-			    }
-			     uploader.start();
-		   }else{
-			   var param = $("#todayNewssaveForm").serialize();
-   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param,function($data){
-   				 if(!$data){
-						 window.hideModal("unnormalModal");
-						 refresh();
-					 }else{
-						 hiAlert("提示",$data);
-					 }
-				 });
-		   }
-	  })
-	  
-	  
-	  
-	  
-	  
     var editor = KindEditor.create('#todayNewsDetail', {
 		cssPath : $path+'/js/editor/plugins/code/prettify.css',
 		uploadJson : $path+'/js/editor/jsp/upload_json.jsp',
@@ -191,17 +100,16 @@ private String htmlspecialchars(String str) {
 		 		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
 		 		'anchor', 'link', 'unlink', '|', 'about'
 		 	],
-		afterBlur: function(){this.sync();},
 		afterCreate : function() {
 			var self = this;
+// 			alert(self.toSource());
 			KindEditor.ctrl(document, 13, function() {
 				self.sync();
-// 				document.forms['todayNewssaveForm'].submit();
+				document.forms['todayNewssaveForm'].submit();
 			});
 			KindEditor.ctrl(self.edit.doc, 13, function() {
-// 				alert(self.edit.doc);
 				self.sync();
-// 				document.forms['todayNewssaveForm'].submit();
+				document.forms['todayNewssaveForm'].submit();
 			});
 		}
 	});

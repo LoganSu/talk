@@ -78,24 +78,7 @@ public class AppManage extends BaseModel {
 	/**操作类型 */
 	@Transient
 	private String opraterType;
-	/**app size 字符串 */
-	@Transient
-	private String appSizeStr;
 	
-	
-	
-	public String getAppSizeStr() {
-		return appSizeStr;
-	}
-
-	public void setAppSizeStr(String appSizeStr) {
-		if(StringUtils.isNotBlank(appSizeStr)){
-			appSizeStr = appSizeStr.substring(0, appSizeStr.indexOf("."));
-			setAppSize(Long.parseLong(appSizeStr));
-		}
-		this.appSizeStr = appSizeStr;
-	}
-
 	public double getAppSizeM() {
 		if(appSize!=null){
 			BigDecimal b = new BigDecimal((double)appSize/1024);  
@@ -236,7 +219,7 @@ public class AppManage extends BaseModel {
 	   	StringBuilder sb = new StringBuilder();
 	   	sb.append("<a class='appmanageDetail' rel='"+getId()+"' href='javascript:void(0)'>详细</a>&nbsp;");
 	   	if(StringUtils.isNotBlank(relativePath)){
-	   		sb.append("<a class='appmanageSingleDown' rel='"+getId()+"' href='"+getServerAddr()+getRelativePath()+"'>APP下载</a>&nbsp;");
+	   		sb.append("<a class='appmanageSingleDown' rel='"+getId()+"' href='"+SysStatic.PATH+"/mc/appManage/singleDown.do?id="+getId()+"'>APP下载</a>&nbsp;");
 	   	}
 //	   	.append("<a class='appmanageUpdate' rel='"+getId()+"' cardStatus='1' href='javascript:void(0)'>修改</a>&nbsp;")
 //	   	.append("<a class='appmanageDelete' rel='"+getId()+"' cardStatus='3' href='javascript:void(0)'>删除</a>&nbsp;");

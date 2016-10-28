@@ -29,12 +29,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.youlb.biz.infoPublish.ITodayNewsBiz;
-import com.youlb.controller.SMSManage.SMSManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.TodayNews;
-import com.youlb.utils.common.QiniuUtils;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.common.Utils;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
@@ -133,37 +134,70 @@ public class TodayNewsCtrl extends BaseCtrl {
      * @return
      */
     @RequestMapping("/saveOrUpdate.do")
-    @ResponseBody
     public String save(HttpServletRequest request,TodayNews todayNews,Model model){
     	//标题不能为空
     	if(StringUtils.isBlank(todayNews.getTitle())){
     		super.message="标题不能为空";
-//    		model.addAttribute("message", super.message);
-        	return super.message;
+    		request.setAttribute("message", message);
+    		return INPUT;
+    	}else{
+    		//过滤特殊字符
+    		for(String s:SysStatic.SPECIALSTRING){
+    			if(todayNews.getTitle().contains(s)){
+    				super.message="您提交的相关表单数据字符含有非法字符!";
+    				request.setAttribute("message", message);
+    				return INPUT;
+    			}
+    		}
     	}
     	//内容不能为空
-    	if(StringUtils.isBlank(todayNews.getTodayNewsDetailEditor())){
+    	if(StringUtils.isBlank(todayNews.getTodayNewsDetail())){
     		super.message="内容不能为空";
-    		return super.message;
+    		request.setAttribute("message", message);
+    		return INPUT;
     	}
     	
     	FileReader in = null;
     	BufferedReader br=null;
     	FileWriter out=null;
     	BufferedWriter bw=null;
-    	File file =null;
 			try {
-	    		String detail = todayNews.getTodayNewsDetailEditor();
+				//把映射目录全部加上访问地址
+				String http = "http://"+ SysStatic.FILEUPLOADIP+ request.getContextPath(); //项目名称  ;
+				MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+	    		MultipartFile multipartFile = multipartRequest.getFile("picture");
+	    		if(multipartFile!=null&&!multipartFile.isEmpty()) {
+	    			String fileName = Utils.dateToString(new Date(), "yyyyMMddHHmmss");
+	    			String dir = fileName.substring(0,6);
+	    			//获取上传文件的后缀
+	    			String riginalFilename = multipartFile.getOriginalFilename();
+	    			String suffix = riginalFilename.substring(riginalFilename.lastIndexOf("."), riginalFilename.length());
+	    			//文件名按时间命名
+	    			String relativePath= SysStatic.TODAYNEWS+dir+"/"+fileName+suffix;
+	    			File file = new File(relativePath);
+	    			if(!file.exists()){
+	    				file.mkdirs();
+	    			}
+	    			multipartFile.transferTo(file);
+	    			todayNews.setPictureUrl(http+relativePath.substring(relativePath.indexOf("todayNews")-1));
+	    		}
+	    		String detail = todayNews.getTodayNewsDetail();
+	    		String ediorFile ="\""+ http + "/ediorFile/";
+	    		//kindeditor 默认把url前面的  http://192.168.1.231:8080去掉了 所以要加上
+	    		detail = detail.replaceAll("\"/ediorFile/", ediorFile);
 	    		String rootPath = request.getSession().getServletContext().getRealPath("/");
 	    		//拷贝原始的html文件
 	    		in = new FileReader(new File(rootPath+"origin.html"));
 	    		br = new BufferedReader(in);
-	    		String path = TodayNewsCtrl.class.getClassLoader().getResource("").getPath();
-	    		path=path.substring(0,path.indexOf("WEB-INF"));
+	    		String htmlTargetPath = SysStatic.HTMLFILE+Utils.dateToString(new Date(), "yyyyMM");
+	    		//创建目录
+	    		File dir = new File(htmlTargetPath);
+	    		if(!dir.exists()){
+	    			dir.mkdirs();
+	    		}
 	    		//创建文件
-	    		String htmlFileName = Utils.dateToString(new Date(), "yyyyMMddHHmmss")+".html";
-	    		String htmlPath = path+"/tems/"+htmlFileName;
-	    		 file = new File(htmlPath);
+	    		String htmlPath = htmlTargetPath+"/"+Utils.dateToString(new Date(), "yyyyMMddHHmmss")+".html";
+	    		File file = new File(htmlPath);
 	    		if(!file.exists()){
 	    			file.createNewFile();
 	    		}
@@ -181,34 +215,35 @@ public class TodayNewsCtrl extends BaseCtrl {
 	    			}
 	    		}
 	    		bw.flush();
-//	            m.addObject("file", file);
-	            int code = QiniuUtils.upload(htmlPath, "todayNews/html/"+htmlFileName);
-	            if(code==200){
-	    		   todayNews.setNewsUrl(QiniuUtils.URL+"todayNews/html/"+htmlFileName);
-	    		   todayNewsBiz.saveOrUpdate(todayNews,getLoginUser());
-	            }else{
-	            	super.message="上传文件到七牛失败";
-	            }
+	    		todayNews.setNewsUrl(http+htmlPath.substring(htmlPath.indexOf("htmlFile")-1));
+	    		todayNewsBiz.saveOrUpdate(todayNews,getLoginUser());
 			} catch (ParseException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (FileNotFoundException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (IOException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (JsonException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			} catch (BizException e) {
 				super.message="发布头条出错";
+				request.setAttribute("message", message);
 				e.printStackTrace();
 			}finally{
 				if(in!=null){
@@ -241,13 +276,8 @@ public class TodayNewsCtrl extends BaseCtrl {
 				}
 				
 			}
-			//删除临时文件
-			if(file!=null){
-//				System.out.println(file.delete());
-				log.info("删除临时文件：："+file.delete());
-
-			}	 
-			return super.message;
+				 
+    	 return INPUT;
     }
     
     /**

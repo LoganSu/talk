@@ -76,6 +76,8 @@ public class SysStatic {
 	/**卡片状态为注销状态*/
 	public static final String CANCEL = "3";
 	
+	/**app保存根目录*/
+	public static String APPDIR = "";
 	/**手机app保存目录*/
 	public static final String PHONE = "phone/";
 	/**门口机app保存目录*/
@@ -95,13 +97,25 @@ public class SysStatic {
 	
 	/**接口地址端口*/
 	public static String HTTP = "";
+	/**文件上传地址*/
+	public static String FILEUPLOADIP = "";
 	
 	/**私钥*/
 	public static String PRIVATEKEY="";
+	/**二维码文件根目录*/
+	public static String QRDIR="";
 	/**房间默认密码*/
 	public static final String ROOMDEFULTPASSWORD = "123456";
 	
 	public static byte[] KEYBYTES = {};
+	/**编辑器文件根目录*/
+	public static String EDIORFILE="";
+	/**今日头条html文件根目录*/
+	public static String HTMLFILE;
+	/**头条图片保存地址*/
+	public static String TODAYNEWS;
+	/**关于社区html文件目录*/
+	public static String ABOUTNEIGHBORHOODS;
 	/**web 版本*/
 	public static String VERSION;
 	/**需要过滤的特殊字符*/

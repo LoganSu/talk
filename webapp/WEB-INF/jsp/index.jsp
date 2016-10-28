@@ -24,9 +24,6 @@
      <link href="${path}/css/common/peng.css" rel="stylesheet">
      <link href="${path}/css/common/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
-     <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
-     <link href="${path}/css/qiniu/main.css" rel="stylesheet">
-     
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
 <!--         <script type="text/javascript" src="docs/js/bootstrap-3.3.2.min.js"></script> -->
@@ -37,14 +34,6 @@
 <%--     <script type="text/javascript" src="${path}/js/common/bootstrap/bootstrap-multiselect-collapsible-groups.js"></script> --%>
 	<script src="${path}/js/common/ajaxfileupload.js"></script>
     <script src="${path}/js/common/init.js"></script>
-    <script src="${path}/js/qiniu/dist/qiniu.js"></script>
-<%--     <script src="${path}/js/qiniu/scripts/main.js"></script> --%>
-    <script src="${path}/js/qiniu/scripts/ui.js"></script>
-    <script type="text/javascript" src="${path}/js/common/spark-md5.js"></script>
-    <script type="text/javascript" src="${path}/js/common/qunit-1.16.0.js"></script>
-    <script src="${path}/js/plupload/js/plupload.full.min.js"></script>
-    <script src="${path}/js/plupload/js/moxie.js"></script>
-    <script src="${path}/js/plupload/js/plupload.full.min.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap.js"></script>
 <%--     <script src="${path}/js/common/bootstrap/fileinput.min.js"></script> --%>
     <script src="${path}/js/common/bootstrap/respond.js"></script>
@@ -126,8 +115,6 @@
     <script src="${path}/js/table/deviceCountSipTable.js"></script>
     <script src="${path}/js/table/IPManageTable.js"></script>
     <script src="${path}/js/table/SMSManageTable.js"></script>
-    <script src="${path}/js/table/billManageTable.js"></script>
-    
     
     
     <!-- 导入自己的js文件-->
@@ -396,9 +383,6 @@
 		                           </r:role>
 		                           <r:role auth="分组管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
-		                           </r:role>
-		                           <r:role auth="费用管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li>
 		                           </r:role>
 	                           </ul>
 	                             

@@ -73,11 +73,7 @@ public class IllegalCharacterFilter implements Filter {
 		  servletresponse.setContentType("text/html");   
 		  servletresponse.setCharacterEncoding("utf-8");    
 		  while (params.hasMoreElements()) { 
-			  String param = (String) params.nextElement();
-			  //编辑器字段跳过 里面有html代码 
-			  if(param!=null&&param.endsWith("Editor")){
-				  continue;
-			  }
+			  String param = (String) params.nextElement(); 
 			  String  paramValue="";
 			  String[] values = request.getParameterValues(param);
 			  if(OK){

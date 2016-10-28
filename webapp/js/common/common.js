@@ -93,7 +93,7 @@ $(function(){
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）
 	 $("#myModal .modalSave").on("click",function(){
-		     
+		  
 		     var title = $("#myModalLabel").html();
 			 var param = $("#myModal").find("form").serialize();
 			 var url;

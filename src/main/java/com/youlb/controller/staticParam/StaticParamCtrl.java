@@ -95,6 +95,10 @@ public class StaticParamCtrl extends BaseCtrl{
     				return  super.message;
     			}
     		}
+    		//修改参数
+    		if("fileUploadIp".equals(staticParam.getFkey())){
+    			SysStatic.FILEUPLOADIP=staticParam.getFvalue();
+    		}
     		staticParamBiz.saveOrUpdate(staticParam,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

@@ -45,7 +45,7 @@ margin-top: 100px
  	     </div>
  	     <div class="col-sm-4 col-md-4"> 
  	        <div>
- 		       <a href="${appManage.serverAddr}${appManage.relativePath}"><button type="button" class="btn btn-info btn-lg Android" style="width: 150px">Android下载</button></a>
+ 		       <a href="${path}/appManage/singleDownPhone.do?type=android"><button type="button" class="btn btn-info btn-lg Android" style="width: 150px">Android下载</button></a>
  	        </div>
  	        <div style="margin-top: 25px"> 
  		       <a href="https://itunes.apple.com/cn/app/you-lin-bang/id1127316147?mt=8"><button type="button" class="btn btn-info btn-lg IOS" style="width: 150px">IOS下载</button></a>

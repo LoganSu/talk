@@ -253,12 +253,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 		return repairs;
 	}
     
-    /**
-     * 通过房间id获取地址
-     * @param roomId
-     * @return
-     * @throws BizException
-     */
+
 	private String getAddressByDomainId(String roomId) throws BizException {
 		StringBuffer sb = new StringBuffer();
 		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
