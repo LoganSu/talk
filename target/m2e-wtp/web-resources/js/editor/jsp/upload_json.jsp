@@ -19,7 +19,7 @@
 
 //文件保存目录路径
 // String savePath = pageContext.getServletContext().getRealPath("/") + "attached/";
-String savePath = SysStatic.EDIORFILE;
+// String savePath = "";
 //文件保存目录URL
 // String saveUrl  = request.getContextPath() + "/attached/";
 String saveUrl  = "ediorFile/";
@@ -40,16 +40,16 @@ if(!ServletFileUpload.isMultipartContent(request)){
 	return;
 }
 //检查目录
-File uploadDir = new File(savePath);
-if(!uploadDir.isDirectory()){
-	out.println(getError("上传目录不存在。"));
-	return;
-}
+// File uploadDir = new File(savePath);
+// if(!uploadDir.isDirectory()){
+// 	out.println(getError("上传目录不存在。"));
+// 	return;
+// }
 //检查目录写权限
-if(!uploadDir.canWrite()){
-	out.println(getError("上传目录没有写权限。"));
-	return;
-}
+// if(!uploadDir.canWrite()){
+// 	out.println(getError("上传目录没有写权限。"));
+// 	return;
+// }
 
 String dirName = request.getParameter("dir");
 if (dirName == null) {
@@ -60,20 +60,20 @@ if(!extMap.containsKey(dirName)){
 	return;
 }
 //创建文件夹
-savePath += dirName + "/";
-saveUrl += dirName + "/";
-File saveDirFile = new File(savePath);
-if (!saveDirFile.exists()) {
-	saveDirFile.mkdirs();
-}
-SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-String ymd = sdf.format(new Date());
-savePath += ymd + "/";
-saveUrl += ymd + "/";
-File dirFile = new File(savePath);
-if (!dirFile.exists()) {
-	dirFile.mkdirs();
-}
+// savePath += dirName + "/";
+// saveUrl += dirName + "/";
+// File saveDirFile = new File(savePath);
+// if (!saveDirFile.exists()) {
+// 	saveDirFile.mkdirs();
+// }
+// SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+// String ymd = sdf.format(new Date());
+// savePath += ymd + "/";
+// saveUrl += ymd + "/";
+// File dirFile = new File(savePath);
+// if (!dirFile.exists()) {
+// 	dirFile.mkdirs();
+// }
 
 FileItemFactory factory = new DiskFileItemFactory();
 ServletFileUpload upload = new ServletFileUpload(factory);
@@ -101,10 +101,10 @@ while (itr.hasNext()) {
 		String newFileName = df.format(new Date()) + "_" + new Random().nextInt(1000) + "." + fileExt;
 		try{
 // 			File uploadedFile = new File(savePath, newFileName);
-			QiniuUtils.upload(item.get(), saveUrl+newFileName);//把编辑器文件上传到七牛
-// 			System.out.println(saveUrl+newFileName);
-// 			System.out.println(QiniuUtils.URL+ saveUrl + newFileName);
 // 			item.write(uploadedFile);
+//          File uploadedFile = new File(savePath, newFileName);
+			QiniuUtils.upload(item.get(), saveUrl+newFileName);//
+// 			System.out.println(QiniuUtils.URL+ saveUrl + newFileName);
 		}catch(Exception e){
 			out.println(getError("上传文件失败。"));
 			return;

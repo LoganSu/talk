@@ -27,4 +27,7 @@
 	<bean id="aboutNeighborRemarkDao" parent="sqlDao">
 		<property name="entityClass" value="com.youlb.entity.management.AboutNeighborhoodsRemark"/>
 	</bean>
+	<bean id="billManageDao" parent="sqlDao">
+		<property name="entityClass" value="com.youlb.entity.management.BillManage"/>
+	</bean>
 </beans>
