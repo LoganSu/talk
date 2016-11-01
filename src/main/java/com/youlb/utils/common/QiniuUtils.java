@@ -1,11 +1,14 @@
 package com.youlb.utils.common;
 
 import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.BucketManager.Batch;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
 
@@ -91,6 +94,9 @@ public class QiniuUtils {
 	  public static void delete(String key) throws QiniuException{
 		    //实例化一个BucketManager对象
 		    BucketManager bucketManager = new BucketManager(auth);
+		    Batch batch = new Batch();
+		    batch.delete(bucketname, new String[]{});
+		    bucketManager.batch(batch);
 		    try {
 		      //调用delete方法移动文件
 		      bucketManager.delete(bucketname, key);

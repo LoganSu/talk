@@ -20,6 +20,7 @@ import com.youlb.entity.common.Domain;
 import com.youlb.entity.common.Pager;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.DateHelper;
@@ -71,7 +72,6 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	@Override
 	public void update(Neighborhoods target) throws BizException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -136,6 +136,18 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		}
 		//只有当id=null时会添加
 		if(StringUtils.isBlank(neighborhoods.getId())){
+			//社区单独配置秘钥
+			if("2".equals(neighborhoods.getUseKey())){
+				//判断是否生成秘钥
+				String uuid = UUID.randomUUID().toString().replace("-", "");
+				String key = uuid.substring(0, 4)+uuid.substring(8, 12)+uuid.substring(14, 18)+uuid.substring(28);
+//				System.out.println(key);
+				byte[] uuidDes3 = DES3.encryptMode(SysStatic.KEYBYTES, key.getBytes());
+				String ramdonCode = DES3.bytesToHexString(uuidDes3);
+				neighborhoods.setEncodeKey(ramdonCode);
+				
+			}
+			
 			String neibId = (String) neighborSqlDao.add(neighborhoods);
 			Domain domain = new Domain();
 			domain.setEntityId(neibId);
@@ -157,7 +169,12 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			String update ="update t_staticparam set fvalue=cast(fvalue as int)+1 where fkey=?";
 			domainSqlDao.updateSQL(update, new Object[]{"neigborVersion"});
 		}else{
+//			Neighborhoods n = neighborSqlDao.get(neighborhoods.getId());
+//			String encodeKey = n.getEncodeKey();
+//			if(StringUtils.isNotBlank(encodeKey)){
+//				neighborhoods.setEncodeKey(encodeKey);
 			neighborSqlDao.update(neighborhoods);
+//			}
 			//更新域对象
 			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getId());
 			//如果是创建sip账号 判断是否已经存在

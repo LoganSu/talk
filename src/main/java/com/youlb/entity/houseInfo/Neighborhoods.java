@@ -62,6 +62,13 @@ public class Neighborhoods extends BaseModel {
 	/**是否创建sip账号1否   2是*/
 	@Column(name="fcreate_sip_num")
 	private String createSipNum;
+	/**是否使用秘钥 1否   2是*/
+	@Column(name="fuse_key")
+	private String useKey;
+	/**16位随机数加密结果*/
+	@Column(name="fencode_key",updatable=false)
+	private String encodeKey;
+	
 	/**时间字符串（前台传入）*/
 	@Transient
 	private String startBuildDateStr;
@@ -75,6 +82,18 @@ public class Neighborhoods extends BaseModel {
 	private String sipNum;
 	
 	
+	public String getEncodeKey() {
+		return encodeKey;
+	}
+	public void setEncodeKey(String encodeKey) {
+		this.encodeKey = encodeKey;
+	}
+	public String getUseKey() {
+		return useKey;
+	}
+	public void setUseKey(String useKey) {
+		this.useKey = useKey;
+	}
 	public String getSipNum() {
 		return sipNum;
 	}

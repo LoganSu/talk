@@ -88,7 +88,6 @@ $(function(){
 // 	    //选择文件之后执行上传  
 	    $('#addNeighborhoodsFirstPageForm .uoloadFileButton').on('click', function() {
 			 var count=uploader.files.length;
-			 alert(count);
 // 	    	 if(uploader.files[0]){
 // 				    if(count>1){
 // 				        hiAlert("提示","最多只能上传一个图标");
