@@ -68,6 +68,8 @@ public class SipCount extends BaseModel {
 				countTypeStr="社区账号sip";
 			}else if("5".equals(countType)){
 				countTypeStr="管理机";
+			}else if("6".equals(countType)){
+				countTypeStr="注册用户";
 			}
 		}
 		return countTypeStr;
