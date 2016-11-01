@@ -95,7 +95,7 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 				 values.add(domainIds);
 			 }
  		 }
-		 sb.append(" GROUP BY d.id ,d.fdepartmentname,d.fdescription,pd.fdepartmentname, d.fcreatetime,d.fparentid ");
+		 sb.append(" GROUP BY d.id ,d.fdepartmentname,d.fdescription,pd.fdepartmentname, d.fcreatetime,d.fparentid,d.ftel,d.faddress ");
 		 sb.append(")t");
 		 OrderHelperUtils.getOrder(sb, target, "t.", "t.createTime");
 		List<Object[]> listObj = departmentDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());

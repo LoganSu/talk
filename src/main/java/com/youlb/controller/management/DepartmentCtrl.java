@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.management.IDepartmentBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.infoPublish.TodayNewsCtrl;
 import com.youlb.entity.management.Department;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
@@ -115,8 +114,8 @@ public class DepartmentCtrl extends BaseCtrl {
     			super.message = "公司电话不能为空！";
 				 return  super.message;
     		}else {
-				if(!RegexpUtils.checkPhone(department.getTel())){
-					super.message = "请填写正确的固定电话！";
+				if(!RegexpUtils.checkPhone(department.getTel())||!RegexpUtils.checkMobile(department.getTel())){
+					super.message = "请填写正确的电话！";
 					 return  super.message;
 				}
 			}

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+import java.util.Arrays;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -139,7 +141,8 @@ public class DES3 {
 //		 System.out.println(Arrays.toString(mima.getBytes(16)));
 //		 Byte[] all = new Byte[32];
 //		 List<Byte> list = new ArrayList<Byte>();
-		 String username = "10000021";
+		 String username = "9999999999999999";
+		 System.out.println(Arrays.toString(username.getBytes()));
 		 byte[] usernameByte = encryptMode(keyBytes, username.getBytes());
 		 
 //		 usernameByte=username.getBytes();
