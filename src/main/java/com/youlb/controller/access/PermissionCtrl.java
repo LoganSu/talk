@@ -139,9 +139,18 @@ public class PermissionCtrl extends BaseCtrl {
 	
 	@RequestMapping("/getKey.do")
 	@ResponseBody
-	public String getKey(){
-		String ic_cardKey = (String) servletContext.getAttribute("ic_cardKey");
-		return ic_cardKey;
+	public String getKey(String roomId){
+		try {
+			String neiborKey = domainBiz.getNeiborKey(roomId);
+//			if(StringUtils.isBlank(neiborKey)){
+//				return (String) servletContext.getAttribute("ic_cardKey");
+//			}else{
+				return neiborKey;
+//			}
+		} catch (BizException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 	 /**
      * 跳转到开卡页面

@@ -62,5 +62,11 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	String hasChild(String[] ids)throws BizException;
 
 	String getParentIdByEntityId(String string)throws BizException;
+	/**
+	 * 通过房间id获取社区的秘钥
+	 * @param roomId
+	 * @return
+	 */
+	String getNeiborKey(String roomId)throws BizException;
 
 }

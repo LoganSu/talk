@@ -101,7 +101,7 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds, " tdi.fdomainid "));
 			valuse.add(domainIds);
 		}
-		sb.append(" group by i.id,i.ftitle,i.fpictureurl,i.fnewsurl,i.ftargetdevice,i.fcreatetime)t where 1=1");
+		sb.append(" group by i.id,i.ftitle,i.fpictureurl,i.fnewsurl,i.ftargetdevice,i.fcreatetime,i.fstatus,i.fpublish_time,i.fpublish_operator,i.fadd_operator)t where 1=1");
 		
 		if(StringUtils.isNotBlank(target.getTitle())){
 			sb.append(" and title like ?");

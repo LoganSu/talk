@@ -309,7 +309,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 			sb.append(" and o.frealname = ?");
 			values.add(target.getRealName());
 		}
-		sb.append(" GROUP BY o.id)t ");
+		sb.append(" GROUP BY o.id,o.floginname,o.frealname,o.fphone,o.flogintime,o.flogouttime,o.floginstatus,o.fisadmin,o.fpassword,o.fcreatetime)t ");
 		OrderHelperUtils.getOrder(sb, target, "t.", "t.createTime");
 		List<Object[]> listObj = operatorSqlDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());
 		List<Operator> list = objToOperator(listObj);
@@ -437,7 +437,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 			sb.append(" and o.frealname like ?");
 			values.add("%"+target.getRealName()+"%");
 		}
-		sb.append(" GROUP BY o.id)t ");
+		sb.append(" GROUP BY o.id,o.floginname,o.frealname,o.fphone,o.flogintime,o.flogouttime,o.fcreatetime)t ");
 		OrderHelperUtils.getOrder(sb, target, "t.", "t.createtime");
 		List<Object[]> listObj = operatorSqlDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());
 		if(listObj!=null&&!listObj.isEmpty()){

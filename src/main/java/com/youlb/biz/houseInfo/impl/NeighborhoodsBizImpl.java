@@ -136,18 +136,12 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		}
 		//只有当id=null时会添加
 		if(StringUtils.isBlank(neighborhoods.getId())){
-			//社区单独配置秘钥
-			if("2".equals(neighborhoods.getUseKey())){
-				//判断是否生成秘钥
-				String uuid = UUID.randomUUID().toString().replace("-", "");
-				String key = uuid.substring(0, 4)+uuid.substring(8, 12)+uuid.substring(14, 18)+uuid.substring(28);
-//				System.out.println(key);
-				byte[] uuidDes3 = DES3.encryptMode(SysStatic.KEYBYTES, key.getBytes());
-				String ramdonCode = DES3.bytesToHexString(uuidDes3);
-				neighborhoods.setEncodeKey(ramdonCode);
-				
-			}
-			
+			//生成秘钥
+			String uuid = UUID.randomUUID().toString().replace("-", "");
+//			System.out.println(uuid);
+			byte[] uuidDes3 = DES3.encryptMode(SysStatic.KEYBYTES, uuid.getBytes());
+			String ramdonCode = DES3.bytesToHexString(uuidDes3);
+			neighborhoods.setEncodeKey(ramdonCode);
 			String neibId = (String) neighborSqlDao.add(neighborhoods);
 			Domain domain = new Domain();
 			domain.setEntityId(neibId);

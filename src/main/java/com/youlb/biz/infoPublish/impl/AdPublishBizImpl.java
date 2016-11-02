@@ -177,7 +177,7 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 			sb.append(" and to_char(ad.fcreatetime,'yyyy-MM-dd') <= ?");
 			valuse.add(target.getEndTime());
 		}
-		sb.append(" GROUP BY ad.id,ad.fadtype,ad.ftargetdevice,ad.fcreatetime,ad.fsendtype,ad.fexpdate ");
+		sb.append(" GROUP BY ad.id,ad.fadtype,ad.ftargetdevice,ad.fcreatetime,ad.fsendtype,ad.fexpdate,ad.fstatus,ad.fpublish_time,ad.fpublish_operator,ad.fadd_operator ");
 		sb.append(")t");
 		OrderHelperUtils.getOrder(sb, target, "t.", "t.createTime desc");
 		List<AdPublish> list = new ArrayList<AdPublish>();

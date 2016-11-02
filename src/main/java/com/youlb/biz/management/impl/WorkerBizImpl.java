@@ -83,7 +83,7 @@ public class WorkerBizImpl implements IWorkerBiz {
 		 .append("SELECT t_department.* FROM t_department, r WHERE t_department.id = r.fparentid) ")
 		 .append("SELECT r.id FROM r where r.fparentid is null) topdepartid ")
 		 .append("from t_worker w INNER JOIN t_department d on d.id=w.fdepartmentid ")
-		 .append("group by w.id,w.fworkername,w.fphone,w.fstatus,w.fusername,w.fcreatetime,d.fdepartmentname ,d.id)t ")
+		 .append("group by w.id,w.fworkername,w.fphone,w.fstatus,w.fusername,w.fcreatetime,d.fdepartmentname,d.id,w.fsex)t ")
 		 .append(" INNER JOIN t_department_domain todd on todd.fdepartmentid=t.topdepartid where 1=1 ");
 		//普通用户过滤s域
 		List<String> domainIds = loginUser.getDomainIds();
@@ -108,7 +108,7 @@ public class WorkerBizImpl implements IWorkerBiz {
 			.append(" SELECT t_department.* FROM t_department, r WHERE t_department.fparentid = r.id) SELECT r.id FROM r) ");
 			values.add(target.getDepartmentId());
 		}
-		 sb.append(" GROUP BY t.id,t.workerName,t.phone,t.status,t.username,t.createTime,t.departmentName,t.sex,t.departmentId");
+		 sb.append(" GROUP BY t.id,t.workerName,t.phone,t.status,t.username,t.createTime,t.departmentName,t.sex,t.departmentId,t.topdepartid");
 		 OrderHelperUtils.getOrder(sb, target, "t.", "t.createTime");
 		 List<Object[]> listObj = workerDao.pageFindBySql(sb.toString(), values.toArray(),target.getPager());
 		 List<Worker> list = new ArrayList<Worker>();

@@ -333,4 +333,27 @@ public class DomainBizImpl implements IDomainBiz {
 		}
 		return null;
 	}
+    /**
+     * 通过房间id获取社区的秘钥
+     * @param roomId
+     * @return
+     * @throws BizException 
+     * @see com.youlb.biz.houseInfo.IDomainBiz#getNeiborKey(java.lang.String)
+     */
+	@Override
+	public String getNeiborKey(String roomId) throws BizException {
+		 StringBuilder sb = new StringBuilder();
+		 sb.append("WITH RECURSIVE r AS (SELECT d.* from t_room r INNER JOIN t_domain d on r.id=d.fentityid where r.id=? ")
+		 .append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id  = r.fparentid)")
+		 .append("SELECT n.fuse_key,n.fencode_key from r INNER JOIN t_neighborhoods n on n.id=r.fentityid where r.flayer='1'");
+		 List<Object[]> listObj = domainSqlDao.pageFindBySql(sb.toString(), new Object[]{roomId});
+		 if(listObj!=null&&!listObj.isEmpty()){
+			 for(Object[] obj:listObj){
+				 if("2".equals(obj[0])){
+					 return (String)obj[1];
+				 }
+			 }
+		 }
+		return null;
+	}
 }

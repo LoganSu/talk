@@ -2,7 +2,6 @@ package com.youlb.biz.infoPublish.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -157,7 +156,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds, " tdi.fdomainid "));
 			valuse.add(domainIds);
 		}
-		sb.append(" group by i.id,i.ftitle,i.finfotype,i.ftargetdevice,i.finfosign,i.finfodetail,i.fsendtype,i.fcreatetime,i.fexpdate)t where 1=1");
+		sb.append(" group by i.id,i.ftitle,i.finfotype,i.ftargetdevice,i.finfosign,i.finfodetail,i.fsendtype,i.fcreatetime,i.fexpdate,i.fcarrierid,i.fstatus,i.fpublish_time,i.fpublish_operator,i.fadd_operator)t where 1=1");
 		if(StringUtils.isNotBlank(target.getTitle())){
 			sb.append(" and t.title like ?");
 			valuse.add("%"+target.getTitle()+"%");

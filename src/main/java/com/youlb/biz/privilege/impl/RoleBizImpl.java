@@ -208,7 +208,7 @@ public class RoleBizImpl implements IRoleBiz {
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds,"tcd.fdomainid"));
 			values.add(domainIds);
 		}
-		sb.append(" group by r.id");
+		sb.append(" group by r.id,r.frolename,r.fdescription,r.fcarrierid,r.fcreatetime");
 		sb.append(")t where 1=1 ");
 		//过滤名称
 	    if(StringUtils.isNotBlank(target.getRoleName())){
@@ -338,7 +338,7 @@ public class RoleBizImpl implements IRoleBiz {
 				sb.append(SearchHelper.jointInSqlOrHql(domainIds,"tcd.fdomainid"));
 				values.add(domainIds);
 			}
-			sb.append(" group by r.id");
+			sb.append(" group by r.id,r.frolename,r.fdescription,r.fcarrierid,r.fcreatetime");
 			sb.append(")t where 1=1 ");
 			//过滤名称
 		    if(StringUtils.isNotBlank(target.getRoleName())){
