@@ -14,7 +14,6 @@ $(function(){
 	  $(".datepicker").datepicker();
 	 //连接发卡器
 	  $("#openCardForm .connectCardMachine").on("click",function(){
-			   alert(myactivex.ConnectReader());
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();
@@ -25,34 +24,36 @@ $(function(){
            var obj = jQuery.parseJSON(connectReader);
 		   if(obj.code=='0'){
 			   //加载key
-               $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']"),function($data){
-            	   var loadKey;
-          	       try{
-          		          loadKey = myactivex.LoadKey($data);
-            	   }catch(e){
-            		   hiAlert("提示","加载密钥出错！");
-       				     return false;
-            	   }
-            	   obj = jQuery.parseJSON(loadKey);
-				   if(obj.code=='0'){
+               $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+            	   //有秘钥的初始化key
+            	   if($data){
+	            	   var loadKey;
+	            	   var indata = "{\"key\":\""+$data+"\"}";
+	          	       try{ 
+	          		          loadKey = myactivex.LoadKey(indata);
+	            	   }catch(e){
+	            		   hiAlert("提示","加载密钥出错！");
+	       				     return false;
+	            	   }
+//             	       obj = jQuery.parseJSON(loadKey);
 					   //验证卡片是否合法
 					   obj = jQuery.parseJSON(myactivex.IsValidCard());
-					   if(obj.code=='0'){
-						   writeCard();
-						//不合法初始化卡
-					   }else{
-						   //初始化卡片
-						   obj = myactivex.InitCardKey_1()
-						   if(obj.code=='0'){
-							   writeCard();
-						   }else{
-							   //卡片秘钥不匹配
-							   hiAlert("提示","卡片秘钥不匹配！");
-						   }
+					   if(obj.code!='0'){
+						   try{
+							   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
+						      if(obj.code!='0'){
+						    	  hiAlert("提示","此为非法卡片！");
+			       				     return false;
+						      }
+						   }catch(e){
+		            		   hiAlert("提示","初始化卡片出错！");
+		       				     return false;
+		            	   }
 					   }
-				   }else{
-					   hiAlert("提示","加载密钥出错！");
-				   }
+            	   }
+					   //如果不合法初始化卡片
+						writeCard();
+            	   
                })
 		   }else{
 			   hiAlert("提示","发卡器连接异常！");
