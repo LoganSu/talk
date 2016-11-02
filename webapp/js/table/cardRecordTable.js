@@ -15,13 +15,12 @@ var cardRecordTable ={
         queryParams: queryParams,//查询参数
         minimumCountColumns: 2,
         onClickRow: function (item, $element) {
-        	var url = $path;
+//        	var url = $path;
         	$.post($path+"/mc/appRecord/getImg.do","id="+item.id,function($data){
-        		   url += $data.path;
+//        		   url += $data.path;
         		   //清空历史图片
         		   $("#personshowImg").html("");
-        		   $("#personshowImg").append('<img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="'+url+'">');
-        		   url="";
+        		   $("#personshowImg").append('<img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="'+$data.path+'">');
         		})
 //        	if(item.id==1){
 //        		url=$path+"/img/qq.jpg"

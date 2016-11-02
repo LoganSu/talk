@@ -152,7 +152,7 @@ public class CarrierBizImpl implements ICarrierBiz {
 			}else{
 				return list;
 			}
-		 sb.append(" GROUP BY c.id,c.fcarriername,c.ftel,c.fpostcode,c.ffax,c.faddress,c.fremark,c.FCREATETIME) t where 1=1");
+		 sb.append(" GROUP BY c.id,c.fcarriername,c.ftel,c.fpostcode,c.ffax,c.faddress,c.fremark,c.FCREATETIME,c.fisnormal,c.fcarrierNum) t where 1=1");
 		 if(StringUtils.isNotBlank(target.getCarrierName())){
 			 sb.append(" and t.carrierName like ?");
 			 values.add("%"+target.getCarrierName()+"%");	 

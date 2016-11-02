@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <object codebase="Test_ActiveX.dll" classid="clsid:63EB4027-895A-4895-99C3-F535CEABA046" id="myactivex">
+
 </object>
 <script type="text/javascript">
 $(function(){
@@ -13,6 +14,7 @@ $(function(){
 	  $(".datepicker").datepicker();
 	 //连接发卡器
 	  $("#openCardForm .connectCardMachine").on("click",function(){
+			   alert(myactivex.ConnectReader());
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();
@@ -23,36 +25,31 @@ $(function(){
            var obj = jQuery.parseJSON(connectReader);
 		   if(obj.code=='0'){
 			   //加载key
-               $.post($path+"/mc/permission/getKey.do",function($data){
+               $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']"),function($data){
             	   var loadKey;
-            	   try{
-            		   loadKey = myactivex.LoadKey($data);
+          	       try{
+          		          loadKey = myactivex.LoadKey($data);
             	   }catch(e){
             		   hiAlert("提示","加载密钥出错！");
        				     return false;
             	   }
             	   obj = jQuery.parseJSON(loadKey);
 				   if(obj.code=='0'){
-					  var cardId;
-					  try{
-						  cardId = myactivex.GetCardId();
-					  }catch(e){
-						  hiAlert("提示","读取卡片id出错！");
-	       				     return false;
-					  }
-					  obj = jQuery.parseJSON(cardId);
-					  var card_id = obj.result.card_id;
-					  if(obj.code=='0'&&card_id){
-					  $("#openCardForm .cardSn").val(card_id);
-						  $.post($path+"/mc/permission/connectCardMachine.do","cardSn="+card_id,function($data){
-							  if(!$data){
-								  hiAlert("提示","该卡已经被使用！");
-			 					   return false;
-			 				   }
-						  })
-					  }else{
-						  hiAlert("提示","请放入卡片！");
-					  }
+					   //验证卡片是否合法
+					   obj = jQuery.parseJSON(myactivex.IsValidCard());
+					   if(obj.code=='0'){
+						   writeCard();
+						//不合法初始化卡
+					   }else{
+						   //初始化卡片
+						   obj = myactivex.InitCardKey_1()
+						   if(obj.code=='0'){
+							   writeCard();
+						   }else{
+							   //卡片秘钥不匹配
+							   hiAlert("提示","卡片秘钥不匹配！");
+						   }
+					   }
 				   }else{
 					   hiAlert("提示","加载密钥出错！");
 				   }
@@ -61,7 +58,28 @@ $(function(){
 			   hiAlert("提示","发卡器连接异常！");
 		   }
 	})
-	
+	var writeCard=function(){
+		  var cardId;
+		  try{
+			  cardId = myactivex.GetCardId();
+		  }catch(e){
+			  hiAlert("提示","读取卡片id出错！");
+				     return false;
+		  }
+		  obj = jQuery.parseJSON(cardId);
+		  var card_id = obj.result.card_id;
+		  if(obj.code=='0'&&card_id){
+		  $("#openCardForm .cardSn").val(card_id);
+			  $.post($path+"/mc/permission/connectCardMachine.do","cardSn="+card_id,function($data){
+				  if(!$data){
+					  hiAlert("提示","该卡已经被使用！");
+ 					   return false;
+ 				   }
+			  })
+		  }else{
+			  hiAlert("提示","请放入卡片！");
+		  }
+	 }
 	 //保存卡片信息
 	 $("#openCardDiv .sure").on("click",function(){
 		var data = $("#openCardForm").serialize();

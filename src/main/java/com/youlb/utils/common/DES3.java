@@ -141,7 +141,7 @@ public class DES3 {
 //		 System.out.println(Arrays.toString(mima.getBytes(16)));
 //		 Byte[] all = new Byte[32];
 //		 List<Byte> list = new ArrayList<Byte>();
-		 String username = "9999999999999999";
+		 String username = "1a3ae1e64cef429bb201d464db378775";
 		 System.out.println(Arrays.toString(username.getBytes()));
 		 byte[] usernameByte = encryptMode(keyBytes, username.getBytes());
 		 
@@ -151,6 +151,8 @@ public class DES3 {
 		 
 		 byte[] srcBytes = decryptMode(keyBytes, usernameByte);
 		 System.out.println("解密后的字符串:" + new String(srcBytes));
+		 
+		System.out.println(Arrays.toString(hexStringToBytes(username))); 
 //		 for(int i=0;i<usernameByte.length;i++){
 //			 list.add(usernameByte[i]);
 //		 }

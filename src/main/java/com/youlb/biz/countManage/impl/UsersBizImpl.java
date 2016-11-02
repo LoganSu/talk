@@ -125,7 +125,7 @@ public class UsersBizImpl implements IUsersBiz {
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds,"t.fdomainid"));
 			values.add(domainIds);
 		}
-		sb.append(" group by u.id,u.fusername,u.fmobile_phone,u.femail,u.frealname,u.fcreatetime) o");
+		sb.append(" group by u.id,u.fusername,u.fmobile_phone,u.femail,u.frealname,u.fcreatetime,u.femail_status,u.fstatus) o");
 		OrderHelperUtils.getOrder(sb, target, "o.", "o.createTime");
 		List<Object[]> listObj = usersSqlDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());
 		if(listObj!=null&&!listObj.isEmpty()){
