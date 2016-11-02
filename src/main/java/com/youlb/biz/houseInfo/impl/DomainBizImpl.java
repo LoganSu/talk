@@ -18,6 +18,7 @@ import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.houseInfo.Room;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.OrderHelperUtils;
@@ -350,7 +351,9 @@ public class DomainBizImpl implements IDomainBiz {
 		 if(listObj!=null&&!listObj.isEmpty()){
 			 for(Object[] obj:listObj){
 				 if("2".equals(obj[0])){
-					 return (String)obj[1];
+					 //解码
+					 byte[] srcBytes = DES3.decryptMode(SysStatic.KEYBYTES, DES3.hexStringToBytes((String)obj[1]));
+					 return new String(srcBytes);
 				 }
 			 }
 		 }
