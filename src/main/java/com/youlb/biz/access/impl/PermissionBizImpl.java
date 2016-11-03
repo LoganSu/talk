@@ -655,11 +655,17 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 */
 	@Override
 	public CardInfo getImg(Integer id) throws BizException {
-		String sql ="select cr.fpath from t_cardrecord cr where cr.id=?";
-		List<String> path = cardSqlDao.pageFindBySql(sql, new Object[]{id});
-		CardInfo info = new CardInfo();
-		info.setPath(path.get(0));
-		return info;
+		String sql ="select cr.fserveraddr,cr.fpath,cr.ftime from t_cardrecord cr where cr.id=?";
+		List<Object[]> listObj = cardSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(listObj!=null&&!listObj.isEmpty()){
+			Object[] obj = listObj.get(0);
+			CardInfo info = new CardInfo();
+			info.setServeraddr((String)obj[0]);
+			info.setPath((String)obj[1]);
+			info.setFtime((Date)obj[2]);
+			return info;
+		}
+		return null;
 	}
 //  public static void main(String[] args){
 //	  BlackListData blc = new BlackListData();

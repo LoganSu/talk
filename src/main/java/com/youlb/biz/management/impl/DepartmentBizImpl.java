@@ -49,7 +49,9 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 	@Override
 	public void delete(Serializable id) throws BizException {
 		departmentDao.delete(id);
-
+		//删除关联
+		String del = "delete from t_department_domain where fdepartmentid=?";
+		departmentDao.executeSql(del, new Object[]{id});
 	}
 
 	@Override

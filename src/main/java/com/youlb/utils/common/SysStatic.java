@@ -100,11 +100,17 @@ public class SysStatic {
 	public static String PRIVATEKEY="";
 	/**房间默认密码*/
 	public static final String ROOMDEFULTPASSWORD = "123456";
+	/**门口机图片备份地址*/
+	public static String FILEUPLOADIP = "";
 	
 	public static byte[] KEYBYTES = {};
 	/**web 版本*/
 	public static String VERSION;
 	/**需要过滤的特殊字符*/
 	public static String[] SPECIALSTRING;
+	/**七牛图片备份地址*/
+	public static String QINIUBACKUP;
+	/**一级平台地址*/
+	public static String FIRSTSERVER;
 	
 }

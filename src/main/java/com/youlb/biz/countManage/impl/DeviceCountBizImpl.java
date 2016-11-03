@@ -1,12 +1,26 @@
 package com.youlb.biz.countManage.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +28,14 @@ import org.springframework.stereotype.Service;
 
 import com.youlb.biz.countManage.IDeviceCountBiz;
 import com.youlb.dao.common.BaseDaoBySql;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -187,10 +204,14 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 	/**
 	 * @param deviceCount
 	 * @throws BizException 
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws JsonException 
+	 * @throws ParseException 
 	 * @see com.youlb.biz.countManage.IDeviceCountBiz#saveOrUpdate(com.youlb.entity.countManage.DeviceCount)
 	 */
 	@Override
-	public void saveOrUpdate(DeviceCount deviceCount) throws BizException {
+	public void saveOrUpdate(DeviceCount deviceCount) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
 		//entityid转换成domainid
 //		String sql ="SELECT d.id from t_domain d where d.fentityid=?";
 //		List<String> slist = deviceCountSqlDao.pageFindBySql(sql, new Object[]{deviceCount.getTreecheckbox().get(0)});
@@ -249,7 +270,35 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 		    	sipType="2";
 		    }
 			deviceCountSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list1.get(0)),password,sipNum,sipType});//门口机sip账号类型为2 管理机sip账号是5
-			
+			//同步数据以及平台
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			//公告 通知需要透传消息
+			HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/device/save_device_usersToFirst.json");
+			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+//			Map<String,String> map = new HashMap<String,String>();
+//			map.put("user_sip", list1.get(0));
+//			map.put("user_password", password);
+//			map.put("local_sip", sipNum);
+//			map.put("sip_type", sipType);
+			//获取服务器ip
+			formParams.add(new BasicNameValuePair("user_sip", list1.get(0)));
+			formParams.add(new BasicNameValuePair("user_password", password));
+			formParams.add(new BasicNameValuePair("local_sip", sipNum));
+			formParams.add(new BasicNameValuePair("sip_type", sipType));
+			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+			request.setEntity(uefEntity);
+			CloseableHttpResponse response = httpClient.execute(request);
+			if(response.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = response.getEntity();
+				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+				if(resultDto!=null){
+					if(!"0".equals(resultDto.getCode())){
+						throw new BizException("同步sip账号出错");
+					}
+				}
+			}else{
+				throw new BizException("同步sip账号出错！");
+			}
 		}else{
 			//修改users表
 			deviceCountSqlDao.update(deviceCount);

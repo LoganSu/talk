@@ -1,15 +1,22 @@
 package com.youlb.utils.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.hibernate.mapping.Array;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.BucketManager.Batch;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.FileInfo;
+import com.qiniu.storage.model.FileListing;
 import com.qiniu.util.Auth;
 
 public class QiniuUtils {
@@ -107,9 +114,34 @@ public class QiniuUtils {
 		    }
 	  }
 	  
+	  /**
+	   * 通过前缀举例文件
+	   * @param key 上传到七牛后保存的文件名 
+	   * @throws QiniuException
+	   */
+	  public static List<String> listFile(String prefix) throws QiniuException{
+		    //实例化一个BucketManager对象
+		    BucketManager bucketManager = new BucketManager(auth);
+		    List<String> keyList = new ArrayList<String>();
+		    try { 
+		      //调用delete方法移动文件
+		    	FileListing  fileListing = bucketManager.listFiles(bucketname, prefix, null, 500, null);
+		        FileInfo[] items = fileListing.items;
+		        for(FileInfo fileInfo:items){
+//		          System.out.println(fileInfo.key);
+		          keyList.add(fileInfo.key);
+		        }
+		    } catch (QiniuException e) {
+		      //捕获异常信息
+		      Response r = e.response;
+		      log.error("qiniu:"+r.error);
+		    }
+		    return keyList;
+	  }
+	  
 
 	public static void main(String[] args) throws IOException {
-		System.out.println(getUpToken());
+		System.out.println(listFile("DoorMachine"));
 //		String key ="test/test.java";
 //		upload("d:/Test.java", key);
 //		System.out.println(getDownloadUrl(key));

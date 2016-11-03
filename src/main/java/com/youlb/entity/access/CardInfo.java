@@ -91,6 +91,9 @@ public class CardInfo extends Model {
    /**完整地址*/
    @Transient
    private String address;
+   /**显示图片的地址*/
+   @Transient
+   private String serveraddr;
    
    @Transient
    private Date ftime;
@@ -100,6 +103,14 @@ public class CardInfo extends Model {
    private Integer id;
    
  
+
+public String getServeraddr() {
+	return serveraddr;
+}
+
+public void setServeraddr(String serveraddr) {
+	this.serveraddr = serveraddr;
+}
 
 public Integer getId() {
 	return id;
