@@ -76,8 +76,15 @@ public class InitServlet extends HttpServlet {
 			logger.error("初始化配置文件出错");
 			e.printStackTrace();
 		}
-//		SysStatic.FILEUPLOADPATH="125.46.73.49:8080";
-		
+		try{
+			StaticParam paramByKey = staticParamBiz.getParamByKey("fileUploadIp");
+			if(paramByKey!=null){
+				SysStatic.FILEUPLOADIP = paramByKey.getFvalue();
+			}
+		}catch(BizException e){
+			logger.error("初始化文件上传地址");
+			e.printStackTrace();
+		}
 		try {
 			initQuartzService(config);
 		} catch (ClassNotFoundException e) {
@@ -127,6 +134,14 @@ public class InitServlet extends HttpServlet {
 		String version = (String) proper.get("version");
 		SysStatic.VERSION=version;
 		logger.info("发布web version::"+version);
+		//七牛备份地址
+		String qiniubackup = (String) proper.get("qiniubackup.dir");
+		SysStatic.QINIUBACKUP=qiniubackup;
+		logger.info("七牛备份地址 qiniubackup::"+qiniubackup);
+		//七牛备份地址
+		String firstServer = (String) proper.get("firstServer.http");
+		SysStatic.FIRSTSERVER=firstServer;
+		logger.info("一级平台地址firstServer::"+firstServer);
 		
 		//特殊字符
 		String specialString = (String) proper.get("special.string");

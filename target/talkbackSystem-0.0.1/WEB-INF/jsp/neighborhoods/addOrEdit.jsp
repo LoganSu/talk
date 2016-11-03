@@ -79,15 +79,15 @@
                       <option value="2" <c:if test="${neighborhoods.createSipNum=='2'}">selected="selected"</c:if>>是</option>
                     </select>
                  </div></td>
-                 <c:if test="${neighborhoods.id==null}">
+<%--                  <c:if test="${neighborhoods.id==null}"> --%>
 	                 <td><div class="leftFont">配置秘钥：</div></td>
 	                 <td><div>
 	                     <select name="useKey" class="form-control">
-	                         <option value="1" <c:if test="${neighborhoods.useKey=='1'}">selected="selected"</c:if> >否</option>
-	                          <option value="2" <c:if test="${neighborhoods.useKey=='2'}">selected="selected"</c:if>>是</option>
+	                         <option value="0" <c:if test="${neighborhoods.useKey=='0'}">selected="selected"</c:if> >不启用</option>
+	                          <option value="2" <c:if test="${neighborhoods.useKey=='2'}">selected="selected"</c:if>>启用</option>
 	                    </select>
 	                 </div></td>
-                 </c:if>
+<%--                  </c:if> --%>
               </tr>
            </table>
          </form>

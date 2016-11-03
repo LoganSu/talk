@@ -48,7 +48,7 @@ $(function(){
                 <td><div class="firstFont"><span class="starColor">*</span>公司名称：</div></td>
                 <td><div><input name="departmentName" class="form-control required" maxlength="20" title="公司名称不能为空" value="${department.departmentName}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>公司电话：</div></td>
-                <td><div><input name="tel" class="form-control required" title="公司电话不能为空" maxlength="15" placeholder="格式：020-88888888" value="${department.tel}"/></div></td>
+                <td><div><input name="tel" class="form-control required" title="公司电话不能为空" maxlength="15" placeholder="手机或座机" value="${department.tel}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>公司地址：</div></td>
                 <td><div><input name="address" style="width: 300px" class="form-control required" maxlength="100" title="公司地址不能为空" value="${department.address}"/></div></td>
               </tr>

@@ -1,11 +1,15 @@
 package com.youlb.controller.access;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -17,6 +21,7 @@ import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.access.CardRecord;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 
 /** 
@@ -65,10 +70,21 @@ public class AppRecordCtrl extends BaseCtrl {
 	
 	@RequestMapping("/getImg.do")
 	@ResponseBody
-	public CardInfo getImg(CardInfo cardInfo){
+	public CardInfo getImg(CardInfo cardInfo,HttpServletRequest request){
 		if(cardInfo.getId()!=null){
 			try {
 				cardInfo = permissionBiz.getImg(cardInfo.getId());
+				Date date = cardInfo.getFtime();
+				Calendar c = Calendar.getInstance();
+				c.setTime(date);
+				c.add(Calendar.MONTH, 1);
+				long l = c.getTimeInMillis();//文件生成时间 + 一个月
+				long now = new Date().getTime();//当前时间
+				//文件超过一个月显示本地图片 
+				if(l-now<0){
+					String strBackUrl = SysStatic.FILEUPLOADIP+ request.getContextPath();      //项目名称  
+					cardInfo.setServeraddr(strBackUrl +"/qiniubackup");
+				} 
 			} catch (BizException e) {
 				e.printStackTrace();
 			}

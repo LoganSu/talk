@@ -65,7 +65,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 .append(" LEFT JOIN t_domain_dweller ddw on dw.id=ddw.fdwellerid WHERE u.sip_type = '6'")
 		 .append(" UNION ")
 		 .append(" SELECT sr.sip_user sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid domainId,r.fdevicecount username")
+		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid||'-'||r.fdevice_count_desc domainId,r.fdevicecount username")
 		 .append(" from sip_registrations sr INNER JOIN users u on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999')")
 		 .append(" left JOIN t_devicecount r on r.fsipnum=u.local_sip where u.sip_type in ('2','5') OR u.sip_type is null ")
 		 .append(" UNION ")
@@ -108,8 +108,14 @@ public class SipCountBizImpl implements ISipCountBiz {
 				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
 				 sip.setNetworkIp(obj[5]==null?"":(String)obj[5]);
 				 sip.setCountType(obj[7]==null?"":(String)obj[7]);
-				 if(obj[8]!=null){
-					 sip.setAddress(getAddressByDomainId((String)obj[8]));
+				 String domainId = (String)obj[8];
+				 if(domainId!=null){
+					 //设备账号需要显示别名
+					 if(domainId.contains("-")){
+						 sip.setAddress(getAddressByDomainId(domainId.substring(0,domainId.indexOf("-")))+"-"+domainId.substring(domainId.indexOf("-")+1));
+					 }else{
+						 sip.setAddress(getAddressByDomainId(domainId));
+					 }
 				 }
 				 sip.setUsername(obj[9]==null?"":(String)obj[9]);
 				 list.add(sip);
@@ -139,7 +145,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 .append(" FROM users u INNER JOIN t_users r ON r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fphone=dw.fphone ")
 		 .append(" LEFT JOIN t_domain_dweller ddw on dw.id=ddw.fdwellerid WHERE u.sip_type = '6' GROUP BY sipUser,username,domainId,sip_type")
 		 .append(" UNION ")
-		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,r.fdevicecount username,r.fdomainid domainId,u.sip_type sip_type ")
+		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,r.fdevicecount username,r.fdomainid||'-'||r.fdevice_count_desc domainId,u.sip_type sip_type ")
 		 .append(" from users u INNER JOIN t_devicecount r on r.fsipnum=u.local_sip where u.sip_type in ('2','5') OR u.sip_type is null ")
 		 .append(" UNION ")
 		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,w.fphone username,tdd.fdomainid domainId,u.sip_type sip_type  ")
@@ -170,8 +176,14 @@ public class SipCountBizImpl implements ISipCountBiz {
 				 sip.setPager(target.getPager());
 				 sip.setSipUser(obj[0]==null?"":(String)obj[0]);
 				 sip.setUsername(obj[1]==null?"":(String)obj[1]);
-				 if(obj[2]!=null){
-					 sip.setAddress(getAddressByDomainId((String)obj[2]));
+				 String domainId = (String)obj[2];
+				 if(domainId!=null){
+					 //设备账号需要显示别名
+					 if(domainId.contains("-")){
+						 sip.setAddress(getAddressByDomainId(domainId.substring(0,domainId.indexOf("-")))+"-"+domainId.substring(domainId.indexOf("-")+1));
+					 }else{
+						 sip.setAddress(getAddressByDomainId(domainId));
+					 }
 				 }
 				 sip.setCountType(obj[3]==null?"":(String)obj[3]);
 				 list.add(sip);

@@ -42,7 +42,7 @@ $(function(){
 						   try{
 							   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
 						      if(obj.code!='0'){
-						    	  hiAlert("提示","此为非法卡片！");
+						    	  hiAlert("提示","此为非法卡片，请更换卡片！");
 			       				     return false;
 						      }
 						   }catch(e){

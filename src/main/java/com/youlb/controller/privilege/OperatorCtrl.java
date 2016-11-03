@@ -428,7 +428,7 @@ public class OperatorCtrl extends BaseCtrl{
     		if(StringUtils.isNotBlank(code)){
     			logger.info("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
     			System.out.println("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
-    			super.message = "验证码10分钟有效，请稍后再试！";
+    			super.message = "验证码24小时有效，请稍后再试！";
     			logger.error(super.message);
     			return super.message;
     		}

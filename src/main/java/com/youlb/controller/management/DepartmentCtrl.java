@@ -114,7 +114,7 @@ public class DepartmentCtrl extends BaseCtrl {
     			super.message = "公司电话不能为空！";
 				 return  super.message;
     		}else {
-				if(!RegexpUtils.checkPhone(department.getTel())||!RegexpUtils.checkMobile(department.getTel())){
+				if(!RegexpUtils.checkPhone(department.getTel())&&!RegexpUtils.checkMobile(department.getTel())){
 					super.message = "请填写正确的电话！";
 					 return  super.message;
 				}
