@@ -1,10 +1,13 @@
 package com.youlb.controller.houseInfo;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: NeighborhoodsCtrl.java 
@@ -91,7 +95,6 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Neighborhoods neighborhoods,Model model){
-    	try {
     		if(StringUtils.isBlank(neighborhoods.getNeibName())){
     			super.message = "社区名称不能为空！";
     			return  super.message;
@@ -100,36 +103,46 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     			super.message = "社区编号不能为空且为5个数字！";
     			return  super.message;
     		}
-    		//同一个地区 社区编号不能相同
-    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
-    		if(b){
-    			super.message = "社区编号已经存在！";
-    			return  super.message;
-    		}
+    		try {
+		    		//同一个地区 社区编号不能相同
+		    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
+		    		if(b){
+		    			super.message = "社区编号已经存在！";
+		    			return  super.message;
+		    		}
+		    		
+		    		if(StringUtils.isBlank(neighborhoods.getAddress())){
+		    			super.message = "社区地址不能为空！";
+		    			return  super.message;
+		    		}
+		    		if(StringUtils.isNotBlank(neighborhoods.getTotalArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalArea())){
+		    			super.message = "总占地面积输入为数字类型！";
+		    			return  super.message;
+		    		}
+		    		if(StringUtils.isNotBlank(neighborhoods.getTotalBuildArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBuildArea())){
+		    			super.message = "总建筑面积输入为数字类型！";
+		    			return  super.message;
+		    		}
+		    		if(StringUtils.isNotBlank(neighborhoods.getTotalBussnisArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBussnisArea())){
+		    			super.message = "总商业面积输入为数字类型！";
+		    			return  super.message;
+		    		}
     		
-    		if(StringUtils.isBlank(neighborhoods.getAddress())){
-    			super.message = "社区地址不能为空！";
-    			return  super.message;
-    		}
-    		if(StringUtils.isNotBlank(neighborhoods.getTotalArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalArea())){
-    			super.message = "总占地面积输入为数字类型！";
-    			return  super.message;
-    		}
-    		if(StringUtils.isNotBlank(neighborhoods.getTotalBuildArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBuildArea())){
-    			super.message = "总建筑面积输入为数字类型！";
-    			return  super.message;
-    		}
-    		if(StringUtils.isNotBlank(neighborhoods.getTotalBussnisArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBussnisArea())){
-    			super.message = "总商业面积输入为数字类型！";
-    			return  super.message;
-    		}
-    		
-    		neighborBiz.saveOrUpdate(neighborhoods,getLoginUser());
-		} catch (Exception e) {
-			super.message = "操作失败！";
-			e.printStackTrace();
-			//TODO log
-		}
+				neighborBiz.saveOrUpdate(neighborhoods,getLoginUser());
+			} catch (NumberFormatException e) {
+ 				e.printStackTrace();
+			} catch (ClientProtocolException e) {
+ 				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+ 				e.printStackTrace();
+			} catch (BizException e) {
+				super.message=e.getMessage();
+ 				e.printStackTrace();
+			} catch (IOException e) {
+ 				e.printStackTrace();
+			} catch (JsonException e) {
+ 				e.printStackTrace();
+			}
     	 return  super.message;
     }
     /**

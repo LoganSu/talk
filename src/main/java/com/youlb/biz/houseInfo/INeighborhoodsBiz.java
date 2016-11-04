@@ -1,11 +1,16 @@
 package com.youlb.biz.houseInfo;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: INeighborhoodsBiz.java 
@@ -19,7 +24,7 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	/**添加或更新
 	 * @param neighborhoods
 	 */
-	void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser)throws BizException;
+	void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser)throws BizException, NumberFormatException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException;
 
 	/**查询地区数据
 	 * @return

@@ -46,7 +46,7 @@
                          <input type="text" value="${appManage.serverAddr}" name="serverAddr" style="width: 300px" class="form-control"/>
                       </c:when>
                     <c:otherwise>
-                         <input type="file" id="uploadFile" style="width: 300px" class="form-control"/>
+                         <input type="file" id="uploadFile" value="eeeeeeeeee" style="width: 300px" class="form-control"/>
                     </c:otherwise>
                     </c:choose>
                 </div></td>

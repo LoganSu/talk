@@ -1,12 +1,22 @@
 package com.youlb.biz.houseInfo.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +28,15 @@ import com.youlb.biz.houseInfo.INeighborhoodsBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.common.Pager;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.DES3;
+import com.youlb.utils.common.JsonUtils;
+import com.youlb.utils.common.Synchronization_sip;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.DateHelper;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
@@ -123,10 +137,15 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	/**
 	 * @param neighborhoods
 	 * @throws BizException 
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws ClientProtocolException 
+	 * @throws NumberFormatException 
 	 * @see com.youlb.biz.neighborhoods.INeighborhoodsBiz#saveOrUpdate(com.youlb.entity.neighborhoods.Neighborhoods)
 	 */
 	@Override
-	public void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser) throws BizException {
+	public void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser) throws BizException, NumberFormatException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException {
 		neighborhoods.setUseDate(DateHelper.strParseDate(neighborhoods.getUseDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setStartBuildDate(DateHelper.strParseDate(neighborhoods.getStartBuildDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setEndBuildDate(DateHelper.strParseDate(neighborhoods.getEndBuildDateStr(), "yyyy-mm-dd"));
@@ -151,7 +170,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			String domainId = (String) domainBiz.save(domain);
 			//判断是否创建sip账号
 			if("2".equals(neighborhoods.getCreateSipNum())){
-				createSipNum(neibId);
+				createSipNum(neibId,neighborhoods.getNeibName());
 			}
 			
 			loginUser.getDomainIds().add(domainId);
@@ -159,6 +178,8 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			//域跟运营商绑定
 			String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
 			domainSqlDao.executeSql(sql, new Object[]{domainId,loginUser.getCarrier().getId()});
+			
+	
 			//更新社区版本参数
 			String update ="update t_staticparam set fvalue=cast(fvalue as int)+1 where fkey=?";
 			domainSqlDao.updateSQL(update, new Object[]{"neigborVersion"});
@@ -176,7 +197,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 				String sql = "select user_sip from users where local_sip=?";
 				List<Integer> list = domainSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getId()});
 				if(list==null||list.isEmpty()){
-					createSipNum(neighborhoods.getId());
+					createSipNum(neighborhoods.getId(),neighborhoods.getNeibName());
 				}
 			//删除sip账号
 			}else if("1".equals(neighborhoods.getCreateSipNum())){
@@ -191,15 +212,43 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 * @param domainId
 	 * @throws BizException 
 	 * @throws NumberFormatException 
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws ClientProtocolException 
 	 */
-	private void createSipNum(String neibId) throws NumberFormatException, BizException{
+	private void createSipNum(String neibId,String neiborName) throws NumberFormatException, BizException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException{
 		Session session = domainSqlDao.getCurrSession();
 		SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 	    List<String> list =  query.list();
-	    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";
+	    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
 	    //使用uuid为sip密码
 	    String password = UUID.randomUUID().toString().replace("-", "");
-		domainSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list.get(0)),password,neibId,"4"});//社区sip账号4
+//		domainSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list.get(0)),password,neibId,"4"});//社区sip账号4
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		//同步数据以及平台
+		HttpGet get = new HttpGet(SysStatic.FIRSTSERVER+"/users/get_fs_by_nei_name.json?neib_name="+neiborName);
+		CloseableHttpResponse execute = httpClient.execute(get);
+		if(execute.getStatusLine().getStatusCode()==200){
+			HttpEntity entity_rsp = execute.getEntity();
+			ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+			if(resultDto!=null){
+				if("0".equals(resultDto.getCode())){
+					Map<String,Object> result = (Map<String, Object>) resultDto.getResult();
+					if(result!=null&&!result.isEmpty()){
+						String fs_ip = (String) result.get("fs_ip");
+						Integer fs_port = (Integer) result.get("fs_port");
+						domainSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list.get(0)),password,neibId,"4",fs_ip,fs_port});//门口机sip账号类型为2 管理机sip账号是5
+						//同步sip账号
+						Synchronization_sip.synchronization_sip(neibId, list.get(0), password, "4", fs_ip,fs_port);
+					}else{
+						throw new BizException("请联系管理员先在一级平台添加社区ip信息再操作");
+					}
+				 }
+			  }
+			}
+		
+		
 	}
 	/**
 	 * @return

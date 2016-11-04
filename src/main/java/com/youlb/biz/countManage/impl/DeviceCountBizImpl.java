@@ -16,6 +16,7 @@ import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -33,6 +34,7 @@ import com.youlb.entity.countManage.DeviceCount;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SHAEncrypt;
+import com.youlb.utils.common.Synchronization_sip;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
@@ -257,11 +259,10 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 			List<String> list =  query.list();
 			deviceCount.setDeviceCount(list.get(0));
 			deviceCountSqlDao.add(deviceCount);
-			
 			//添加真正的sip账号fs拨号使用
 			SQLQuery query1 = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 		    List<String> list1 =  query1.list();
-		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";
+		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
 		    String password = UUID.randomUUID().toString().replace("-", "");
 		    String sipType = deviceCount.getCountType();
 		    if("3".equals(sipType)){
@@ -269,42 +270,54 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 		    }else if("1".equals(sipType)){
 		    	sipType="2";
 		    }
-			deviceCountSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list1.get(0)),password,sipNum,sipType});//门口机sip账号类型为2 管理机sip账号是5
-			//同步数据以及平台
+			//获取fs ip和端口
+			//获取社区名称
+			String neiborName = getNeiborNameByDomainId(domainId);
 			CloseableHttpClient httpClient = HttpClients.createDefault();
-			//公告 通知需要透传消息
-			HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/device/save_device_usersToFirst.json");
-			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-//			Map<String,String> map = new HashMap<String,String>();
-//			map.put("user_sip", list1.get(0));
-//			map.put("user_password", password);
-//			map.put("local_sip", sipNum);
-//			map.put("sip_type", sipType);
-			//获取服务器ip
-			formParams.add(new BasicNameValuePair("user_sip", list1.get(0)));
-			formParams.add(new BasicNameValuePair("user_password", password));
-			formParams.add(new BasicNameValuePair("local_sip", sipNum));
-			formParams.add(new BasicNameValuePair("sip_type", sipType));
-			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-			request.setEntity(uefEntity);
-			CloseableHttpResponse response = httpClient.execute(request);
-			if(response.getStatusLine().getStatusCode()==200){
-				HttpEntity entity_rsp = response.getEntity();
+			//同步数据以及平台
+			HttpGet get = new HttpGet(SysStatic.FIRSTSERVER+"/users/get_fs_by_nei_name.json?neib_name="+neiborName);
+			CloseableHttpResponse execute = httpClient.execute(get);
+			if(execute.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = execute.getEntity();
 				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 				if(resultDto!=null){
-					if(!"0".equals(resultDto.getCode())){
-						throw new BizException("同步sip账号出错");
-					}
+					if("0".equals(resultDto.getCode())){
+						Map<String,Object> result = (Map<String, Object>) resultDto.getResult();
+						if(result!=null&&!result.isEmpty()){
+							String fs_ip = (String) result.get("fs_ip");
+							Integer fs_port = (Integer) result.get("fs_port");
+							deviceCountSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list1.get(0)),password,sipNum,sipType,fs_ip,fs_port});//门口机sip账号类型为2 管理机sip账号是5
+							//同步sip账号
+							Synchronization_sip.synchronization_sip(sipNum, list1.get(0), password, sipType, fs_ip,fs_port);
+						}
+					 }
+				  }
 				}
-			}else{
-				throw new BizException("同步sip账号出错！");
-			}
+			
 		}else{
 			//修改users表
 			deviceCountSqlDao.update(deviceCount);
 			
 		}
 		
+	}
+   
+    /**
+     * 通过域id获取社区名称
+     * @param domainId
+     * @return
+     * @throws BizException 
+     */
+	private String getNeiborNameByDomainId(String domainId) throws BizException {
+		 StringBuilder sb = new StringBuilder();
+		 sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d  where d.id=? ")
+		 .append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid )")
+		 .append(" SELECT r.fremark from r where r.flayer='1'");
+		 List<String> list = deviceCountSqlDao.pageFindBySql(sb.toString(), new Object[]{domainId});
+		 if(list!=null&&!list.isEmpty()){
+			 return list.get(0);
+		 }
+		return "";
 	}
 
 	/**

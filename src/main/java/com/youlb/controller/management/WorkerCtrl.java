@@ -1,10 +1,13 @@
 package com.youlb.controller.management;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 @Controller
 @Scope("prototype")
@@ -92,32 +96,44 @@ public class WorkerCtrl extends BaseCtrl{
     @ResponseBody
     public String save(Worker worker,Model model){
     	try {
-    		if(StringUtils.isBlank(worker.getDepartmentId())||worker.getDepartmentId().contains(",")){
-    			super.message = "请选择一个部门！";
-    			return  super.message;
-    		}
-    		if(StringUtils.isBlank(worker.getWorkerName())){
-    			super.message = "姓名不能为空！";
-    			return  super.message;
-    		}
-    		if(StringUtils.isBlank(worker.getPhone())){
-    			super.message = "手机号码不能为空！";
-    			return  super.message;
-    		}
-    		//判断手机号是否已经注册
-    		boolean b = workerBiz.checkPhoneExist(worker.getPhone(),worker.getId());
-    		if(b){
-    			super.message = "该手机号码已经被注册！";
-    			return  super.message;
-    		}
-    		worker.setUsername(worker.getPhone());
-    		worker.setPassword(SHAEncrypt.digestPassword(worker.getPhone()));
-    		workerBiz.saveOrUpdate(worker,getLoginUser());
-		} catch (Exception e) {
-			super.message = "操作失败！";
-			e.printStackTrace();
-			//TODO log
-		}
+	    		if(StringUtils.isBlank(worker.getDepartmentId())||worker.getDepartmentId().contains(",")){
+	    			super.message = "请选择一个部门！";
+	    			return  super.message;
+	    		}
+	    		if(StringUtils.isBlank(worker.getWorkerName())){
+	    			super.message = "姓名不能为空！";
+	    			return  super.message;
+	    		}
+	    		if(StringUtils.isBlank(worker.getPhone())){
+	    			super.message = "手机号码不能为空！";
+	    			return  super.message;
+	    		}
+	    		//判断手机号是否已经注册
+	    		boolean b = workerBiz.checkPhoneExist(worker.getPhone(),worker.getId());
+	    		if(b){
+	    			super.message = "该手机号码已经被注册！";
+	    			return  super.message;
+	    		}
+	    		worker.setUsername(worker.getPhone());
+	    		worker.setPassword(SHAEncrypt.digestPassword(worker.getPhone()));
+				workerBiz.saveOrUpdate(worker,getLoginUser());
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BizException e) {
+				super.message=e.getMessage();
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
     	 return  super.message;
     }
  
