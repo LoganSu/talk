@@ -125,6 +125,7 @@ public class WorkerCtrl extends BaseCtrl{
 				e.printStackTrace();
 			} catch (BizException e) {
 				super.message=e.getMessage();
+				log.error(super.message);
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

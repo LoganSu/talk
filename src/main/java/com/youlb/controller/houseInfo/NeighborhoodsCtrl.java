@@ -1,20 +1,20 @@
-package com.youlb.controller.houseInfo;
+ package com.youlb.controller.houseInfo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
@@ -36,6 +36,8 @@ import com.youlb.utils.exception.JsonException;
 @RequestMapping("/mc/neighborhoods")
 @Scope("prototype")
 public class NeighborhoodsCtrl extends BaseCtrl {
+	private static Logger log = LoggerFactory.getLogger(NeighborhoodsCtrl.class);
+
 	@Autowired
 	private INeighborhoodsBiz neighborBiz;
 	@Autowired
@@ -137,6 +139,7 @@ public class NeighborhoodsCtrl extends BaseCtrl {
  				e.printStackTrace();
 			} catch (BizException e) {
 				super.message=e.getMessage();
+				log.error(super.message);
  				e.printStackTrace();
 			} catch (IOException e) {
  				e.printStackTrace();

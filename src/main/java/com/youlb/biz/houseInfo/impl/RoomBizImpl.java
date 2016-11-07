@@ -70,8 +70,12 @@ public class RoomBizImpl implements IRoomBiz {
 	 */
 	@Override
 	public void update(Room target) throws BizException {
-		// TODO Auto-generated method stub
-
+		StringBuilder sb = new StringBuilder();
+		sb.append("update Room set roomNum=?,roomFloor=?,certificateNum=?,roomType=?,purpose=?,orientation=?,decorationStatus=?,roomArea=?, ")
+		.append("useArea=?,gardenArea=?,useStatus=?,remark=? where id=?");
+		roomSqlDao.update(sb.toString(), new Object[]{target.getRoomNum(),target.getRoomFloor(),target.getCertificateNum(),target.getRoomType(),
+			             target.getPurpose(),target.getOrientation(),target.getDecorationStatus(),target.getRoomArea(),target.getUseArea(),
+			             target.getGardenArea(),target.getUseStatus(),target.getRemark(),target.getId()});
 	}
 
 	/**
@@ -164,7 +168,7 @@ public class RoomBizImpl implements IRoomBiz {
 			domainSqlDao.executeSql(sql, new Object[]{domainId,loginUser.getCarrier().getId()});
 			
 		}else{
-			roomSqlDao.update(room);
+			update(room);
 			//更新与对象
 			domainBiz.update(room.getRoomNum(),room.getId());
 		}

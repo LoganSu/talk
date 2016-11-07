@@ -19,6 +19,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -86,7 +87,32 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	@Override
 	public void update(Neighborhoods target) throws BizException {
-
+      StringBuilder sb = new StringBuilder();
+      List<Object> list = new ArrayList<Object>();
+      sb.append("update Neighborhoods set neibName=?,neibNum=?,contractor=?,address=?,totalArea=?,");
+      list.add(target.getNeibName());list.add(target.getNeibNum());
+      list.add(target.getContractor());list.add(target.getAddress());
+      list.add(target.getTotalArea());
+      if(target.getStartBuildDate()!=null){
+    	  sb.append("startBuildDate=?,");
+    	  list.add(target.getStartBuildDate());
+      }
+      if(target.getEndBuildDate()!=null){
+    	  sb.append("endBuildDate=?,");
+    	  list.add(target.getEndBuildDate());
+      }
+      
+      if(target.getUseDate()!=null){
+    	  sb.append("useDate=?,");
+    	  list.add(target.getEndBuildDate());
+      }
+      
+      
+      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=? where id=?");
+      list.add(target.getTotalBuildArea());list.add(target.getTotalBussnisArea());list.add(target.getGreeningRate());
+      list.add(target.getPlotRatio());list.add(target.getRemark());list.add(target.getCreateSipNum());
+      list.add(target.getId());
+      neighborSqlDao.update(sb.toString(),list.toArray());
 	}
 
 	/**
@@ -188,7 +214,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 //			String encodeKey = n.getEncodeKey();
 //			if(StringUtils.isNotBlank(encodeKey)){
 //				neighborhoods.setEncodeKey(encodeKey);
-			neighborSqlDao.update(neighborhoods);
+			update(neighborhoods);
 //			}
 			//更新域对象
 			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getId());
