@@ -245,7 +245,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	private void createSipNum(String neibId,String neiborName) throws NumberFormatException, BizException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException{
 		Session session = domainSqlDao.getCurrSession();
-		SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
+		SQLQuery query = session.createSQLQuery("SELECT '12'||substring('0000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 	    List<String> list =  query.list();
 	    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
 	    //使用uuid为sip密码

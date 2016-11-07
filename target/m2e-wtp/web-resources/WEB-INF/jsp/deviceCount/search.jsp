@@ -37,7 +37,7 @@
                       <select name="countType" class="form-control">
                          <option value="">--全部--</option>
                          <option value="1">门口机</option>
-                         <option value="2">自助终端</option>
+<!--                          <option value="2">自助终端</option> -->
                          <option value="3">管理机</option>
                       </select>
                 </div></td>

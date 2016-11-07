@@ -20,7 +20,15 @@
           <r:role auth="房间/删除">  
             <!--delete类 公共删除  -->
              <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/room/delete.do">删除</button></li>
-          </r:role>  
+          </r:role>
+<%--           <r:role auth="房间/导入">   --%>
+            <!--delete类 公共删除  -->
+             <li><button class="btn btn-info btn-sm roomImport" rel="${path}/mc/room/delete.do">导入</button></li>
+<%--           </r:role>   --%>
+<%--           <r:role auth="房间/导出">   --%>
+            <!--delete类 公共删除  -->
+             <li><button class="btn btn-primary btn-sm roomExport" rel="${path}/mc/room/delete.do">导出</button></li>
+<%--           </r:role>   --%>
          </ul>
 	 </div>
 	 <!-- 查询form div-->     

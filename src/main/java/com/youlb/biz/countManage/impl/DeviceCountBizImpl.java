@@ -239,17 +239,6 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 				}else{
 					sipNum = getSipNum(domainId);
 				}
-				//更新的操作
-				if(StringUtils.isNotBlank(deviceCount.getId())){
-					String update = "update users set local_sip=? where local_sip=? and sip_type=?";
-					String sipType = deviceCount.getCountType();
-				    if("3".equals(sipType)){
-				    	sipType="5";
-				    }else if("1".equals(sipType)){
-				    	sipType="2";
-				    }
-					deviceCountSqlDao.executeSql(update, new Object[]{sipNum,deviceCount.getSipNum(),sipType});
-				}
 			}
 			deviceCount.setSipNum(sipNum);//sipNum
 			deviceCount.setId(null);
@@ -260,16 +249,21 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 			deviceCount.setDeviceCount(list.get(0));
 			deviceCountSqlDao.add(deviceCount);
 			//添加真正的sip账号fs拨号使用
-			SQLQuery query1 = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
+			String sipType = deviceCount.getCountType();
+			String serialize="";
+			if("3".equals(sipType)){
+				sipType="5";
+				serialize="SELECT '11'||substring('0000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ";
+				
+			}else if("1".equals(sipType)){
+				sipType="2";
+				serialize="SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ";
+				
+			}
+			SQLQuery query1 = session.createSQLQuery(serialize);
 		    List<String> list1 =  query1.list();
 		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
 		    String password = UUID.randomUUID().toString().replace("-", "");
-		    String sipType = deviceCount.getCountType();
-		    if("3".equals(sipType)){
-		    	sipType="5";
-		    }else if("1".equals(sipType)){
-		    	sipType="2";
-		    }
 			//获取fs ip和端口
 			//获取社区名称
 			String neiborName = getNeiborNameByDomainId(domainId);
@@ -295,7 +289,6 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 				}
 			
 		}else{
-			//修改users表
 			deviceCountSqlDao.update(deviceCount);
 			
 		}

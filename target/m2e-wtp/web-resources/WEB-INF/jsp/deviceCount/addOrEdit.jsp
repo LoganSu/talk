@@ -29,7 +29,7 @@
 	                <td><div>
 	                   <select name="countType" class="form-control countType">
 		                 <option <c:if test="${deviceCount.countType=='1'}">selected="selected"</c:if>  value="1">门口机</option>
-                         <option <c:if test="${deviceCount.countType=='2'}">selected="selected"</c:if>  value="2">自助终端</option>
+<%--                          <option <c:if test="${deviceCount.countType=='2'}">selected="selected"</c:if>  value="2">自助终端</option> --%>
                          <option <c:if test="${deviceCount.countType=='3'}">selected="selected"</c:if>  value="3">管理机</option>
                       </select>
 	                </div></td>
