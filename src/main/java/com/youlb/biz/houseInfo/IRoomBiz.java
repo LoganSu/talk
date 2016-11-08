@@ -1,7 +1,12 @@
 package com.youlb.biz.houseInfo;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
 import com.youlb.biz.common.IBaseBiz;
+import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.houseInfo.Room;
+import com.youlb.entity.houseInfo.RoomInfoDto;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
 
@@ -34,5 +39,12 @@ public interface IRoomBiz extends IBaseBiz<Room> {
 	 * @return
 	 */
 	String getAddressByDomainId(String domainId)throws BizException;
+    /**
+     * 批量导入数据
+     * @param readExcelContent
+     */
+	void saveBatch(List<RoomInfoDto> readExcelContent,Operator loginUser,String parentId) throws BizException, IllegalAccessException, InvocationTargetException;
+
+	List<RoomInfoDto> getRoomInfoDto(String parentId)throws BizException;
 
 }

@@ -1,23 +1,28 @@
 package com.youlb.biz.houseInfo.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.dao.common.BaseDaoBySql;
+import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.common.Pager;
 import com.youlb.entity.houseInfo.Room;
+import com.youlb.entity.houseInfo.RoomInfoDto;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
@@ -343,6 +348,61 @@ public class RoomBizImpl implements IRoomBiz {
 			 return listObj.get(0);
 		 }
 		return null;
+	}
+
+	@Override
+	public void saveBatch(List<RoomInfoDto> dtoList,Operator loginUser,String parentId) throws BizException, IllegalAccessException, InvocationTargetException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("INSERT INTO t_room (FROOMNUM,FROOMFLOOR,FROOMTYPE,FCERTIFICATENUM,FPURPOSE,FORIENTATION,FDECORATIONSTATUS,")
+		.append("FROOMAREA,FUSEAREA,FGARDENAREA,FUSESTATUS,r.FREMARK,) values(?,?,?,?,?,?,?,?,?,?,?,?)");
+		if(dtoList!=null&&!dtoList.isEmpty()){
+			for(RoomInfoDto dto:dtoList){
+				Room room = new Room();
+				room.setParentId(parentId);
+				BeanUtils.copyProperties(room, dto);
+				//判断房号是否已经存在
+				String roomNum = domainBiz.getDomainByParentId(room);
+				if(StringUtils.isNotBlank(roomNum)){
+					throw new BizException("房号"+roomNum+"已经存在");
+				}
+//				roomSqlDao.executeSql(sb.toString(), new Object[]{dto.getRoomNum(),dto.getRoomNum(),dto.getRoomType(),dto.getCertificateNum(),
+//					dto.getPurpose(),dto.getOrientation(),dto.getDecorationStatus(),dto.getRoomArea(),dto.getUseArea(),dto.getGardenArea(),dto.getUseStatus(),
+//					dto.getRemark()});
+				saveOrUpdate(room, loginUser);
+
+			}
+		}
+	}
+
+	@Override
+	public List<RoomInfoDto> getRoomInfoDto(String parentId) throws BizException {
+		List<RoomInfoDto> list = new ArrayList<RoomInfoDto>();
+		if(StringUtils.isBlank(parentId)){
+			return list;
+		}
+		 StringBuilder sb = new StringBuilder();
+		 sb.append("SELECT FROOMNUM,FROOMFLOOR,FROOMTYPE,FCERTIFICATENUM,FPURPOSE,FORIENTATION,FDECORATIONSTATUS,")
+		 .append("FROOMAREA,FUSEAREA,FGARDENAREA,FUSESTATUS,r.FREMARK FROM t_room r INNER JOIN t_domain d ON d.fentityid=r.id WHERE d.fparentid=? ORDER BY FROOMNUM");
+		 List<Object[]> listObj = roomSqlDao.pageFindBySql(sb.toString(), new Object[]{parentId});
+		 if(listObj!=null&&!listObj.isEmpty()){
+			 for(Object[] obj:listObj){
+				 RoomInfoDto dto = new RoomInfoDto();
+				 dto.setRoomNum(obj[0]==null?"":(String)obj[0]);
+				 dto.setRoomFloor(obj[1]==null?null:(Integer)obj[1]);
+				 dto.setRoomType(obj[2]==null?"":(String)obj[2]);
+				 dto.setCertificateNum(obj[3]==null?"":(String)obj[3]);
+				 dto.setPurpose(obj[4]==null?"":(String)obj[4]);
+				 dto.setOrientation(obj[5]==null?"":(String)obj[5]);
+				 dto.setDecorationStatus(obj[6]==null?"":(String)obj[6]);
+				 dto.setRoomArea(obj[7]==null?"":(String)obj[7]);
+				 dto.setUseArea(obj[8]==null?"":(String)obj[8]);
+				 dto.setGardenArea(obj[9]==null?"":(String)obj[9]);
+				 dto.setUseStatus(obj[10]==null?"":(String)obj[10]);
+				 dto.setRemark(obj[11]==null?"":(String)obj[11]);
+				 list.add(dto);
+			 }
+		 }
+		return list;
 	}
 
 }
