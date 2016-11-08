@@ -108,9 +108,10 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
       }
       
       
-      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=? where id=?");
+      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=?,useKey=? where id=?");
       list.add(target.getTotalBuildArea());list.add(target.getTotalBussnisArea());list.add(target.getGreeningRate());
       list.add(target.getPlotRatio());list.add(target.getRemark());list.add(target.getCreateSipNum());
+      list.add(target.getUseKey());
       list.add(target.getId());
       neighborSqlDao.update(sb.toString(),list.toArray());
 	}

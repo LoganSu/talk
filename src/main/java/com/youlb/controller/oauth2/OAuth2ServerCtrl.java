@@ -36,7 +36,7 @@ public class OAuth2ServerCtrl {
 		try {
 			oauthRequest = new OAuthAuthzRequest(request);
 			String redirectUri = oauthRequest.getRedirectURI();
-			 oauthRequest = new OAuthAuthzRequest(request);
+//			 oauthRequest = new OAuthAuthzRequest(request);
 			 //验证client_id=wdwe12efds&response_type=code&state=11111&scope=http://baidu.com&redirect_uri=http://192.168.1.231:8080/o/oauth2/doPost
 			 
 	         //build OAuth response
