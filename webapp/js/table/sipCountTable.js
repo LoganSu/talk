@@ -70,13 +70,15 @@ var sipCountTable ={
             align: 'center',
             valign: 'middle',
             sortable: false
-        },{
-            field: 'userAgent',
-            title: '客户端类型',
-            align: 'center',
-            valign: 'middle',
-            sortable: false
-        },{
+        }
+//        ,{
+//            field: 'userAgent',
+//            title: '客户端类型',
+//            align: 'center',
+//            valign: 'middle',
+//            sortable: false
+//        }
+        ,{
             field: 'expiresStr',
             title: '下次注册时间',
             align: 'center',

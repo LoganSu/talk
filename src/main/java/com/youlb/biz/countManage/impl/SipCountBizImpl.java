@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.youlb.biz.countManage.ISipCountBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.countManage.SipCount;
@@ -58,28 +56,29 @@ public class SipCountBizImpl implements ISipCountBiz {
 	public List<SipCount> showList(SipCount target, Operator loginUser)throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
-		 sb.append("SELECT * from (SELECT sr.sip_user sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,ddw.fdomainid domainId,r.fusername username")
-		 .append(" from sip_registrations sr INNER JOIN users u on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999')")
+		 sb.append("SELECT * from (SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
+//		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,ddw.fdomainid domainId,r.fusername username")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,ddw.fdomainid domainId,r.fusername username")
+		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999')")
 		 .append(" left JOIN t_users r on r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fphone=dw.fphone ")
 		 .append(" LEFT JOIN t_domain_dweller ddw on dw.id=ddw.fdwellerid WHERE u.sip_type = '6'")
 		 .append(" UNION ")
-		 .append(" SELECT sr.sip_user sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid||'-'||r.fdevice_count_desc domainId,r.fdevicecount username")
-		 .append(" from sip_registrations sr INNER JOIN users u on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999')")
+		 .append(" SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid||'-'||r.fdevice_count_desc domainId,r.fdevicecount username")
+		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999')")
 		 .append(" left JOIN t_devicecount r on r.fsipnum=u.local_sip where u.sip_type in ('2','5') OR u.sip_type is null ")
 		 .append(" UNION ")
-		 .append(" SELECT sr.sip_user sip_user,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,tdd.fdomainid domainid,w.fphone username ")
-		 .append(" from sip_registrations sr INNER JOIN users u on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999') ")
+		 .append(" SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,tdd.fdomainid domainid,w.fphone username ")
+		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999') ")
 		 .append(" left JOIN t_worker w on w.id=u.local_sip INNER JOIN t_department_domain tdd on ")
 		 .append(" (WITH RECURSIVE r AS (SELECT * FROM t_department WHERE id = w.fdepartmentid union ALL ")
 		 .append(" SELECT t_department.* FROM t_department, r WHERE t_department.id = r.fparentid) SELECT r.id FROM r where r.fparentid is null ")
 		 .append(" )=tdd.fdepartmentid  where u.sip_type ='3' ")
 		 .append(" UNION ")
-		 .append(" SELECT sr.sip_user sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,d.id domainid,n.fneibname username")
-		 .append(" from sip_registrations sr INNER JOIN users u on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999')")
+		 .append(" SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,d.id domainid,n.fneibname username")
+		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999')")
 		 .append(" left JOIN t_neighborhoods n on n.id=u.local_sip INNER JOIN t_domain d on d.fentityid=n.id  where u.sip_type ='4' ) t where 1=1");
 		 if(StringUtils.isNotBlank(target.getSipUser())){
 			 sb.append(" and t.sipUser like ? ");
@@ -104,11 +103,11 @@ public class SipCountBizImpl implements ISipCountBiz {
 				 sip.setSipUser(obj[0]==null?"":(String)obj[0]);
 				 sip.setServerHost(obj[1]==null?"":(String)obj[1]);
 				 sip.setStatus(obj[2]==null?"":(String)obj[2]);
-				 sip.setExpires(obj[3]==null?0:((BigInteger)obj[3]).longValue());
-				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
-				 sip.setNetworkIp(obj[5]==null?"":(String)obj[5]);
-				 sip.setCountType(obj[7]==null?"":(String)obj[7]);
-				 String domainId = (String)obj[8];
+				 sip.setExpires(obj[3]==null?0:((Integer)obj[3]).longValue());
+//				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
+				 sip.setNetworkIp(obj[4]==null?"":(String)obj[4]);
+				 sip.setCountType(obj[6]==null?"":(String)obj[6]);
+				 String domainId = (String)obj[7];
 				 if(domainId!=null){
 					 //设备账号需要显示别名
 					 if(domainId.contains("-")){
@@ -117,7 +116,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 						 sip.setAddress(getAddressByDomainId(domainId));
 					 }
 				 }
-				 sip.setUsername(obj[9]==null?"":(String)obj[9]);
+				 sip.setUsername(obj[8]==null?"":(String)obj[8]);
 				 list.add(sip);
 			 }
 		 }
@@ -202,10 +201,10 @@ public class SipCountBizImpl implements ISipCountBiz {
 //		 .append(" left JOIN t_room r on r.fsipnum =u.local_sip left JOIN t_domain d on d.fentityid=r.id left JOIN t_domain_dweller tdd on tdd.fdomainid=d.id ")
 //		 .append(" left JOIN t_dweller dw on dw.id=tdd.fdwellerid LEFT JOIN t_users tu on dw.fphone=tu.fmobile_phone where u.sip_type ='1'")
 //		 .append(" UNION ")
-		 sb.append(" SELECT * from ( SELECT to_char(u.user_sip,'999999999999999') sipUser,sr.sip_host sip_host,sr.status status,sr.expires expires,")
-		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid domainId,r.fdevicecount username")
+		 sb.append(" SELECT * from ( SELECT to_char(u.user_sip,'999999999999999') sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid domainId,r.fdevicecount username")
 		 .append(" from users u inner JOIN t_devicecount r on r.fsipnum=u.local_sip ")
-		 .append(" left JOIN sip_registrations sr on u.user_sip=to_number(sr.sip_user, '9999999999999999999999999') where u.sip_type ='2' ) t where 1=1 ");
+		 .append(" left JOIN registrations sr on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999') where u.sip_type ='2' ) t where 1=1 ");
 //		 .append(" UNION ")
 //		 .append(" SELECT sr.sip_user sip_user,sr.sip_host sip_host,sr.status status,sr.expires expires,")
 //		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,tdd.fdomainid domainid,w.fphone fusername ")
@@ -243,18 +242,19 @@ public class SipCountBizImpl implements ISipCountBiz {
 				 sip.setServerHost(obj[1]==null?"":(String)obj[1]);
 				 sip.setStatus(obj[2]==null?"":(String)obj[2]);
 				 if(obj[3]!=null){
-					 sip.setExpires(((BigInteger)obj[3]).longValue());
+					 sip.setExpires(((Integer)obj[3]).longValue());
 				 }
-				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
-				 sip.setNetworkIp(obj[5]==null?"":(String)obj[5]);
-				 sip.setCountType(obj[7]==null?"":(String)obj[7]);
+//				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
+				 sip.setNetworkIp(obj[4]==null?"":(String)obj[4]);
+				 sip.setCountType(obj[6]==null?"":(String)obj[6]);
 				 if(obj[8]!=null){
-					 sip.setAddress(getAddressByDomainId((String)obj[8]));
+					 sip.setAddress(getAddressByDomainId((String)obj[7]));
 				 }
-				 sip.setUsername(obj[9]==null?"":(String)obj[9]);
+				 sip.setUsername(obj[8]==null?"":(String)obj[8]);
 				 list.add(sip);
 			 }
 		 }
 		return list;
 	}
+	
 }
