@@ -7,8 +7,6 @@
 		 <form id="roomsaveForm" action="">
 		 <input type="hidden" name="id" value="${room.id}"/>
 		 <input type="hidden" name="parentId" value="${room.parentId}"/>
-		 <input type="hidden" name="sipNum" value="${room.sipNum}"/>
-		 <input type="hidden" name="password" value="${room.password}"/>
            <table>
               <tr>
                 <td><div class="leftFont"><span class="starColor">*</span>房号：</div></td>

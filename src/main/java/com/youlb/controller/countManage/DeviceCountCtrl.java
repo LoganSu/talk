@@ -1,6 +1,7 @@
 package com.youlb.controller.countManage;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,6 +12,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,7 @@ import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.DateHelper;
 
 /** 
@@ -144,7 +148,19 @@ public class DeviceCountCtrl extends BaseCtrl {
     		}
     		deviceCountBiz.saveOrUpdate(deviceCount);
 //    		super.message = "添加成功！";
-		} catch (Exception e) {
+		} catch (BizException e) {
+			super.message = e.getMessage();
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			super.message = "操作失败！";
+			e.printStackTrace();
+		} catch (ParseException e) {
+			super.message = "操作失败！";
+			e.printStackTrace();
+		} catch (IOException e) {
+			super.message = "操作失败！";
+			e.printStackTrace();
+		} catch (JsonException e) {
 			super.message = "操作失败！";
 			e.printStackTrace();
 		}

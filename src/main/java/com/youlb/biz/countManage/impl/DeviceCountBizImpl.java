@@ -277,8 +277,12 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 							deviceCountSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list1.get(0)),password,sipNum,sipType,fs_ip,fs_port});//门口机sip账号类型为2 管理机sip账号是5
 							//同步sip账号
 							Synchronization_sip.synchronization_sip(sipNum, list1.get(0), password, sipType, fs_ip,fs_port);
+						}else{
+							throw new BizException("请联系管理员先在一级平台添加社区ip信息再操作");
 						}
-					 }
+					 }else{
+							throw new BizException("接口返回："+resultDto.getMsg());
+					  }
 				  }
 				}
 			

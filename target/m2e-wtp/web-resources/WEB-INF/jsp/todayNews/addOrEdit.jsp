@@ -42,7 +42,11 @@ private String htmlspecialchars(String str) {
                 <td colspan="5"><div><input style="width: 320px" id="todayNewsPicture" name="picture" type="file" class="form-control"/></div></td>
               </tr>
               <c:if test="${todayNews.pictureUrl!=null}">
-                 <tr><td><div class="firstFont"></div></td><td colspan="5"><div><img src="${todayNews.pictureUrl}" style="width: 150px;height: 100px"/></div></td></tr>
+                 <tr><td><div class="firstFont"></div></td><td colspan="5"><div>
+                   <c:if test="${todayNews.pictureUrl!=null&&todayNews.pictureUrl!=''}">
+                     <img src="${todayNews.pictureUrl}" style="width: 150px;height: 100px"/>
+                   </c:if>
+                 </div></td></tr>
               </c:if>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>内容：</div></td>
