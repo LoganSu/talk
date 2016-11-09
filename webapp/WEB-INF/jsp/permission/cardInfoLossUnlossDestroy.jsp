@@ -71,7 +71,6 @@ $(function(){
 			   }
 			   //加载key
                $.post($path+"/mc/permission/getKey.do","roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($data){
-            	   
             	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
         			   if($data){
         			        hiAlert("提示",$data);
@@ -113,6 +112,17 @@ $(function(){
             	   
                })
 			   
+		   }else{
+			   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
+    			   if($data){
+    			        hiAlert("提示",$data);
+    			   }else{
+          			   $("#unnormalModal").modal("hide");
+          			  $("#tableShowList").bootstrapTable('refresh', {
+          				url: $path+'/mc/room/showList.do',
+          			});
+    			   }
+    		   });
 		   }
 		   
 	  })

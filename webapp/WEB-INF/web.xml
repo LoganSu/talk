@@ -67,7 +67,7 @@
     <filter-class>com.youlb.utils.filters.IllegalCharacterFilter</filter-class>   
     <init-param>    
       <param-name>characterParams</param-name>    
-      <param-value>&lt;,&gt;,#,%,=,+,;,&amp;,&quot;,&#039;</param-value>
+      <param-value>&lt;,&gt;,#,%,+,;,&amp;,&quot;,&#039;</param-value>
     </init-param>
   </filter>  
     <filter-mapping>  

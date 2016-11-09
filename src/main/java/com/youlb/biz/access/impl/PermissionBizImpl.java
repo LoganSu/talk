@@ -285,6 +285,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 		//没有设备账号 说明没有安装没口机
 		if(StringUtils.isBlank(deviceCount)){
 			logger.info("没有安装门口机，设备账号为空");
+			throw new BizException("没有安装门口机，设备账号为空");
 		}else{
 			CloseableHttpClient httpClient = HttpClients.createDefault();
 			HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");

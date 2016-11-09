@@ -13,7 +13,7 @@ $(function(){
 	 //时间控件
 	  $(".datepicker").datepicker();
 	 //连接发卡器
-	  $("#openCardForm .connectCardMachine").on("click",function(){
+	  $(document).on("click","#openCardForm .connectCardMachine",function(){
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();
