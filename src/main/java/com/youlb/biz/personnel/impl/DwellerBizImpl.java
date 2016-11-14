@@ -1,20 +1,36 @@
 package com.youlb.biz.personnel.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.youlb.biz.personnel.IDwellerBiz;
 import com.youlb.dao.common.BaseDaoBySql;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.MobileLocationUtil;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
+import com.youlb.utils.helper.DateHelper;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -252,6 +268,10 @@ public class DwellerBizImpl implements IDwellerBiz {
 							String updateCallNum= "update t_room set fcallednumber=?,fphone_city=? where id=(select d.fentityid from t_domain d where d.id=?)";
 							dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 						}
+				         String neibName = getNeibName(domainid);
+				         if(StringUtils.isNotBlank(dweller.getPhone())){
+				        	 create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
+				         }
 					}
 				}
 //			}
@@ -284,7 +304,71 @@ public class DwellerBizImpl implements IDwellerBiz {
 		
 		
 	}
+	/**
+	 * 获取社区名称
+	 * @param domainid
+	 * @return
+	 * @throws BizException 
+	 */
+	private String getNeibName(String domainid) throws BizException {
+		String sql = "WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id =? union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer = '1'";
+		List<String> list = dwellerSqlDao.pageFindBySql(sql, new Object[]{domainid});
+		if(list!=null&&!list.isEmpty()){
+			return list.get(0);
+		}
+		return null;
+	}
 
+	/**
+	    * 创建sip账号
+	    * @param sipType
+	    * @param neiborName
+	    * @throws IOException
+	    * @throws ClientProtocolException
+	    * @throws JsonException
+	    * @throws UnsupportedEncodingException
+	    * @throws BizException
+	    */
+		public void create_sip(String local_sip,String sipType, String neibName)
+				throws IOException, ClientProtocolException, JsonException,
+				UnsupportedEncodingException, BizException {
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+				//同步数据以及平台
+				HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/fir_platform/create_sip_num");
+				List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+				formParams.add(new BasicNameValuePair("local_sip", local_sip));
+				formParams.add(new BasicNameValuePair("sip_type", sipType));
+				formParams.add(new BasicNameValuePair("neibName", neibName));
+				UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+				request.setEntity(uefEntity);
+				CloseableHttpResponse response = httpClient.execute(request);
+				if(response.getStatusLine().getStatusCode()==200){
+					HttpEntity entity_rsp = response.getEntity();
+					ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+					if(resultDto!=null){
+						if(!"0".equals(resultDto.getCode())){
+							throw new BizException("创建sip账号出错");
+						}else{
+							Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
+							if(map!=null&&!map.isEmpty()){
+								Map<String,Object> user_sipMap = (Map<String, Object>) map.get("user_sip");
+							    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
+							    //{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
+							    dwellerSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
+							    		user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
+                                //{id=87, username=15974102603, mobilePhone=15974102603, cryptedPsw=e10adc3949ba59abbe56e057f20f883e, status=3, createTime=2016-11-14 16:01:39, carrier=中国移动, attribution=湖南长沙}
+								Map<String,Object> userMap = (Map<String, Object>) map.get("user");
+							    String t_user ="insert into t_users (id,fusername,fmobile_phone,fcrypted_password,fstatus,FCREATETIME,fcarrier,fattribution) values(?,?,?,?,?,?,?,?)";
+							    dwellerSqlDao.executeSql(t_user,new Object[]{userMap.get("id"),userMap.get("username"),userMap.get("mobilePhone"),userMap.get("cryptedPsw"),userMap.get("status"),
+							    		    DateHelper.strParseDate((String)userMap.get("createTime"), "yyyy-MM-dd HH:mm:ss"),userMap.get("carrier"),userMap.get("attribution")});
+
+							}
+					     }
+					}else{
+						throw new BizException("创建sip账号出错！");
+					}
+		       }
+		}
 	/**判断房子是否已经被别人选择过
 	 * @param dweller
 	 * @return
