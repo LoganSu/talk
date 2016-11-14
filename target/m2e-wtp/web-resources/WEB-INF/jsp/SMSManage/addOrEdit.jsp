@@ -27,9 +27,9 @@ $(function(){
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>用户名：</div></td>
-                <td><div><input name="username" class="form-control required" title="用户名不能为空" maxlength="100" value="${SMSManage.username}"/></div></td>
+                <td><div><input name="username" class="form-control required" title="用户名不能为空" maxlength="10" value="${SMSManage.username}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>密码：</div></td>
-                <td><div><input name="pwd" type="password" class="form-control required" title="密码不能为空" maxlength="100" value="${SMSManage.pwd}"/></div></td>
+                <td><div><input name="pwd" type="password" class="form-control required" title="密码不能为空" maxlength="10" value="${SMSManage.pwd}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>公司签名：</div></td>

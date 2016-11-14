@@ -86,6 +86,8 @@
     <script src="${path}/js/monitor/monitor.js" ></script>
     <script src="${path}/js/IPManage/IPManage.js" ></script>
     <script src="${path}/js/SMSManage/SMSManage.js" ></script>
+    <script src="${path}/js/houseInfo/area.js" ></script>
+    
     
     
     <!-- table JS -->

@@ -1,18 +1,11 @@
 package com.youlb.controller.appManage;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,15 +18,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.youlb.biz.appManage.IAppManageBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.appManage.AppManage;
-import com.youlb.utils.common.ApkUtil;
-import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 
@@ -117,24 +105,24 @@ public class AppManageCtrl extends BaseCtrl {
     @ResponseBody
     public String save(HttpServletRequest request,HttpSession session,AppManage appManage,Model model){
     	try {
-//    		if("6".equals(appManage.getAppType())){
-    		if(StringUtils.isBlank(appManage.getAppName())){
-    			super.message = "APP名称不能为空！";
-    			return super.message;
+    		if(!"IOS".equals(appManage.getThreeAppType())){
+	    		if(StringUtils.isBlank(appManage.getAppName())){
+	    			super.message = "APP名称不能为空！";
+	    			return super.message;
+	    		}
+	    		if(StringUtils.isBlank(appManage.getVersionName())){
+	    			super.message = "版本名称不能为空！";
+	    			return super.message;
+	    		}
+	    		if(StringUtils.isBlank(appManage.getVersionCode())){
+	    			super.message = "版本号不能为空！";
+	    			return super.message;
+	    		}
+	    		if(StringUtils.isBlank(appManage.getAppName())){
+	    			super.message = "APP名称不能为空！";
+	    			return super.message;
+	    		}
     		}
-    		if(StringUtils.isBlank(appManage.getVersionName())){
-    			super.message = "版本名称不能为空！";
-    			return super.message;
-    		}
-    		if(StringUtils.isBlank(appManage.getVersionCode())){
-    			super.message = "版本号不能为空！";
-    			return super.message;
-    		}
-    		if(StringUtils.isBlank(appManage.getAppName())){
-    			super.message = "APP名称不能为空！";
-    			return super.message;
-    		}
-//    		}
     		if(StringUtils.isBlank(appManage.getVersionDes())){
     			super.message = "版本说明不能为空！";
     			return super.message;
@@ -147,11 +135,13 @@ public class AppManageCtrl extends BaseCtrl {
         			}
         		}
     		}
-    		boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
-			if(b){
-				super.message = "软件版本已经存在！";
-				return super.message;
-			}
+    		if(StringUtils.isNotBlank(appManage.getMd5Value())){
+    			boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
+    			if(b){
+    				super.message = "软件版本已经存在！";
+    				return super.message;
+    			}
+    		}
     		List<String> treecheckbox = appManage.getTreecheckbox();
     		if(treecheckbox!=null&&treecheckbox.size()!=1){
     			super.message = "请选择一个域发布信息！";

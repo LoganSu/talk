@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -181,7 +182,7 @@ public class ExcelUtils {
     */
    public static <T extends Object>String exportExcel(String title, String[] headersName,String[] headersId,List<T> dtoList,String file) {
 		//表头
-		Map<Integer,String> map = new HashMap<Integer,String>();
+		Map<Integer,String> map = new LinkedHashMap<Integer,String>();
 		int key=0;
 		for (int i = 0; i < headersName.length; i++) {
 			if (!headersName[i].equals(null)) {
@@ -190,7 +191,7 @@ public class ExcelUtils {
 			}
 		}
 		//字段
-		Map<Integer,String> zdMap = new HashMap<Integer,String>();
+		Map<Integer,String> zdMap = new LinkedHashMap<Integer,String>();
 		int value = 0;
 		for (int i = 0; i < headersId.length; i++) {
 			if (!headersId[i].equals(null)) {

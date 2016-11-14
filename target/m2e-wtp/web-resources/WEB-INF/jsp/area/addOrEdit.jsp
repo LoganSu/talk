@@ -4,45 +4,7 @@
 
 <body>
 <script type="text/javascript">
-$(function(){
-	$("#areasaveForm .province").on("change",function(){
-		  var value = $(this).val();
-		  var arr = value.split("_");
-		  var id = arr[0];
-		  if(id){
-		    address($(this),$path+"/mc/area/getAddressByParentId.do?parentId="+id);
-		  }
-	});
-	
-	//获取社区编号
-	$("#areasaveForm .city").on("change",function(){
-		  var city = $(this).val();
-		  if(city){
-			  $.post($path+"/mc/area/getAreaCode.do","city="+city,function($data){
-				   $("#areasaveForm .areaNum").val($data);
-				  if($data){
-					  $("#areasaveForm .areaNum").attr("readonly","readonly");
-				  }else{
-					  $("#areasaveForm .areaNum").removeAttr("readonly");
-				  }
-			  })
-			  
-		  }
- 	});
-	
-})
 
-var address=function(_this,url){
-	 //获取下一个select位置 层级需要固定
-    var nextLevel = _this.parent().parent().next().next().find("select");
-    nextLevel.children().remove(":gt(0)");
-	  $.post(url,function($data){
-		  $.each($data,function(i,obj){
-			  var option = "<option value='"+obj.fshortname+"'>"+obj.fshortname+"</option>";
-		      nextLevel.append(option);
-		  })
-	  })
-}
 
 </script>
 <div>
@@ -79,6 +41,12 @@ var address=function(_this,url){
               </tr>
            </table>
          </form>
+               <!-- 详情不显示按钮 -->
+	           <div class="modal-footer">
+		         <!--操作按钮 -->
+		            <input type="button" class="btn btn-primary sure" value="确定"/> 
+		            <input type="button" class="btn btn-default" data-dismiss="modal" value="关闭"/> 
+		       </div>
 	   </div>
  </div>
 </body>

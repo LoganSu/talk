@@ -9,14 +9,14 @@
 		   <input type="hidden" name="id" value="${appManage.id}"/>
 		   <input type="hidden" name="appType" value="${appManage.appType}"/>
 		   <input type="hidden" id="appManageDomainIds" value="${appManage.treecheckbox}"/>
-		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/>
-		   <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>
-		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/>
-		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/>
-		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/>
+<%-- 		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/> --%>
+<%-- 		   <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/> --%>
+<%-- 		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/> --%>
+<%-- 		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/> --%>
+<%-- 		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/> --%>
 		   
 		   
-           <table>
+           <table class="appManagesaveTable">
               <tr>
 <!--                 <td><div class="firstFont"><span class="starColor">*</span>软件名称：</div></td> -->
 <%--                 <td><div><input name="versionName" class="form-control" value="${appManage.versionName}"/></div></td> --%>
@@ -30,28 +30,38 @@
                       <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option>
                     </select>
                 </div></td>
-                <td><div class="leftFont">
-                   <c:choose>
-                     <c:when test="${appManage.appType == 6}">
-                        <select class="appManageSeolect form-control" style="width: 80px"><option class="andriod">apk上传</option><option <c:if test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">selected="selected"</c:if> class="IOS">IOS地址</option></select>
-                     </c:when>
-                     <c:otherwise>
-                       <span class="starColor">*</span>apk上传：
-                     </c:otherwise>
-                   </c:choose>
-                  </div></td>
-                <td colspan="1"><div class="changeInputDiv" id="uploadFileDiv">
-                    <c:choose>
-                      <c:when test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">
-                         <input type="text" value="${appManage.serverAddr}" name="serverAddr" style="width: 300px" class="form-control"/>
-                      </c:when>
-                    <c:otherwise>
-                         <input type="file" id="uploadFile" value="eeeeeeeeee" style="width: 300px" class="form-control"/>
-                    </c:otherwise>
-                    </c:choose>
-                </div></td>
+                <c:choose>
+                  <c:when test="${appManage.id ==null}">
+		                <td><div class="leftFont">
+		                   <c:choose>
+		                     <c:when test="${appManage.appType == 6}">
+		                        <select class="appManageSeolect form-control" name="threeAppType" style="width: 80px"><option <c:if test="${appManage.threeAppType eq 'andriod'}">selected="selected"</c:if> value="andriod" class="andriod">apk上传</option><option value="IOS"  <c:if test="${appManage.threeAppType eq 'IOS'}">selected="selected"</c:if> class="IOS">IOS地址</option></select>
+		                     </c:when>
+		                     <c:otherwise>
+		                       <span class="starColor">*</span>apk上传：
+		                     </c:otherwise>
+		                   </c:choose>
+		                  </div></td>
+		                <td colspan="1"><div class="changeInputDiv" id="uploadFileDiv">
+		                    <c:choose>
+		                      <c:when test="${appManage.relativePath==null&&appManage.appType == 6&&appManage.id != null}">
+		                         <input type="text" value="${appManage.serverAddr}" name="serverAddr" style="width: 300px" class="form-control"/>
+		                      </c:when>
+		                    <c:otherwise>
+		                         <input type="file" id="uploadFile" value="" style="width: 300px" class="form-control"/>
+		                    </c:otherwise>
+		                    </c:choose>
+		                </div></td>
+                  </c:when>
+                  <c:otherwise>
+                     <td></td>
+                     <td></td>
+                  </c:otherwise>
+                </c:choose>
+                
               </tr>
-              <tr>
+              
+              <tr class="chooseShowTr">
                   <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
                   <td><div>
                      <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
@@ -61,7 +71,7 @@
                      <input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>
                   </div></td>
               </tr>
-               <tr>
+               <tr class="chooseShowTr">
                   <td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>
                   <td><div>
                      <input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>
@@ -71,6 +81,7 @@
                      <input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>
                   </div></td>
               </tr>
+              
               <c:if test="${appManage.appType == 6}">
                 <c:choose>
                    <c:when test="${appManage.opraterType == 1}">
@@ -422,32 +433,38 @@ function calculate(file,callBack){
 	  
 	  
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
-		 var appName = $("#appManagesaveForm [name='appName']").val();
-		 if(!appName){
-			 hiAlert("提示","app名称不能为空");
-			 return false;
-		 }
-		 var versionName = $("#appManagesaveForm [name='versionName']").val();
-		 if(!versionName){
-			 hiAlert("提示","版本名称不能为空");
-			 return false;
-		 }
-		 var versionCode = $("#appManagesaveForm [name='versionCode']").val();
-		 if(!versionCode){
-			 hiAlert("提示","版本号不能为空");
-			 return false;
-		 }
-		 var packageName = $("#appManagesaveForm [name='packageName']").val();
-		 if(!packageName){
-			 hiAlert("提示","包名不能为空");
-			 return false;
-		 }
+		
+		  var appManageSeolect = $("#appManagesaveForm .appManageSeolect").val();
+		  if(appManageSeolect!='IOS'){
+				 var appName = $("#appManagesaveForm [name='appName']").val();
+				 if(!appName){
+					 hiAlert("提示","app名称不能为空");
+					 return false;
+				 }
+				 var versionName = $("#appManagesaveForm [name='versionName']").val();
+				 if(!versionName){
+					 hiAlert("提示","版本名称不能为空");
+					 return false;
+				 }
+				 var versionCode = $("#appManagesaveForm [name='versionCode']").val();
+				 if(!versionCode){
+					 hiAlert("提示","版本号不能为空");
+					 return false;
+				 }
+				 var packageName = $("#appManagesaveForm [name='packageName']").val();
+				 if(!packageName){
+					 hiAlert("提示","包名不能为空");
+					 return false;
+				 }
+		  }
 		 var versionDes = $("#appManagesaveForm [name='versionDes']").val();
 		 if(!versionDes){
 			 hiAlert("提示","版本说明不能为空");
 			 return false;
 		 }
-		 if(uploader.files[0]){
+		var id = $("#appManagesaveForm [name='id']").val();
+		//添加  文件必须  id为空
+		 if(uploader.files[0]&&!id){
 			 calculate(uploader.files[0].getNative(), function(md5){
 				 $.post($path+"/mc/appManage/checkVersion.do","md5Value="+md5,function($data){
 					 if($data){
@@ -458,28 +475,45 @@ function calculate(file,callBack){
 	        	         var count=uploader.files.length;
 	        			    if(count>1){
 	        			        hiAlert("提示","最多只能上传一个app");
+	        			        return false;
 	        			    }else if(count==0){
 	        			    	hiAlert("提示","没有要上传的app文件");
-	        			    }else{
-	        			     uploader.start();
+	        			    	return false;
 	        			    }
 	        			    return false;
 	        			    
 					 }
 				 });
 	         });
-			  
+		 //更新	  
+		 }else if(id){
+			 var param = $('#appManagesaveForm').serialize();
+			 alert(param);
+ 			 $.post($path+"/mc/appManage/saveOrUpdate.do",param,function($data){
+				 if(!$data){
+					 window.hideModal("unnormalModal");
+					 refresh();
+				 }else{
+					 hiAlert("提示",$data);
+				 }
+			 });
+		 }else{
+			 hiAlert("提示","请选择上传文件");
+			 return false;
 		 }
 			 if($("#appManagesaveForm [name='appType']").val()=='6'){
 			    	var count=uploader1.files.length;
- 			    if(count>1){
- 			        hiAlert("提示","最多只能上传一个app");
- 			    }else if(count==0){
- 			    	hiAlert("提示","没有要上传的app文件");
- 			    }else{
- 			     uploader1.start();
- 			    }
+	 			    if(count>1){
+	 			        hiAlert("提示","最多只能上传一个图标");
+	 			       return false;
+	 			    }else if(count==0){
+	 			    	hiAlert("提示","没有要上传的图标");
+	 			    	return false;
+	 			    }else{
+	 			     uploader1.start();
+	 			    }
 			    }
+			     uploader.start();
 		 
 		  //显示进度条
 // 		  var timer = setInterval(function(){
@@ -524,10 +558,147 @@ function calculate(file,callBack){
 			var className = $(this)[0].options[$(this)[0].selectedIndex].className;
 			if(className=="andriod"){
 				$("#appManagesaveForm .changeInputDiv input").remove();
-				$("#appManagesaveForm .changeInputDiv").append('<input type="file" id="uploadFile" name="uploadFile" style="width: 300px" class="form-control"/>');
+				$("#appManagesaveForm .changeInputDiv").append(function(){
+					return '<input type="file" id="uploadFile" style="width: 300px" class="form-control"/>';
+				});
+				//重新加载事件
+				uploader = Qiniu.uploader({
+				    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+				    browse_button: 'uploadFile',         // 上传选择的点选按钮，必需
+				    // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
+				    // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
+				    // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
+				    // uptoken : '<Your upload token>', // uptoken是上传凭证，由其他程序生成
+				    uptoken_url: $path+'/mc/qiniu/token',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+//		 		    uptoken_func: function(file){    // 在需要获取uptoken时，该方法会被调用
+//		 		       // do something
+//		 		       return uptoken;
+//		 		    },
+				    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+				    // downtoken_url: '/downtoken',
+				    // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
+//		 		    unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+//		 		    save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+				    domain: 'http://upload.gdsayee.com.cn/',     // bucket域名，下载资源时用到，必需
+				    container: 'uploadFileDiv',             // 上传区域DOM ID，默认是browser_button的父元素
+				    max_file_size: '100mb',             // 最大文件体积限制
+				    flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
+				    max_retries: 3,                     // 上传失败最大重试次数
+				    dragdrop: true,                     // 开启可拖曳上传
+				    drop_element: 'uploadFileDiv',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+				    chunk_size: '4mb',                  // 分块上传时，每块的体积
+				    auto_start: false,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+				    multi_selection: false,
+				    filters : {
+				        max_file_size : '100mb',
+				        prevent_duplicates: true,
+				        // Specify what files to browse for
+				        mime_types: [
+				            {title : "apk files", extensions : "apk"} // 限定zip后缀上传
+				        ]
+				    },
+				    //x_vars : {
+				    //    查看自定义变量
+				    //    'time' : function(up,file) {
+				    //        var time = (new Date()).getTime();
+				              // do something with 'time'
+				    //        return time;
+				    //    },
+				    //    'size' : function(up,file) {
+				    //        var size = file.size;
+				              // do something with 'size'
+				    //        return size;
+				    //    }
+				    //},
+				    init: {
+				        'FilesAdded': function(up, files) {
+			                plupload.each(files, function(file) {
+			                    var progress = new FileProgress(file, 'fsUploadProgress');
+			                    progress.setStatus("等待...");
+			                });
+				        },
+				        'BeforeUpload': function(up, file) {
+				               // 每个文件上传前，处理相关的事情
+				        },
+				        'UploadProgress': function(up, file) {
+				               var progress = new FileProgress(file, 'fsUploadProgress');        
+				               var chunk_size = plupload.parseSize(this.getOption('chunk_size'));         
+				               progress.setProgress(file.percent + "%", file.speed, chunk_size); 
+				        },
+				        'FileUploaded': function(up, file, info) {
+				               // 每个文件上传成功后，处理相关的事情
+				               // 其中info是文件上传成功后，服务端返回的json，形式如：
+				               // {
+				               //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
+				               //    "key": "gogopher.jpg"
+				               //  }
+					             
+					             $("#appManagesaveForm [name='appSizeStr']").val(file.size/1024);
+				               // 查看简单反馈
+				               var domain = up.getOption('domain');
+				               var res = jQuery.parseJSON(info);
+				               $("#appManagesaveForm [name='serverAddr']").val(domain);
+//		 		               var sourceLink = domain + res.key; //获取上传成功后的文件的Url
+				               $("#appManagesaveForm [name='relativePath']").val(res.key);
+				               calculate(uploader.files[0].getNative(), function(md5){
+				                 $("#appManagesaveForm [name='md5Value']").val(md5);
+				               })
+				     		  if(res.key){
+			                    var param = $('#appManagesaveForm').serialize();
+				     			 $.post($path+"/mc/appManage/saveOrUpdate.do",param,function($data){
+									 if(!$data){
+										 window.hideModal("unnormalModal");
+										 refresh();
+		 							 }else{
+										 hiAlert("提示",$data);
+									 }
+								 });
+				     		     
+				     		     
+				     		  }
+				        },
+				        'Error': function(up, err, errTip) {
+				               //上传出错时，处理相关的事情
+				        },
+				        'UploadComplete': function() {
+				               //队列文件处理完毕后，处理相关的事情
+				        },
+				        'Key': function(up, file) {
+				            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+				            // 该配置必须要在unique_names: false，save_key: false时才生效
+		                  	var key = "web/appManage/"+new Date().getTime()+".apk";
+				            // do something with key here
+				            return key
+				        }
+				    }
+				});
+				
+				var tr = 
+					'<tr class="chooseShowTr">'+
+	                '<td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>'+
+	                '<td><div>'+
+	                   '<input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>'+
+	                '</div></td>'+
+	                 '<td><div class="leftFont"><span class="starColor">*</span>版本名称：</div></td>'+
+	                '<td><div>'+
+	                   '<input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>'+
+	                '</div></td>'+
+	               '</tr>'+
+	               '<tr class="chooseShowTr">'+
+	                '<td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>'+
+	                '<td><div>'+
+	                   '<input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>'+
+	                '</div></td>'+
+	                 '<td><div class="leftFont"><span class="starColor">*</span>包名：</div></td>'+
+	                '<td><div>'+
+	                   '<input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>'+
+	                '</div></td>'
+	               '</tr>';
+				$("#appManagesaveForm .appManagesaveTable tr:eq(0)").after(tr);
 			}else{
 				$("#appManagesaveForm .changeInputDiv input").remove();
 				$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
+				$("#appManagesaveForm .chooseShowTr").remove();
 			}
 		})
   })

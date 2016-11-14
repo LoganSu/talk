@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +28,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.youlb.biz.SMSManage.ISMSManageBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.SMSManage.SMSManage;
 import com.youlb.entity.SMSManage.SMSWhiteList;
 import com.youlb.utils.common.ExcelUtils;
 import com.youlb.utils.common.RegexpUtils;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 /**
  * 
@@ -150,6 +154,15 @@ public class SMSManageCtrl extends BaseCtrl {
     		model.addAttribute("message", super.message);
 			return INPUT;
 
+    	}else{
+    		//过滤特殊字符
+    		for(String s:SysStatic.SPECIALSTRING){
+    			if(SMSManage.getUsername().contains(s)){
+    				super.message="您提交的相关表单数据字符含有非法字符!";
+    				model.addAttribute("message", super.message);
+    				return INPUT;
+    			}
+    		}
     	}
         if(StringUtils.isBlank(SMSManage.getPwd())){
         	super.message = "密码不能为空！";
@@ -162,6 +175,15 @@ public class SMSManageCtrl extends BaseCtrl {
         	model.addAttribute("message", super.message);
 			return INPUT;
 
+    	}else{
+    		//过滤特殊字符
+    		for(String s:SysStatic.SPECIALSTRING){
+    			if(SMSManage.getSign().contains(s)){
+    				super.message="您提交的相关表单数据字符含有非法字符!";
+    				model.addAttribute("message", super.message);
+    				return INPUT;
+    			}
+    		}
     	}
         
       //服务器地址

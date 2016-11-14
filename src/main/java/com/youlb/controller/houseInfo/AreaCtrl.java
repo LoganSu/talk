@@ -105,7 +105,14 @@ public class AreaCtrl extends BaseCtrl {
     		if(StringUtils.isBlank(area.getAreaNum())||area.getAreaNum().length()!=3){
     			super.message = "编号不能为空且为3个数字，请填写区号！";
    			    return  super.message;
+    		}else{
+    			boolean b = areaBiz.checkAreaNumFromArea(area);
+    			if(b){
+    				super.message = "编号已经存在！";
+       			    return  super.message;
+    			}
     		}
+    		
 			List<Area> areaList = areaBiz.getAreaList(area);
 			if(areaList!=null&&!areaList.isEmpty()){
 				super.message = "城市已存在！";
@@ -119,6 +126,30 @@ public class AreaCtrl extends BaseCtrl {
 		}
     	 return  super.message;
     }
+    
+    
+    	
+    	 /**
+         * 查询编号是否存在
+         * @param ids
+         * @param model
+         * @return
+         */
+    	@RequestMapping("/checkAreaNum.do")
+    	@ResponseBody
+    	public String checkAreaNum(String areaNum){
+    		if(StringUtils.isNotBlank(areaNum)){
+    			try {
+    				 String news = areaBiz.checkAreaNum(areaNum);
+    				 if(StringUtils.isNotBlank(news)){
+    					 news =  news + "编号已经存在";
+    				 }
+    				 return news;
+    			} catch (Exception e) {
+    			}
+    		}
+    		return "编号不能为空！";
+    	}
     /**
      * 修改
      * @param user

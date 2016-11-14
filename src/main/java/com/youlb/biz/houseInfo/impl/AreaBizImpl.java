@@ -12,7 +12,6 @@ import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.common.Domain;
-import com.youlb.entity.common.Pager;
 import com.youlb.entity.houseInfo.Address;
 import com.youlb.entity.houseInfo.Area;
 import com.youlb.entity.privilege.Operator;
@@ -289,6 +288,42 @@ public class AreaBizImpl implements IAreaBiz {
 				values.add(area.getId());
 			}
 		return  areaSqlDao.find(sb.toString(), values.toArray());
+	}
+	/**
+	 * 查询编号是否存在
+	 * @param areaNum
+	 * @return
+	 * @throws BizException 
+	 * @see com.youlb.biz.houseInfo.IAreaBiz#checkAreaNum(java.lang.String)
+	 */
+	@Override
+	public String checkAreaNum(String areaNum) throws BizException {
+		String sql = "select case when length(num)>3 then substr(num, 2,4) else num end  from t_areacode where num like ?";
+		List<String> list = areaSqlDao.pageFindBySql(sql, new Object[]{"%"+areaNum});
+		if(list!=null&&!list.isEmpty()){
+			String areaCode = list.get(0);
+			if(areaCode.length()>3){
+				areaCode=areaCode.substring(1);
+			}
+			return areaCode;
+		}
+		return null;
+	}
+	@Override
+	public boolean checkAreaNumFromArea(Area area) throws BizException {
+		 StringBuilder sb = new StringBuilder("select areaNum from Area where areaNum=? ");
+		 List<Object> values = new ArrayList<Object>();
+		 values.add(area.getAreaNum());
+		//更新判断排除自己
+		if(StringUtils.isNotBlank(area.getId())){
+			sb.append(" and id != ?");
+			values.add(area.getId());
+		}
+		List<Object[]> listObj = areaSqlDao.find(sb.toString(), values.toArray());
+		if(listObj!=null&&!listObj.isEmpty()){
+			return true;
+		}
+		return false;
 	}
 
 }

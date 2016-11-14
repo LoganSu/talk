@@ -70,6 +70,9 @@ public class AppManage extends BaseModel {
 	/**app名称*/
 	@Column(name="fapp_name")
     private String appName;
+	/**第三方app类型*/
+	@Column(name="fthree_app_type")
+    private String threeAppType;
 	/**日期搜索条件*/
 	@Transient
 	private String createTimeSearch;
@@ -81,7 +84,6 @@ public class AppManage extends BaseModel {
 	/**app size 字符串 */
 	@Transient
 	private String appSizeStr;
-	
 	
 	
 	public String getAppSizeStr() {
@@ -113,6 +115,14 @@ public class AppManage extends BaseModel {
 		return publishTime;
 	}
 	
+	public String getThreeAppType() {
+		return threeAppType;
+	}
+
+	public void setThreeAppType(String threeAppType) {
+		this.threeAppType = threeAppType;
+	}
+
 	public String getAppName() {
 		return appName;
 	}

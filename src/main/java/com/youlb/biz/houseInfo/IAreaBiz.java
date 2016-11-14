@@ -62,5 +62,17 @@ public interface IAreaBiz extends IBaseBiz<Area>{
      * @return
      */
 	List<Area> getAreaList(Area area)throws BizException;
+	/**
+	 * 查询编号是否存在
+	 * @param areaNum
+	 * @return
+	 */
+	String checkAreaNum(String areaNum)throws BizException;
+	/**
+	 * 查询编号是否存在查询area表
+	 * @param areaNum
+	 * @return
+	 */
+	boolean checkAreaNumFromArea(Area area)throws BizException;
 
 }

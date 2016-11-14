@@ -77,8 +77,10 @@ public class AppManageBiz implements IAppManageBiz {
 	 */
 	@Override
 	public void update(AppManage target) throws BizException {
-		// TODO Auto-generated method stub
-
+		StringBuilder sb = new StringBuilder();
+		sb.append("update AppManage set autoInstal=?,appName=?,versionName=?,versionCode=?,packageName=?,versionDes=? where id=?");
+		appManageSqlDao.update(sb.toString(),new Object[]{target.getAutoInstal(),target.getAppName(),target.getVersionName(),target.getVersionCode(),
+			target.getPackageName(),target.getVersionDes(),target.getId()});
 	}
 
 	/**
@@ -249,7 +251,7 @@ public class AppManageBiz implements IAppManageBiz {
 					 }
 				 }
 			 }
-			 appManageSqlDao.update(appManage);
+			  update(appManage);
 		 }
 		
 		
