@@ -83,20 +83,34 @@ $(function(){
 			 hiAlert("提示","编号不能为空！");
 				return false;
 		 }
-		 $.post($path+"/mc/area/checkAreaNum.do","areaNum="+areaNum,function($data){
-				if($data){
-					hiAlert("提示",$data);
-					return false;
-				}
-				$.post(url,param,function($data){
-					if(!$data){
-						$("#unnormalModal").modal("hide");
-						refresh();
-					}else{
-						hiAlert("提示",$data);
-					}
-				});
-			});
+		 var readonly = $("#areasaveForm .areaNum").attr("readonly");
+		 //输入的时候做重复判断
+		 if(!readonly){
+			 $.post($path+"/mc/area/checkAreaNum.do","areaNum="+areaNum,function($data){
+				 if($data){
+					 hiAlert("提示",$data);
+					 return false;
+				 }
+				 $.post(url,param,function($data){
+					 if(!$data){
+						 $("#unnormalModal").modal("hide");
+						 refresh();
+					 }else{
+						 hiAlert("提示",$data);
+					 }
+				 });
+			 });
+		  //不是输入框直接提交
+		 }else{
+			 $.post(url,param,function($data){
+				 if(!$data){
+					 $("#unnormalModal").modal("hide");
+					 refresh();
+				 }else{
+					 hiAlert("提示",$data);
+				 }
+			 });
+		 }
 		 
 	 })
 var address=function(_this,url){
