@@ -128,7 +128,7 @@
 // 		 });
   $(function(){
 	  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName)
-		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false);
+		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false,true,[1,2,3,4]);
 
 		// 普通tree
 // 		$('#infoPublishShowTree').bstree({

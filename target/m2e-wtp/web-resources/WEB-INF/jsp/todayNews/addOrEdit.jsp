@@ -217,7 +217,9 @@ private String htmlspecialchars(String str) {
 				open: false,
 				checkbox:true,
 				checkboxLink:false,
-				showurl:false
+				showurl:false,
+				checkboxPartShow:true,
+				layer:[1,2,3,4]
 		});
 		//多选框回显
 		var treecheckbox = $("#todayNewssDomainIds").val();
