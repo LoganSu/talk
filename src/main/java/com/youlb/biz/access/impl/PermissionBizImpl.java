@@ -601,7 +601,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 		sb.append("select * from(SELECT cr.fcardsn cardsn,cr.ftime cardtime,cr.fpath imgpath,cr.id id,cr.fusername username,dc.fdomainid domainid")
 		.append(" from t_cardrecord cr INNER JOIN t_devicecount dc on dc.fdevicecount=cr.fusername where 1=1 ");
 		if("5".equals(cardRecord.getMode())){
-			sb.append(" and cr.fmode in('5','7','8') ");
+			sb.append(" and cr.fmode in('5','7','8','9') ");
 		}else{
 			sb.append(" and cr.fmode =? ");
 			values.add(cardRecord.getMode());//纪录类型
@@ -661,9 +661,9 @@ public class PermissionBizImpl implements IPermissionBiz {
 		if(listObj!=null&&!listObj.isEmpty()){
 			Object[] obj = listObj.get(0);
 			CardInfo info = new CardInfo();
-			info.setServeraddr((String)obj[0]);
-			info.setPath((String)obj[1]);
-			info.setFtime((Date)obj[2]);
+			info.setServeraddr(obj[0]==null?"":(String)obj[0]);
+			info.setPath(obj[1]==null?"":(String)obj[1]);
+			info.setFtime(obj[2]==null?null:(Date)obj[2]);
 			return info;
 		}
 		return null;
