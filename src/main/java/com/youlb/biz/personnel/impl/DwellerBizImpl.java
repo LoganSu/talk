@@ -65,6 +65,10 @@ public class DwellerBizImpl implements IDwellerBiz {
 	/**
 	 * @param target
 	 * @throws BizException
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws ClientProtocolException 
 	 * @see com.youlb.biz.common.IBaseBiz#update(java.io.Serializable)
 	 */
 	@Override
@@ -79,6 +83,21 @@ public class DwellerBizImpl implements IDwellerBiz {
 			dwellerSqlDao.executeSql(delete, new Object[]{dweller.getId()});
 			dwellerSqlDao.getCurrSession().flush();
 		   for(String domainid:dweller.getTreecheckbox()){
+			   String neibName = getNeibName(domainid);
+			   //判断用户是否已经有sip
+			   String findSip = "select u.user_sip from users u inner join t_users tu on tu.id=to_number(u.local_sip, '9999999999999') inner join t_dweller d on d.fphone=tu.fusername where d.id=?";
+			   List<String> sipList = dwellerSqlDao.pageFindBySql(findSip, new Object[]{dweller.getId()});
+			   if(sipList==null||sipList.isEmpty()){
+				   //创建sip
+				   if(StringUtils.isNotBlank(dweller.getPhone())){
+					   try {
+						create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
+					} catch (IOException | JsonException e) {
+						e.printStackTrace();
+					}
+				   }
+			   }
+			   
 				String find="select d.id from t_domain_dweller dd inner join t_domain d on d.id=dd.fdomainid where d.id=? and dd.fdwellertype='1'";
 				List<String> list = dwellerSqlDao.pageFindBySql(find, new Object[]{domainid});
 				//说明该房屋已经绑定人的信息 此人是非户主
@@ -269,6 +288,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 							dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 						}
 				         String neibName = getNeibName(domainid);
+				         //创建sip
 				         if(StringUtils.isNotBlank(dweller.getPhone())){
 				        	 create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
 				         }
@@ -347,7 +367,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 					ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 					if(resultDto!=null){
 						if(!"0".equals(resultDto.getCode())){
-							throw new BizException("创建sip账号出错");
+							throw new BizException("接口返回："+resultDto.getMsg());
 						}else{
 							Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
 							if(map!=null&&!map.isEmpty()){
