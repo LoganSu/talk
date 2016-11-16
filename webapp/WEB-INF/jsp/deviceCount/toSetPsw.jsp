@@ -22,8 +22,10 @@ $(function(){
 			$.post(url,data,function($data){
 				if(!$data){
 					$("#unnormalModal").modal("hide");
+					return false;
 				}else{
 					hiAlert("提示",$data);
+					return false;
 				}
 			})
 		}else{

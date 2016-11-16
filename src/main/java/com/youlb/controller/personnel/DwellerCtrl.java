@@ -90,12 +90,24 @@ public class DwellerCtrl extends BaseCtrl {
 //    			super.message = "请选择地址！";
 //    			return  super.message;
 //    		}
+    		if(StringUtils.isBlank(dweller.getFname())){
+	    		super.message = "姓名不能为空！";
+	    		return  super.message;
+    	    }else{
+    	    	if(dweller.getFname().length()>10){
+    	    		super.message = "姓名长度超长！";
+    	    		return  super.message;
+    	    	}
+    	    }
     	    //检查身份证号码
     	    if(StringUtils.isNotBlank(dweller.getIdNum())){
     	    	if(dweller.getIdNum().length()!=18){
     	    		super.message = "身份证号码不正确！";
     	    		return  super.message;
     	    	}
+    	    }else{
+    	    	super.message = "身份证号码不能为空！";
+	    		return  super.message;
     	    }
     	   
     	    //顶级运营商如果指定房间 修改运营商为被指定的域的运营商

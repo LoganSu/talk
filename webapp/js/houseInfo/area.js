@@ -69,7 +69,7 @@ $(function(){
 		});
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）
-	 $(document).on("click","#unnormalModal .sure",function(){
+	 $(document).on("click","#areasaveForm .sure",function(){
 	     var title = $("#unnormalModal").html();
 		 var param = $("#unnormalModal").find("form").serialize();
 		 var  url=$(".areaSaveOrUpdateBtn").attr("saveUrl");

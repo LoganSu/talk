@@ -87,6 +87,15 @@ public class RegexpUtils {
         String regex = "\\s+";   
         return Pattern.matches(regex,blankSpace);   
     }   
+    /** 
+     * 验证空白字符开头
+     * @param blankSpace 空白字符，包括：空格、\t、\n、\r、\f、\x0B 
+     * @return 验证成功返回true，验证失败返回false 
+     */   
+    public static boolean checkHeadBlankSpace(String blankSpace) {   
+        String regex = "^\\s+";   
+        return Pattern.matches(regex,blankSpace);   
+    }   
        
     /** 
      * 验证中文 
