@@ -148,12 +148,12 @@ public class RoomBizImpl implements IRoomBiz {
 			//插入sip账号到数据库注册
 			String roomId = (String) roomSqlDao.add(room);
 			//添加真正的sip账号fs拨号使用
-			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
-		    List<String> list =  query.list();
-		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";
+//			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
+//		    List<String> list =  query.list();
+//		    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type) values(?,?,?,?)";
 		    //使用uuid为sip密码
-		    String password = UUID.randomUUID().toString().replace("-", "");
-			domainSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list.get(0)),password,sipNum+room.getRoomNum(),"1"});//房间sip账号类型为1
+//		    String password = UUID.randomUUID().toString().replace("-", "");
+//			domainSqlDao.executeSql(addSip, new Object[]{Integer.parseInt(list.get(0)),password,sipNum+room.getRoomNum(),"1"});//房间sip账号类型为1
 //			String insertSip = "insert into users (user_sip,user_password) values(?,?)";
 //			//时间戳密码
 //			Calendar c = Calendar.getInstance();
