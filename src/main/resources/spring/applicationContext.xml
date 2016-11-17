@@ -19,7 +19,7 @@
      <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
 <!--           <property name="jdbcUrl" value="jdbc:postgresql://db.ylb.cn:5432/freeswitch" /> -->
 <!--           <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.228:5432/freeswitch" /> -->
-          <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.77:5432/freeswitch" />
+          <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.242:5432/freeswitch" />
           <property name="user" value="postgres" />
 		  <property name="password" value="wjp3557730" />
 <!--                   <property name="user" value="postgres" /> -->

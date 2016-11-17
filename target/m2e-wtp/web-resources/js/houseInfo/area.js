@@ -69,7 +69,18 @@ $(function(){
 		});
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）
-	 $(document).on("click","#areasaveForm .sure",function(){
+	 $(document).on("click","#areasaveFormSubmit .sure",function(){
+		 var province = $("#areasaveForm [name='province']").val();
+		 if(!province){
+			 hiAlert("提示","省份不能为空！");
+				return false;
+		 }
+		 var city = $("#areasaveForm [name='city']").val();
+		 if(!city){
+			 hiAlert("提示","城市不能为空！");
+				return false;
+		 }
+		 
 	     var title = $("#unnormalModal").html();
 		 var param = $("#unnormalModal").find("form").serialize();
 		 var  url=$(".areaSaveOrUpdateBtn").attr("saveUrl");

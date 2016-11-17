@@ -42,7 +42,7 @@
            </table>
          </form>
                <!-- 详情不显示按钮 -->
-	           <div class="modal-footer">
+	           <div class="modal-footer" id="areasaveFormSubmit">
 		         <!--操作按钮 -->
 		            <input type="button" class="btn btn-primary sure" value="确定"/> 
 		            <input type="button" class="btn btn-default" data-dismiss="modal" value="关闭"/> 
