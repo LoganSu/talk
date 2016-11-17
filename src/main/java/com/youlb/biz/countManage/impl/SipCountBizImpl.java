@@ -89,8 +89,8 @@ public class SipCountBizImpl implements ISipCountBiz {
 			 values.add("%"+target.getUsername()+"%");
 		 }
 		 if(StringUtils.isNotBlank(target.getDomainId())){
-			 sb.append(" and t.domainId = ? ");
-			 values.add(target.getDomainId());
+			 sb.append(" and t.domainId like ? ");
+			 values.add(target.getDomainId()+"%");
 		 }
 		 OrderHelperUtils.getOrder(sb, target, "t.", "t.expires");
 		 
@@ -163,8 +163,8 @@ public class SipCountBizImpl implements ISipCountBiz {
 			 values.add("%"+target.getUsername()+"%");
 		 }
 		 if(StringUtils.isNotBlank(target.getDomainId())){
-			 sb.append(" and t.domainId = ? ");
-			 values.add(target.getDomainId());
+			 sb.append(" and t.domainId like ? ");
+			 values.add(target.getDomainId()+"%");
 		 }
 		 OrderHelperUtils.getOrder(sb, target, "t.", "t.sipUser");
 		 List<Object[]> listObj = sipCountlDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());
@@ -202,7 +202,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 //		 .append(" left JOIN t_dweller dw on dw.id=tdd.fdwellerid LEFT JOIN t_users tu on dw.fphone=tu.fmobile_phone where u.sip_type ='1'")
 //		 .append(" UNION ")
 		 sb.append(" SELECT * from ( SELECT to_char(u.user_sip,'999999999999999') sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
-		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,r.fdomainid domainId,r.fdevicecount username")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,case when r.fdevice_count_desc is null or r.fdevice_count_desc='' then r.fdomainid else r.fdomainid ||'-'||r.fdevice_count_desc end domainId,r.fdevicecount username")
 		 .append(" from users u inner JOIN t_devicecount r on r.fsipnum=u.local_sip ")
 		 .append(" left JOIN registrations sr on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999') where u.sip_type ='2' ) t where 1=1 ");
 //		 .append(" UNION ")
@@ -227,8 +227,8 @@ public class SipCountBizImpl implements ISipCountBiz {
 			 values.add("%"+target.getUsername()+"%");
 		 }
 		 if(StringUtils.isNotBlank(target.getDomainId())){
-			 sb.append(" and t.domainId = ? ");
-			 values.add(target.getDomainId());
+			 sb.append(" and t.domainId like ? ");
+			 values.add(target.getDomainId()+"%");
 		 }
 		 OrderHelperUtils.getOrder(sb, target, "t.", "t.expires");
 		 
@@ -247,8 +247,14 @@ public class SipCountBizImpl implements ISipCountBiz {
 //				 sip.setUserAgent(obj[4]==null?"":(String)obj[4]);
 				 sip.setNetworkIp(obj[4]==null?"":(String)obj[4]);
 				 sip.setCountType(obj[6]==null?"":(String)obj[6]);
-				 if(obj[8]!=null){
-					 sip.setAddress(getAddressByDomainId((String)obj[7]));
+				 String domainId = (String)obj[7];
+				 if(StringUtils.isNotBlank(domainId)){
+					 //设备账号需要显示别名
+					 if(domainId.contains("-")){
+						 sip.setAddress(getAddressByDomainId(domainId.substring(0,domainId.indexOf("-")))+"-"+domainId.substring(domainId.indexOf("-")+1));
+					 }else{
+						 sip.setAddress(getAddressByDomainId(domainId));
+					 }
 				 }
 				 sip.setUsername(obj[8]==null?"":(String)obj[8]);
 				 list.add(sip);

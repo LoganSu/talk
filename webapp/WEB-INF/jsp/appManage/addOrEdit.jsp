@@ -9,11 +9,13 @@
 		   <input type="hidden" name="id" value="${appManage.id}"/>
 		   <input type="hidden" name="appType" value="${appManage.appType}"/>
 		   <input type="hidden" id="appManageDomainIds" value="${appManage.treecheckbox}"/>
-<%-- 		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/> --%>
-<%-- 		   <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/> --%>
-<%-- 		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/> --%>
-<%-- 		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/> --%>
-<%-- 		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/> --%>
+		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/>
+		   <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>
+		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/>
+		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/>
+		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/>
+		   <input type="hidden" name="threeAppType" value="${appManage.threeAppType}"/>
+		   
 		   
 		   
            <table class="appManagesaveTable">
@@ -60,27 +62,28 @@
                 </c:choose>
                 
               </tr>
-              
-              <tr class="chooseShowTr">
-                  <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
-                  <td><div>
-                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
-                  </div></td>
-                   <td><div class="leftFont"><span class="starColor">*</span>版本名称：</div></td>
-                  <td><div>
-                     <input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>
-                  </div></td>
-              </tr>
-               <tr class="chooseShowTr">
-                  <td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>
-                  <td><div>
-                     <input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>
-                  </div></td>
-                   <td><div class="leftFont"><span class="starColor">*</span>包名：</div></td>
-                  <td><div>
-                     <input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>
-                  </div></td>
-              </tr>
+              <c:if test="${appManage.threeAppType != 'IOS'}">
+	              <tr class="chooseShowTr">
+	                  <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
+	                  <td><div>
+	                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
+	                  </div></td>
+	                   <td><div class="leftFont"><span class="starColor">*</span>版本名称：</div></td>
+	                  <td><div>
+	                     <input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>
+	                  </div></td>
+	              </tr>
+	               <tr class="chooseShowTr">
+	                  <td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>
+	                  <td><div>
+	                     <input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>
+	                  </div></td>
+	                   <td><div class="leftFont"><span class="starColor">*</span>包名：</div></td>
+	                  <td><div>
+	                     <input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>
+	                  </div></td>
+	              </tr>
+              </c:if>
               
               <c:if test="${appManage.appType == 6}">
                 <c:choose>
@@ -315,7 +318,7 @@ function calculate(file,callBack){
 		        }
 		    }
 		});
-	  
+	  //上传图标
 	  var uploader1 = Qiniu.uploader({
 		    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
 		    browse_button: 'appIcon',         // 上传选择的点选按钮，必需
@@ -435,10 +438,11 @@ function calculate(file,callBack){
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
 		
 		  var appManageSeolect = $("#appManagesaveForm .appManageSeolect").val();
-		  if(appManageSeolect!='IOS'){
+		  var threeAppType = $("#appManagesaveForm [name='threeAppType']").val();
+		  if(appManageSeolect!='IOS'&&threeAppType!='IOS'){
 				 var appName = $("#appManagesaveForm [name='appName']").val();
 				 if(!appName){
-					 hiAlert("提示","app名称不能为空");
+					 hiAlert("提示","app名称不能为空222");
 					 return false;
 				 }
 				 var versionName = $("#appManagesaveForm [name='versionName']").val();
@@ -486,9 +490,8 @@ function calculate(file,callBack){
 				 });
 	         });
 		 //更新	  
-		 }else if(id){
+		 }else if(!uploader1.files[0]&&id){
 			 var param = $('#appManagesaveForm').serialize();
-			 alert(param);
  			 $.post($path+"/mc/appManage/saveOrUpdate.do",param,function($data){
 				 if(!$data){
 					 window.hideModal("unnormalModal");
@@ -497,16 +500,14 @@ function calculate(file,callBack){
 					 hiAlert("提示",$data);
 				 }
 			 });
-		 }else{
-			 hiAlert("提示","请选择上传文件");
-			 return false;
 		 }
 			 if($("#appManagesaveForm [name='appType']").val()=='6'){
+				 var id = $("#appManagesaveForm [name='id']").val();
 			    	var count=uploader1.files.length;
 	 			    if(count>1){
 	 			        hiAlert("提示","最多只能上传一个图标");
 	 			       return false;
-	 			    }else if(count==0){
+	 			    }else if(count==0&&!id){
 	 			    	hiAlert("提示","没有要上传的图标");
 	 			    	return false;
 	 			    }else{

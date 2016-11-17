@@ -73,7 +73,6 @@
 		return this.each(function() {
 			var obj,opts;
 			if (!(obj = $.data(this, pluginName))) {
-//				alert(obj);
 				var $this = $(this)
 					,data = $this.data()
 					,title = $this.attr('title') || data.title

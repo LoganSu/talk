@@ -53,7 +53,7 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 		String del = "delete from t_department_domain where fdepartmentid=?";
 		departmentDao.executeSql(del, new Object[]{id});
 		//删除员工
-		 del = "delete from t_work where fdepartmentid=?";
+		 del = "delete from t_worker where fdepartmentid=?";
 		departmentDao.executeSql(del, new Object[]{id});
 	}
 

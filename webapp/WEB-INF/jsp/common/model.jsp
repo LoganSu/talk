@@ -80,7 +80,9 @@
       <div class="modal-footer">
         <!-- 操作按钮-->
         <button type="button" class="btn btn-primary" data-action="1">确定</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-default cancel" data-dismiss="modal">关闭</button>
+<!--             <a class="btn cancel" href="#" data-dismiss="modal">cancel</a> -->
+<!--             <a href="#" class="btn btn-danger" data-action="1">yes</a> -->
       </div>
     </div>
   </div>

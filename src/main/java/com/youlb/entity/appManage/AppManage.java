@@ -92,8 +92,10 @@ public class AppManage extends BaseModel {
 
 	public void setAppSizeStr(String appSizeStr) {
 		if(StringUtils.isNotBlank(appSizeStr)){
-			appSizeStr = appSizeStr.substring(0, appSizeStr.indexOf("."));
-			setAppSize(Long.parseLong(appSizeStr));
+			if(appSizeStr.contains(".")){
+				appSizeStr = appSizeStr.substring(0, appSizeStr.indexOf("."));
+			}
+				setAppSize(Long.parseLong(appSizeStr));
 		}
 		this.appSizeStr = appSizeStr;
 	}

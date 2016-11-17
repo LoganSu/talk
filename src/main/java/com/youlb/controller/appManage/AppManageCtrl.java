@@ -135,7 +135,7 @@ public class AppManageCtrl extends BaseCtrl {
         			}
         		}
     		}
-    		if(StringUtils.isNotBlank(appManage.getMd5Value())){
+    		if(StringUtils.isBlank(appManage.getId())&&StringUtils.isNotBlank(appManage.getMd5Value())){
     			boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
     			if(b){
     				super.message = "软件版本已经存在！";
