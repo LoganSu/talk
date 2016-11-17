@@ -45,7 +45,7 @@ $(function(){
 		        content: "您确定要发布吗？",
 		        param:ids,
 		        action: function(param) {
-		        	alert("发布");
+//		        	alert("发布");
 		            $.post(url,param,function($data){
 		            	if(!$data){
 							refresh();
@@ -126,7 +126,7 @@ $(function(){
 			        content: "您确定要删除记录吗？",
 			        param:ids,
 			        action: function(param) {
-			        	alert("删除");
+//			        	alert("删除");
 			            $.post(url,param,function($data){
 			            	if(!$data){
 								refresh();

@@ -14,7 +14,7 @@
 		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/>
 		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/>
 		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/>
-		   <input type="hidden" name="threeAppType" value="${appManage.threeAppType}"/>
+		   <input type="hidden" class = "threeAppType" value="${appManage.threeAppType}"/>
 		   
 		   
 		   
@@ -438,11 +438,11 @@ function calculate(file,callBack){
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
 		
 		  var appManageSeolect = $("#appManagesaveForm .appManageSeolect").val();
-		  var threeAppType = $("#appManagesaveForm [name='threeAppType']").val();
+		  var threeAppType = $("#appManagesaveForm .threeAppType").val();
 		  if(appManageSeolect!='IOS'&&threeAppType!='IOS'){
 				 var appName = $("#appManagesaveForm [name='appName']").val();
 				 if(!appName){
-					 hiAlert("提示","app名称不能为空222");
+					 hiAlert("提示","app名称不能为空");
 					 return false;
 				 }
 				 var versionName = $("#appManagesaveForm [name='versionName']").val();
@@ -484,7 +484,7 @@ function calculate(file,callBack){
 	        			    	hiAlert("提示","没有要上传的app文件");
 	        			    	return false;
 	        			    }
-	        			    return false;
+	        			    uploader.start();
 	        			    
 					 }
 				 });
@@ -496,10 +496,13 @@ function calculate(file,callBack){
 				 if(!$data){
 					 window.hideModal("unnormalModal");
 					 refresh();
+					 return false;
 				 }else{
 					 hiAlert("提示",$data);
+					 return false;
 				 }
 			 });
+ 			uploader.start();
 		 }
 			 if($("#appManagesaveForm [name='appType']").val()=='6'){
 				 var id = $("#appManagesaveForm [name='id']").val();
@@ -514,7 +517,6 @@ function calculate(file,callBack){
 	 			     uploader1.start();
 	 			    }
 			    }
-			     uploader.start();
 		 
 		  //显示进度条
 // 		  var timer = setInterval(function(){
