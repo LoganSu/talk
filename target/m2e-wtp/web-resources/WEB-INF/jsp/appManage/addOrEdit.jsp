@@ -10,7 +10,9 @@
 		   <input type="hidden" name="appType" value="${appManage.appType}"/>
 		   <input type="hidden" id="appManageDomainIds" value="${appManage.treecheckbox}"/>
 		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/>
-		   <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>
+		   <c:if test="${(appManage.id ==null||!appManage.threeAppType eq 'IOS')&&appManage.appType!=6}">
+		      <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>
+		   </c:if>
 		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/>
 		   <input type="hidden" name="appSizeStr" value="${appManage.appSize}"/>
 		   <input type="hidden" name="iconUrl" value="${appManage.iconUrl}"/>
@@ -55,9 +57,22 @@
 		                    </c:choose>
 		                </div></td>
                   </c:when>
+                  
                   <c:otherwise>
-                     <td></td>
-                     <td></td>
+                       <c:choose>
+                          <c:when test="${appManage.threeAppType eq 'IOS'}">
+	                  		   <td><div class="leftFont">
+			                        <select class="appManageSeolect form-control" name="threeAppType" style="width: 80px"><option value="IOS"  <c:if test="${appManage.threeAppType eq 'IOS'}">selected="selected"</c:if> class="IOS">IOS地址</option></select>
+			                  </div></td>
+			                <td colspan="1"><div class="changeInputDiv" id="uploadFileDiv">
+			                         <input type="text" value="${appManage.serverAddr}" name="serverAddr" style="width: 300px" class="form-control"/>
+			                </div></td>
+	                    </c:when>
+	                    <c:otherwise>
+	                        <td></td>
+	                        <td></td>
+	                    </c:otherwise>
+                       </c:choose>
                   </c:otherwise>
                 </c:choose>
                 
@@ -464,6 +479,12 @@ function calculate(file,callBack){
 					 hiAlert("提示","包名不能为空");
 					 return false;
 				 }
+		  }else{
+			  var serverAddr = $("#appManagesaveForm [name='serverAddr']").val();
+				 if(!serverAddr){
+					 hiAlert("提示","IOS地址不能为空");
+					 return false;
+				 }
 		  }
 		 var versionDes = $("#appManagesaveForm [name='versionDes']").val();
 		 if(!versionDes){
@@ -526,7 +547,21 @@ function calculate(file,callBack){
 	 			        hiAlert("提示","最多只能上传一个图标");
 	 			       return false;
 	 			    }else if(count==0&&!id){
-	 			    	hiAlert("提示","没有要上传的图标6666");
+	 			    	hiAlert("提示","没有要上传的图标");
+	 			    	return false;
+	 			    }else{
+	 			     uploader1.start();
+	 			    }
+			    }
+		 }else{
+			 if($("#appManagesaveForm [name='appType']").val()=='6'){
+				 var id = $("#appManagesaveForm [name='id']").val();
+			    	var count=uploader1.files.length;
+	 			    if(count>1){
+	 			        hiAlert("提示","最多只能上传一个图标");
+	 			       return false;
+	 			    }else if(count==0&&!id){
+	 			    	hiAlert("提示","没有要上传的图标");
 	 			    	return false;
 	 			    }else{
 	 			     uploader1.start();

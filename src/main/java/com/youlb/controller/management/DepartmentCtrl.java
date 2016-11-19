@@ -213,10 +213,17 @@ public class DepartmentCtrl extends BaseCtrl {
      */
 	@RequestMapping("/delete.do")
 	@ResponseBody
-	public String delete(String[] ids,Model model){
+	public String delete(String[] ids,String parentId){
 		if(ids!=null&&ids.length>0){
 			try {
-				departmentBiz.delete(ids);
+				//删部门
+				if(StringUtils.isNotBlank(parentId)){
+					departmentBiz.delete(ids);
+
+				}else{
+					//删公司
+					departmentBiz.delete(ids,parentId);
+				}
 			} catch (Exception e) {
 				super.message =  "删除出错";
 			}

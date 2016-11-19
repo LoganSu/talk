@@ -6,7 +6,7 @@ $(function(){
 		  $(".treeDiv").hide();
 		  //隐藏显示的图片
 		  $("#personshowImg").hide();
-		  $("#showRightArea").load($(this).attr("rel"));
+		  $("#showRightArea").load($(this).attr("rel")+"&aa="+Math.random());
 		 //显示tree
 		if($(this).hasClass("tree")){
 			 var treeId = $(this).attr("tree_id");

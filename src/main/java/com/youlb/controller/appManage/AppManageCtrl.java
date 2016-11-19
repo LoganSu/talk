@@ -122,6 +122,8 @@ public class AppManageCtrl extends BaseCtrl {
 	    			super.message = "APP名称不能为空！";
 	    			return super.message;
 	    		}
+    		}else{
+    			
     		}
     		if(StringUtils.isBlank(appManage.getVersionDes())){
     			super.message = "版本说明不能为空！";

@@ -17,7 +17,7 @@
             </r:role>
             <r:role auth="组织架构/删除部门">
 	            <!--delete类 公共删除  -->
-	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/department/delete.do">删除部门</button></li>
+	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/department/delete.do?parentId=${parentId}">删除部门</button></li>
             </r:role>
          </ul>
 	 </div>
