@@ -399,9 +399,9 @@
 		                           <r:role auth="分组管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
 		                           </r:role>
-		                           <r:role auth="费用管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li>
-		                           </r:role>
+<%-- 		                           <r:role auth="费用管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li> --%>
+<%-- 		                           </r:role> --%>
 	                           </ul>
 	                             
 	                       </div>
