@@ -1,11 +1,16 @@
 package com.youlb.biz.personnel;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: IDwellerBiz.java 
@@ -19,7 +24,7 @@ public interface IDwellerBiz extends IBaseBiz<Dweller> {
 	/**
 	 * @param dweller
 	 */
-	void saveOrUpdate(Dweller dweller,Operator loginUser)throws Exception;
+	void saveOrUpdate(Dweller dweller,Operator loginUser)throws BizException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException ;
 
 	/**判断房子是否已经被别人选择过
 	 * @param dweller

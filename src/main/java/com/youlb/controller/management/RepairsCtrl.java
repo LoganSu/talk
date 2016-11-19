@@ -21,6 +21,7 @@ import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.biz.management.IRepairsBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.management.Repairs;
+import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
 /**
@@ -96,6 +97,11 @@ public class RepairsCtrl extends BaseCtrl{
     		if(StringUtils.isBlank(repairs.getPhone())){
     			super.message = "联系电话不能为空！";
     			return  super.message;
+    		}else{
+    			if(!RegexpUtils.checkMobile(repairs.getPhone())){
+    				super.message = "请填写正确的手机号码！";
+    				return  super.message;
+    			}
     		}
     		if(StringUtils.isBlank(repairs.getDomainId())){
     			super.message = "请选择地址！";

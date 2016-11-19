@@ -83,21 +83,6 @@ public class DwellerBizImpl implements IDwellerBiz {
 			dwellerSqlDao.executeSql(delete, new Object[]{dweller.getId()});
 			dwellerSqlDao.getCurrSession().flush();
 		   for(String domainid:dweller.getTreecheckbox()){
-			   String neibName = getNeibName(domainid);
-			   //判断用户是否已经有sip
-			   String findSip = "select u.user_sip from users u inner join t_users tu on tu.id=to_number(u.local_sip, '9999999999999') inner join t_dweller d on d.fphone=tu.fusername where d.id=?";
-			   List<String> sipList = dwellerSqlDao.pageFindBySql(findSip, new Object[]{dweller.getId()});
-			   if(sipList==null||sipList.isEmpty()){
-				   //创建sip
-				   if(StringUtils.isNotBlank(dweller.getPhone())){
-					   try {
-						create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
-					} catch (IOException | JsonException e) {
-						e.printStackTrace();
-					}
-				   }
-			   }
-			   
 				String find="select d.id from t_domain_dweller dd inner join t_domain d on d.id=dd.fdomainid where d.id=? and dd.fdwellertype='1'";
 				List<String> list = dwellerSqlDao.pageFindBySql(find, new Object[]{domainid});
 				//说明该房屋已经绑定人的信息 此人是非户主
@@ -110,6 +95,20 @@ public class DwellerBizImpl implements IDwellerBiz {
 					dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 				}
 			}
+		   //判断用户是否已经有sip
+		   String findSip = "select u.user_sip from users u inner join t_users tu on tu.id=to_number(u.local_sip, '9999999999999') inner join t_dweller d on d.fphone=tu.fusername where d.id=?";
+		   List<String> sipList = dwellerSqlDao.pageFindBySql(findSip, new Object[]{dweller.getId()});
+		   if(sipList==null||sipList.isEmpty()){
+			   String neibName = getNeibName(dweller.getTreecheckbox().get(0));
+			   //创建sip
+			   if(StringUtils.isNotBlank(dweller.getPhone())){
+				   try {
+					create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
+				} catch (IOException | JsonException e) {
+					e.printStackTrace();
+				}
+			   }
+		   }
 		}
 	}
 
@@ -248,11 +247,16 @@ public class DwellerBizImpl implements IDwellerBiz {
 
 	/**
 	 * @param hostInfo
+	 * @throws BizException 
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws ClientProtocolException 
 	 * @throws Exception 
 	 * @see com.youlb.biz.personnel.IDwellerBiz#saveOrUpdate(com.youlb.entity.personnel.HostInfo)
 	 */
 	@Override
-	public void saveOrUpdate(Dweller dweller,Operator loginUser) throws Exception {
+	public void saveOrUpdate(Dweller dweller,Operator loginUser) throws BizException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException   {
 //		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values ((select d.id from t_domain d where d.fentityid=?),?,?)";
 		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values (?,?,?)";
 		if(StringUtils.isNotBlank(dweller.getPhone())){
@@ -273,7 +277,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 				dweller.setId(null);
 				String dwellerId = (String) dwellerSqlDao.add(dweller);
 				dwellerSqlDao.getCurrSession().flush();
-				if(dweller.getTreecheckbox()!=null){
+				if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()){
 					for(String domainid:dweller.getTreecheckbox()){
 						String find="select d.id from t_domain_dweller dd inner join t_domain d on d.id=dd.fdomainid where d.id=? and dd.fdwellertype='1'";
 						List<String> list = dwellerSqlDao.pageFindBySql(find, new Object[]{domainid});
@@ -287,12 +291,17 @@ public class DwellerBizImpl implements IDwellerBiz {
 							String updateCallNum= "update t_room set fcallednumber=?,fphone_city=? where id=(select d.fentityid from t_domain d where d.id=?)";
 							dwellerSqlDao.executeSql(updateCallNum, new Object[]{dweller.getPhone(),dweller.getPhoneCity(),domainid});
 						}
-				         String neibName = getNeibName(domainid);
-				         //创建sip
-				         if(StringUtils.isNotBlank(dweller.getPhone())){
-				        	 create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
-				         }
 					}
+					   //判断用户是否已经有sip
+//					   String findSip = "select u.user_sip from users u inner join t_users tu on tu.id=to_number(u.local_sip, '9999999999999') inner join t_dweller d on d.fphone=tu.fusername where d.id=?";
+//					   List<String> sipList = dwellerSqlDao.pageFindBySql(findSip, new Object[]{dweller.getId()});
+//					   if(sipList==null||sipList.isEmpty()){
+						   String neibName = getNeibName(dweller.getTreecheckbox().get(0));
+							//创建sip
+							if(StringUtils.isNotBlank(dweller.getPhone())){
+								create_sip(dweller.getPhone(), "6", neibName);//用户sip 6
+							}
+//					   }
 				}
 //			}
 			

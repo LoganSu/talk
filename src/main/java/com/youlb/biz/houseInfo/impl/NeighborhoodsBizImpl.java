@@ -12,10 +12,13 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -197,7 +200,39 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			String domainId = (String) domainBiz.save(domain);
 			//判断是否创建sip账号
 			if("2".equals(neighborhoods.getCreateSipNum())){
-				createSipNum(neibId,neighborhoods.getNeibName());
+				String neiborName = neighborhoods.getNeibName();
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				
+				//同步数据以及平台
+				HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/fir_platform/create_sip_num");
+				List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+				formParams.add(new BasicNameValuePair("local_sip", neibId));
+				formParams.add(new BasicNameValuePair("sip_type", "4"));
+				formParams.add(new BasicNameValuePair("neibName", neiborName));
+				UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+				request.setEntity(uefEntity);
+				CloseableHttpResponse response = httpClient.execute(request);
+				if(response.getStatusLine().getStatusCode()==200){
+					HttpEntity entity_rsp = response.getEntity();
+					ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+					if(resultDto!=null){
+						if(!"0".equals(resultDto.getCode())){
+							throw new BizException("接口返回："+resultDto.getMsg());
+						}else{
+							Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
+							if(map!=null&&!map.isEmpty()){
+								Map<String,Object> user_sipMap = (Map<String, Object>) map.get("user_sip");
+							    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
+							    //{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
+							    neighborSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
+							    		user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
+
+							}
+					     }
+					}else{
+						throw new BizException("创建sip账号出错！");
+					}
+		       }
 			}
 			
 			loginUser.getDomainIds().add(domainId);
