@@ -470,10 +470,9 @@ public class DwellerBizImpl implements IDwellerBiz {
 	@Override
 	public boolean checkPhoneExistWebShow(String phone,String carrierId) throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT w.fphone from t_dweller w INNER JOIN t_carrier c on c.id=w.fcarrier_id where w.fphone=? and c.id=?");
+		sb.append("SELECT w.fphone from t_dweller w where w.fphone=?");
 		List<Object> values = new ArrayList<Object>();
 		values.add(phone);
-		values.add(carrierId);
 		List<String> find = dwellerSqlDao.pageFindBySql(sb.toString(), values.toArray());
 		if(find!=null&&!find.isEmpty()){
 			return true;

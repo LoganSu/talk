@@ -4,14 +4,15 @@
 <body>
 <script type="text/javascript">
   $(function(){
-	  $("#updatePaswForm .password").on("focusin",function(){
-	      var newPassword = $("#updatePaswForm .newPassword").val();
-		  var password = $("#updatePaswForm .password")
-		  if(newPassword.length<5){
-				  hiAlert("提示","密码不能小于5个字符");
-				  return false;
-		  }
-	  })
+// 	  $("#updatePaswForm .newPassword").on("change ",function(){
+// 	      var newPassword = $("#updatePaswForm .newPassword").val();
+// 		  alert(newPassword);
+// 		  var password = $("#updatePaswForm .password")
+// 		  if(newPassword.length<5){
+// 				  hiAlert("提示","密码不能小于5个字符");
+// 				  return false;
+// 		  }
+// 	  })
   })
 </script>
 <div>

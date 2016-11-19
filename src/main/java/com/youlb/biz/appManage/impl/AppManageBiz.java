@@ -168,7 +168,7 @@ public class AppManageBiz implements IAppManageBiz {
 	 */
 	@Override
 	public void saveOrUpdate(AppManage appManage, Operator loginUser) throws ParseException, JsonException, IOException, BizException {
-		String sql="insert into t_domain_appmanage(fappmanageid,fdomainid) values (?,?)";
+//		String sql="insert into t_domain_appmanage(fappmanageid,fdomainid) values (?,?)";
 		 //add
 		 if(StringUtils.isBlank(appManage.getId())){
 			 appManage.setId(null);
@@ -180,22 +180,24 @@ public class AppManageBiz implements IAppManageBiz {
 //				 }
 //			 }
 			 String id = (String) appManageSqlDao.add(appManage);
-			 //第三方app不做推送
-			 if(!SysStatic.six.equals(appManage.getAppType())){
+			 //手机app做推送
+			 if(SysStatic.two.equals(appManage.getAppType())){
 				 //	门口机和管理机 需要操作中间表
-				 if(SysStatic.one.equals(appManage.getAppType())||SysStatic.three.equals(appManage.getAppType())){
-					 if(appManage.getTreecheckbox()!=null){
-						 for(String domainId:appManage.getTreecheckbox()){
-							 appManageSqlDao.executeSql(sql, new Object[]{id,domainId});
-						 }
-					 }
-				 }
-				 //获取taglist
-				 List<String> tagList = getTagList(appManage, loginUser);
-				 if(tagList==null){
-					 throw new BizException("未找到目标设备");
-				 }
-				 //推送升级信息
+//				 if(SysStatic.one.equals(appManage.getAppType())||SysStatic.three.equals(appManage.getAppType())){
+//					 if(appManage.getTreecheckbox()!=null){
+//						 for(String domainId:appManage.getTreecheckbox()){
+//							 appManageSqlDao.executeSql(sql, new Object[]{id,domainId});
+//						 }
+//					 }
+//				 }
+//				 获取taglist
+//				 List<String> tagList = getTagList(appManage, loginUser);
+				 List<String> tagList = new ArrayList<String>();
+				 tagList.add("4028816755c94fe50155c96c0ec70005");
+//				 if(tagList==null){
+//					 throw new BizException("未找到目标设备");
+//				 }
+//				 推送升级信息
 				 VersionInfo info = new VersionInfo();
 				 info.setTagList(tagList);//目标推送标签
 				 info.setDesc(appManage.getVersionDes());//说明
@@ -205,7 +207,7 @@ public class AppManageBiz implements IAppManageBiz {
 				 info.setVersion_code(appManage.getVersionCode());//版本号
 				 info.setVersion_name(appManage.getVersionName());//版本名称
 				 info.setTargetDevive(appManage.getAppType());//app类型 1手机 2门口机
-				 //是否强制升级
+//				 是否强制升级
 				 if("1".equals(appManage.getAutoInstal())){
 					 info.setAuto_instal(false);
 				 }else if("2".equals(appManage.getAutoInstal())){
@@ -236,21 +238,21 @@ public class AppManageBiz implements IAppManageBiz {
 	     //update		 
 		 }else{
 			 //门口机app
-			 if(SysStatic.one.equals(appManage.getAppType())){
-				 //删掉历史关联
-				 String delete = "delete from t_domain_appmanage t where t.fappmanageid=?";
-				 appManageSqlDao.executeSql(delete, new Object[]{appManage.getId()});
+//			 if(SysStatic.one.equals(appManage.getAppType())){
+//				 //删掉历史关联
+//				 String delete = "delete from t_domain_appmanage t where t.fappmanageid=?";
+//				 appManageSqlDao.executeSql(delete, new Object[]{appManage.getId()});
 				 //按区域	 需要操作中间表
-				 if(SysStatic.one.equals(appManage.getUpgradeType())){
-					 appManage.setTargetVersion(null);//把目标版本id置空
-					 if(appManage.getTreecheckbox()!=null){
-						 for(String entityId:appManage.getTreecheckbox()){
-							 appManageSqlDao.executeSql(sql, new Object[]{appManage.getId(),entityId});
-						 }
-						 
-					 }
-				 }
-			 }
+//				 if(SysStatic.one.equals(appManage.getUpgradeType())){
+//					 appManage.setTargetVersion(null);//把目标版本id置空
+//					 if(appManage.getTreecheckbox()!=null){
+//						 for(String entityId:appManage.getTreecheckbox()){
+//							 appManageSqlDao.executeSql(sql, new Object[]{appManage.getId(),entityId});
+//						 }
+//						 
+//					 }
+//				 }
+//			 }
 			  update(appManage);
 		 }
 		

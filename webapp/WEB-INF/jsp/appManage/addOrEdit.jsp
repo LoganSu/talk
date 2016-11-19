@@ -147,20 +147,20 @@
 <!-- 		                <td></td> -->
 <!-- 		              </tr> -->
 <!-- 		           </table> -->
-		           <table>
-		              <tr>
-		                <td><div><input type="radio" checked="checked" name="upgradeType" value="1" <c:if test="${appManage.upgradeType==1}">checked="checked"</c:if>/></div></td>
-		                <td><div>全部</div></td>
-		              </tr>
-		              <tr>
-		                <td><div><input type="radio" name="upgradeType" value="2" <c:if test="${appManage.upgradeType==2}">checked="checked"</c:if>/></div></td>
-		                <td><div>指定范围</div></td>
-		                <td></td>
-		              </tr>
-		           </table>
-	                <div style="width: 500px;height: 400px;overflow: auto;">
-	                     <p id="appManageShowTree"></p>              
-	                </div>
+<!-- 		           <table> -->
+<!-- 		              <tr> -->
+<%-- 		                <td><div><input type="radio" checked="checked" name="upgradeType" value="1" <c:if test="${appManage.upgradeType==1}">checked="checked"</c:if>/></div></td> --%>
+<!-- 		                <td><div>全部</div></td> -->
+<!-- 		              </tr> -->
+<!-- 		              <tr> -->
+<%-- 		                <td><div><input type="radio" name="upgradeType" value="2" <c:if test="${appManage.upgradeType==2}">checked="checked"</c:if>/></div></td> --%>
+<!-- 		                <td><div>指定范围</div></td> -->
+<!-- 		                <td></td> -->
+<!-- 		              </tr> -->
+<!-- 		           </table> -->
+<!-- 	                <div style="width: 500px;height: 400px;overflow: auto;"> -->
+<!-- 	                     <p id="appManageShowTree"></p>               -->
+<!-- 	                </div> -->
 	           </div>
            </c:if>
            <!-- 详情不显示按钮 -->
@@ -488,8 +488,20 @@ function calculate(file,callBack){
 	        			    	hiAlert("提示","没有要上传的app文件");
 	        			    	return false;
 	        			    }
+	        			    if($("#appManagesaveForm [name='appType']").val()=='6'){
+	        					 var id = $("#appManagesaveForm [name='id']").val();
+	        				    	var count=uploader1.files.length;
+	        		 			    if(count>1){
+	        		 			        hiAlert("提示","最多只能上传一个图标");
+	        		 			       return false;
+	        		 			    }else if(count==0&&!id){
+	        		 			    	hiAlert("提示","没有要上传的图标");
+	        		 			    	return false;
+	        		 			    }else{
+	        		 			     uploader1.start();
+	        		 			    }
+	        				    }
 	        			    uploader.start();
-	        			    
 					 }
 				 });
 	         });
@@ -507,20 +519,20 @@ function calculate(file,callBack){
 				 }
 			 });
  			uploader.start();
-		 }
-			 if($("#appManagesaveForm [name='appType']").val()=='6'){
+ 			if($("#appManagesaveForm [name='appType']").val()=='6'){
 				 var id = $("#appManagesaveForm [name='id']").val();
 			    	var count=uploader1.files.length;
 	 			    if(count>1){
 	 			        hiAlert("提示","最多只能上传一个图标");
 	 			       return false;
 	 			    }else if(count==0&&!id){
-	 			    	hiAlert("提示","没有要上传的图标");
+	 			    	hiAlert("提示","没有要上传的图标6666");
 	 			    	return false;
 	 			    }else{
 	 			     uploader1.start();
 	 			    }
 			    }
+		 }
 		 
 		  //显示进度条
 // 		  var timer = setInterval(function(){

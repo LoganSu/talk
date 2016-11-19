@@ -142,11 +142,11 @@ public class AppManageCtrl extends BaseCtrl {
     				return super.message;
     			}
     		}
-    		List<String> treecheckbox = appManage.getTreecheckbox();
-    		if(treecheckbox!=null&&treecheckbox.size()!=1){
-    			super.message = "请选择一个域发布信息！";
-    			return super.message;
-    		}
+//    		List<String> treecheckbox = appManage.getTreecheckbox();
+//    		if(treecheckbox!=null&&treecheckbox.size()!=1){
+//    			super.message = "请选择一个域发布信息！";
+//    			return super.message;
+//    		}
 //    		if(SysStatic.one.equals(appManage.getAppType())){
 //    			if(appManage.getTreecheckbox()==null||appManage.getTreecheckbox().isEmpty()){
 //					super.message = "请选择指定区域升级";

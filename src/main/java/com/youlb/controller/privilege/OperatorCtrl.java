@@ -374,13 +374,27 @@ public class OperatorCtrl extends BaseCtrl{
     @ResponseBody
     public String updatePasw(Operator user,Model model){
     	try {
-    		if(StringUtils.isNotBlank(user.getNewPassword())&&StringUtils.isNotBlank(user.getPassword())&&
-    			user.getNewPassword().equals(user.getPassword())){
-    			operatorBiz.update(user);
-    		}else{
-    			super.message = "密码输入不一致！";
-    			logger.info(super.message);
+    		if(StringUtils.isBlank(user.getNewPassword())||StringUtils.isBlank(user.getPassword())){
+    			super.message = "密码不能为空！";
+    			 return  super.message;
     		}
+			if(user.getNewPassword().length()<5||user.getPassword().length()<5){
+				super.message = "新密码不能少于5个字符！！";
+				return  super.message;
+			}
+			if(!user.getNewPassword().equals(user.getPassword())){
+				super.message = "密码输入不一致！";
+				return  super.message;
+			}
+    		
+    		
+//    		if(StringUtils.isNotBlank(user.getNewPassword())&&StringUtils.isNotBlank(user.getPassword())&&
+//    			user.getNewPassword().equals(user.getPassword())){
+    			operatorBiz.update(user);
+//    		}else{
+//    			super.message = "密码输入不一致！";
+//    			logger.info(super.message);
+//    		}
 		} catch (Exception e) {
 			super.message = "重置密码出错！";
 			e.printStackTrace();
