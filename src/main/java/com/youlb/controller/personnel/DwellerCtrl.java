@@ -1,10 +1,13 @@
 package com.youlb.controller.personnel;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: DwellerCtrl.java 
@@ -149,12 +153,29 @@ public class DwellerCtrl extends BaseCtrl {
     	    		return  super.message;
     	    	}
     	    }
-    		dwellerBiz.saveOrUpdate(dweller,loginUser);
-		} catch (Exception e) {
-			super.message = "操作失败！";
-			e.printStackTrace();
-			//TODO log
-		}
+    		
+				dwellerBiz.saveOrUpdate(dweller,loginUser);
+			} catch (BizException e) {
+				if(RegexpUtils.checkChinese(e.getMessage())){
+					super.message = e.getMessage();
+				}else{
+					super.message = "操作失败";
+				}
+	    		return  super.message;
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
     	 return  super.message;
     }
     /**

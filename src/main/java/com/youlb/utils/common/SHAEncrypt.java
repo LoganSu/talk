@@ -1,9 +1,14 @@
 package com.youlb.utils.common;
  
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.UnsupportedEncodingException; 
 import java.math.BigInteger;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,16 +124,18 @@ public class SHAEncrypt {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String fileMd5(MultipartFile upload) throws Exception {
-	    byte[] uploadBytes = upload.getBytes();
-	    MessageDigest md5 = MessageDigest.getInstance("MD5");
-	    byte[] digest = md5.digest(uploadBytes);
-	    String hashString = DecodUtils.bytesToHexString(digest);
-	    return hashString.toUpperCase(); 
+	public static String fileMd5(File file) throws Exception {
+		FileInputStream in = new FileInputStream(file);
+		MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());  
+        MessageDigest md5 = MessageDigest.getInstance("MD5");  
+        md5.update(byteBuffer);  
+        BigInteger bi = new BigInteger(1, md5.digest());  
+        String value = bi.toString(16);  
+	    return value.toUpperCase(); 
 	}
 	
 	    
-	public static void main(String[] args) throws NoSuchAlgorithmException {
+	public static void main(String[] args) throws Exception {
 	 
         //Y0Dh3+2cuteG/0QXEA32hrBmiHgcit4aQOnX0egaxtkIS/nPjVjzCPMnxx9Qgxdrj/H1IsLMIKh2eyvvfgPaQ==
 		try {
@@ -141,9 +148,11 @@ public class SHAEncrypt {
 			// TODO Auto-generated catch block
 //			logger.warn(e.getMessage(),e);
 		}
-		String digestPassword = digestPassword("123456");
-		System.out.println(digestPassword.toUpperCase());
-
+//		String digestPassword = digestPassword("123456");
+//		System.out.println(digestPassword.toUpperCase());46797DEC3E45C151552F6B63D830FFC5
+		                                               //46797DEC3E45C151552F6B63D830FFC5
+		String md = fileMd5(new File("d:/ylb-android(1.1.0.009).apk"));
+         System.out.println(md);
 
 		
    	}

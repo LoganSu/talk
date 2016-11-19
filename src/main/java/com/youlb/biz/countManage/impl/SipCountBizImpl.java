@@ -60,7 +60,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 //		 .append(" sr.user_agent user_agent,sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,ddw.fdomainid domainId,r.fusername username")
 		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,ddw.fdomainid domainId,r.fusername username")
 		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999')")
-		 .append(" left JOIN t_users r on r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fphone=dw.fphone ")
+		 .append(" left JOIN t_users r on r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fmobile_phone=dw.fphone ")
 		 .append(" LEFT JOIN t_domain_dweller ddw on dw.id=ddw.fdwellerid WHERE u.sip_type = '6'")
 		 .append(" UNION ")
 		 .append(" SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
@@ -141,7 +141,7 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select * from (SELECT to_char(u.user_sip,'999999999999999') sipUser,r.fusername username,ddw.fdomainid domainId,u.sip_type sip_type")
-		 .append(" FROM users u INNER JOIN t_users r ON r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fphone=dw.fphone ")
+		 .append(" FROM users u INNER JOIN t_users r ON r.id = to_number(u.local_sip, '9999999999999999') LEFT JOIN t_dweller dw on r.fmobile_phone=dw.fphone ")
 		 .append(" LEFT JOIN t_domain_dweller ddw on dw.id=ddw.fdwellerid WHERE u.sip_type = '6' GROUP BY sipUser,username,domainId,sip_type")
 		 .append(" UNION ")
 		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,r.fdevicecount username,case when r.fdevice_count_desc is null or r.fdevice_count_desc='' then r.fdomainid else r.fdomainid ||'-'||r.fdevice_count_desc end domainId,u.sip_type sip_type ")

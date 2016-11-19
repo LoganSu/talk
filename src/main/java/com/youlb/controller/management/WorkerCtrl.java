@@ -24,6 +24,7 @@ import com.youlb.entity.management.DepartmentTree;
 import com.youlb.entity.management.Worker;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.JsonUtils;
+import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
@@ -107,6 +108,11 @@ public class WorkerCtrl extends BaseCtrl{
 	    		if(StringUtils.isBlank(worker.getPhone())){
 	    			super.message = "手机号码不能为空！";
 	    			return  super.message;
+	    		}else{
+	    			if(!RegexpUtils.checkMobile(worker.getPhone())){
+	    				super.message = "请填写正确的手机号码！";
+	    				return  super.message;
+	    			}
 	    		}
 	    		//判断手机号是否已经注册
 	    		boolean b = workerBiz.checkPhoneExist(worker.getPhone(),worker.getId());

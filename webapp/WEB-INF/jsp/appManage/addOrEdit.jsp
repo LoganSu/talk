@@ -179,34 +179,39 @@
  <iframe style="width:0; height:0;display: none;" id="appManageSubmitFrame" name="appManageSubmitFrame"></iframe>
 </body>
 <script type="text/javascript">
+
 function calculate(file,callBack){
-    var fileReader = new FileReader(),
-        blobSlice = File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice,    
-        chunkSize = 2097152,    
-        // read in chunks of 2MB    
-        chunks = Math.ceil(file.size / chunkSize),    
-        currentChunk = 0,    
-        spark = new SparkMD5();    
-    fileReader.onload = function(e) {
-        spark.appendBinary(e.target.result); // append binary string    
-        currentChunk++;    
-    
-        if (currentChunk < chunks) {    
-            loadNext();    
-        }    
-        else {    
-            callBack(spark.end().toUpperCase());  
-        }    
-    };    
-    function loadNext() {
-        var start = currentChunk * chunkSize,    
-            end = start + chunkSize >= file.size ? file.size : start + chunkSize;    
-            
-         fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));    //支持ie
-    };    
-    
-    loadNext();    
-}    
+// 	alert(file);
+	var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+	        running = false;
+		if (running) {
+		    return;
+		}
+		var fileReader = new FileReader();
+		fileReader.onload = function (e) {
+		    running = false;
+		
+		    if (file.size != e.target.result.byteLength) {
+		    	alert("获取文件MD5出错");
+		    } else {
+		    	 callBack(SparkMD5.ArrayBuffer.hash(e.target.result).toUpperCase());  
+// 		        return SparkMD5.ArrayBuffer.hash(e.target.result).toUpperCase(); // compute hash
+		    }
+		};
+	
+		fileReader.onerror = function () {
+		    running = false;
+		};
+	
+		running = true;
+		fileReader.readAsArrayBuffer(file);
+	
+}
+
+
+
+
+ 
   $(function(){
 	  var uploader = Qiniu.uploader({
 		    runtimes: 'html5,flash,html4',      // 上传模式，依次退化
@@ -436,7 +441,6 @@ function calculate(file,callBack){
 	  
 	  
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
-		
 		  var appManageSeolect = $("#appManagesaveForm .appManageSeolect").val();
 		  var threeAppType = $("#appManagesaveForm .threeAppType").val();
 		  if(appManageSeolect!='IOS'&&threeAppType!='IOS'){
