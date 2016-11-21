@@ -213,7 +213,7 @@
                            <ul class="nav nav-pills nav-stacked">
                              <r:role auth="实时监控">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do">实时监控</a></li>
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do?1=1">实时监控</a></li>
                              </r:role>
                            </ul>
                        </div>
@@ -467,7 +467,7 @@
                        <div class="panel-body">
                            <ul class="nav nav-pills nav-stacked">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/toChangePws.do">修改密码</a></li>
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/toChangePws.do?1=1">修改密码</a></li>
                            </ul>
                        </div>
                    </div>

@@ -376,7 +376,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 					ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 					if(resultDto!=null){
 						if(!"0".equals(resultDto.getCode())){
-							throw new BizException("接口返回："+resultDto.getMsg());
+							throw new BizException(resultDto.getMsg());
 						}else{
 							Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
 							if(map!=null&&!map.isEmpty()){

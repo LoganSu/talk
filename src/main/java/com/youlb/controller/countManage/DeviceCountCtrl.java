@@ -139,13 +139,13 @@ public class DeviceCountCtrl extends BaseCtrl {
     		if(StringUtils.isBlank(deviceCount.getId())&&(deviceCount.getTreecheckbox()==null||deviceCount.getTreecheckbox().size()!=1)){
     			return  "只能选择一个域！";
     		}
-    		if(StringUtils.isNotBlank(deviceCount.getId())){
-    			DeviceCount d = deviceCountBiz.get(deviceCount.getId());
-    			deviceCount.setCountPsw(d.getCountPsw());
-    			deviceCount.setEndTime(d.getEndTime());
-    			deviceCount.setRamdonCode(d.getRamdonCode());
-    			deviceCount.setSipNum(d.getSipNum());
-    		}
+//    		if(StringUtils.isNotBlank(deviceCount.getId())){
+//    			DeviceCount d = deviceCountBiz.get(deviceCount.getId());
+//    			deviceCount.setCountPsw(d.getCountPsw());
+//    			deviceCount.setEndTime(d.getEndTime());
+//    			deviceCount.setRamdonCode(d.getRamdonCode());
+//    			deviceCount.setSipNum(d.getSipNum());
+//    		}
     		deviceCountBiz.saveOrUpdate(deviceCount);
 //    		super.message = "添加成功！";
 		} catch (BizException e) {

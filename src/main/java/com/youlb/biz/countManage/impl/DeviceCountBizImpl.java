@@ -279,7 +279,7 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 				if(resultDto!=null){
 					if(!"0".equals(resultDto.getCode())){
-						throw new BizException("接口返回："+resultDto.getMsg());
+						throw new BizException(resultDto.getMsg());
 					}else{
 						Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
 						if(map!=null&&!map.isEmpty()){
@@ -323,13 +323,24 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 //				}
 			
 		}else{
-			deviceCountSqlDao.update(deviceCount);
-			
+			updateAll(deviceCount);
 		}
 		
 	}
-   
     /**
+     * 更新操作
+     * @param deviceCount
+     * @throws BizException 
+     */
+    private void updateAll(DeviceCount deviceCount) throws BizException {
+		 StringBuilder sb = new StringBuilder();
+		 sb.append("update DeviceCount set deviceCountDesc=?,longitude=?,latitude=?,countType=?,countStatus=?,warnPhone=?,warnEmail=? where id=?");
+		 deviceCountSqlDao.update(sb.toString(), new Object[]{deviceCount.getDeviceCountDesc(),deviceCount.getLongitude(),deviceCount.getLatitude(),
+			 deviceCount.getCountType(),deviceCount.getCountStatus(),deviceCount.getWarnPhone(),deviceCount.getWarnEmail(),deviceCount.getId()});
+		
+	}
+
+	/**
      * 通过域id获取社区名称
      * @param domainId
      * @return

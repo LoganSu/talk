@@ -95,11 +95,11 @@ $(function(){
         	            		    RestoreCardKey = myactivex.RestoreCardKey();  
         	            		    obj = jQuery.parseJSON(RestoreCardKey);
         	            		    if(obj.code!='0'){
-        						    	  hiAlert("提示","清空卡片信息出错！");
+        						    	  hiAlert("提示","注销卡片失败！");
         			       				     return false;
         						      }
         		       			} catch (e) {
-        		       			   hiAlert("提示","清空卡片信息出错！");
+        		       			   hiAlert("提示","注销卡片失败！");
         		       			   return false;
         		       			}
         				   

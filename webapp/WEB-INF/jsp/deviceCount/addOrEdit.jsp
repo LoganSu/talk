@@ -20,9 +20,9 @@
               </tr>
               <tr>
                     <td><div class="firstFont">经度：</div></td>
-                    <td><div><input name="longitude" class="form-control"  value="${deviceCount.longitude}"/></div></td>
+                    <td><div><input name="longitude" class="form-control" maxlength="6" value="${deviceCount.longitude}"/></div></td>
                     <td><div class="leftFont">纬度：</div></td>
-                    <td><div><input name="latitude" class="form-control"  value="${deviceCount.latitude}"/></div></td>
+                    <td><div><input name="latitude" class="form-control" maxlength="6" value="${deviceCount.latitude}"/></div></td>
               </tr>
               <tr>
 	                <td><div class="firstFont">账号类型：</div></td>
