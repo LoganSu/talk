@@ -1,5 +1,7 @@
 package com.youlb.biz.doorMachine;
 
+import java.util.List;
+
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.doorMachine.DoorMachine;
 import com.youlb.entity.privilege.Operator;
@@ -14,5 +16,10 @@ public interface IDoorMachineBiz extends IBaseBiz<DoorMachine> {
      * @return
      */
 	boolean checkExist(DoorMachine doorMachine)throws BizException;
+	/**
+	 * 获取软件型号列表
+	 * @return
+	 */
+	List<String> getSoftwareTypeList()throws BizException ;
 
 }

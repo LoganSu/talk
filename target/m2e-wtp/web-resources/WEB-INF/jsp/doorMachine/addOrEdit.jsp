@@ -14,7 +14,7 @@
            <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>型号：</div></td>
-                <td><div><input name="machineType" class="form-control areaNum required" title="型号不能为空" maxlength="20" value="${doorMachine.machineType}"/></div></td>
+                <td><div><input name="softwareType" class="form-control areaNum required" title="型号不能为空" maxlength="20" value="${doorMachine.machineType}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>硬件型号：</div></td>
                 <td><div><input name="hardwareModel" class="form-control areaNum required" title="硬件型号不能为空" maxlength="20" value="${doorMachine.hardwareModel}"/></div></td>
               </tr>

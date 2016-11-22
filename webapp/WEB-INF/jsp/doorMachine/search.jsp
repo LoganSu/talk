@@ -28,7 +28,7 @@
            <table>
               <tr>
                 <td><div class="firstFont">型号：</div></td>
-                <td><div><input name="machineType" class="form-control"/></div></td>
+                <td><div><input name="softwareType" class="form-control"/></div></td>
                 <td><div class="leftFont">硬件型号：</div></td>
                 <td><div><input name="hardwareModel" class="form-control"/></div></td>
                 <td><div class="leftFont"><button class="btn btn-info btn-sm reset">重置</button></div></td>

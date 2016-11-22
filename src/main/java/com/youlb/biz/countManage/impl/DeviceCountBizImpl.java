@@ -334,9 +334,28 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
      */
     private void updateAll(DeviceCount deviceCount) throws BizException {
 		 StringBuilder sb = new StringBuilder();
-		 sb.append("update DeviceCount set deviceCountDesc=?,longitude=?,latitude=?,countType=?,countStatus=?,warnPhone=?,warnEmail=? where id=?");
-		 deviceCountSqlDao.update(sb.toString(), new Object[]{deviceCount.getDeviceCountDesc(),deviceCount.getLongitude(),deviceCount.getLatitude(),
-			 deviceCount.getCountType(),deviceCount.getCountStatus(),deviceCount.getWarnPhone(),deviceCount.getWarnEmail(),deviceCount.getId()});
+		 List<Object> values = new ArrayList<Object>();
+		 sb.append("update DeviceCount set deviceCountDesc=?,countType=?,countStatus=?,warnPhone=?,warnEmail=? ");
+		 values.add(deviceCount.getDeviceCountDesc());
+		 values.add(deviceCount.getCountType());
+		 values.add(deviceCount.getCountStatus());
+		 values.add(deviceCount.getWarnPhone());
+		 values.add(deviceCount.getWarnEmail());
+		 if(deviceCount.getLongitude() !=null){
+			 sb.append(",longitude=?");
+			 values.add(deviceCount.getLongitude());
+		 }else{
+			 sb.append(",longitude=null");
+		 }
+		 if(deviceCount.getLatitude()!=null){
+			 sb.append(",latitude=?");
+			 values.add(deviceCount.getLatitude());
+		 }else{
+			 sb.append(",latitude=null");
+		 }
+		 sb.append(" where id=?");
+		 values.add(deviceCount.getId());
+		 deviceCountSqlDao.update(sb.toString(), values.toArray());
 		
 	}
 

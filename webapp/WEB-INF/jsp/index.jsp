@@ -455,10 +455,10 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
                              </r:role>
-<%--                              <r:role auth="门口机型号定义 "> --%>
+                             <r:role auth="门口机型号定义 ">
 <!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li> --%>
-<%--                              </r:role> --%>
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
+                             </r:role>
                            </ul>
                        </div>
                    </div>

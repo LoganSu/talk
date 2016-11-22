@@ -77,6 +77,7 @@ public class OperatorCtrl extends BaseCtrl{
      */
     @RequestMapping("/loginForm.do")
     public String login(HttpServletRequest request,HttpSession httpSession,Operator user,Model model){
+    	
     	//重定向到登录页面标识
     	httpSession.setAttribute("from_redirect", "from_redirect");
         if(StringUtils.isBlank(user.getLoginName())){

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.appManage.IAppManageBiz;
+import com.youlb.biz.doorMachine.IDoorMachineBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.appManage.AppManage;
 import com.youlb.utils.common.SysStatic;
@@ -42,6 +43,12 @@ public class AppManageCtrl extends BaseCtrl {
     private IAppManageBiz appManageBiz;
 	public void setAppManageBiz(IAppManageBiz appManageBiz) {
 		this.appManageBiz = appManageBiz;
+	}
+	
+	@Autowired
+	private IDoorMachineBiz doorMachineBiz;
+	public void setDoorMachineBiz(IDoorMachineBiz doorMachineBiz) {
+		this.doorMachineBiz = doorMachineBiz;
 	}
 	
 //	@Overrideyyyyyyyyyyy
@@ -79,6 +86,12 @@ public class AppManageCtrl extends BaseCtrl {
 	    	if(SysStatic.two.equals(appManage.getAppType())){
 	    		List<AppManage> appList = appManageBiz.getOldVersion();
 	    		model.addAttribute("appList",appList);
+	    	}
+	    	//门口机需要选择类型
+	    	if("1".equals(appManage.getAppType())){
+	    		//获取软件型号列表
+	    		List<String> softwareTypeList = doorMachineBiz.getSoftwareTypeList();
+	    		model.addAttribute("softwareTypeList",softwareTypeList);
 	    	}
 	    	//获取父节点
 	//    	if(StringUtils.isNotBlank(domain.getParentId())){

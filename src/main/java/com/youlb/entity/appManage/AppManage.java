@@ -73,6 +73,10 @@ public class AppManage extends BaseModel {
 	/**第三方app类型*/
 	@Column(name="fthree_app_type")
     private String threeAppType;
+	 /**软件型号*/
+    @Column(name="fsoftware_type")
+    private String softwareType;
+	
 	/**日期搜索条件*/
 	@Transient
 	private String createTimeSearch;
@@ -117,6 +121,14 @@ public class AppManage extends BaseModel {
 		return publishTime;
 	}
 	
+	public String getSoftwareType() {
+		return softwareType;
+	}
+
+	public void setSoftwareType(String softwareType) {
+		this.softwareType = softwareType;
+	}
+
 	public String getThreeAppType() {
 		return threeAppType;
 	}

@@ -78,9 +78,9 @@ public class AppManageBiz implements IAppManageBiz {
 	@Override
 	public void update(AppManage target) throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("update AppManage set autoInstal=?,appName=?,versionName=?,versionCode=?,packageName=?,versionDes=?,iconUrl=? where id=?");
+		sb.append("update AppManage set autoInstal=?,appName=?,versionName=?,versionCode=?,packageName=?,versionDes=?,iconUrl=?,softwareType=? where id=?");
 		appManageSqlDao.update(sb.toString(),new Object[]{target.getAutoInstal(),target.getAppName(),target.getVersionName(),target.getVersionCode(),
-			target.getPackageName(),target.getVersionDes(),target.getIconUrl(),target.getId()});
+			target.getPackageName(),target.getVersionDes(),target.getIconUrl(),target.getSoftwareType(),target.getId()});
 	}
 
 	/**

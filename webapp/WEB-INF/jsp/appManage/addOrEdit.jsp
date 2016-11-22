@@ -120,6 +120,17 @@
                    </c:otherwise>
                 </c:choose>
               </c:if>
+             <!-- 门口机 -->
+              <c:if test="${appManage.appType == 1}">
+                  <td><div class="firstFont">软件型号：</div></td>
+                  <td><div>
+                    <select class="form-control" name="softwareType">
+                      <c:forEach items="${softwareTypeList}" var="softwareType">
+                         <option <c:if test="${appManage.softwareType==softwareType}">selected="selected"</c:if>  value="${softwareType}">${softwareType}</option>
+                      </c:forEach>
+                    </select>
+                 </div></td>
+              </c:if>
               <tr>
               <td><div class="firstFont"><span class="starColor">*</span>版本说明：</div></td>
                 <td colspan="4"><div>

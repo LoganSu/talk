@@ -66,6 +66,14 @@ public class DeviceInfo extends BaseModel{
    /**备注*/
    @Column(name="fremark")
    private String remark;
+   /**版本号*/
+   @Column(name="fversion_num")
+   private String versionNum;
+   /**软件型号*/
+   @Column(name="fsoftware_type")
+   private String softwareType;
+   
+   
 	public String getOprator() {
 		return "<a class='deviceInfoSetPws' rel='"+getId()+"' href='javascript:void(0)'>设置密码</a>";
 	}
@@ -105,6 +113,18 @@ public class DeviceInfo extends BaseModel{
 		return deviceStatusStr;
 	}
 	
+	public String getVersionNum() {
+		return versionNum;
+	}
+	public void setVersionNum(String versionNum) {
+		this.versionNum = versionNum;
+	}
+	public String getSoftwareType() {
+		return softwareType;
+	}
+	public void setSoftwareType(String softwareType) {
+		this.softwareType = softwareType;
+	}
 	public String getRemark() {
 		return remark;
 	}

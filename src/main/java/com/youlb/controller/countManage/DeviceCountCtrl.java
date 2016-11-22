@@ -124,6 +124,21 @@ public class DeviceCountCtrl extends BaseCtrl {
     @ResponseBody
     public String saveOrUpdate(DeviceCount deviceCount,Model model){
     	try {
+    		
+    		if(deviceCount.getLatitude()!=null){
+    			if(!RegexpUtils.checkDecimals(deviceCount.getLatitude()+"")){
+    				super.message = "请填写正确的纬度！";
+    				return super.message;
+    			}
+    		}
+    		
+    		if(deviceCount.getLongitude()!=null){
+    			if(!RegexpUtils.checkDecimals(deviceCount.getLongitude()+"")){
+    				super.message = "请填写正确的经度！";
+    				return super.message;
+    			}
+    		}
+    		
     		if(StringUtils.isNotBlank(deviceCount.getWarnPhone())){
     			if(!RegexpUtils.checkMobile(deviceCount.getWarnPhone())){
     				super.message = "请填写正确的手机号码！";
@@ -149,7 +164,11 @@ public class DeviceCountCtrl extends BaseCtrl {
     		deviceCountBiz.saveOrUpdate(deviceCount);
 //    		super.message = "添加成功！";
 		} catch (BizException e) {
-			super.message = e.getMessage();
+			if(RegexpUtils.checkChinese(e.getMessage())){
+				super.message = e.getMessage();
+			}else{
+				super.message = "操作失败！";
+			}
 			e.printStackTrace();
 		} catch (ClientProtocolException e) {
 			super.message = "操作失败！";

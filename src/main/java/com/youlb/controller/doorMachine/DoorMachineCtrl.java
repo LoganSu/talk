@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.doorMachine.IDoorMachineBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.doorMachine.DoorMachine;
-import com.youlb.entity.houseInfo.Address;
-import com.youlb.entity.houseInfo.Area;
 import com.youlb.utils.exception.BizException;
 @RequestMapping("/mc/doorMachine")
 @Controller
@@ -72,7 +70,7 @@ public class DoorMachineCtrl extends BaseCtrl {
     @ResponseBody
     public String save(DoorMachine doorMachine,Model model){
     	try {
-    		if(StringUtils.isBlank(doorMachine.getMachineType())){
+    		if(StringUtils.isBlank(doorMachine.getSoftwareType())){
     			super.message="型号不能为空";
     			return super.message;
     		}

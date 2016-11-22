@@ -10,9 +10,9 @@ import com.youlb.entity.common.BaseModel;
 @Entity
 public class DoorMachine extends BaseModel{
 	private static final long serialVersionUID = -1716963340887365557L;
-	/**型号*/
-	@Column(name="fmachine_type")
-	private String machineType;
+	/**软件型号*/
+	@Column(name="fsoftware_type")
+	private String softwareType;
 	/**硬件型号*/
     @Column(name="fhardware_model")
 	private String  hardwareModel;
@@ -21,11 +21,12 @@ public class DoorMachine extends BaseModel{
 	private String  remark;
     
     
-	public String getMachineType() {
-		return machineType;
+	 
+	public String getSoftwareType() {
+		return softwareType;
 	}
-	public void setMachineType(String machineType) {
-		this.machineType = machineType;
+	public void setSoftwareType(String softwareType) {
+		this.softwareType = softwareType;
 	}
 	public String getHardwareModel() {
 		return hardwareModel;

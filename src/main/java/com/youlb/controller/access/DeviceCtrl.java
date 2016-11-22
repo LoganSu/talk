@@ -282,8 +282,8 @@ public class DeviceCtrl extends BaseCtrl{
 				String randomUUID = UUID.randomUUID().toString();
 				randomUUID = randomUUID.replace("-", "");
 				log.info("path="+path);
-				String[] title = new String[]{"设备SN码","设备编号","设备型号","设备厂家","设备状态","应用版本","内存大小","存储容量","系统版本","处理器","固件版本","内核版本","备注","设备出厂日期"};
-				String[] filds =new String[]{"id","deviceNum","deviceModel","deviceFactory","deviceStatus","app_version","memory_size","storage_capacity","system_version","processor_type","firmware_version","kernal_version","remark","deviceBorn"};
+				String[] title = new String[]{"设备SN码","设备编号","设备型号","设备厂家","设备状态","应用版本","内存大小","存储容量","系统版本","处理器","固件版本","内核版本","备注","设备出厂日期","版本号","软包型号"};
+				String[] filds =new String[]{"id","deviceNum","deviceModel","deviceFactory","deviceStatus","app_version","memory_size","storage_capacity","system_version","processor_type","firmware_version","kernal_version","remark","deviceBorn","versionNum","softwareType"};
 				String temPath = ExcelUtils.exportExcel("设备信息", title, filds, list, path+"tems/"+randomUUID+".xls");
 				log.info("temPath="+temPath);
 				File file = new File(temPath);

@@ -29,7 +29,7 @@ var doorMachineTable  ={
             valign: 'middle',
             sortable: false
         },{
-            field: 'machineType',
+            field: 'softwareType',
             title: '型号',
             align: 'center',
             valign: 'middle',

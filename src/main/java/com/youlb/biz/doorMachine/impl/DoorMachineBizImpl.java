@@ -59,9 +59,9 @@ public class DoorMachineBizImpl implements IDoorMachineBiz {
 	public List<DoorMachine> showList(DoorMachine target, Operator loginUser)throws BizException {
 		 StringBuilder sb = new StringBuilder("from DoorMachine where 1=1");
 		 List<Object> values = new ArrayList<Object>();
-		 if(StringUtils.isNotBlank(target.getMachineType())){
-			 sb.append("and machineType like ?");
-			 values.add("%"+target.getMachineType()+"%");
+		 if(StringUtils.isNotBlank(target.getSoftwareType())){
+			 sb.append("and softwareType like ?");
+			 values.add("%"+target.getSoftwareType()+"%");
 		 }
 		 if(StringUtils.isNotBlank(target.getHardwareModel())){
 			 sb.append("and hardwareModel like ?");
@@ -90,12 +90,23 @@ public class DoorMachineBizImpl implements IDoorMachineBiz {
      */
 	@Override
 	public boolean checkExist(DoorMachine doorMachine) throws BizException {
-		 String hql = "from DoorMachine where machineType=? and hardwareModel=?";
-		 List<DoorMachine> list = doorMachineSqlDao.find(hql, new Object[]{doorMachine.getMachineType(),doorMachine.getHardwareModel()});
+		 String hql = "from DoorMachine where softwareType=? and hardwareModel=?";
+		 List<DoorMachine> list = doorMachineSqlDao.find(hql, new Object[]{doorMachine.getSoftwareType(),doorMachine.getHardwareModel()});
 		 if(list!=null&&!list.isEmpty()){
 			 return true;
 		 }
 		return false;
+	}
+    /**
+     * 获取软件型号列表
+     * @return
+     * @throws BizException 
+     * @see com.youlb.biz.doorMachine.IDoorMachineBiz#getSoftwareTypeList()
+     */
+	@Override
+	public List<String> getSoftwareTypeList() throws BizException {
+		 String hql = "select  softwareType from DoorMachine group by softwareType order by softwareType";
+		return doorMachineSqlDao.find(hql, new Object[]{});
 	}
 
 }
