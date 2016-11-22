@@ -129,6 +129,8 @@
     <script src="${path}/js/table/IPManageTable.js"></script>
     <script src="${path}/js/table/SMSManageTable.js"></script>
     <script src="${path}/js/table/billManageTable.js"></script>
+    <script src="${path}/js/table/doorMachineTable.js"></script>
+    
     
     
     
@@ -148,7 +150,7 @@
 			<div class="panel panel-primary">
 			    <div class="panel-heading" >
 				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
-				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do">返回首页</button></label>
+				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
 					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
 				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
 			    </div>
@@ -453,6 +455,10 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
                              </r:role>
+<%--                              <r:role auth="门口机型号定义 "> --%>
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li> --%>
+<%--                              </r:role> --%>
                            </ul>
                        </div>
                    </div>
