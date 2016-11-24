@@ -28,7 +28,7 @@ public class DomainName extends BaseModel {
     private String parentid;
 	/**层级*/
 	@Column(name="flayer")
-    private String layer;
+    private Integer layer;
 	
 	
 	public String getParentid() {
@@ -37,10 +37,10 @@ public class DomainName extends BaseModel {
 	public void setParentid(String parentid) {
 		this.parentid = parentid;
 	}
-	public String getLayer() {
+	public Integer getLayer() {
 		return layer;
 	}
-	public void setLayer(String layer) {
+	public void setLayer(Integer layer) {
 		this.layer = layer;
 	}
 	public String getRemark() {

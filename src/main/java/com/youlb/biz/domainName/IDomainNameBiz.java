@@ -12,5 +12,10 @@ public interface IDomainNameBiz extends IBaseBiz<DomainName> {
 	void saveOrUpdate(DomainName domainName, Operator loginUser) throws BizException;
 
 	List<DomainName> showListByParentId(String id, Operator loginUser);
+    /**
+     * 获取二级域名列表
+     * @return
+     */
+	List<DomainName> getTwoDomainName()throws BizException;
 
 }

@@ -395,6 +395,12 @@ var flushTree = function(){
 		 url= $path+'/mc/aboutNeighborhoodsTree';//社区树
 		 open=true;
 	  }
+	 var d = $("#domainNameTree").parent().is(":visible");
+	 if(d){
+		 treeId="domainNameTree";
+		 url= $path+'/mc/domainNameTree';//社区树
+		 open=true;
+	  }
 	  tree(treeId, url,open,param);
  
 }

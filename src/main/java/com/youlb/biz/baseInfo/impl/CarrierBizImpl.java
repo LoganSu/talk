@@ -13,6 +13,7 @@ import com.youlb.biz.baseInfo.ICarrierBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Pager;
+import com.youlb.entity.domainName.DomainName;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.entity.privilege.Role;
@@ -52,6 +53,12 @@ public class CarrierBizImpl implements ICarrierBiz {
 
 	public void setRoleSqlDao(BaseDaoBySql<Role> roleSqlDao) {
 		this.roleSqlDao = roleSqlDao;
+	}
+	
+	@Autowired
+	private BaseDaoBySql<DomainName> domainNameSqlDao;
+	public void setDomainNameSqlDao(BaseDaoBySql<DomainName> domainNameSqlDao) {
+		this.domainNameSqlDao = domainNameSqlDao;
 	}
 	/**
 	 * @param target
@@ -226,6 +233,15 @@ public class CarrierBizImpl implements ICarrierBiz {
 				//发送密码到手机上
 				Boolean b = SmsUtil.sendSMS(carrier.getTel(), "【赛翼智能】欢迎使用友邻邦产品，为您创建的"+carrier.getCarrierName()+"运营商密码为："+random+"，请妥善保管");
 				 //TODO LOG
+				 //添加运营商域名
+				DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
+				DomainName sub = new DomainName();
+				sub.setDomain(domainName.getDomain()+"/"+carrier.getCarrierNum()+"/login.do");
+				sub.setPlatform(domainName.getPlatform());
+				sub.setFname(carrier.getCarrierName()+"运营商");
+				sub.setLayer(domainName.getLayer()+1);
+				sub.setParentid(domainName.getId());
+				domainNameSqlDao.add(sub);
 				//设置角色的权限
 //			List<Privilege> pList = privilegeSqlDao.find("from Privilege p where p.type=?",new Object[]{SysStatic.NORMALPRIVILEGE});
 //			if(pList!=null&&!pList.isEmpty()){

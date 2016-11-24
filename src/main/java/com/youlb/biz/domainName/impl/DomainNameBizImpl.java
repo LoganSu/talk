@@ -73,6 +73,7 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 	public void saveOrUpdate(DomainName domainName, Operator loginUser) throws BizException {
 		if(StringUtils.isBlank(domainName.getId())){
 			domainName.setId(null);
+			domainName.setDomain(domainName.getDomain()+".sayee.cn");
 			domainNameSqlDao.add(domainName);
 		}else{
 			domainNameSqlDao.update(domainName);
@@ -84,6 +85,18 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 	public List<DomainName> showListByParentId(String id, Operator loginUser) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+    /**
+     * 获取二级域名列表
+     * @return
+     * @throws BizException 
+     * @see com.youlb.biz.domainName.IDomainNameBiz#getTwoDomainName()
+     */
+	@Override
+	public List<DomainName> getTwoDomainName() throws BizException {
+		 String hql = "from DomainName where parentid='14'";
+		 List<DomainName> list = domainNameSqlDao.find(hql);
+		return list;
 	}
 
 }

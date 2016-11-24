@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.domainName.DomainName;
+import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
 @Controller
@@ -49,7 +51,15 @@ public class DomainNameCtrl extends BaseCtrl {
      */
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,String parentid,Model model){
-    	model.addAttribute("parentid", parentid);
+    	if(StringUtils.isNotBlank(parentid)){
+    		try {
+				DomainName parentDomain = domainNameBiz.get(parentid);
+				model.addAttribute("parentDomain", parentDomain);
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     	if(ids!=null&&ids.length>0){
 			try {
 				DomainName domainName = domainNameBiz.get(ids[0]);
@@ -71,6 +81,28 @@ public class DomainNameCtrl extends BaseCtrl {
     @ResponseBody
     public String save(DomainName domainName,Model model){
     	try {
+    		
+    		if(StringUtils.isBlank(domainName.getFname())){
+    			super.message = "名称不能为空";
+    			return super.message;
+    		}
+    		if(StringUtils.isBlank(domainName.getDomain())){
+    			super.message = "域名不能为空";
+    			return super.message;
+    		}else{
+    			if(RegexpUtils.checkNumAndLetter(domainName.getDomain(), 3, 8)){
+    				super.message = "请填写正确的字符";
+        			return super.message;
+    			}
+    		}
+    		if(StringUtils.isNotBlank(domainName.getId())){
+    			String s = "11,12,13,14";
+    			if(s.contains(domainName.getId())){
+    				super.message = "该条数据不能修改";
+        			return super.message;
+    			}
+    		}
+    		
     		domainNameBiz.saveOrUpdate(domainName,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

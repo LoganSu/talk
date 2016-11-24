@@ -15,8 +15,18 @@
               <tr>
 	                <td><div class="firstFont"><span class="starColor">*</span>名称：</div></td>
 	                <td><div><input name="carrierName" class="form-control required" title="名称不能为空" maxlength="10" value="${carrier.carrierName}"/></div></td>
-                     <td><div class="leftFont"><span class="starColor">*</span>运营商简称：</div></td>
-                     <td><div><input name="carrierNum" class="form-control required" title="运营商简称不能为空且最多为10个字母" maxlength="10" value="${carrier.carrierNum}"/></div></td>
+                    <td><div class="leftFont"><span class="starColor">*</span>二级域名：</div></td>
+                    <td><div>
+	                  <select name="domainNameId" class="form-control province">
+	                    <c:forEach var="domainName" items="${domainList}">
+           	                <option value="${domainName.id}">${domainName.domain}</option>
+	                    </c:forEach>
+	                  </select>
+	                </div></td>
+               </tr>
+               <tr>
+                    <td><div class="firstFont"><span class="starColor">*</span>运营商简称：</div></td>
+                    <td><div><input name="carrierNum" class="form-control required" title="运营商简称不能为空且最多为10个字母" maxlength="10" value="${carrier.carrierNum}"/></div></td>
 	                <td><div class="leftFont"><span class="starColor number">*</span>手机号码：</div></td>
 	                <td><div><input name="tel" class="form-control required" title="手机号码不能为空" maxlength="11" placeholder="接收运营商登录密码" value="${carrier.tel}"/></div></td>
               </tr>
@@ -24,7 +34,7 @@
 	                <td><div class="firstFont"><span class="starColor">*</span>固定电话：</div></td>
 	                <td><div><input name="fax" class="form-control required" title="固定电话不能为空" maxlength="15" placeholder="格式：020-88888888"   value="${carrier.fax}"/></div></td>
 	                <td><div class="leftFont"><span class="starColor">*</span>地址：</div></td>
-	                <td colspan="3"><div><input name="address" class="form-control required" maxlength="100" style="width:450px" title="地址不能为空" value="${carrier.address}"/></div></td>
+	                <td colspan="1"><div><input name="address" class="form-control required" maxlength="100" style="width:450px" title="地址不能为空" value="${carrier.address}"/></div></td>
 <!-- 	                <td><div class="leftFont">邮编：</div></td> -->
 <%-- 	                <td><div><input name="postcode" class="form-control"  value="${carrier.postcode}"/></div></td> --%>
               </tr>

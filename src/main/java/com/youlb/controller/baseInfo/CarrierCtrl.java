@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.baseInfo.ICarrierBiz;
+import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.appManage.AppManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
+import com.youlb.entity.domainName.DomainName;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.vo.QJson;
 import com.youlb.entity.vo.QTree;
@@ -52,7 +54,11 @@ public class CarrierCtrl extends BaseCtrl {
 	public void setCarrierBiz(ICarrierBiz carrierBiz) {
 		this.carrierBiz = carrierBiz;
 	}
-
+	@Autowired
+    private IDomainNameBiz domainNameBiz;
+	public void setDomainNameBiz(IDomainNameBiz domainNameBiz) {
+		this.domainNameBiz = domainNameBiz;
+	}
 
 	/**
 	 * 显示table数据
@@ -80,6 +86,14 @@ public class CarrierCtrl extends BaseCtrl {
      */
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Carrier carrier,Model model){
+    	//获取二级域名列表
+    	try {
+			List<DomainName> domainList = domainNameBiz.getTwoDomainName();
+			model.addAttribute("domainList", domainList);
+		} catch (BizException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	
     	if(ids!=null&&ids.length>0){
     		try {
@@ -110,6 +124,10 @@ public class CarrierCtrl extends BaseCtrl {
 	    		
     		if(StringUtils.isBlank(carrier.getCarrierName())){
     			super.message = "名称不能为空！";
+   			      return  super.message;
+    		}
+    		if(StringUtils.isBlank(carrier.getDomainNameId())){
+    			super.message = "二级域名不能为空，请先添加二级域名";
    			      return  super.message;
     		}
     		
