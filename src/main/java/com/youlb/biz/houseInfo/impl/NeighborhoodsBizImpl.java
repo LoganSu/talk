@@ -197,11 +197,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			domain.setRemark(neighborhoods.getNeibName());
 			domain.setParentId(neighborhoods.getParentId());
 			String domainId = (String) domainBiz.save(domain);
-			//判断是否创建sip账号
-			if("2".equals(neighborhoods.getCreateSipNum())){
+			//创建sip账号
+//			if("2".equals(neighborhoods.getCreateSipNum())){
 				String neiborName = neighborhoods.getNeibName();
 				createSip(neibId, neiborName);
-			}
+//			}
 			
 			loginUser.getDomainIds().add(domainId);
 			domainSqlDao.getCurrSession().flush();
@@ -223,17 +223,17 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			//更新域对象
 			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getId());
 			//如果是创建sip账号 判断是否已经存在
-			if("2".equals(neighborhoods.getCreateSipNum())){
-				String sql = "select user_sip from users where local_sip=?";
-				List<Integer> list = domainSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getId()});
-				if(list==null||list.isEmpty()){
-					createSip(neighborhoods.getId(), neighborhoods.getNeibName());
-				}
-			//删除sip账号
-			}else if("1".equals(neighborhoods.getCreateSipNum())){
-				String delete ="delete from users where local_sip=?";
-				domainSqlDao.executeSql(delete, new Object[]{neighborhoods.getId()});
-			}
+//			if("2".equals(neighborhoods.getCreateSipNum())){
+//				String sql = "select user_sip from users where local_sip=?";
+//				List<Integer> list = domainSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getId()});
+//				if(list==null||list.isEmpty()){
+//					createSip(neighborhoods.getId(), neighborhoods.getNeibName());
+//				}
+//			}
+//			else if("1".equals(neighborhoods.getCreateSipNum())){
+//				String delete ="delete from users where local_sip=?";
+//				domainSqlDao.executeSql(delete, new Object[]{neighborhoods.getId()});
+//			}
 		}
 	}
 	/**
@@ -258,7 +258,12 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		formParams.add(new BasicNameValuePair("neibName", neiborName));
 		UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
 		request.setEntity(uefEntity);
-		CloseableHttpResponse response = httpClient.execute(request);
+		CloseableHttpResponse response=null;
+		try{
+			 response = httpClient.execute(request);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		if(response.getStatusLine().getStatusCode()==200){
 			HttpEntity entity_rsp = response.getEntity();
 			ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);

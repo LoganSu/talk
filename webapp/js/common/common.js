@@ -28,6 +28,9 @@ $(function(){
 				  }else if(treeId=="neighborhoodsTree"){
 					  url= $path+'/mc/aboutNeighborhoodsTree';//社区树
 					  open=true;
+				  }else if(treeId=="domainNameTree"){
+					  url= $path+'/mc/domainNameTree';//域名树
+					  open=true;
 				  }
 				  tree(treeId, url,open,param);
 				  $(document).on("click","#"+treeId+" li a",function(){

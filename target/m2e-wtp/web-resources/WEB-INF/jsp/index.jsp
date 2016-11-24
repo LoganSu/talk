@@ -130,7 +130,7 @@
     <script src="${path}/js/table/SMSManageTable.js"></script>
     <script src="${path}/js/table/billManageTable.js"></script>
     <script src="${path}/js/table/doorMachineTable.js"></script>
-    
+    <script src="${path}/js/table/domainNameTable.js"></script>
     
     
     
@@ -459,6 +459,9 @@
 <!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
                              </r:role>
+                             <r:role auth="域名管理 ">
+                               <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li>
+                             </r:role>
                            </ul>
                        </div>
                    </div>
@@ -509,6 +512,9 @@
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
                      <p id="neighborhoodsTree"></p>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <p id="domainNameTree"></p>
                   </div>
                   
                   
