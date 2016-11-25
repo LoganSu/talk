@@ -394,7 +394,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		 sb.append("select * from (select n.id id,n.FNEIBNAME neibName,n.FNEIBNUM neibNum,n.FCONTRACTOR contractor," )
 		 .append(" n.FADDRESS address,n.FSTARTBUILDDATE startBuildDate,n.FENDBUILDDATE endBuildDate,")
 		 .append("n.FUSEDATE useDate,n.FTOTALAREA totalArea,n.FTOTALBUILDAREA totalBuildArea,n.FTOTALBUSSNISAREA totalBussnisArea,")
-		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum ")
+		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,n.fcreate_sip_num")
 		 .append(" from t_neighborhoods n inner join t_domain d on d.fentityid = n.id left join users u on u.local_sip=n.id where d.fparentid=? ");
 		 values.add(target.getParentId());
 		 
@@ -435,7 +435,9 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 					neibor.setPlotRatio(obj[12]==null?"":(String)obj[12]);
 					neibor.setRemark(obj[13]==null?"":(String)obj[13]);
 					neibor.setCreateTime(obj[14]==null?null:(Date)obj[14]);
-					neibor.setSipNum(obj[15]==null?null:(Integer)obj[15]+"");
+					if("2".equals(obj[16])){
+						neibor.setSipNum(obj[15]==null?null:(Integer)obj[15]+"");
+					}
 					neibor.setPager(pager);
 					neiborList.add(neibor);
 				}

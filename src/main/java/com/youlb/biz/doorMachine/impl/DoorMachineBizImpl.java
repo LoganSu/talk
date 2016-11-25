@@ -90,8 +90,16 @@ public class DoorMachineBizImpl implements IDoorMachineBiz {
      */
 	@Override
 	public boolean checkExist(DoorMachine doorMachine) throws BizException {
-		 String hql = "from DoorMachine where softwareType=? and hardwareModel=?";
-		 List<DoorMachine> list = doorMachineSqlDao.find(hql, new Object[]{doorMachine.getSoftwareType(),doorMachine.getHardwareModel()});
+		StringBuilder sb = new StringBuilder();
+		List<Object> values = new ArrayList<Object>();
+		sb.append("from DoorMachine where softwareType=? and hardwareModel=?");
+		values.add(doorMachine.getSoftwareType());
+		values.add(doorMachine.getHardwareModel());
+		if(StringUtils.isNotBlank(doorMachine.getId())){
+			sb.append(" and id != ?");
+			values.add(doorMachine.getId());
+		}
+		 List<DoorMachine> list = doorMachineSqlDao.find(sb.toString(), values.toArray());
 		 if(list!=null&&!list.isEmpty()){
 			 return true;
 		 }
