@@ -20,16 +20,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.youlb.biz.privilege.IOperatorBiz;
-import com.youlb.controller.oauth2.MyUserDetails;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Pager;
@@ -52,7 +45,7 @@ import com.youlb.utils.helper.SearchHelper;
  * 
  */
 @Service("operatorBiz")
-public class OperatorBizImpl implements IOperatorBiz ,UserDetailsService{
+public class OperatorBizImpl implements IOperatorBiz {
 	@Autowired
 	private BaseDaoBySql<Operator> operatorSqlDao;
 	@Autowired
@@ -681,15 +674,4 @@ public class OperatorBizImpl implements IOperatorBiz ,UserDetailsService{
 		return false;
 	}
 
-	@Override
-	public UserDetails loadUserByUsername(String arg0)throws UsernameNotFoundException {
-		 List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-		 SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_ABCS");
-		  list.add(simpleGrantedAuthority);
-		 User user = new User(arg0, "abc", true, true, true, true, list);
-//		 SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_ABCS");
-		return user;
-	}
-
-   
 }
