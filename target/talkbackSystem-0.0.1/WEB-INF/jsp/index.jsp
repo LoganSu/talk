@@ -86,6 +86,8 @@
     <script src="${path}/js/monitor/monitor.js" ></script>
     <script src="${path}/js/IPManage/IPManage.js" ></script>
     <script src="${path}/js/SMSManage/SMSManage.js" ></script>
+    <script src="${path}/js/houseInfo/area.js" ></script>
+    
     
     
     <!-- table JS -->
@@ -127,6 +129,8 @@
     <script src="${path}/js/table/IPManageTable.js"></script>
     <script src="${path}/js/table/SMSManageTable.js"></script>
     <script src="${path}/js/table/billManageTable.js"></script>
+    <script src="${path}/js/table/doorMachineTable.js"></script>
+    <script src="${path}/js/table/domainNameTable.js"></script>
     
     
     
@@ -146,7 +150,7 @@
 			<div class="panel panel-primary">
 			    <div class="panel-heading" >
 				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
-				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do">返回首页</button></label>
+				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
 					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
 				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
 			    </div>
@@ -211,7 +215,7 @@
                            <ul class="nav nav-pills nav-stacked">
                              <r:role auth="实时监控">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do">实时监控</a></li>
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do?1=1">实时监控</a></li>
                              </r:role>
                            </ul>
                        </div>
@@ -374,7 +378,7 @@
 	                       <div class="panel-body">
 		                       <ul class="nav nav-pills nav-stacked">
 		                           <r:role auth="关于小区">
-		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do">关于小区</a></li>
+		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li>
 		                           </r:role>
 			                       <r:role auth="客服服务">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">客服服务</a></li>
@@ -397,9 +401,9 @@
 		                           <r:role auth="分组管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
 		                           </r:role>
-		                           <r:role auth="费用管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li>
-		                           </r:role>
+<%-- 		                           <r:role auth="费用管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li> --%>
+<%-- 		                           </r:role> --%>
 	                           </ul>
 	                             
 	                       </div>
@@ -451,6 +455,13 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
                              </r:role>
+                             <r:role auth="门口机型号定义 ">
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
+                             </r:role>
+                             <r:role auth="域名管理 ">
+                               <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li>
+                             </r:role>
                            </ul>
                        </div>
                    </div>
@@ -465,7 +476,7 @@
                        <div class="panel-body">
                            <ul class="nav nav-pills nav-stacked">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/toChangePws.do">修改密码</a></li>
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/toChangePws.do?1=1">修改密码</a></li>
                            </ul>
                        </div>
                    </div>
@@ -501,6 +512,9 @@
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
                      <p id="neighborhoodsTree"></p>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <p id="domainNameTree"></p>
                   </div>
                   
                   

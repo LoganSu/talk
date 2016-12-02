@@ -4,15 +4,15 @@
 <body>
 <script type="text/javascript">
   $(function(){
-	  $("#updatePaswForm .password").on("change",function(){
-	      var newPassword = $("#updatePaswForm .newPassword").val();
-		  var password = $("#updatePaswForm .password")
-		  if(password.length==newPassword.length){
-			  if(!password==newPassword){
-				  hiAlert("提示","密码输入不一致");
-			  }
-		  }
-	  })
+// 	  $("#updatePaswForm .newPassword").on("change ",function(){
+// 	      var newPassword = $("#updatePaswForm .newPassword").val();
+// 		  alert(newPassword);
+// 		  var password = $("#updatePaswForm .password")
+// 		  if(newPassword.length<5){
+// 				  hiAlert("提示","密码不能小于5个字符");
+// 				  return false;
+// 		  }
+// 	  })
   })
 </script>
 <div>
@@ -24,12 +24,12 @@
 	              <tr>
 	                <td><div class="leftFont"><span class="starColor">*</span>新密码：</div></td>
 	                <td><div>
-	                   <input type="password" name="newPassword" class="form-control updatePassword" title="新密码不能为空"/>
+	                   <input type="password" name="newPassword" class="form-control newPassword" title="新密码不能为空"/>
 	                </div></td>
 	              </tr>
 	              <tr>
 	                <td><div class="leftFont"><span class="starColor">*</span>确认新密码：</div></td>
-	                <td><div><input type="password" name="password" class="form-control updatePassword" title="确认新密码不能为空"/></div></td>
+	                <td><div><input type="password" name="password" class="form-control password" title="确认新密码不能为空"/></div></td>
 	              </tr>
 	           </table>
            </div>

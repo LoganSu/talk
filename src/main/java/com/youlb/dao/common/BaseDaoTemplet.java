@@ -3,6 +3,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -1121,9 +1122,14 @@ public class BaseDaoTemplet<T extends Model> extends HibernateDaoSupport{
 		int count = 0;
 		StringBuilder sb = new StringBuilder();
 		sb.append(withClause);
-		sb.append("select count(1) ");
-		sb.append(sql);
-		count = jdbcTemplate.queryForInt(sb.toString(), values);
+		sb.append("select count(*) ");
+		if(sql.contains("order by")){
+			sb.append(sql.substring(sql.indexOf("from"),sql.lastIndexOf("order by")-1));
+		}else{
+			sb.append(sql.substring(sql.indexOf("from")));
+		}
+
+		count = jdbcTemplate.queryForObject(sb.toString(),values,Integer.class);
 		return count;
 	}
 	

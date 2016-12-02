@@ -16,7 +16,7 @@
 	                <td><div class="leftFont"><span class="starColor">*</span>姓名：</div></td>
 	                <td><div><input name="realName" class="form-control required" title="姓名不能为空" value="${user.realName}"/></div></td>
 	                <td><div class="leftFont"><span class="starColor">*</span>手机号码：</div></td>
-	                <td><div><input name="phone" class="form-control required" maxlength="11" title="电话不能为空" value="${user.phone}"/></div></td>
+	                <td><div><input name="phone" class="form-control required" maxlength="11" title="手机号码不能为空" value="${user.phone}"/></div></td>
 	              </tr>
 <!-- 	              <tr> -->
 <!-- 	                 <td><div class="leftFont"><span class="starColor">*</span>系统管理员：</div></td> -->

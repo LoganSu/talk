@@ -2,7 +2,6 @@ package com.youlb.biz.privilege.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,9 +20,16 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.youlb.biz.privilege.IOperatorBiz;
+import com.youlb.controller.oauth2.MyUserDetails;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Pager;
@@ -46,7 +52,7 @@ import com.youlb.utils.helper.SearchHelper;
  * 
  */
 @Service("operatorBiz")
-public class OperatorBizImpl implements IOperatorBiz {
+public class OperatorBizImpl implements IOperatorBiz ,UserDetailsService{
 	@Autowired
 	private BaseDaoBySql<Operator> operatorSqlDao;
 	@Autowired
@@ -116,6 +122,9 @@ public class OperatorBizImpl implements IOperatorBiz {
 	@Override
 	public Operator get(Serializable id) throws BizException {
 		Operator operator = operatorSqlDao.get(id);
+		if(operator.getLoginName().contains("_")){
+			operator.setLoginName(operator.getLoginName().substring(operator.getLoginName().indexOf("_")+1));
+		}
 		//获取角色集合
 		String sql = "select m.froleid from t_operator o inner join t_operator_role m on m.foperatorid=o.id where o.id=?";
 		List<String> roleIds = operatorSqlDao.pageFindBySql(sql,new Object[]{id});
@@ -136,6 +145,88 @@ public class OperatorBizImpl implements IOperatorBiz {
 //			login.setLogOutTime(new Date());
 			operatorSqlDao.update(update, new Object[]{0,new Date(),login.getId()});
 		}
+	}
+	/**
+	 * 隐式登录
+	 * @param user
+	 * @return
+	 * @throws BizException 
+	 * @see com.youlb.biz.privilege.IOperatorBiz#hideLogin(com.youlb.entity.privilege.Operator)
+	 */
+	@Override
+	public Operator hideLogin(Operator user) throws BizException {
+		if(user!=null&&StringUtils.isNotBlank(user.getLoginName())&&user.getCarrier()!=null&&StringUtils.isNotBlank(user.getCarrier().getCarrierNum())){
+			StringBuilder sb = new StringBuilder();
+			sb.append("SELECT o.id,o.floginname,o.frealname,o.fphone,o.flogintime,o.flogouttime,o.floginstatus,o.fisadmin,o.fpassword")
+			.append(" from t_operator o INNER JOIN t_operator_role tor on tor.foperatorid=o.id INNER JOIN t_role r on")
+			.append(" r.id =tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid where o.floginname=? and c.fcarriernum=?");
+//			String pasw = SHAEncrypt.digestPassword(user.getPassword());
+			List<Object[]> operatorObj = operatorSqlDao.pageFindBySql(sb.toString(), new Object[]{user.getLoginName(),user.getCarrier().getCarrierNum()});
+			List<Operator> list = objToOperator(operatorObj);
+			if(!list.isEmpty()){
+			   Operator loginUser = list.get(0);
+			   //绑定运营商信息
+			    sb = new StringBuilder();
+			    sb.append("select c.id,c.fcarriername,c.fisnormal,c.fcarriernum")
+			   .append(" from t_carrier c INNER JOIN t_role r on r.fcarrierid=c.id INNER JOIN t_operator_role tor")
+			    .append(" on tor.froleid=r.id where tor.foperatorid=? GROUP BY c.id,c.fcarriername,c.fisnormal,c.fcarriernum");
+			    Object[] obj =  (Object[]) operatorSqlDao.findObjectBySql(sb.toString(), new Object[]{loginUser.getId()});
+			    Carrier carrier = new Carrier();
+			    if(obj!=null){
+			    	carrier.setId(obj[0]==null?null:(String)obj[0]);
+			    	carrier.setCarrierName(obj[1]==null?null:(String)obj[1]);
+			    	carrier.setIsNormal(obj[2]==null?null:(String)obj[2]);
+			    	carrier.setCarrierNum(obj[3]==null?null:(String)obj[3]);
+			    }
+			    loginUser.setCarrier(carrier);
+//			    //判断密码是否正确
+//				 //加密匹配
+//				 String pasw = SHAEncrypt.digestPassword(carrier.getCarrierNum()+loginUser.getLoginName()+loginUser.getPassword()+code);
+//			     if(!pasw.equals(user.getPassword())){
+//			    	 return null;
+//			     }
+			   
+		    	//更改状态
+		    	loginUser.setLoginStatus(1);
+	    		loginUser.setLoginTime(new Date());//登入时间
+	    		operatorSqlDao.update(loginUser);
+	    		//设置操作权限
+		    	 sb = new StringBuilder();
+		    	sb.append("SELECT p.fkey from  t_role r INNER JOIN t_role_privilege rp ON r.id=rp.froleId INNER JOIN t_privilege p ")
+		    	.append(" ON p.id=rp.fprivilegeId WHERE r.id IN (SELECT tor.froleid from t_operator_role tor where tor.foperatorId =?)")
+		    	.append(" group by p.fkey");
+		    	List<String> listObj = operatorSqlDao.pageFindBySql(sb.toString(), new Object[]{loginUser.getId()});
+		    	loginUser.setPrivilegeList(listObj);
+		         //设置用户角色
+	    	    String rolesHql = "SELECT tor.froleId from t_operator o INNER JOIN t_operator_role tor ON tor.foperatorId=o.id where o.id=?";
+	    	    List<String> roles = operatorSqlDao.pageFindBySql(rolesHql, new Object[]{loginUser.getId()});
+			    loginUser.setRoleIds(roles);
+			    //设置用户域
+			     sb = new StringBuilder();
+			     List<Object> values = new ArrayList<Object>();
+			    //admin拥有全部域权限 isAdmin为空是普通用户
+			    if(loginUser.getIsAdmin()!=null){
+			    	sb.append("SELECT tcd.fdomainid from t_carrier c INNER JOIN t_role r ON r.fcarrierid=c.id")
+			    	.append(" INNER JOIN t_carrier_domain tcd ON tcd.fcarrierid=c.id")
+			    	.append(" INNER JOIN t_operator_role tor on r.id=tor.froleid where tor.foperatorid=?");
+			    }else{
+			    	sb.append("SELECT trd.fdomainid from t_operator_role tor INNER JOIN t_role r on r.id=tor.froleid")
+			        .append(" INNER JOIN t_role_domain trd on trd.froleid=r.id where tor.foperatorid=?");
+			    }
+			    values.add(loginUser.getId());
+			    List<String> domainIds = operatorSqlDao.pageFindBySql(sb.toString(),values.toArray());
+			    //防止nullPointException
+			    if(domainIds==null){
+			    	domainIds = new ArrayList<String>();
+			    }
+			    loginUser.setDomainIds(domainIds);
+			    return loginUser;
+		    }else{
+			    return null;
+		    }
+	    }else{
+		    return null;
+	    }
 	}
 
 	/**
@@ -281,12 +372,16 @@ public class OperatorBizImpl implements IOperatorBiz {
 		.append(" o.floginstatus loginStatus,o.fisadmin isAdmin,o.fpassword,o.fcreatetime createTime from t_operator o INNER JOIN t_operator_role tor ON o.id=tor.foperatorid ")
 		.append(" INNER JOIN t_role r ON r.id=tor.froleid INNER JOIN t_carrier c ON c.id=r.fcarrierid")
 		.append(" INNER JOIN t_carrier_domain  tcd on tcd.fcarrierid=c.id  where 1=1 ");//admin用户显示列表
-		
 		List<String> domainIds = loginUser.getDomainIds();
 		if(domainIds!=null&&!domainIds.isEmpty()){
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds,"tcd.fdomainid"));
 			values.add(domainIds);
 		}
+		//对接平台用户数据过滤
+//		 if(loginUser.getLoginName().contains("_")){
+//			 sb.append(" and substr(o.floginname, 0 ,length('"+loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_"))+"')+1)=?");
+//			 values.add(loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_")));
+//		 }
 		//普通运营商只能看到自己所属运营商的用户 
 //		if(SysStatic.NORMALCARRIER.equals(loginUser.getCarrier().getIsNormal())){ 
 			sb.append(" and c.id =? and o.fisadmin is null"); 
@@ -331,7 +426,11 @@ public class OperatorBizImpl implements IOperatorBiz {
 			for(Object[] obj:listObj){
 				Operator operator = new Operator();
 				operator.setId(obj[0]==null?"":(String)obj[0]);
-				operator.setLoginName(obj[1]==null?"":(String)obj[1]);
+//				if(hideprefix){
+//					operator.setLoginName(obj[1]==null?"":((String)obj[1]).contains("_")?((String)obj[1]).substring(((String)obj[1]).indexOf("_")+1):(String)obj[1]);
+//				}else{
+					operator.setLoginName(obj[1]==null?"":(String)obj[1]);
+//				}
 				operator.setRealName(obj[2]==null?"":(String)obj[2]);
 				operator.setPhone(obj[3]==null?"":(String)obj[3]);
 				operator.setLoginTime(obj[4]==null?null:(Date)obj[4]);
@@ -581,5 +680,16 @@ public class OperatorBizImpl implements IOperatorBiz {
 		}
 		return false;
 	}
+
+	@Override
+	public UserDetails loadUserByUsername(String arg0)throws UsernameNotFoundException {
+		 List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
+		 SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_ABCS");
+		  list.add(simpleGrantedAuthority);
+		 User user = new User(arg0, "abc", true, true, true, true, list);
+//		 SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_ABCS");
+		return user;
+	}
+
    
 }

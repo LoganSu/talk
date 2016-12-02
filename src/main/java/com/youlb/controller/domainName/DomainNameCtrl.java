@@ -63,6 +63,7 @@ public class DomainNameCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
 			try {
 				DomainName domainName = domainNameBiz.get(ids[0]);
+//				domainName.setDomain(domainName.getDomain().substring(0, domainName.getDomain().indexOf(".")));
 				model.addAttribute("domainName", domainName);
 			} catch (BizException e) {
 				// TODO Auto-generated catch block
@@ -90,8 +91,8 @@ public class DomainNameCtrl extends BaseCtrl {
     			super.message = "域名不能为空";
     			return super.message;
     		}else{
-    			if(RegexpUtils.checkNumAndLetter(domainName.getDomain(), 3, 8)){
-    				super.message = "请填写正确的字符";
+    			if(!RegexpUtils.checkNumAndLetter(domainName.getDomain(), 1, 8)){
+    				super.message = "域名为1~8个字符组成";
         			return super.message;
     			}
     		}

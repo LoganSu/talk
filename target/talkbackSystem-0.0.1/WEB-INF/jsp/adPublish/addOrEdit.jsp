@@ -189,7 +189,10 @@ text-align: center;
 				open: false,
 				checkbox:true,
 				checkboxLink:false,
-				showurl:false
+				showurl:false,
+				checkboxPartShow:true,
+				layer:[1,2,3,4]
+				
 		});
 		//多选框回显
  		var treecheckbox = $("#adPublishDomainIds").val();

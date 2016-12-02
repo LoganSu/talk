@@ -1,6 +1,7 @@
 package com.youlb.controller.privilege;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,11 +25,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.qiniu.util.Json;
 import com.youlb.biz.privilege.IOperatorBiz;
 import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Role;
+import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
@@ -75,9 +81,65 @@ public class OperatorCtrl extends BaseCtrl{
      * 用户登入
      * @return
      */
+    @RequestMapping("/hideLogin.do")
+    public String hideLogin(HttpServletRequest request,HttpServletResponse response,HttpSession httpSession,Operator user,Model model){
+    	Map<String,String> retMap = new HashMap<String, String>();
+		try {
+			PrintWriter writer = response.getWriter();
+	    	//其他平台对接判断
+	    	String ip = request.getRemoteAddr();
+	    	String token = request.getParameter("token");
+	    	String username = request.getParameter("username");
+	    	String carrierNum = request.getParameter("carrierNum");
+    		if(StringUtils.isNotBlank(ip)&&StringUtils.isNotBlank(token)&&StringUtils.isNotBlank(username)){
+    			//验证ip
+    			if(!"192.168.1.231".equals(ip)){
+    				retMap.put("code", "3");
+        			retMap.put("message", "非法ip");
+        			writer.write(JsonUtils.toJson(retMap));
+        			return null;
+    			}
+    			//验证token
+    			if(!"token".equals(token)){
+    				retMap.put("code", "4");
+        			retMap.put("message", "非法请求");
+        			writer.write(JsonUtils.toJson(retMap));
+        			return null;
+    			}
+				//设置默认的运营商
+				Carrier carrier = new Carrier();
+				carrier.setCarrierNum(carrierNum);
+				user.setCarrier(carrier);
+				//设置账号
+				user.setLoginName(username);
+				Operator loginUser = operatorBiz.hideLogin(user);
+				if(loginUser!=null){
+					httpSession.setAttribute(SysStatic.LOGINUSER, loginUser);
+					return INDEX;
+				}else{
+					retMap.put("code", "2");
+	    			retMap.put("message", "用户名不存在");
+				}
+				
+    		}else{
+    			retMap.put("code", "1");
+    			retMap.put("message", "所需参数为空");
+    		}
+    		writer.write(JsonUtils.toJson(retMap));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (BizException e) {
+			e.printStackTrace();
+		}
+			return null;
+    	}
+    
+    /**
+     * 用户登入
+     * @return
+     */
     @RequestMapping("/loginForm.do")
-    public String login(HttpServletRequest request,HttpSession httpSession,Operator user,Model model){
-    	
+    public String login(HttpServletRequest request,HttpServletResponse response,HttpSession httpSession,Operator user,Model model){
     	//重定向到登录页面标识
     	httpSession.setAttribute("from_redirect", "from_redirect");
         if(StringUtils.isBlank(user.getLoginName())){

@@ -43,8 +43,7 @@ public class LoginFilter implements Filter {
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse, javax.servlet.FilterChain)
 	 */
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest)request;
 		HttpServletResponse httpResponse = (HttpServletResponse)response;
 		//获取项目根路径
@@ -52,7 +51,7 @@ public class LoginFilter implements Filter {
 		//判断请求路径
 		String requestURI = httpRequest.getRequestURI();
 		//放行登录请求
-		 if(requestURI.equals(contextPath+"/mc/user/loginForm.do")||requestURI.equals(contextPath+"/mc/user/getVerificationCode.do")){
+		 if(requestURI.equals(contextPath+"/mc/user/loginForm.do")||requestURI.equals(contextPath+"/mc/user/hideLogin.do")||requestURI.equals(contextPath+"/mc/user/getVerificationCode.do")){
 			 chain.doFilter(request, response);
 			 return;
 		 }

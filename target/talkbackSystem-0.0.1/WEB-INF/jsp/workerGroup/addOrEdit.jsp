@@ -56,7 +56,7 @@ $(function(){
                </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>组名称：</div></td>
-                <td><div><input name="groupName" class="form-control required" title="姓名不能为空" value="${workerGroup.groupName}"/></div></td>
+                <td><div><input name="groupName" class="form-control required" title="组名称不能为空" value="${workerGroup.groupName}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>组类别：</div></td>
                 <td ><div>
                    <select name="power" class="form-control">

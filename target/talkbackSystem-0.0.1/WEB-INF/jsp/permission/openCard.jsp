@@ -5,15 +5,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<object codebase="Test_ActiveX.dll" classid="clsid:63EB4027-895A-4895-99C3-F535CEABA046" id="myactivex">
-
+<object style="width: 0px;height: 0px" codebase="Test_ActiveX.dll" classid="clsid:63EB4027-895A-4895-99C3-F535CEABA046" id="myactivex">
 </object>
 <script type="text/javascript">
 $(function(){
 	 //时间控件
 	  $(".datepicker").datepicker();
 	 //连接发卡器
-	  $("#openCardForm .connectCardMachine").on("click",function(){
+	  $(document).on("click","#openCardForm .connectCardMachine",function(){
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();

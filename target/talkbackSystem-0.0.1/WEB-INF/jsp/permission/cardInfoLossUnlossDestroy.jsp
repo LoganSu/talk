@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<object codebase="Test_ActiveX.dll" classid="clsid:63EB4027-895A-4895-99C3-F535CEABA046" id="myactivex">
+<object style="width: 0px;height: 0px"  codebase="Test_ActiveX.dll" classid="clsid:63EB4027-895A-4895-99C3-F535CEABA046" id="myactivex">
 
 </object>
 </head>
@@ -71,48 +71,72 @@ $(function(){
 			   }
 			   //加载key
                $.post($path+"/mc/permission/getKey.do","roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($data){
-            	   
-            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
-        			   if($data){
-        			        hiAlert("提示",$data);
-        			   }else{
-        				   //有秘钥的初始化key
-                    	   if($data){
-        	            	   var loadKey,RestoreCardKey,obj;
-        	            	   var indata = "{\"key\":\""+$data+"\"}";
-        	          	       try{ 
-        	          		          loadKey = myactivex.LoadKey(indata);
-        	          		         obj = jQuery.parseJSON(RestoreCardKey);
-        	          		         if(obj.code!='0'){
-        						    	  hiAlert("提示","加载密钥出错！");
-        			       				     return false;
-        						      }
-        	            	   }catch(e){
-        	            		   hiAlert("提示","加载密钥出错！");
-        	       				     return false;
-        	            	   }
-        	            	 }
-        	            	   try {
-        	            		    RestoreCardKey = myactivex.RestoreCardKey();  
-        	            		    obj = jQuery.parseJSON(RestoreCardKey);
-        	            		    if(obj.code!='0'){
-        						    	  hiAlert("提示","清空卡片信息出错！");
-        			       				     return false;
-        						      }
-        		       			} catch (e) {
-        		       			   hiAlert("提示","清空卡片信息出错！");
-        		       			   return false;
-        		       			}
-        				   
-              			   $("#unnormalModal").modal("hide");
-              			  $("#tableShowList").bootstrapTable('refresh', {
-              				url: $path+'/mc/room/showList.do',
-              			});
-        			   }
-        		   });
+            	   if($data){
+	            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
+	        			   if($data){
+	        			        hiAlert("提示",$data);
+	        			   }else{
+	        				   //有秘钥的初始化key
+	                    	   if($data){
+	        	            	   var loadKey,RestoreCardKey,obj;
+	        	            	   var indata = "{\"key\":\""+$data+"\"}";
+	        	          	       try{ 
+	        	          		          loadKey = myactivex.LoadKey(indata);
+	        	          		         obj = jQuery.parseJSON(RestoreCardKey);
+	        	          		         if(obj.code!='0'){
+	        						    	  hiAlert("提示","加载密钥出错！");
+	        			       				     return false;
+	        						      }
+	        	            	   }catch(e){
+	        	            		   hiAlert("提示","加载密钥出错！");
+	        	       				     return false;
+	        	            	   }
+	        	            	 }
+	        	            	   try {
+	        	            		    RestoreCardKey = myactivex.RestoreCardKey();  
+	        	            		    obj = jQuery.parseJSON(RestoreCardKey);
+	        	            		    if(obj.code!='0'){
+	        						    	  hiAlert("提示","注销卡片失败！");
+	        			       				     return false;
+	        						      }
+	        		       			} catch (e) {
+	        		       			   hiAlert("提示","注销卡片失败！");
+	        		       			   return false;
+	        		       			}
+	        				   
+	              			   $("#unnormalModal").modal("hide");
+	              			  $("#tableShowList").bootstrapTable('refresh', {
+	              				url: $path+'/mc/room/showList.do',
+	              			});
+	        			   }
+	        		   });
+            	   }else{
+            		   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
+	        			   if($data){
+	        			        hiAlert("提示",$data);
+	        			   }else{
+	              			    $("#unnormalModal").modal("hide");
+	              			   $("#tableShowList").bootstrapTable('refresh', {
+	              				url: $path+'/mc/room/showList.do',
+	              			});
+	        			   }
+	        		   });
+            		   
+            	   }
             	   
                })
 			   
+		   }else{
+			   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
+    			   if($data){
+    			        hiAlert("提示",$data);
+    			   }else{
+          			   $("#unnormalModal").modal("hide");
+          			  $("#tableShowList").bootstrapTable('refresh', {
+          				url: $path+'/mc/room/showList.do',
+          			});
+    			   }
+    		   });
 		   }
 		   
 	  })

@@ -59,7 +59,7 @@ var workerTable ={
             width: '60',
             sortable: true
         },{
-            field: 'phone',
+            field: 'username',
             title: '账号',
             align: 'center',
             width: '60',

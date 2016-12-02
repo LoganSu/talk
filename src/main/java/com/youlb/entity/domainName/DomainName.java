@@ -61,6 +61,9 @@ public class DomainName extends BaseModel {
 	public void setFname(String fname) {
 		this.fname = fname;
 	}
+	public String getDomainStr() {
+		return domain+".sayee.cn";
+	}
 	public String getDomain() {
 		return domain;
 	}

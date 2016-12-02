@@ -44,6 +44,7 @@ import com.youlb.entity.houseInfo.Unit;
 import com.youlb.utils.common.ExcelUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: RoomCtrl.java 
@@ -395,6 +396,18 @@ public class RoomCtrl extends BaseCtrl {
 					model.addAttribute("message", "复制对象出错");
 					e.printStackTrace();
 					return INPUT;
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (org.apache.http.ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 			

@@ -20,7 +20,7 @@ var cardRecordTable ={
 //        		   url += $data.path;
         		   //清空历史图片
         		   $("#personshowImg").html("");
-        		   $("#personshowImg").append('<img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="'+$data.path+'">');
+        		   $("#personshowImg").append('<img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="'+$data.serveraddr+$data.path+'">');
         		})
 //        	if(item.id==1){
 //        		url=$path+"/img/qq.jpg"

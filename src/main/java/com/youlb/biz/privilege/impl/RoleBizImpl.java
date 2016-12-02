@@ -99,6 +99,9 @@ public class RoleBizImpl implements IRoleBiz {
 	@Override
 	public Role get(Serializable id) throws BizException {
 		Role role = roleSqlDao.get(id);
+//		if(role.getRoleName().contains("_")){
+//			role.setRoleName(role.getRoleName().substring(role.getRoleName().indexOf("_")+1));
+//		}
 		//获取权限集合
 		String sql ="select m.fprivilegeid from t_role r INNER JOIN t_role_privilege m on m.FROLEID=r.id where r.id=?";
 		List<String> privilegeIds = roleSqlDao.pageFindBySql(sql,new Object[]{id});
@@ -208,6 +211,12 @@ public class RoleBizImpl implements IRoleBiz {
 			sb.append(SearchHelper.jointInSqlOrHql(domainIds,"tcd.fdomainid"));
 			values.add(domainIds);
 		}
+		//对接平台用户数据过滤
+//		 if(loginUser.getLoginName().contains("_")){
+//			 sb.append(" and substr(r.frolename, 0 ,length('"+loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_"))+"')+1)=?");
+//			 values.add(loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_")));
+//		 }
+		
 		sb.append(" group by r.id,r.frolename,r.fdescription,r.fcarrierid,r.fcreatetime");
 		sb.append(")t where 1=1 ");
 		//过滤名称
@@ -222,7 +231,8 @@ public class RoleBizImpl implements IRoleBiz {
 			for(Object[] obj:listObj){
 				Role role = new Role();
 				role.setId(obj[0]==null?"":(String)obj[0]);
-				role.setRoleName(obj[1]==null?"":(String)obj[1]);
+				role.setRoleName(obj[1]==null?"":((String)obj[1]));
+//				role.setRoleName(obj[1]==null?"":((String)obj[1]).contains("_")?((String)obj[1]).substring(((String)obj[1]).indexOf("_")+1):(String)obj[1]);
 				role.setDescription(obj[2]==null?"":(String)obj[2]);
 				role.setCarrierId(obj[3]==null?"":(String)obj[3]);
 				role.setPager(pager);

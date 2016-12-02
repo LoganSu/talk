@@ -41,7 +41,7 @@ var domainNameTable ={
             valign: 'middle',
             sortable: true
         },{
-            field: 'domain',
+            field: 'domainStr',
             title: '域名',
             align: 'center',
             valign: 'middle',

@@ -51,8 +51,7 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 
 	@Override
 	public DomainName get(Serializable id) throws BizException {
-		 
-		return domainNameSqlDao.get(id);
+		return  domainNameSqlDao.get(id);
 	}
 
 	@Override
@@ -73,7 +72,6 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 	public void saveOrUpdate(DomainName domainName, Operator loginUser) throws BizException {
 		if(StringUtils.isBlank(domainName.getId())){
 			domainName.setId(null);
-			domainName.setDomain(domainName.getDomain()+".sayee.cn");
 			domainNameSqlDao.add(domainName);
 		}else{
 			domainNameSqlDao.update(domainName);

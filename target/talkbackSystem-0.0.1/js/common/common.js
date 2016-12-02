@@ -6,7 +6,7 @@ $(function(){
 		  $(".treeDiv").hide();
 		  //隐藏显示的图片
 		  $("#personshowImg").hide();
-		  $("#showRightArea").load($(this).attr("rel"));
+		  $("#showRightArea").load($(this).attr("rel")+"&aa="+Math.random());
 		 //显示tree
 		if($(this).hasClass("tree")){
 			 var treeId = $(this).attr("tree_id");
@@ -27,6 +27,9 @@ $(function(){
 					  open=true;
 				  }else if(treeId=="neighborhoodsTree"){
 					  url= $path+'/mc/aboutNeighborhoodsTree';//社区树
+					  open=true;
+				  }else if(treeId=="domainNameTree"){
+					  url= $path+'/mc/domainNameTree';//域名树
 					  open=true;
 				  }
 				  tree(treeId, url,open,param);
@@ -390,6 +393,12 @@ var flushTree = function(){
 	 if(d){
 		 treeId="neighborhoodsTree";
 		 url= $path+'/mc/aboutNeighborhoodsTree';//社区树
+		 open=true;
+	  }
+	 var d = $("#domainNameTree").parent().is(":visible");
+	 if(d){
+		 treeId="domainNameTree";
+		 url= $path+'/mc/domainNameTree';//社区树
 		 open=true;
 	  }
 	  tree(treeId, url,open,param);

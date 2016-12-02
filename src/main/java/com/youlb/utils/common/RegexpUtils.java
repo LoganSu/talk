@@ -189,6 +189,6 @@ public class RegexpUtils {
     
 	  public static void main(String[] args) {
 		  
-		  System.out.println(checkDecimals("466.8"));
+		  System.out.println(checkNumAndLetter("11",2,4));
 	}
 }

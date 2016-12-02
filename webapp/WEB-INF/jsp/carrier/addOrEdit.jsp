@@ -19,7 +19,7 @@
                     <td><div>
 	                  <select name="domainNameId" class="form-control province">
 	                    <c:forEach var="domainName" items="${domainList}">
-           	                <option value="${domainName.id}">${domainName.domain}</option>
+           	                <option value="${domainName.id}">${domainName.domain}.sayee.cn</option>
 	                    </c:forEach>
 	                  </select>
 	                </div></td>

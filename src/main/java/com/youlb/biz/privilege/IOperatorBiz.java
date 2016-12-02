@@ -82,6 +82,12 @@ public interface IOperatorBiz extends IBaseBiz<Operator>{
 	String getVerificationCode(Operator user,String expireTime)throws BizException, UnsupportedEncodingException,IOException,JsonException;
 
 	boolean chickLoginNameExist(Operator user)throws BizException;
+	/**
+	 * 对接用户隐式登录
+	 * @param user
+	 * @return
+	 */
+	Operator hideLogin(Operator user)throws BizException;
 
 
 

@@ -45,6 +45,7 @@ $(function(){
 		        content: "您确定要发布吗？",
 		        param:ids,
 		        action: function(param) {
+//		        	alert("发布");
 		            $.post(url,param,function($data){
 		            	if(!$data){
 							refresh();
@@ -121,10 +122,11 @@ $(function(){
 				 }
 				 var ids = getSelectedIds();
 				var url = $path+"/mc/infoPublish/delete.do";
-				 but.scojs_confirm({
+				but.scojs_confirm({
 			        content: "您确定要删除记录吗？",
 			        param:ids,
 			        action: function(param) {
+//			        	alert("删除");
 			            $.post(url,param,function($data){
 			            	if(!$data){
 								refresh();
@@ -134,6 +136,7 @@ $(function(){
 			            });
 			            
 			        }
-			      });	
+			      });
 		 })
+		 
 })

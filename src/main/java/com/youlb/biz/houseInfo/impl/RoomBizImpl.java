@@ -1,13 +1,24 @@
 package com.youlb.biz.houseInfo.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +32,14 @@ import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.common.Pager;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.houseInfo.Room;
 import com.youlb.entity.houseInfo.RoomInfoDto;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -131,22 +145,55 @@ public class RoomBizImpl implements IRoomBiz {
 	 * @param room
 	 * @throws BizException 
 	 * @throws NumberFormatException 
+	 * @throws IOException 
+	 * @throws JsonException 
+	 * @throws ParseException 
 	 * @see com.youlb.biz.room.IRoomBiz#saveOrUpdate(com.youlb.entity.room.Room)
 	 */
 	@Override
-	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException {
+	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException, ParseException, JsonException, IOException {
 		//add
 		if(StringUtils.isBlank(room.getId())){
-			Session session = domainSqlDao.getCurrSession();
-			String sipNum = getSipNum(room.getParentId());
-			room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
+//			Session session = domainSqlDao.getCurrSession();
+//			String sipNum = getSipNum(room.getParentId());
+//			room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
 			room.setPassword(SysStatic.ROOMDEFULTPASSWORD);//设置默认密码
 			//获取分组号
-			SQLQuery group = session.createSQLQuery("SELECT '8'||substring('0000000'||nextval('tbl_room_sip_group'),length(currval('tbl_room_sip_group')||'')) ");
-			List<String> groupList = group.list();
-			room.setSipGroup(Integer.parseInt(groupList.get(0)));
+//			SQLQuery group = session.createSQLQuery("SELECT '8'||substring('0000000'||nextval('tbl_room_sip_group'),length(currval('tbl_room_sip_group')||'')) ");
+//			List<String> groupList = group.list();
 			//插入sip账号到数据库注册
 			String roomId = (String) roomSqlDao.add(room);
+			String neibName = getNeiborNameByDomainId(room.getParentId());
+			//同步数据以及平台
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/fir_platform/create_sip_num");
+			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+			formParams.add(new BasicNameValuePair("local_sip", roomId));
+			formParams.add(new BasicNameValuePair("sip_type", "7"));
+			formParams.add(new BasicNameValuePair("neibName", neibName));
+			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+			request.setEntity(uefEntity);
+			CloseableHttpResponse response = httpClient.execute(request);
+			if(response.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = response.getEntity();
+				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+				if(resultDto!=null){
+					if(!"0".equals(resultDto.getCode())){
+						throw new BizException(resultDto.getMsg());
+					}else{
+						Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
+						if(map!=null&&!map.isEmpty()){
+							Map<String,Object> user_sipMap = (Map<String, Object>) map.get("user_sip");
+						    room.setSipGroup((Integer) user_sipMap.get("user_sip"));
+						}
+				     }
+				}else{
+					throw new BizException("获取房间分组号出错！");
+				}
+	       }
+			
+			
+			
 			//添加真正的sip账号fs拨号使用
 //			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('00000000'||nextval('tbl_sipcount_seq'),length(currval('tbl_sipcount_seq')||'')) ");
 //		    List<String> list =  query.list();
@@ -179,8 +226,22 @@ public class RoomBizImpl implements IRoomBiz {
 		}
 		
 	}
-	public static void main(String[] args) {
-		String s = UUID.randomUUID().toString().replace("-", "");
+	/**
+     * 通过域id获取社区名称
+     * @param domainId
+     * @return
+     * @throws BizException 
+     */
+	private String getNeiborNameByDomainId(String domainId) throws BizException {
+		 StringBuilder sb = new StringBuilder();
+		 sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d  where d.id=? ")
+		 .append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid )")
+		 .append(" SELECT r.fremark from r where r.flayer='1'");
+		 List<String> list = domainSqlDao.pageFindBySql(sb.toString(), new Object[]{domainId});
+		 if(list!=null&&!list.isEmpty()){
+			 return list.get(0);
+		 }
+		return "";
 	}
 	/**
 	 * @param domainId
@@ -351,7 +412,7 @@ public class RoomBizImpl implements IRoomBiz {
 	}
 
 	@Override
-	public void saveBatch(List<RoomInfoDto> dtoList,Operator loginUser,String parentId) throws BizException, IllegalAccessException, InvocationTargetException {
+	public void saveBatch(List<RoomInfoDto> dtoList,Operator loginUser,String parentId) throws BizException, IllegalAccessException, InvocationTargetException, NumberFormatException, ParseException, JsonException, IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO t_room (FROOMNUM,FROOMFLOOR,FROOMTYPE,FCERTIFICATENUM,FPURPOSE,FORIENTATION,FDECORATIONSTATUS,")
 		.append("FROOMAREA,FUSEAREA,FGARDENAREA,FUSESTATUS,r.FREMARK,) values(?,?,?,?,?,?,?,?,?,?,?,?)");

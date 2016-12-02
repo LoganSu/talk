@@ -108,6 +108,10 @@ public class RoleCtrl extends BaseCtrl{
     	try {
     		Operator loginUser = getLoginUser();
     		role.setCarrierId(loginUser.getCarrier().getId());
+    		//区分区分第三方添加权限  加前缀
+//    		if(loginUser.getLoginName().contains("_")&&!role.getRoleName().contains("_")){
+//    			role.setRoleName(loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_")+1)+role.getRoleName());
+//    		}
     		roleBiz.saveOrUpdate(role);
 		} catch (Exception e) {
 			super.message = "操作失败！";

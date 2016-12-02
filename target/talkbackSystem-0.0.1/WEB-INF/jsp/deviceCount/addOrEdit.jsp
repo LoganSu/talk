@@ -20,17 +20,29 @@
               </tr>
               <tr>
                     <td><div class="firstFont">经度：</div></td>
-                    <td><div><input name="longitude" class="form-control"  value="${deviceCount.longitude}"/></div></td>
+                    <td><div><input name="longitude" class="form-control" maxlength="6" value="${deviceCount.longitude}"/></div></td>
                     <td><div class="leftFont">纬度：</div></td>
-                    <td><div><input name="latitude" class="form-control"  value="${deviceCount.latitude}"/></div></td>
+                    <td><div><input name="latitude" class="form-control" maxlength="6" value="${deviceCount.latitude}"/></div></td>
               </tr>
               <tr>
 	                <td><div class="firstFont">账号类型：</div></td>
 	                <td><div>
 	                   <select name="countType" class="form-control countType">
-		                 <option <c:if test="${deviceCount.countType=='1'}">selected="selected"</c:if>  value="1">门口机</option>
-<%--                          <option <c:if test="${deviceCount.countType=='2'}">selected="selected"</c:if>  value="2">自助终端</option> --%>
-                         <option <c:if test="${deviceCount.countType=='3'}">selected="selected"</c:if>  value="3">管理机</option>
+	                    <c:choose>
+	                      <c:when test="${deviceCount.id!=null}">
+	                         <c:if test="${deviceCount.countType=='1'}">
+	                           <option <c:if test="${deviceCount.countType=='1'}">selected="selected"</c:if>  value="1">门口机</option>
+	                         </c:if>
+	                         <c:if test="${deviceCount.countType=='3'}">
+                               <option <c:if test="${deviceCount.countType=='3'}">selected="selected"</c:if>  value="3">管理机</option>
+                              </c:if>
+	                      </c:when>
+	                      <c:otherwise>
+			                 <option <c:if test="${deviceCount.countType=='1'}">selected="selected"</c:if>  value="1">门口机</option>
+	<%--                          <option <c:if test="${deviceCount.countType=='2'}">selected="selected"</c:if>  value="2">自助终端</option> --%>
+	                         <option <c:if test="${deviceCount.countType=='3'}">selected="selected"</c:if>  value="3">管理机</option>
+	                      </c:otherwise>
+	                    </c:choose>
                       </select>
 	                </div></td>
 	                <td><div class="leftFont">账号状态：</div></td>
