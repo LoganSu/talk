@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -130,6 +131,32 @@ public class InitServlet extends HttpServlet {
 		String key = (String) proper.get("key");
 		SysStatic.KEYBYTES=DES3.hexStringToBytes(key);
 		logger.info("加载私钥");
+		//爱社区3des秘钥
+		String asqkey = (String) proper.get("asqkey");
+		SysStatic.ASQKEYBYTES=DES3.hexStringToBytes(asqkey);
+		logger.info("加载爱社区3des私钥");
+		//爱社区秘钥
+		String asqpsw = (String) proper.get("asqpsw");
+		SysStatic.ASQPSW=asqpsw;
+		logger.info("加载爱社区私钥");
+		//爱社区ip
+		String asqips = (String) proper.get("asqips");
+		List<String> ips = new ArrayList<String>();
+		if(StringUtils.isNotBlank(asqips)){
+			if(asqips.contains(",")){
+				String[] asqipsArr = asqips.split(",");
+				for(String ip:asqipsArr){
+					ips.add(ip);
+				}
+				SysStatic.ASQIPSLIST=ips;
+				logger.info("加载爱社区ip地址");
+			}else{
+				ips.add(asqips);
+			}
+		}else{
+			logger.error("请配置爱社区ip地址");
+		}
+		
 		//web版本
 		String version = (String) proper.get("version");
 		SysStatic.VERSION=version;

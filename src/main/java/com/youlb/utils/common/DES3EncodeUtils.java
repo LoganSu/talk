@@ -59,19 +59,55 @@ public class DES3EncodeUtils {
 	    return stringBuilder.toString();  
 	}
 	
+	/** 十六进制转换成十进制字符串
+	 * Convert hex string to byte[] 
+	 * @param hexString the hex string 
+	 * @return byte[] 
+	 */  
+	public static byte[] hexStringToBytes(String hexString) {  
+	    if (hexString == null || hexString.equals("")) {  
+	        return null;  
+	    }  
+	    hexString = hexString.toUpperCase();  
+	    int length = hexString.length() / 2;  
+	    char[] hexChars = hexString.toCharArray();  
+	    byte[] d = new byte[length];  
+	    for (int i = 0; i < length; i++) {  
+	        int pos = i * 2;  
+	        d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));  
+	    }  
+	    return d;  
+	}  
 	
+	/** 
+	 * Convert char to byte 
+	 * @param c char 
+	 * @return byte 
+	 */  
+	 private static byte charToByte(char c) {  
+	    return (byte) "0123456789ABCDEF".indexOf(c);  
+	}  
 	public static void main(String[] args) throws IOException {
 		final byte[] keyBytes = {0x11, 0x22, 0x4C, 0x56, (byte) 0x87, 0x13,
 			 0x40, 0x38, 0x28, 0x25, 0x79, 0x51, (byte) 0xCB, (byte) 0xDD,
 			 0x56, 0x65, 0x77, 0x23, 0x74, (byte) 0x98, 0x30, 0x40, 0x36,(byte) 0xE2}; // 24字节的密钥
 
-		 String token = "1a3ae1e64cef429bb201d464db378775";
+		
+//		String dec =  bytesToHexString(keyBytes);
+//		 System.out.println(dec);
+		 String key = "1a3ae1e64cef429bb201d464db378775";
+		 String username="admin";
+		 String carrierNum ="asq";
 		 //加密
-		 byte[] tokenByte = encryptMode(keyBytes, token.getBytes());
+		 byte[] tokenByte = encryptMode(keyBytes, key.getBytes());
 		 String dec =  bytesToHexString(tokenByte);
-		 //加密后字符
+		 
 		 System.out.println(dec);
+		 byte[] tokenByte1 = encryptMode(hexStringToBytes("11224c568713403828257951cbdd566577237498304036e2"), key.getBytes());
+		 String dec1 =  bytesToHexString(tokenByte1);
+		 System.out.println(dec1);
+		 //加密后字符
 		 //MD5传参
-		 System.out.println(DigestUtils.md5Hex(dec));
+		 System.out.println(DigestUtils.md5Hex(dec+username+carrierNum));
 	}
 }

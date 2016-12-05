@@ -23,7 +23,11 @@
           class="org.springframework.security.oauth2.provider.approval.DefaultUserApprovalHandler"/>
 
     <!--client-->
-    <bean id="clientDetailsService" class="com.youlb.biz.auth2.MyClientDetailsService"/>
+    <bean id="clientDetailsService" class="com.youlb.biz.auth2.MyClientDetailsService">
+       <property name="clientSqlDao" ref="clientSqlDao"></property>
+    </bean>
+    
+    
     <bean id="clientDetailsUserDetailsService"
           class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
         <constructor-arg ref="clientDetailsService"/>
@@ -77,6 +81,9 @@
         <security:intercept-url pattern="/mc/**" access="ROLE_ABCS"/>
         <security:custom-filter ref="mobileResourceServer" before="PRE_AUTH_FILTER"/>
         <security:access-denied-handler ref="accessDeniedHandler"/>
+    </security:http>
+    <security:http  pattern="/user/**" security="none">
+    
     </security:http>
 
 </beans>

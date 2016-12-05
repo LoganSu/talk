@@ -1,5 +1,7 @@
 package com.youlb.utils.common;
 
+import java.util.List;
+
 /** 
  * @ClassName: SysStatic 
  * @Description: TODO 
@@ -102,8 +104,16 @@ public class SysStatic {
 	public static final String ROOMDEFULTPASSWORD = "123456";
 	/**门口机图片备份地址*/
 	public static String FILEUPLOADIP = "";
-	
+	/**门口机登录*/
 	public static byte[] KEYBYTES = {};
+	/**爱社区des3秘钥*/
+	public static byte[] ASQKEYBYTES;
+	/**爱社区秘钥*/
+	public static String ASQPSW;
+	/**爱社区ip地址*/
+	public static List<String> ASQIPSLIST;
+
+
 	/**web 版本*/
 	public static String VERSION;
 	/**需要过滤的特殊字符*/

@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.ParseException;
 import org.slf4j.Logger;
@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qiniu.util.Json;
@@ -32,6 +33,7 @@ import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Role;
+import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SysStatic;
@@ -81,7 +83,7 @@ public class OperatorCtrl extends BaseCtrl{
      * 用户登入
      * @return
      */
-    @RequestMapping("/hideLogin.do")
+    @RequestMapping(value="/hideLogin.do",method=RequestMethod.POST)
     public String hideLogin(HttpServletRequest request,HttpServletResponse response,HttpSession httpSession,Operator user,Model model){
     	Map<String,String> retMap = new HashMap<String, String>();
 		try {
@@ -93,14 +95,18 @@ public class OperatorCtrl extends BaseCtrl{
 	    	String carrierNum = request.getParameter("carrierNum");
     		if(StringUtils.isNotBlank(ip)&&StringUtils.isNotBlank(token)&&StringUtils.isNotBlank(username)){
     			//验证ip
-    			if(!"192.168.1.231".equals(ip)){
+    			if(!SysStatic.ASQIPSLIST.contains(ip)){
     				retMap.put("code", "3");
         			retMap.put("message", "非法ip");
         			writer.write(JsonUtils.toJson(retMap));
         			return null;
     			}
     			//验证token
-    			if(!"token".equals(token)){
+    			byte[] encode = DES3.encryptMode(SysStatic.ASQKEYBYTES, SysStatic.ASQPSW.getBytes());
+    			String encodeStr = DES3.bytesToHexString(encode);
+    			String md5 = DigestUtils.md5Hex(encodeStr+username+carrierNum);
+    			//验证token
+    			if(!md5.equals(token)){
     				retMap.put("code", "4");
         			retMap.put("message", "非法请求");
         			writer.write(JsonUtils.toJson(retMap));
