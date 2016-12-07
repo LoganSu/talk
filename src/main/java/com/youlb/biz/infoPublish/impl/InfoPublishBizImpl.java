@@ -222,9 +222,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 	 */
 	@Override
 	public void saveOrUpdate(InfoPublish infoPublish, Operator loginUser) throws ClientProtocolException, IOException, IllegalAccessException, InvocationTargetException, ParseException, JsonException, BizException {
-		
-//		设置运营商
-		infoPublish.setCarrierId(loginUser.getCarrier().getId());
+
 		//日期转换
 		String expDateStr = infoPublish.getExpDateStr();
 		if(StringUtils.isNotBlank(expDateStr)){
@@ -244,6 +242,8 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		 List<String> tagList = getTagList(infoPublish,loginUser);
 		//add
 		if(StringUtils.isBlank(infoPublish.getId())){
+//			设置运营商
+			infoPublish.setCarrierId(loginUser.getCarrier().getId());
 			//全部发送
 			 if("1".equals(infoPublish.getSendType())){
 				 infoPublish.setInfoType("2");//社区消息

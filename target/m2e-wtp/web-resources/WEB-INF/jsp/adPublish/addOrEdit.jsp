@@ -14,7 +14,7 @@ text-align: center;
 	   <div>
 	   <form id="adPublishsaveForm" name="adPublishsaveForm">
 		   <input type="hidden" name="id" value="${adPublish.id}"/>
-<%-- 		   <input type="hidden" name="carrierId" value="${adPublish.carrierId}"/> --%>
+		   <input type="hidden" name="adType" value="${adPublish.adType}"/>
 		   <input type="hidden" id="adPublishDomainIds" value="${adPublish.treecheckbox}"/>
               <div class="firstFont"><span class="starColor">*</span>上传媒体文件：</div>
               <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div>

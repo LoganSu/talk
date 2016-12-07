@@ -76,7 +76,6 @@ $(function(){
 				   $("#tableShowList").bootstrapTable('refresh', {
 					   url: $path+"/mc/department/showList.do"
 				   });
-				   tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
 				   //更新之后关闭弹出框
 				   if(id){
 					   $("#unnormalModal").modal("hide");
@@ -87,6 +86,7 @@ $(function(){
 						   $(obj).val("");
 					   })
 				   }
+				   tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
 			   }
 			 });
 	   })
@@ -95,7 +95,7 @@ $(function(){
 		   var url=$path+"/mc/department/saveOrUpdate.do";
 		   var param = $("#departmentsaveForm").serialize();
 //		   var parentId = $("#departmentsaveForm input[name='parentId']").val();
-		   var id = $("#companyDepartmentsaveForm input[name='id']").val();
+		   var id = $("#departmentsaveForm input[name='id']").val();
 		   $.post(url,param,function($data){
 			   if($data){
 				   hiAlert("提示",$data);
@@ -103,7 +103,6 @@ $(function(){
 				 $("#tableShowList").bootstrapTable('refresh', {
 						url: $path+"/mc/department/showList.do"
 					});
-				 tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
 				 //更新之后关闭弹出框
 				 if(id){
 					$("#unnormalModal").modal("hide");
@@ -115,6 +114,7 @@ $(function(){
 					 })
 					 
 				 }
+				 tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
 			   }
 			 });
 	   })

@@ -60,8 +60,38 @@ public class TodayNews  extends BaseModel{
 	/**创建人*/
 	@Column(name="fadd_operator")
     public String addOperator;
-    
-    public String getOperate() {
+	/**所属运营商*/
+	@Column(name="fcarrierid")
+    public String carrierId;
+	/**是否是本运营商发布的公告*/
+	@Transient
+    public Boolean self;
+	
+
+	public String getSelfStr() {
+		String selfStr="";
+		if(self!=null){
+			if(self){
+				selfStr="是";
+			}else{
+				selfStr="否";
+			}
+		}
+		return selfStr;
+	}
+    public String getCarrierId() {
+		return carrierId;
+	}
+	public void setCarrierId(String carrierId) {
+		this.carrierId = carrierId;
+	}
+	public Boolean getSelf() {
+		return self;
+	}
+	public void setSelf(Boolean self) {
+		this.self = self;
+	}
+	public String getOperate() {
 	   	StringBuilder sb = new StringBuilder();
 	   	sb.append("<a class='todayNewsDetail' rel='"+getId()+"' href='javascript:void(0)'>详细</a>&nbsp;");
 //	   	.append("<a class='infoPublishUpdate' rel='"+getId()+"' cardStatus='1' href='javascript:void(0)'>修改</a>&nbsp;")

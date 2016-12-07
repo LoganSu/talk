@@ -90,6 +90,14 @@ public class RepairsCtrl extends BaseCtrl{
     @ResponseBody
     public String save(Repairs repairs,Model model){
     	try {
+    		if(StringUtils.isNotBlank(repairs.getId())){
+    			Repairs r = repairsBiz.get(repairs.getId());
+    			if(!"1".equals(r.getStatus())){
+    				super.message = "只能修改未处理的工单！";
+        			return  super.message;
+    			}
+    		}
+    		
     		if(StringUtils.isBlank(repairs.getLinkman())){
     			super.message = "联系人不能为空！";
     			return  super.message;

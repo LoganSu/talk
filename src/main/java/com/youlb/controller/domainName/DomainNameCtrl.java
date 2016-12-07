@@ -91,8 +91,8 @@ public class DomainNameCtrl extends BaseCtrl {
     			super.message = "域名不能为空";
     			return super.message;
     		}else{
-    			if(!RegexpUtils.checkNumAndLetter(domainName.getDomain(), 1, 8)){
-    				super.message = "域名为1~8个字符组成";
+    			if(!RegexpUtils.checkNumAndLetter(domainName.getDomain(), 1, 20)){
+    				super.message = "域名为1~20个字符组成";
         			return super.message;
     			}
     		}

@@ -107,7 +107,7 @@ public class UsersBizImpl implements IUsersBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		List<Users> list = new ArrayList<Users>();
-		sb.append("select * from (SELECT u.id id,u.fusername username,u.fmobile_phone mobilePhone,u.femail email,u.frealname realName,u.fcreatetime createTime,u.femail_status emailStatus,u.fstatus statusStr")
+		sb.append("select * from (SELECT u.id id,u.fusername username,u.fmobile_phone mobilePhone,u.femail email,u.frealname realName,u.fcreatetime createTime,u.femail_status emailStatus,u.fstatus status")
 //		.append(" from t_users u INNER JOIN t_dweller dw on dw.fphone=u.fmobile_phone INNER JOIN t_domain_dweller tdd on tdd.fdwellerid=dw.id where 1=1");
 		.append(" from t_users u left JOIN (SELECT dw.fphone fphone,tdd.fdomainid fdomainid  from t_dweller dw INNER  JOIN t_domain_dweller tdd on tdd.fdwellerid=dw.id ) t ")
 		.append("  on t.fphone=u.fmobile_phone where 1=1");

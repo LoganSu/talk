@@ -45,7 +45,7 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 		// TODO Auto-generated method stub
 
 	}
-
+   //删除公司
 	@Override
 	public void delete(Serializable id) throws BizException {
 		departmentDao.delete(id);
@@ -53,25 +53,35 @@ public class DepartmentBizImpl implements IDepartmentBiz {
 		String del = "delete from t_department_domain where fdepartmentid=?";
 		departmentDao.executeSql(del, new Object[]{id});
 		//删除部门的时候删除员工
-		 del = "delete from t_worker where fdepartmentid=?";
-		 departmentDao.executeSql(del, new Object[]{id});
+//		del = "delete from t_worker where fdepartmentid in ?";
+		StringBuilder sb = new StringBuilder("delete from t_worker where 1=1 ");
+		List<String> list = getSubDepartId(id);
+		sb.append(SearchHelper.jointInSqlOrHql(list, " fdepartmentid "));
+		departmentDao.executeSql(sb.toString(), new Object[]{list});
 		
 	}
-	//删除公司
+	//删除部门
 	@Override
 	public void delete(String[] ids, String parentId) throws BizException {
 		if(ids!=null){
 			for(String id:ids){
 				String sql = "WITH RECURSIVE r AS ( SELECT * FROM t_department WHERE id= ? union ALL SELECT t_department.* FROM t_department, "
-						+ "r WHERE t_department.fparentid = r.id) SELECT r.id FROM r where r.flayer>0";
+						+ "r WHERE t_department.fparentid = r.id) SELECT r.id FROM r ";
 				       List<String> list = departmentDao.pageFindBySql(sql, new Object[]{id});
-				       for(String dId :list){
-				    	   delete(dId);
-				       }
-				       departmentDao.delete(id);
 			}
 		}
 	}
+	/**
+	 * 获取下级部门的id
+	 * @param id
+	 * @throws BizException
+	 */
+	public List<String> getSubDepartId(Serializable id) throws BizException {
+			String sql = "WITH RECURSIVE r AS ( SELECT * FROM t_department WHERE id= ? union ALL SELECT t_department.* FROM t_department, "
+					+ "r WHERE t_department.fparentid = r.id) SELECT r.id FROM r ";
+			       return departmentDao.pageFindBySql(sql, new Object[]{id});
+	}
+	
 
 	@Override
 	public void delete(String[] ids) throws BizException {

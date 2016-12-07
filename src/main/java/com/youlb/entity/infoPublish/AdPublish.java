@@ -93,6 +93,17 @@ public class AdPublish extends BaseModel {
 	@Transient
     public String expDateStr;
 	
+
+	/**是否是本运营商发布的公告*/
+	@Transient
+    public Boolean self;
+	public Boolean getSelf() {
+		return self;
+	}
+	public void setSelf(Boolean self) {
+		this.self = self;
+	}
+
 	public String getExpDateStr() {
 		if(expDate!=null){
 			expDateStr=DateHelper.dateFormat(expDate, "yyyy-MM-dd");
@@ -132,7 +143,18 @@ public class AdPublish extends BaseModel {
 	/**操作类型 */
 	@Transient
 	private String opraterType;
-	
+
+	public String getSelfStr() {
+		String selfStr="";
+		if(self!=null){
+			if(self){
+				selfStr="是";
+			}else{
+				selfStr="否";
+			}
+		}
+		return selfStr;
+	}
 	
 	public String getStatus() {
 		return status;

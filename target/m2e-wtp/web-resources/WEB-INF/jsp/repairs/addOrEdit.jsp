@@ -52,7 +52,7 @@ $(function(){
               </tr>
                <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>联系电话：</div></td>
-                <td><div><input name="phone" class="form-control required number" title="请填写11位手机号码" maxlength="11" value="${repairs.phone}"/></div></td>
+                <td><div><input name="phone" class="form-control required number" title="请填写11位手机号码" <c:if test="${repairs.id!=null}">readonly="readonly"</c:if> maxlength="11" value="${repairs.phone}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont">来源：</div></td>
@@ -60,7 +60,9 @@ $(function(){
 	                 <select name="comeFrom" class="form-control">
 	                    <option value="1" <c:if test="${repairs.comeFrom==1}">selected="selected"</c:if>>电话</option>
 	                    <option value="2" <c:if test="${repairs.comeFrom==2}">selected="selected"</c:if>>来访</option>
-	                    <option value="3" <c:if test="${repairs.comeFrom==3}">selected="selected"</c:if>>终端</option>
+	                    <c:if test="${repairs.id!=null}">
+	                      <option value="3" <c:if test="${repairs.comeFrom==3}">selected="selected"</c:if>>终端</option>
+	                    </c:if>
 	                 </select>
                 </div></td>
                </tr>

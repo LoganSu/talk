@@ -80,8 +80,9 @@ public class IPManageCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(IPManage iPManage,Model model){
-    	if(StringUtils.isBlank(iPManage.getIp())||!RegexpUtils.checkIpAddress(iPManage.getIp())){
-    		super.message = "请填写正确的ip地址！";
+//    	if(StringUtils.isBlank(iPManage.getIp())||!RegexpUtils.checkIpAddress(iPManage.getIp())){
+    	if(StringUtils.isBlank(iPManage.getIp())){
+    		super.message = "ip地址不能为空！";
     		return  super.message;
     	}
     	if(iPManage.getPort()!=null){
@@ -103,8 +104,9 @@ public class IPManageCtrl extends BaseCtrl {
     		return  super.message;
     	}
     	
-    	if(StringUtils.isBlank(iPManage.getFsIp())||!RegexpUtils.checkIpAddress(iPManage.getFsIp())){
-    		super.message = "请填写正确的ip地址！";
+//    	if(StringUtils.isBlank(iPManage.getFsIp())||!RegexpUtils.checkIpAddress(iPManage.getFsIp())){
+    	if(StringUtils.isBlank(iPManage.getFsIp())){
+    		super.message = "FS ip地址不能为空！";
     		return  super.message;
     	}
     	if(iPManage.getFsPort()!=null){

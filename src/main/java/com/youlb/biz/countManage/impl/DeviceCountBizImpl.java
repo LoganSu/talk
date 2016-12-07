@@ -317,7 +317,7 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 //							throw new BizException("请联系管理员先在一级平台添加社区ip信息再操作");
 //						}
 //					 }else{
-//							throw new BizException("接口返回："+resultDto.getMsg());
+//							throw new BizException(resultDto.getMsg());
 //					  }
 //				  }
 //				}

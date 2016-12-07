@@ -468,11 +468,15 @@ public class DwellerBizImpl implements IDwellerBiz {
      * @see com.youlb.biz.personnel.IDwellerBiz#checkPhoneExist(java.lang.String)
      */
 	@Override
-	public boolean checkPhoneExistWebShow(String phone,String carrierId) throws BizException {
+	public boolean checkPhoneExistWebShow(Dweller dweller) throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT w.fphone from t_dweller w where w.fphone=?");
 		List<Object> values = new ArrayList<Object>();
-		values.add(phone);
+		sb.append("SELECT w.fphone from t_dweller w where w.fphone=? ");
+		values.add(dweller.getPhone());
+		if(StringUtils.isNotBlank(dweller.getId())){
+			sb.append(" and w.id!=? ");
+			values.add(dweller.getId());
+		}
 		List<String> find = dwellerSqlDao.pageFindBySql(sb.toString(), values.toArray());
 		if(find!=null&&!find.isEmpty()){
 			return true;

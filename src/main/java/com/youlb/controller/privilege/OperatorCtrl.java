@@ -83,7 +83,7 @@ public class OperatorCtrl extends BaseCtrl{
      * 用户登入
      * @return
      */
-    @RequestMapping(value="/hideLogin.do",method=RequestMethod.POST)
+    @RequestMapping(value="/hideLogin.do",method=RequestMethod.GET)
     public String hideLogin(HttpServletRequest request,HttpServletResponse response,HttpSession httpSession,Operator user,Model model){
     	Map<String,String> retMap = new HashMap<String, String>();
 		try {
@@ -106,7 +106,7 @@ public class OperatorCtrl extends BaseCtrl{
     			String encodeStr = DES3.bytesToHexString(encode);
     			String md5 = DigestUtils.md5Hex(encodeStr+username+carrierNum);
     			//验证token
-    			if(!md5.equals(token)){
+    			if(!md5.equalsIgnoreCase(token)){
     				retMap.put("code", "4");
         			retMap.put("message", "非法请求");
         			writer.write(JsonUtils.toJson(retMap));

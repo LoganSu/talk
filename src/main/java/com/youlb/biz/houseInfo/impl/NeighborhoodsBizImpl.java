@@ -22,6 +22,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -158,8 +159,14 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	@Override
 	public Neighborhoods get(Serializable id) throws BizException {
-		
-		return neighborSqlDao.get(id);
+		Neighborhoods n = neighborSqlDao.get(id);
+		//获取parentid
+		String sql = "select d.fparentid from t_domain d inner join t_neighborhoods n on n.id=d.fentityid where n.id=?";
+		List<String> list = neighborSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(list!=null&&!list.isEmpty()){
+			n.setParentId(list.get(0));
+		}
+		return n;
 	}
 
 
@@ -325,7 +332,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 						throw new BizException("请联系管理员先在一级平台添加社区ip信息再操作");
 					}
 				 }else{
-						throw new BizException("接口返回："+resultDto.getMsg());
+						throw new BizException(resultDto.getMsg());
 				  }
 			  }
 			}
@@ -498,8 +505,15 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	@Override
 	public boolean checkNeighborNum(Neighborhoods neighborhoods) throws BizException {
-		 String sql = "SELECT n.fneibnum from t_domain d INNER JOIN t_neighborhoods n on n.id=d.fentityid where d.fparentid=? ";
-		 List<String> list = neighborSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getParentId()});
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.fneibnum from t_domain d INNER JOIN t_neighborhoods n on n.id=d.fentityid where d.fparentid=? ");
+		 values.add(neighborhoods.getParentId());
+//		 values.add(neighborhoods.getNeibNum());
+		 if(StringUtils.isNotBlank(neighborhoods.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(neighborhoods.getId());
+		 }
+		 List<String> list = neighborSqlDao.pageFindBySql(sb.toString(), values.toArray());
 		 if(list!=null&&!list.isEmpty()&&list.contains(neighborhoods.getNeibNum())){
 			 return true;
 		 }

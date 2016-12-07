@@ -18,6 +18,11 @@ $(function(){
 				 hiAlert("提示","已发布内容不能修改！");
 				 return false;
 			 }
+			 //判断是否是本运营商信息
+			 if(selects[0].selfStr=="否"){
+				 hiAlert("提示","非本运营商信息不能修改！");
+				 return false;
+			}
 		}
 		$.post(url,data,function(addHtml){
 			//设置标题

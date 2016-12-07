@@ -324,8 +324,8 @@
                    <div id="collapseThree" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
                            <ul class="nav nav-pills nav-stacked">
-                             <r:role auth="移动端APP管理"> 
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=2">移动端APP管理</a></li>
+                             <r:role auth="用户端APP管理"> 
+                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=2">用户端APP管理</a></li>
                              </r:role>
                              <r:role auth="门口机APP管理"> 
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=1">门口机APP管理</a></li>
@@ -380,8 +380,8 @@
 		                           <r:role auth="关于小区">
 		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li>
 		                           </r:role>
-			                       <r:role auth="客服服务">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">客服服务</a></li>
+			                       <r:role auth="物业投诉">
+		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">物业投诉</a></li>
 		                           </r:role>
 		                           <r:role auth="物业报修">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=1">物业报修</a></li>

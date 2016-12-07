@@ -35,6 +35,12 @@ var adPublishTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'selfStr',
+            title: '是否本运营商发布',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'addOperator',
             title: '添加人',
             align: 'center',

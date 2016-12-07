@@ -92,9 +92,11 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> valuse = new ArrayList<Object>();
 		sb.append("select * from (SELECT i.id id,i.ftitle title,i.fpictureurl pictureUrl,i.fnewsurl newsUrl,i.ftargetdevice targetDevice,i.fcreatetime createTime,")
-	    .append("i.fstatus status,i.fpublish_time publishTime,i.fpublish_operator publishOperator,i.fadd_operator addOperator ")
+	    .append("i.fstatus status,i.fpublish_time publishTime,i.fpublish_operator publishOperator,i.fadd_operator addOperator,case when i.fcarrierid=? then true else false end self ")
 //		.append("i.finfosign infoSign,i.finfodetail infoDetail,i.fsendtype sendType,i.fcreatetime createTime,i.fexpdate expDate ")
 		.append("from t_todaynews i INNER JOIN t_domain_todaynews tdi on tdi.ftodaynewsid=i.id where 1=1 ");
+		valuse.add(loginUser.getCarrier().getId());
+
 		//普通用户过滤运营商
 		List<String> domainIds = loginUser.getDomainIds();
 		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
@@ -136,6 +138,7 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 				todayNews.setPublishTime(obj[7]==null?null:(Date)obj[7]);
 				todayNews.setPublishOperator(obj[8]==null?"":(String)obj[8]);
 				todayNews.setAddOperator(obj[9]==null?"":(String)obj[9]);
+				todayNews.setSelf(obj[10]==null?null:(Boolean)obj[10]);
 				list.add(todayNews);
 			}
 		}
@@ -159,6 +162,8 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 		List<String> tagList = getTagList(todayNews,loginUser);
 		//add
 		if(StringUtils.isBlank(todayNews.getId())){
+			//设置运营商
+			todayNews.setCarrierId(loginUser.getCarrier().getId());
 			String id = (String) todayNewsSqlDao.add(todayNews);
 			if(tagList!=null&&!tagList.isEmpty()){
 				//把需要指定域保存中间表 全部推送保存的是社区级doaminid 指定范围的保存的是指定domainid

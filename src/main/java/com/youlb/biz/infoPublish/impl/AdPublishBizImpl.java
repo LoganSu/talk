@@ -145,8 +145,10 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> valuse = new ArrayList<Object>();
 		sb.append("SELECT * from (SELECT ad.id id,ad.fadtype adType,ad.ftargetdevice targetDevice,ad.fcreatetime createTime,ad.fsendtype sendType,ad.fexpdate expDate,")
-	    .append("ad.fstatus status,ad.fpublish_time publishTime,ad.fpublish_operator publishOperator,ad.fadd_operator addOperator ")
+	    .append("ad.fstatus status,ad.fpublish_time publishTime,ad.fpublish_operator publishOperator,ad.fadd_operator addOperator,case when ad.fcarrierid=? then true else false end self  ")
 		.append("from t_adpublish ad INNER JOIN t_domain_adpublish tda on tda.fadpublishid=ad.id where 1=1");
+		valuse.add(loginUser.getCarrier().getId());
+
 		//普通用户过滤运营商
 		List<String> domainIds = loginUser.getDomainIds();
 		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
@@ -196,6 +198,7 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 				ad.setPublishTime(obj[7]==null?null:(Date)obj[7]);
 				ad.setPublishOperator(obj[8]==null?"":(String)obj[8]);
 				ad.setAddOperator(obj[9]==null?"":(String)obj[9]);
+				ad.setSelf(obj[10]==null?null:(Boolean)obj[10]);
 				list.add(ad);
 			}
 		}
@@ -246,6 +249,8 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 		List<String> tagList = getTagList(adPublish,loginUser);
 		//add
 		if(StringUtils.isBlank(adPublish.getId())){
+			//设置运营商
+			adPublish.setCarrierId(loginUser.getCarrier().getId());
 			adPublish.setAdType("1");//图片类型
 			String id = (String) adPublishSqlDao.add(adPublish);
 			List<String> adPics = adPublish.getPicId();

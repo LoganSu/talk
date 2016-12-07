@@ -230,7 +230,7 @@ public class RepairsBizImpl implements IRepairsBiz {
 		}
 	}
 
-
+    //封装对象
 	private Repairs setRepairs(Repairs repairs) throws BizException {
 		repairs.setStatus(SysStatic.one);//未处理
 		repairs.setOrderNum(new Date().getTime()+"");//工单编号

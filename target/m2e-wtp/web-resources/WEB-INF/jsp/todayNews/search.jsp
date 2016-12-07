@@ -24,7 +24,7 @@
             </r:role>
             <r:role auth="今日头条/删除">
 	            <!--delete类 公共删除  -->
-	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/todayNews/delete.do">删除</button></li>
+	            <li><button class="btn btn-danger btn-sm todayNewsPushDelete">删除</button></li>
             </r:role>
          </ul>
 	 </div>

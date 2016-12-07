@@ -146,8 +146,8 @@ public class DwellerCtrl extends BaseCtrl {
     			}
     		}
     		 //检查手机号码是否已经被注册
-    	    if(StringUtils.isNotBlank(dweller.getPhone())&&StringUtils.isBlank(dweller.getId())){
-    	    	boolean b = dwellerBiz.checkPhoneExistWebShow(dweller.getPhone(),dweller.getCarrierId());
+    	    if(StringUtils.isNotBlank(dweller.getPhone())){
+    	    	boolean b = dwellerBiz.checkPhoneExistWebShow(dweller);
     	    	if(b){
     	    		super.message = "该联系电话已经被注册！";
     	    		return  super.message;
