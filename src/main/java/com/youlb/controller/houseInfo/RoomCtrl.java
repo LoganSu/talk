@@ -444,7 +444,7 @@ public class RoomCtrl extends BaseCtrl {
 			randomUUID = randomUUID.replace("-", "");
 			log.info("path="+path);
 			String[] title = new String[]{"房号","楼层","房产证号","房间归属","用途","朝向","装修情况","建筑面积㎡","使用面积㎡","花园面积㎡","是否空置","备注"};
-			String[] filds =new String[]{"roomNum","roomFloor","roomType","certificateNum","purpose","orientation","decorationStatus","roomArea","useArea","gardenArea","useStatus","remark"};
+			String[] filds =new String[]{"roomNum","roomFloor","certificateNum","roomType","purpose","orientation","decorationStatus","roomArea","useArea","gardenArea","useStatus","remark"};
 			String temPath = ExcelUtils.exportExcel("房间信息", title, filds, list, path+"tems/"+randomUUID+".xls");
 			log.info("temPath="+temPath);
 			File file = new File(temPath);

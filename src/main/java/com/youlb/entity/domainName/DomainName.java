@@ -62,7 +62,7 @@ public class DomainName extends BaseModel {
 		this.fname = fname;
 	}
 	public String getDomainStr() {
-		return domain+".sayee.cn";
+		return domain;
 	}
 	public String getDomain() {
 		return domain;

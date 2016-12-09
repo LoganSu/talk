@@ -169,6 +169,10 @@ public class InitServlet extends HttpServlet {
 		String firstServer = (String) proper.get("firstServer.http");
 		SysStatic.FIRSTSERVER=firstServer;
 		logger.info("一级平台地址firstServer::"+firstServer);
+		//平台级别
+		String platformLevel = (String) proper.get("platform.level");
+		SysStatic.PLATFORMLEVEL=platformLevel;
+		logger.info("平台级别::"+platformLevel);
 		
 		//特殊字符
 		String specialString = (String) proper.get("special.string");

@@ -45,9 +45,18 @@ public class IPManage extends BaseModel {
    /**fs端口*/
    @Column(name="ffs_port")
    private Integer fsPort;
+   /**社区唯一编号*/
+   @Column(name="fneibor_flag")
+   private Integer neiborFlag;
    
    
 	 
+	public Integer getNeiborFlag() {
+		return neiborFlag;
+	}
+	public void setNeiborFlag(Integer neiborFlag) {
+		this.neiborFlag = neiborFlag;
+	}
 	public String getFsIp() {
 		return fsIp;
 	}

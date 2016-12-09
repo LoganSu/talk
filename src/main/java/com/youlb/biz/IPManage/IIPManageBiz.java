@@ -8,6 +8,12 @@ import com.youlb.utils.exception.BizException;
 public interface IIPManageBiz extends IBaseBiz<IPManage> {
 
 	void saveOrUpdate(IPManage iPManage, Operator loginUser)throws BizException;
+    /**
+     * 判断名称是否存在
+     * @param iPManage
+     * @return
+     */
+	boolean checkNeibName(IPManage iPManage)throws BizException;
 
  
 }

@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
@@ -77,6 +79,8 @@ public class NeighborhoodsCtrl extends BaseCtrl {
      */
     @RequestMapping("/toSaveOrUpdate.do")
    	public String toSaveOrUpdate(String[] ids,Neighborhoods neighborhoods,Model model){
+    	List<Map<String,String>> listMap = neighborBiz.get_ip_manage_list();
+		model.addAttribute("listMap", listMap);
     	if(ids!=null&&ids.length>0){
     		 try {
 				neighborhoods = neighborBiz.get(ids[0]);
@@ -88,7 +92,7 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     	}
    		return "/neighborhoods/addOrEdit";
    	}
-    /**
+	/**
      * 保存或修改
      * @param user
      * @param model

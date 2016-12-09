@@ -14,7 +14,9 @@ import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.monitor.PointInfo;
 import com.youlb.entity.monitor.RealTimeMonitor;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 @Service("realTimeMonitorBiz")
 public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
@@ -59,9 +61,19 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 	@Override
 	public List<RealTimeMonitor> showList(RealTimeMonitor target, Operator loginUser)throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("select d.fdomainid,r.id,s.fvalue,r.fstatus,r.fcreatetime,d.fwarn_phone from t_real_time_monitor r")
-		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type order by r.fstatus,r.fcreatetime desc");
-		List<Object[]> listObj = realTimeMonitorDao.pageFindBySql(sb.toString(), new Object[]{}, target.getPager());
+		List<Object> values = new ArrayList<Object>();
+		sb.append("select * from(select d.fdomainid,r.id,s.fvalue warnType,r.fstatus status,r.fcreatetime createTime,d.fwarn_phone warnPhone from t_real_time_monitor r")
+		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type ");
+		
+		//普通用户过滤域
+		 List<String> domainIds = loginUser.getDomainIds();
+		 if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
+			 sb.append(SearchHelper.jointInSqlOrHql(domainIds, " d.fdomainid "));
+			 values.add(domainIds);
+		 }
+		 sb.append(")t");
+		 OrderHelperUtils.getOrder(sb, target, "t.", " t.status,t.creaTetime desc ");
+		List<Object[]> listObj = realTimeMonitorDao.pageFindBySql(sb.toString(), values.toArray(), target.getPager());
 		List<RealTimeMonitor> list = new ArrayList<RealTimeMonitor>();
 		if(listObj!=null&&!listObj.isEmpty()){
 			for(Object[] obj:listObj){

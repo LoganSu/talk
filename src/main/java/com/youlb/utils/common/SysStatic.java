@@ -122,5 +122,7 @@ public class SysStatic {
 	public static String QINIUBACKUP;
 	/**一级平台地址*/
 	public static String FIRSTSERVER;
+	/**平台级别*/
+	public static String PLATFORMLEVEL;
 	
 }

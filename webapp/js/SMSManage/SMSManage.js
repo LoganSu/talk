@@ -25,7 +25,7 @@ $(function(){
 	
 	//白名单
 	$(document).on("click",".SMSManageWhiteList",function(){
-	    hiAlert("提示","此功能考虑ing，敬请期待！");
+	    hiAlert("提示","此功能尚未完善，敬请期待！");
 //		var url =$path+"/mc/appManage/toWhiteList.do";
 //		var title = $(this).html();
 //		var id=$(this).attr("rel");

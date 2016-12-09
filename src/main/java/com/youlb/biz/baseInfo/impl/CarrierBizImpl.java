@@ -236,7 +236,7 @@ public class CarrierBizImpl implements ICarrierBiz {
 				 //添加运营商域名
 				DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
 				DomainName sub = new DomainName();
-				sub.setDomain(domainName.getDomain()+"/"+carrier.getCarrierNum()+"/login.do");
+				sub.setDomain(domainName.getDomain()+".sayee.cn/"+carrier.getCarrierNum()+"/login.do");
 				sub.setPlatform(domainName.getPlatform());
 				sub.setFname(carrier.getCarrierName()+"运营商");
 				sub.setLayer(domainName.getLayer()+1);

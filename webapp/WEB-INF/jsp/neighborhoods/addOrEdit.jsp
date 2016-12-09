@@ -35,7 +35,17 @@
            <table>
                <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>社区名称：</div></td>
-                <td><div><input name="neibName" value="${neighborhoods.neibName}" maxlength="20" title="社区名称不能为空" class="form-control required"/></div></td>
+                <td><div>
+                          <select class="form-control" name="neibName">
+	                             <option value="">--请选择--</option>
+	                             <c:forEach items="${listMap}" var="map">
+<%-- 	                                 <c:forEach items="${map.value}" var="keyMap"> --%>
+	                                    <option value="${map.fneib_name}">${map.fplatform_name}&nbsp;&nbsp;&nbsp;${map.fneib_name}</option>
+<%-- 	                                 </c:forEach> --%>
+	                             </c:forEach>
+	                     </select>
+<%--                     <input name="neibName" value="${neighborhoods.neibName}" maxlength="20" <c:if test="${neighborhoods.id!=null}">readonly="readonly"</c:if> placeholder="添加成功不能修改"  title="社区名称不能为空" class="form-control required"/> --%>
+                    </div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>社区编号：</div></td>
                 <td><div><input name="neibNum" value="${neighborhoods.neibNum}" maxlength="5" title="社区编号不能为空且为5个数字" class="form-control required number"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>社区地址：</div></td>

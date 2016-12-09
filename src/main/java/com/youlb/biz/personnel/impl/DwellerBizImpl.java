@@ -141,10 +141,17 @@ public class DwellerBizImpl implements IDwellerBiz {
 	 */
 	@Override
 	public void delete(String[] ids) throws BizException {
+		StringBuilder del = new StringBuilder("DELETE from t_users u where u.fusername in (SELECT d.fphone from t_dweller d where 1=1 ");
+		List<String> idList = new ArrayList<String>();
 		if(ids!=null){
 			for(String id:ids){
+				idList.add(id);
 				delete(id);
 			}
+			del.append(SearchHelper.jointInSqlOrHql(idList, " d.id "));
+			del.append(")");
+			//删除互联网用户
+			dwellerSqlDao.executeSql(del.toString(), new Object[]{idList});
 		}
 
 	}

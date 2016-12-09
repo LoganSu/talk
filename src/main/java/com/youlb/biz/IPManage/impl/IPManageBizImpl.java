@@ -1,9 +1,12 @@
 package com.youlb.biz.IPManage.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -64,11 +67,36 @@ public class IPManageBizImpl implements IIPManageBiz {
 	@Override
 	public void saveOrUpdate(IPManage iPManage, Operator loginUser) throws BizException {
 		 if(StringUtils.isBlank(iPManage.getId())){
+			//获取分组号
+			 Session session = iPManageDao.getCurrSession();
+			SQLQuery group = session.createSQLQuery("SELECT '1'||substring('0000'||nextval('t_neiber_order_seq'),length(currval('t_neiber_order_seq')||'')) ");
+			List<String> groupList = group.list();
+			iPManage.setNeiborFlag(Integer.parseInt(groupList.get(0)));
 			 iPManageDao.add(iPManage);
 		 }else{
 			 iPManageDao.update(iPManage);
 		 }
 		
+	}
+    /**
+     * 判断名称是否存在
+     * @throws BizException 
+     */
+	@Override
+	public boolean checkNeibName(IPManage iPManage) throws BizException {
+		 StringBuilder sb = new StringBuilder();
+		 List<Object> values = new ArrayList<Object>();
+		 sb.append("select id from t_ip_manage where fneib_name=?");
+		 values.add(iPManage.getNeibName());
+		 if(StringUtils.isNotBlank(iPManage.getId())){
+			 sb.append(" and id != ?");
+			 values.add(iPManage.getId());
+		 }
+		 List<String> list = iPManageDao.pageFindBySql(sb.toString(), values.toArray());
+	     if(list!=null&&!list.isEmpty()){
+			 return true;
+		 }
+		return false;
 	}
 
 }

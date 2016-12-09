@@ -24,7 +24,7 @@
                 <td><div><input name="fname" class="form-control required" title="名称不能为空" maxlength="10" value="${domainName.fname}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>域名：</div></td>
                 <td><div><input name="domain" class="form-control required" style="width: 220px" title="域名不能为空" maxlength="20" value="${domainName.domain}"/></div></td>
-                <td colspan="2"><div style="margin-left: 0px" class="firstFont">.sayee.cn</div></td>
+                <td colspan="2"><div style="margin-left: 0px" class="firstFont"></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont">备注：</div></td>

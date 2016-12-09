@@ -57,7 +57,7 @@
 		            title: '地址',
 		            align: 'center',
 		            valign: 'middle',
-		            sortable: true
+		            sortable: false
 		        },{
 		            field: 'warnType',
 		            title: '告警类型',
@@ -87,7 +87,7 @@
 		            title: '操作',
 		            align: 'center',
 		            valign: 'middle',
-		            sortable: true
+		            sortable: false
 		        }]		 
 	 })
 	 //引用百度地图

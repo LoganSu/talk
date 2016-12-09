@@ -77,6 +77,12 @@ var IPManageTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'neiborFlag',
+            title: '社区唯一标志',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'remark',
             title: '备注',
             align: 'center',

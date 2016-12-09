@@ -3,6 +3,7 @@ package com.youlb.biz.houseInfo;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 
@@ -54,6 +55,8 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	 * @return
 	 */
 	boolean checkNeighborNum(Neighborhoods neighborhoods)throws BizException;
+
+	List<Map<String, String>> get_ip_manage_list();
 
 	
 }

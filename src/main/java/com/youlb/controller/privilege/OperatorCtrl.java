@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.qiniu.util.Json;
 import com.youlb.biz.privilege.IOperatorBiz;
 import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.controller.common.BaseCtrl;
@@ -77,7 +76,11 @@ public class OperatorCtrl extends BaseCtrl{
      */
     @RequestMapping("/index.do")
 	public String index(Model model){
-		return "/index";
+    	if("1".equals(SysStatic.PLATFORMLEVEL)){
+    		return "/oneLevelIndex";
+    	}else{
+    		return "/twoLevelIndex";
+    	}
 	}
     /**
      * 用户登入

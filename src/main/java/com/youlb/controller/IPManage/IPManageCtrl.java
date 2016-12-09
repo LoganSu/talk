@@ -102,6 +102,16 @@ public class IPManageCtrl extends BaseCtrl {
     	if(StringUtils.isBlank(iPManage.getNeibName())){
     		super.message = "社区名称不能为空！";
     		return  super.message;
+    	}else{
+			try {
+				boolean b = iPManageBiz.checkNeibName(iPManage);
+				if(b){
+					super.message = "社区名称已经存在！";
+					return  super.message;
+				}
+			} catch (BizException e) {
+ 				e.printStackTrace();
+			}
     	}
     	
 //    	if(StringUtils.isBlank(iPManage.getFsIp())||!RegexpUtils.checkIpAddress(iPManage.getFsIp())){
@@ -125,7 +135,6 @@ public class IPManageCtrl extends BaseCtrl {
 		} catch (Exception e) {
 			super.message = "操作失败！";
 			e.printStackTrace();
-			//TODO log
 		}
     	 return  super.message;
     }

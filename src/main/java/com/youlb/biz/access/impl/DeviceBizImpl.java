@@ -205,15 +205,15 @@ public class DeviceBizImpl implements IDeviceBiz {
 				 dto.setDeviceNum(obj[1]==null?"":(String)obj[1]);
 				 dto.setDeviceModel(obj[2]==null?"":(String)obj[2]);
 				 dto.setDeviceFactory(obj[3]==null?"":(String)obj[3]);
-				 if(obj[4]!=null){
+//				 if(obj[4]!=null){
 					 if("1".equals(obj[4])){
 						 dto.setDeviceStatus("激活");
 					 }else{
 						 dto.setDeviceStatus("未激活");
 					 }
-				 }else{
-					 dto.setDeviceStatus("");
-				 }
+//				 }else{
+//					 dto.setDeviceStatus("未激活");
+//				 }
 				 dto.setApp_version(obj[5]==null?"":(String)obj[5]);
 				 dto.setMemory_size(obj[6]==null?"":(String)obj[6]);
 				 dto.setStorage_capacity(obj[7]==null?"":(String)obj[7]);

@@ -10,7 +10,7 @@
 		   <input type="hidden" name="appType" value="${appManage.appType}"/>
 		   <input type="hidden" id="appManageDomainIds" value="${appManage.treecheckbox}"/>
 		   <input type="hidden" name="relativePath" value="${appManage.relativePath}"/>
-		   <c:if test="${(appManage.id ==null||!appManage.threeAppType eq 'IOS')&&appManage.appType!=6}">
+		   <c:if test="${(appManage.id ==null&&appManage.appType == 6)||(appManage.appType!=null&&!appManage.threeAppType eq 'IOS')||appManage.appType != 6}">
 		      <input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>
 		   </c:if>
 		   <input type="hidden" name="md5Value" value="${appManage.md5Value}"/>
@@ -31,7 +31,7 @@
                 <td><div>
                     <select class="form-control" name="autoInstal">
                       <option <c:if test="${appManage.autoInstal=='2'}">selected="selected"</c:if> value="2">否</option>
-                      <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option>
+<%--                       <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option> --%>
                     </select>
                 </div></td>
                 <c:choose>
@@ -134,7 +134,7 @@
               <tr>
               <td><div class="firstFont"><span class="starColor">*</span>版本说明：</div></td>
                 <td colspan="4"><div>
-                  <textarea name="versionDes" maxlength="20" class="form-control" style="width: 560px" rows="3" cols="5">${appManage.versionDes}</textarea>
+                  <textarea name="versionDes" maxlength="200" class="form-control" style="width: 560px" rows="3" cols="5">${appManage.versionDes}</textarea>
 <%--                   <input name="versionDes" class="form-control" value="${appManage.versionDes}"/> --%>
                 </div></td>
                 
@@ -469,7 +469,21 @@ function calculate(file,callBack){
 	  $("#appManagesaveForm .btn-primary").on('click',function(){
 		  var appManageSeolect = $("#appManagesaveForm .appManageSeolect").val();
 		  var threeAppType = $("#appManagesaveForm .threeAppType").val();
+		  var id = $("#appManagesaveForm [name='id']").val();
 		  if(appManageSeolect!='IOS'&&threeAppType!='IOS'){
+			  //添加判断app不能为空
+			  if(!id){
+			   var count=uploader.files.length;
+			    if(count>1){
+			        hiAlert("提示","最多只能上传一个app");
+			        return false;
+			    }else if(count==0){
+			    	hiAlert("提示","没有要上传的app文件");
+			    	return false;
+			    }
+			  }
+			  
+			  
 				 var appName = $("#appManagesaveForm [name='appName']").val();
 				 if(!appName){
 					 hiAlert("提示","app名称不能为空");
@@ -502,7 +516,7 @@ function calculate(file,callBack){
 			 hiAlert("提示","版本说明不能为空");
 			 return false;
 		 }
-		var id = $("#appManagesaveForm [name='id']").val();
+		
 		//添加  文件必须  id为空
 		 if(uploader.files[0]&&!id){
 			 calculate(uploader.files[0].getNative(), function(md5){
@@ -564,8 +578,19 @@ function calculate(file,callBack){
 	 			     uploader1.start();
 	 			    }
 			    }
-		 }else{
-			 if($("#appManagesaveForm [name='appType']").val()=='6'){
+		 }else if($("#appManagesaveForm [name='appType']").val()=='6'){
+				 var sel = $("#appManagesaveForm .appManageSeolect")
+				 var className = sel[0].options[sel[0].selectedIndex].className;
+				 if(className=='andriod'){
+					 var count=uploader.files.length;
+     			    if(count>1){
+     			        hiAlert("提示","最多只能上传一个app");
+     			        return false;
+     			    }else if(count==0){
+     			    	hiAlert("提示","没有要上传的app文件");
+     			    	return false;
+     			    }
+				 }
 				 var id = $("#appManagesaveForm [name='id']").val();
 			    	var count=uploader1.files.length;
 	 			    if(count>1){
@@ -577,7 +602,6 @@ function calculate(file,callBack){
 	 			    }else{
 	 			     uploader1.start();
 	 			    }
-			    }
 		 }
 		 
 		  //显示进度条
@@ -760,7 +784,11 @@ function calculate(file,callBack){
 	                '</div></td>'
 	               '</tr>';
 				$("#appManagesaveForm .appManagesaveTable tr:eq(0)").after(tr);
+				$("#appManagesaveForm").append('<input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>');
 			}else{
+				//删除七牛插件js
+				$("#uploadFileDiv").children().remove();
+				$("#appManagesaveForm [name='serverAddr']").remove();
 				$("#appManagesaveForm .changeInputDiv input").remove();
 				$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
 				$("#appManagesaveForm .chooseShowTr").remove();

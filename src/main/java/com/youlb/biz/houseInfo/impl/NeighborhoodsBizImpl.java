@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,7 +23,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -92,8 +92,8 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	public void update(Neighborhoods target) throws BizException {
       StringBuilder sb = new StringBuilder();
       List<Object> list = new ArrayList<Object>();
-      sb.append("update Neighborhoods set neibName=?,neibNum=?,contractor=?,address=?,totalArea=?,");
-      list.add(target.getNeibName());list.add(target.getNeibNum());
+      sb.append("update Neighborhoods set neibNum=?,contractor=?,address=?,totalArea=?,");
+//      list.add(target.getNeibName());list.add(target.getNeibNum());
       list.add(target.getContractor());list.add(target.getAddress());
       list.add(target.getTotalArea());
       if(target.getStartBuildDate()!=null){
@@ -518,6 +518,34 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			 return true;
 		 }
 		return false;
+	}
+	/**
+	 * 调用接口获取ip列表
+	 */
+	@Override
+	public List<Map<String, String>> get_ip_manage_list() {
+		try {
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpGet get = new HttpGet(SysStatic.FIRSTSERVER+"/users/get_ip_manage_list.json");
+			CloseableHttpResponse execute = httpClient.execute(get);
+			if(execute.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = execute.getEntity();
+				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+				if(resultDto!=null){
+					if("0".equals(resultDto.getCode())){
+						return (List<Map<String, String>>) resultDto.getResult();
+					}
+				}
+			}
+		} catch (IOException e) {
+ 			e.printStackTrace();
+		} catch (ParseException e) {
+ 			e.printStackTrace();
+		} catch (JsonException e) {
+ 			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	/**根据所属小区查询社区列表
