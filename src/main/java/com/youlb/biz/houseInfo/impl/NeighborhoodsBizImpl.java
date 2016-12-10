@@ -92,8 +92,9 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	public void update(Neighborhoods target) throws BizException {
       StringBuilder sb = new StringBuilder();
       List<Object> list = new ArrayList<Object>();
-      sb.append("update Neighborhoods set neibNum=?,contractor=?,address=?,totalArea=?,");
-//      list.add(target.getNeibName());list.add(target.getNeibNum());
+      sb.append("update Neighborhoods set neibName=?, neibNum=?,contractor=?,address=?,totalArea=?,");
+      list.add(target.getNeibName());
+      list.add(target.getNeibNum());
       list.add(target.getContractor());list.add(target.getAddress());
       list.add(target.getTotalArea());
       if(target.getStartBuildDate()!=null){
@@ -116,7 +117,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
       list.add(target.getPlotRatio());list.add(target.getRemark());list.add(target.getCreateSipNum());
       list.add(target.getUseKey());
       list.add(target.getId());
-      neighborSqlDao.update(sb.toString(),list.toArray());
+    	  neighborSqlDao.update(sb.toString(),list.toArray());
 	}
 
 	/**

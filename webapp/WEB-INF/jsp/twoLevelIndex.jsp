@@ -149,7 +149,7 @@
        <div class="row" style="margin-right: -15px">
 			<div class="panel panel-primary">
 			    <div class="panel-heading" >
-				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台二级</span></label>
+				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
 				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
 					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
 				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
@@ -315,35 +315,35 @@
 	                   </div>
 	               </div>
 	        </r:role>
-	        <r:role auth="版本管理">     
-               <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                       <span class=" glyphicon glyphicon-home" aria-hidden="true"></span>
-                       <a class="accordion-toggle">版本管理</a>
-                   </div>
-                   <div id="collapseThree" class="panel-collapse collapse" style="height: 0px;">
-                       <div class="panel-body">
-                           <ul class="nav nav-pills nav-stacked">
-                             <r:role auth="用户端APP管理"> 
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=2">用户端APP管理</a></li>
-                             </r:role>
-                             <r:role auth="门口机APP管理"> 
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=1">门口机APP管理</a></li>
-                             </r:role>
-                             <r:role auth="管理机APP管理"> 
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=3">管理机APP管理</a></li>
-                             </r:role>
-                             <r:role auth="物业APP管理"> 
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=5">物业APP管理</a></li>
-                             </r:role>
-                             <r:role auth="第三方APP管理">
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=6">第三方APP管理</a></li>
-                             </r:role>
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-           </r:role>
+<%-- 	        <r:role auth="版本管理">      --%>
+<!--                <div class="panel panel-primary"> -->
+<!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree"> -->
+<!--                        <span class=" glyphicon glyphicon-home" aria-hidden="true"></span> -->
+<!--                        <a class="accordion-toggle">版本管理</a> -->
+<!--                    </div> -->
+<!--                    <div id="collapseThree" class="panel-collapse collapse" style="height: 0px;"> -->
+<!--                        <div class="panel-body"> -->
+<!--                            <ul class="nav nav-pills nav-stacked"> -->
+<%--                              <r:role auth="用户端APP管理">  --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=2">用户端APP管理</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="门口机APP管理">  --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=1">门口机APP管理</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="管理机APP管理">  --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=3">管理机APP管理</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="物业APP管理">  --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=5">物业APP管理</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="第三方APP管理"> --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/appManage/appManageshowPage.do?module=phoneAppManageTable&modulePath=/appManage&appType=6">第三方APP管理</a></li> --%>
+<%--                              </r:role> --%>
+<!--                            </ul> -->
+<!--                        </div> -->
+<!--                    </div> -->
+<!--                </div> -->
+<%--            </r:role> --%>
            <r:role auth="信息发布">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSeven">
@@ -447,18 +447,18 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/staticParam/staticParamListshowPage.do?module=staticParamTable&modulePath=/staticParam">静态参数</a></li>
                              </r:role>
-                             <r:role auth="服务器IP管理">
-                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li>
-                             </r:role>
+<%--                              <r:role auth="服务器IP管理"> --%>
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li> --%>
+<%--                              </r:role> --%>
                              <r:role auth="短信网关配置">
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
                              </r:role>
-                             <r:role auth="门口机型号定义 ">
-<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
-                             </r:role>
+<%--                              <r:role auth="门口机型号定义 "> --%>
+<!-- <!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 --> 
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li> --%>
+<%--                              </r:role> --%>
                              <r:role auth="域名管理 ">
                                <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li>
                              </r:role>

@@ -36,14 +36,14 @@ var roomTable ={
             valign: 'middle',
             sortable: true,
         }, {
-            field: 'roomType',
-            title: '房间归属',
+            field: 'certificateNum',
+            title: '房产证号',
             align: 'center',
             valign: 'middle',
             sortable: true
         }, {
-            field: 'certificateNum',
-            title: '房产证号',
+            field: 'roomType',
+            title: '房间归属',
             align: 'center',
             valign: 'middle',
             sortable: true

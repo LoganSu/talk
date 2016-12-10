@@ -40,7 +40,7 @@
 	                             <option value="">--请选择--</option>
 	                             <c:forEach items="${listMap}" var="map">
 <%-- 	                                 <c:forEach items="${map.value}" var="keyMap"> --%>
-	                                    <option value="${map.fneib_name}">${map.fplatform_name}&nbsp;&nbsp;&nbsp;${map.fneib_name}</option>
+	                                    <option <c:if test="${map.fneib_name eq neighborhoods.neibName}">selected="selected"</c:if> value="${map.fneib_name}">${map.fplatform_name}&nbsp;&nbsp;&nbsp;${map.fneib_name}</option>
 <%-- 	                                 </c:forEach> --%>
 	                             </c:forEach>
 	                     </select>

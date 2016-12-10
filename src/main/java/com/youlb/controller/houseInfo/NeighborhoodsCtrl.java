@@ -142,7 +142,9 @@ public class NeighborhoodsCtrl extends BaseCtrl {
 			} catch (UnsupportedEncodingException e) {
  				e.printStackTrace();
 			} catch (BizException e) {
-				super.message=e.getMessage();
+				if(RegexpUtils.checkChinese(e.getMessage())){
+					super.message=e.getMessage();
+				}
 				log.error(super.message);
  				e.printStackTrace();
 			} catch (IOException e) {

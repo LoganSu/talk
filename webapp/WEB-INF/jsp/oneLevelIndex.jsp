@@ -138,9 +138,9 @@
 <%--     <script src="${path}/js/room/room.js" ></script> --%>
     <script src="${path}/js/common/tree.js"></script>
     <script type="text/javascript">
-       $(function(){
-    	   $("#showRightArea").load($path+"/mc/guidePage/toGuidePage.do");
-       })
+//        $(function(){
+//     	   $("#showRightArea").load($path+"/mc/guidePage/toGuidePage.do");
+//        })
     </script>
 </head>
   <body>
@@ -149,7 +149,7 @@
        <div class="row" style="margin-right: -15px">
 			<div class="panel panel-primary">
 			    <div class="panel-heading" >
-				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台一级</span></label>
+				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
 				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
 					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
 				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
@@ -163,110 +163,110 @@
                        <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
                        <strong style="font-size: 24px;">菜单选项</strong>
                    </div>
-           <r:role auth="房产管理">     
-               <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                       <span class=" glyphicon glyphicon-globe" aria-hidden="true"></span>
-                       <a class="accordion-toggle">房产管理</a>
-                   </div>
-                   <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
-                       <div class="panel-body">
-                           <i class="fa fa-files-o fa-fw"></i>
-                           <ul class="nav nav-pills nav-stacked">
-                              <r:role auth="房产信息">
-                                <li><a tree_id="houseInfoTree" class="li_a tree" href="javascript:void(0)" rel="${path}/mc/area/areaListshowPage.do?module=areaTable&modulePath=/area">房产信息</a></li>
-                              </r:role>  
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-           </r:role>
-           <r:role auth="运营商管理">     
-               <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                       <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
-                       <a class="accordion-toggle">运营商管理</a>
-                   </div>
-                   <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
-                       <div class="panel-body">
-                           <ul class="nav nav-pills nav-stacked">
-                             <r:role auth="运营商信息">       
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/carrier/carrierListshowPage.do?module=carrierTable&modulePath=/carrier">运营商信息</a></li>
-                             </r:role>
-                             <r:role auth="运营商帐号管理">       
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/userListshowPage.do?module=carrierOperatorTable&modulePath=/carrierOperator">运营商帐号管理</a></li>
-                             </r:role>
-                             <r:role auth="运营商角色管理">       
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/role/roleListshowPage.do?module=carrierRoleTable&modulePath=/carrierRole">运营商角色管理</a></li>
-                             </r:role>
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-           </r:role>
-           <r:role auth="安防监控">     
-               <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThirteen">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                       <a class="accordion-toggle">安防监控</a>
-                   </div>
-                   <div id="collapseThirteen" class="panel-collapse collapse" style="height: 0px;">
-                       <div class="panel-body">
-                           <ul class="nav nav-pills nav-stacked">
-                             <r:role auth="实时监控">
-                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do?1=1">实时监控</a></li>
-                             </r:role>
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-             </r:role>
-	        <r:role auth="住户管理">     
-               <div class="panel panel-primary">
-                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEight">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                       <a class="accordion-toggle">住户管理</a>
-                   </div>
-                   <div id="collapseEight" class="panel-collapse collapse" style="height: 0px;">
-                       <div class="panel-body">
-                           <ul class="nav nav-pills nav-stacked">
-                             <r:role auth="住户信息">
-                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/dweller/dwellerListshowPage.do?module=dwellerTable&modulePath=/dweller">住户信息</a></li>
-                             </r:role>
-                           </ul>
-                       </div>
-                   </div>
-               </div>
-             </r:role>
-	        <r:role auth="门禁管理">   
-	           <div class="panel panel-primary">
-	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-	                       <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
-	                       <a class="accordion-toggle">门禁管理</a>
-	                   </div>
-	                   <div id="collapseFive" class="panel-collapse collapse" style="height: 0px;">
-	                       <div class="panel-body">
-		                       <ul class="nav nav-pills nav-stacked">
-			                       <r:role auth="门禁授权管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/room/roomCardListshowPage.do?module=roomPermissionTable&modulePath=/roomPermission">门禁授权管理</a></li>
-		                           </r:role>
-		                           <r:role auth="门禁卡管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/permission/cardListshowPage.do?module=cardTable&modulePath=/card">门禁卡管理</a></li>
-		                           </r:role>
-		                           <r:role auth="门禁卡刷卡记录">
-		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/cardRecord/cardrecordshowPage.do?module=cardRecordTable&modulePath=/cardrecord">门禁卡刷卡记录</a></li>
-	                           	   </r:role>
-	                           	    <r:role auth="APP开锁记录">
-		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/appRecord/apprecordshowPage.do?module=appRecordTable&modulePath=/apprecord">APP开锁记录</a></li>
-	                           	   </r:role>
-	                           </ul>
+<%--            <r:role auth="房产管理">      --%>
+<!--                <div class="panel panel-primary"> -->
+<!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne"> -->
+<!--                        <span class=" glyphicon glyphicon-globe" aria-hidden="true"></span> -->
+<!--                        <a class="accordion-toggle">房产管理</a> -->
+<!--                    </div> -->
+<!--                    <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;"> -->
+<!--                        <div class="panel-body"> -->
+<!--                            <i class="fa fa-files-o fa-fw"></i> -->
+<!--                            <ul class="nav nav-pills nav-stacked"> -->
+<%--                               <r:role auth="房产信息"> --%>
+<%--                                 <li><a tree_id="houseInfoTree" class="li_a tree" href="javascript:void(0)" rel="${path}/mc/area/areaListshowPage.do?module=areaTable&modulePath=/area">房产信息</a></li> --%>
+<%--                               </r:role>   --%>
+<!--                            </ul> -->
+<!--                        </div> -->
+<!--                    </div> -->
+<!--                </div> -->
+<%--            </r:role> --%>
+<%--            <r:role auth="运营商管理">      --%>
+<!--                <div class="panel panel-primary"> -->
+<!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo"> -->
+<!--                        <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span> -->
+<!--                        <a class="accordion-toggle">运营商管理</a> -->
+<!--                    </div> -->
+<!--                    <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;"> -->
+<!--                        <div class="panel-body"> -->
+<!--                            <ul class="nav nav-pills nav-stacked"> -->
+<%--                              <r:role auth="运营商信息">        --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/carrier/carrierListshowPage.do?module=carrierTable&modulePath=/carrier">运营商信息</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="运营商帐号管理">        --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/user/userListshowPage.do?module=carrierOperatorTable&modulePath=/carrierOperator">运营商帐号管理</a></li> --%>
+<%--                              </r:role> --%>
+<%--                              <r:role auth="运营商角色管理">        --%>
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/role/roleListshowPage.do?module=carrierRoleTable&modulePath=/carrierRole">运营商角色管理</a></li> --%>
+<%--                              </r:role> --%>
+<!--                            </ul> -->
+<!--                        </div> -->
+<!--                    </div> -->
+<!--                </div> -->
+<%--            </r:role> --%>
+<%--            <r:role auth="安防监控">      --%>
+<!--                <div class="panel panel-primary"> -->
+<!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThirteen"> -->
+<!--                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
+<!--                        <a class="accordion-toggle">安防监控</a> -->
+<!--                    </div> -->
+<!--                    <div id="collapseThirteen" class="panel-collapse collapse" style="height: 0px;"> -->
+<!--                        <div class="panel-body"> -->
+<!--                            <ul class="nav nav-pills nav-stacked"> -->
+<%--                              <r:role auth="实时监控"> --%>
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/realTimeMonitor/realTimeMonitor.do?1=1">实时监控</a></li> --%>
+<%--                              </r:role> --%>
+<!--                            </ul> -->
+<!--                        </div> -->
+<!--                    </div> -->
+<!--                </div> -->
+<%--              </r:role> --%>
+<%-- 	        <r:role auth="住户管理">      --%>
+<!--                <div class="panel panel-primary"> -->
+<!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEight"> -->
+<!--                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
+<!--                        <a class="accordion-toggle">住户管理</a> -->
+<!--                    </div> -->
+<!--                    <div id="collapseEight" class="panel-collapse collapse" style="height: 0px;"> -->
+<!--                        <div class="panel-body"> -->
+<!--                            <ul class="nav nav-pills nav-stacked"> -->
+<%--                              <r:role auth="住户信息"> --%>
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/dweller/dwellerListshowPage.do?module=dwellerTable&modulePath=/dweller">住户信息</a></li> --%>
+<%--                              </r:role> --%>
+<!--                            </ul> -->
+<!--                        </div> -->
+<!--                    </div> -->
+<!--                </div> -->
+<%--              </r:role> --%>
+<%-- 	        <r:role auth="门禁管理">    --%>
+<!-- 	           <div class="panel panel-primary"> -->
+<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive"> -->
+<!-- 	                       <span class="glyphicon glyphicon-gift" aria-hidden="true"></span> -->
+<!-- 	                       <a class="accordion-toggle">门禁管理</a> -->
+<!-- 	                   </div> -->
+<!-- 	                   <div id="collapseFive" class="panel-collapse collapse" style="height: 0px;"> -->
+<!-- 	                       <div class="panel-body"> -->
+<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
+<%-- 			                       <r:role auth="门禁授权管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/room/roomCardListshowPage.do?module=roomPermissionTable&modulePath=/roomPermission">门禁授权管理</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="门禁卡管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/permission/cardListshowPage.do?module=cardTable&modulePath=/card">门禁卡管理</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="门禁卡刷卡记录"> --%>
+<%-- 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/cardRecord/cardrecordshowPage.do?module=cardRecordTable&modulePath=/cardrecord">门禁卡刷卡记录</a></li> --%>
+<%-- 	                           	   </r:role> --%>
+<%-- 	                           	    <r:role auth="APP开锁记录"> --%>
+<%-- 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/appRecord/apprecordshowPage.do?module=appRecordTable&modulePath=/apprecord">APP开锁记录</a></li> --%>
+<%-- 	                           	   </r:role> --%>
+<!-- 	                           </ul> -->
 	                             
-	                       </div>
-	                   </div>
-	               </div>
-	        </r:role>
+<!-- 	                       </div> -->
+<!-- 	                   </div> -->
+<!-- 	               </div> -->
+<%-- 	        </r:role> --%>
 	         <r:role auth="设备管理">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwelve">
@@ -282,9 +282,9 @@
 		                           <r:role auth="设备帐号管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/deviceCount/deviceCountshowPage.do?module=deviceCountTable&modulePath=/deviceCount">设备帐号管理</a></li>
 		                           </r:role>
-		                           <r:role auth="门口机在线状态查询">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=deviceCountSipTable&modulePath=/deviceCountSip">门口机在线状态查询</a></li>
-		                           </r:role>
+<%-- 		                           <r:role auth="门口机在线状态查询"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=deviceCountSipTable&modulePath=/deviceCountSip">门口机在线状态查询</a></li> --%>
+<%-- 		                           </r:role> --%>
 	                           </ul>
 	                             
 	                       </div>
@@ -303,12 +303,12 @@
 			                       <r:role auth="用户帐号管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/users/usersshowPage.do?module=usersTable&modulePath=/users">用户帐号管理</a></li>
 		                           </r:role>
-		                           <r:role auth="SIP账号在线查询">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountTable&modulePath=/sipCount">SIP账号在线查询</a></li>
-		                           </r:role>
-		                           <r:role auth="SIP账号关联查询">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountAllTable&modulePath=/sipCountAll">SIP账号关联查询</a></li>
-		                           </r:role>
+<%-- 		                           <r:role auth="SIP账号在线查询"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountTable&modulePath=/sipCount">SIP账号在线查询</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="SIP账号关联查询"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountAllTable&modulePath=/sipCountAll">SIP账号关联查询</a></li> --%>
+<%-- 		                           </r:role> --%>
 	                           </ul>
 	                             
 	                       </div>
@@ -344,72 +344,72 @@
                    </div>
                </div>
            </r:role>
-           <r:role auth="信息发布">   
-	           <div class="panel panel-primary">
-	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSeven">
-	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-	                       <a class="accordion-toggle">信息发布</a>
-	                   </div>
-	                   <div id="collapseSeven" class="panel-collapse collapse" style="height: 0px;">
-	                       <div class="panel-body">
-		                       <ul class="nav nav-pills nav-stacked">
-			                       <r:role auth="公告通知发布">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/infoPublish/infoPublishshowPage.do?module=infoPublishTable&modulePath=/infoPublish">公告通知发布</a></li>
-		                           </r:role>
-		                           <r:role auth="广告发布">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/adPublish/adPublishshowPage.do?module=adPublishTable&modulePath=/adPublish">广告发布</a></li>
-		                           </r:role>
-		                           <r:role auth="今日头条">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">今日头条</a></li>
-		                           </r:role>
-	                           </ul>
+<%--            <r:role auth="信息发布">    --%>
+<!-- 	           <div class="panel panel-primary"> -->
+<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSeven"> -->
+<!-- 	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> -->
+<!-- 	                       <a class="accordion-toggle">信息发布</a> -->
+<!-- 	                   </div> -->
+<!-- 	                   <div id="collapseSeven" class="panel-collapse collapse" style="height: 0px;"> -->
+<!-- 	                       <div class="panel-body"> -->
+<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
+<%-- 			                       <r:role auth="公告通知发布"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/infoPublish/infoPublishshowPage.do?module=infoPublishTable&modulePath=/infoPublish">公告通知发布</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="广告发布"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/adPublish/adPublishshowPage.do?module=adPublishTable&modulePath=/adPublish">广告发布</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="今日头条"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">今日头条</a></li> --%>
+<%-- 		                           </r:role> --%>
+<!-- 	                           </ul> -->
 	                             
-	                       </div>
-	                   </div>
-	               </div>
-	        </r:role>
-	           <r:role auth="物业服务">   
-	           <div class="panel panel-primary">
-	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">
-	                       <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-	                       <a class="accordion-toggle">物业服务</a>
-	                   </div>
-	                   <div id="collapseTen" class="panel-collapse collapse" style="height: 0px;">
-	                       <div class="panel-body">
-		                       <ul class="nav nav-pills nav-stacked">
-		                           <r:role auth="关于小区">
-		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li>
-		                           </r:role>
-			                       <r:role auth="物业投诉">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">物业投诉</a></li>
-		                           </r:role>
-		                           <r:role auth="物业报修">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=1">物业报修</a></li>
-		                           </r:role>
-<%-- 		                           <r:role auth="费用管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">费用管理</a></li> --%>
+<!-- 	                       </div> -->
+<!-- 	                   </div> -->
+<!-- 	               </div> -->
+<%-- 	        </r:role> --%>
+<%-- 	           <r:role auth="物业服务">    --%>
+<!-- 	           <div class="panel panel-primary"> -->
+<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen"> -->
+<!-- 	                       <span class="glyphicon glyphicon-home" aria-hidden="true"></span> -->
+<!-- 	                       <a class="accordion-toggle">物业服务</a> -->
+<!-- 	                   </div> -->
+<!-- 	                   <div id="collapseTen" class="panel-collapse collapse" style="height: 0px;"> -->
+<!-- 	                       <div class="panel-body"> -->
+<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
+<%-- 		                           <r:role auth="关于小区"> --%>
+<%-- 		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li> --%>
 <%-- 		                           </r:role> --%>
-<%--                                    <r:role auth="公司管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/management/department/company">公司管理</a></li> --%>
+<%-- 			                       <r:role auth="物业投诉"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">物业投诉</a></li> --%>
 <%-- 		                           </r:role> --%>
-		                           <r:role auth="组织架构">
-		                             <li><a tree_id="managementDepartmentTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/departmentCompany">组织架构</a></li>
-		                           </r:role>
-		                           <r:role auth="员工管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/worker/workershowPage.do?module=workerTable&modulePath=/worker">员工管理</a></li>
-		                           </r:role>
-		                           <r:role auth="分组管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
-		                           </r:role>
-<%-- 		                           <r:role auth="费用管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li> --%>
+<%-- 		                           <r:role auth="物业报修"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=1">物业报修</a></li> --%>
 <%-- 		                           </r:role> --%>
-	                           </ul>
+<%-- <%-- 		                           <r:role auth="费用管理"> --%> 
+<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">费用管理</a></li> --%> 
+<%-- <%-- 		                           </r:role> --%> 
+<%-- <%--                                    <r:role auth="公司管理"> --%> 
+<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/management/department/company">公司管理</a></li> --%> 
+<%-- <%-- 		                           </r:role> --%> 
+<%-- 		                           <r:role auth="组织架构"> --%>
+<%-- 		                             <li><a tree_id="managementDepartmentTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/departmentCompany">组织架构</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="员工管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/worker/workershowPage.do?module=workerTable&modulePath=/worker">员工管理</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- 		                           <r:role auth="分组管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li> --%>
+<%-- 		                           </r:role> --%>
+<%-- <%-- 		                           <r:role auth="费用管理"> --%> 
+<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li> --%> 
+<%-- <%-- 		                           </r:role> --%> 
+<!-- 	                           </ul> -->
 	                             
-	                       </div>
-	                   </div>
-	               </div>
-	        </r:role>          
+<!-- 	                       </div> -->
+<!-- 	                   </div> -->
+<!-- 	               </div> -->
+<%-- 	        </r:role>           --%>
            <r:role auth="权限管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
@@ -451,17 +451,17 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li>
                              </r:role>
-                             <r:role auth="短信网关配置">
-                               <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-                               <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li>
-                             </r:role>
+<%--                              <r:role auth="短信网关配置"> --%>
+<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
+<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li> --%>
+<%--                              </r:role> --%>
                              <r:role auth="门口机型号定义 ">
 <!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
                              </r:role>
-                             <r:role auth="域名管理 ">
-                               <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li>
-                             </r:role>
+<%--                              <r:role auth="域名管理 "> --%>
+<%--                                <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li> --%>
+<%--                              </r:role> --%>
                            </ul>
                        </div>
                    </div>
