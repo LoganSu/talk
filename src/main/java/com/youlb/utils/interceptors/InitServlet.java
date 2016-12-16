@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +30,7 @@ import com.youlb.utils.common.DES3;
 import com.youlb.utils.common.QuartzService;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.helper.DateHelper;
 
 
 
@@ -159,6 +162,10 @@ public class InitServlet extends HttpServlet {
 		
 		//web版本
 		String version = (String) proper.get("version");
+		if(StringUtils.isBlank(version)){
+			version = DateHelper.dateFormat(new Date(), "yy.MM.dd.HH");
+		}
+		
 		SysStatic.VERSION=version;
 		logger.info("发布web version::"+version);
 		//七牛备份地址

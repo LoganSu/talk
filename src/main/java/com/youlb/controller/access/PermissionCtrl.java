@@ -258,7 +258,7 @@ public class PermissionCtrl extends BaseCtrl {
     @ResponseBody
     public CardInfo connectCardMachine(CardInfo cardInf,Model model){
 		try {
-			boolean b = permissionBiz.checkCardExist(cardInf.getCardSn()+"");
+			boolean b = permissionBiz.checkCardExist(cardInf);
 			if(b){
 				return null;
 			}
@@ -281,7 +281,7 @@ public class PermissionCtrl extends BaseCtrl {
     public String writeCard(CardInfo cardInfo,Model model){
     	//检查卡片是否已经使用
     	try {
-    	boolean b = permissionBiz.checkCardExist(cardInfo.getCardSn());
+    	boolean b = permissionBiz.checkCardExist(cardInfo);
     	if(b){
     		super.message="1";
     		return super.message;

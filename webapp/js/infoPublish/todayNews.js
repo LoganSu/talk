@@ -90,7 +90,7 @@ $(function(){
 					 var item = selects[i];
 //					 alert(item.selfStr);
 					if(item.selfStr=="否"){
-						 hiAlert("提示","请选择本运营商发布的公告删除！");
+						 hiAlert("提示","请选择本运营商发布的头条删除！");
 						 return false;
 					}
 				 }

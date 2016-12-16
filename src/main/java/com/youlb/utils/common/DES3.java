@@ -150,7 +150,7 @@ public class DES3 {
 		 String dec =  bytesToHexString(usernameByte);
 		 System.out.println(dec);
 		 
-		 byte[] srcBytes = decryptMode(keyBytes, hexStringToBytes(dec));
+		 byte[] srcBytes = decryptMode(keyBytes, hexStringToBytes("04d3fd100e9abfde89682014f2f58c4e3793f6295c807825c07ab799e6f3b8011d2b4f78032b612e"));
 		 System.out.println("解密后的字符串:" + new String(srcBytes));
 		 
 		System.out.println(Arrays.toString(hexStringToBytes(username))); 

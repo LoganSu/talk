@@ -75,7 +75,11 @@ public class OperatorCtrl extends BaseCtrl{
      * @return
      */
     @RequestMapping("/index.do")
-	public String index(Model model){
+	public String index(Model model,String carrierNum){
+    	//爱社区特殊处理页面
+    	if("asq".equals(carrierNum)){
+    		return "/asqIndex";
+    	}
     	if("1".equals(SysStatic.PLATFORMLEVEL)){
     		return "/oneLevelIndex";
     	}else{
@@ -124,7 +128,7 @@ public class OperatorCtrl extends BaseCtrl{
 				Operator loginUser = operatorBiz.hideLogin(user);
 				if(loginUser!=null){
 					httpSession.setAttribute(SysStatic.LOGINUSER, loginUser);
-					return INDEX;
+					return INDEX+"?carrierNum="+user.getCarrier().getCarrierNum();
 				}else{
 					retMap.put("code", "2");
 	    			retMap.put("message", "用户名不存在");
@@ -483,7 +487,25 @@ public class OperatorCtrl extends BaseCtrl{
     @ResponseBody
     public String getVerificationCode(Operator user){
     	try {
-    		Map<String,Map<String,Object>> map =  (Map<String, Map<String, Object>>) servletContext.getAttribute("exceedSendSmsMap");
+    		//判断账号是否存在
+    		boolean b = operatorBiz.chickLoginNameExist(user);
+    		if(!b){
+    			super.message = "请填写正确的账号";
+    			logger.error(super.message);
+    			return super.message;
+    		}
+    		//获取验证码
+    		String code = operatorBiz.getVerificationCode(user,null);
+    		if(StringUtils.isNotBlank(code)){
+    			logger.info("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
+    			System.out.println("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
+    			super.message = "验证码24小时有效，请稍后再试！";
+    			logger.error(super.message);
+    			return super.message;
+    		}
+			operatorBiz.getVerificationCode(user,"1440");//十分钟有效期(测试一天有效)935133
+			
+			Map<String,Map<String,Object>> map =  (Map<String, Map<String, Object>>) servletContext.getAttribute("exceedSendSmsMap");
     		Map<String,Object> subMap = map.get(user.getCarrier().getCarrierNum()+user.getLoginName());
     		if(subMap!=null){
     			Integer count = (Integer) subMap.get("count");
@@ -502,23 +524,6 @@ public class OperatorCtrl extends BaseCtrl{
     			newMap.put("time", new Date());
     			map.put(user.getCarrier().getCarrierNum()+user.getLoginName(), newMap);
     		}
-    		//判断账号是否存在
-    		boolean b = operatorBiz.chickLoginNameExist(user);
-    		if(!b){
-    			super.message = "请填写正确的账号";
-    			logger.error(super.message);
-    			return super.message;
-    		}
-    		//获取验证码
-    		String code = operatorBiz.getVerificationCode(user,null);
-    		if(StringUtils.isNotBlank(code)){
-    			logger.info("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
-    			System.out.println("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
-    			super.message = "验证码24小时有效，请稍后再试！";
-    			logger.error(super.message);
-    			return super.message;
-    		}
-			operatorBiz.getVerificationCode(user,"1440");//十分钟有效期(测试一天有效)935133
 		} catch (IOException | JsonException e) {
 			e.printStackTrace();
 			super.message = "验证码发送失败！";

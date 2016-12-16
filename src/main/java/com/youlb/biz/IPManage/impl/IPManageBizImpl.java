@@ -31,7 +31,10 @@ public class IPManageBizImpl implements IIPManageBiz {
 
 	@Override
 	public void update(IPManage target) throws BizException {
-		// TODO Auto-generated method stub
+		String update ="update IPManage set ip=?,port=?,platformName=?,remark=?,platformType=?,neibName=?,management=?,fsIp=?,fsPort=? where id=?";
+		iPManageDao.update(update, new Object[]{target.getIp(),target.getPort(),target.getPlatformName(),target.getRemark(),target.getPlatformType(),
+				target.getNeibName(),target.getManagement(),target.getFsIp(),target.getFsPort(),target.getId()});
+		
 
 	}
 
@@ -74,7 +77,7 @@ public class IPManageBizImpl implements IIPManageBiz {
 			iPManage.setNeiborFlag(Integer.parseInt(groupList.get(0)));
 			 iPManageDao.add(iPManage);
 		 }else{
-			 iPManageDao.update(iPManage);
+			 update(iPManage);
 		 }
 		
 	}

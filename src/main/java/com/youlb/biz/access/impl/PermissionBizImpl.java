@@ -261,7 +261,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 	    List<String> list =  query.list();
 	    logger.info("生成序号8位数"+list.get(0));
 	    cardInfo.setCardNo(Integer.parseInt(list.get(0)));
-	    cardSqlDao.saveOrUpdate(cardInfo);
+	    cardSqlDao.add(cardInfo);
 //	    Session currSession = cardSqlDao.getCurrSession();
 	    session.flush();
 		//添加所有卡片父类表
@@ -303,7 +303,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 				HttpEntity entity_rsp = response.getEntity();
 				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 				if(resultDto!=null){
-					if(!"0".equals(resultDto.getCode())){
+					if(!"0".equals(resultDto.getCode())&&!"3001".equals(resultDto.getCode())){//设备没有登录也发卡成功
 						logger.error(resultDto.getMsg());
 						throw new BizException(resultDto.getMsg());
 					}
@@ -322,9 +322,9 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * @see com.youlb.biz.access.IPermissionBiz#checkCardExist(java.lang.String)
 	 */
 	@Override
-	public boolean checkCardExist(String cardSn) throws BizException {
-		String hql = "from CardInfo where cardSn=? and cardStatus !='3' ";//注销的可以重新发卡
-		List<CardInfo> cardList = cardSqlDao.find(hql, new Object[]{cardSn});
+	public boolean checkCardExist(CardInfo cardInf) throws BizException {
+		String hql = "from CardInfo where cardSn=? and roomId=? and cardStatus !='3' ";//注销的可以重新发卡
+		List<CardInfo> cardList = cardSqlDao.find(hql, new Object[]{cardInf.getCardSn(),cardInf.getRoomId()});
 		if(cardList.size()>0){
 			return true;
 		}
@@ -381,15 +381,15 @@ public class PermissionBizImpl implements IPermissionBiz {
 		if(SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
 			//解除卡分人的关联
 			sb.append(",t.oprType=null");
-			//解除卡跟 房子的关联
-			String delete ="delete from t_domain_card t where t.fcardsn=?";
-			cardSqlDao.executeSql(delete, new Object[]{cardInfo.getCardSn()});
+//			//解除卡跟 房子的关联
+//			String delete ="delete from t_domain_card t where t.fcardsn=?";
+//			cardSqlDao.executeSql(delete, new Object[]{cardInfo.getCardSn()});
 			//更新发卡数量-1
 //			String update = "update t_dweller set fcardcount = CASE WHEN fcardcount is null or fcardcount<0 then 0 ELSE fcardcount END-1 where id=?";
 //			cardSqlDao.updateSQL(update, new Object[]{cardInfo.getDwellerId()});
 		}
-		sb.append(" where t.cardSn= ?");
-		cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn()});
+		sb.append(" where t.cardSn= ? and roomId=?");
+		cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getRoomId()});
 		
 		//调用接口下发黑名单
 		//挂失或者解挂需要推送黑名单

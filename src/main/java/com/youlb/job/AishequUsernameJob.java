@@ -51,7 +51,7 @@ public class AishequUsernameJob implements Job{
 					String delet = "delete from t_operator where floginname=?";
 					List<String> roleIdList = operatorSqlDao.pageFindBySql(defultRole,new Object[]{});
 					if(roleIdList==null||roleIdList.isEmpty()){
-						throw new BizException("请为爱社区创建默认角色，即所有权限为空");
+						throw new BizException("请先创建一个默认角色，即所有权限为空");
 					}
 					String roleId=roleIdList.get(0);
 					for(Object obj:list){

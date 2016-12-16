@@ -57,6 +57,10 @@ public interface INeighborhoodsBiz extends IBaseBiz<Neighborhoods>{
 	boolean checkNeighborNum(Neighborhoods neighborhoods)throws BizException;
 
 	List<Map<String, String>> get_ip_manage_list();
+	/**
+	 * 判断是否有重复的名称
+	 */
+	boolean checkNeighborName(Neighborhoods neighborhoods) throws BizException;
 
 	
 }

@@ -72,11 +72,12 @@ $(function(){
 	var writeCard=function(cardId){
 		  obj = jQuery.parseJSON(cardId);
 		  var card_id = obj.result.card_id;
+		  var roomId = $("#openCardForm [name='roomId']").val();
 		  if(obj.code=='0'&&card_id){
 		  $("#openCardForm .cardSn").val(card_id);
-			  $.post($path+"/mc/permission/connectCardMachine.do","cardSn="+card_id,function($data){
+			  $.post($path+"/mc/permission/connectCardMachine.do","cardSn="+card_id+"&roomId="+roomId,function($data){
 				  if(!$data){
-					  hiAlert("提示","该卡已经被使用！");
+					  hiAlert("提示","该卡已经绑定此房产，请更换新卡！");
  					   return false;
  				   }
 			  })
@@ -95,7 +96,7 @@ $(function(){
 		//保存卡片信息
 		$.post($path+"/mc/permission/writeCard.do",data,function($data){
 			if($data=="1"){
-		       hiAlert("提示","该卡片已经被使用，请更换新卡！");
+		       hiAlert("提示","该卡已经绑定此房产，请更换新卡！");
 		       return false;
 			}else if($data=="0"){
 				  hiAlert("提示","开卡成功！");

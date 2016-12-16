@@ -11,11 +11,20 @@ import com.youlb.controller.common.BaseCtrl;
 public class GuidePageCtrl extends BaseCtrl {
    
 	 /**
-     * 跳转到添加、更新页面
+     * 跳转到引导页
      * @return
      */
     @RequestMapping("/toGuidePage.do")
    	public String toSaveOrUpdate(String[] ids,Model model){
    		return "/guidePage/guidePage";
+   	}
+    
+    /**
+     * 跳转到爱社区引导页
+     * @return
+     */
+    @RequestMapping("/asqGuidePage.do")
+   	public String asqGuidePage(String[] ids,Model model){
+   		return "/guidePage/asqGuidePage";
    	}
 }

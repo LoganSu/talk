@@ -78,9 +78,23 @@ public class AppManageBiz implements IAppManageBiz {
 	@Override
 	public void update(AppManage target) throws BizException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("update AppManage set autoInstal=?,appName=?,versionName=?,versionCode=?,packageName=?,versionDes=?,iconUrl=?,softwareType=? where id=?");
-		appManageSqlDao.update(sb.toString(),new Object[]{target.getAutoInstal(),target.getAppName(),target.getVersionName(),target.getVersionCode(),
-			target.getPackageName(),target.getVersionDes(),target.getIconUrl(),target.getSoftwareType(),target.getId()});
+		List<Object> values = new ArrayList<Object>();
+		sb.append("update AppManage set autoInstal=?,appName=?,versionName=?,versionCode=?,packageName=?,versionDes=?,iconUrl=?,softwareType=?  ");
+		values.add(target.getAutoInstal());
+		values.add(target.getAppName());
+		values.add(target.getVersionName());
+		values.add(target.getVersionName());
+		values.add(target.getPackageName());
+		values.add(target.getVersionDes());
+		values.add(target.getIconUrl());
+		values.add(target.getSoftwareType());
+		if("IOS".equals(target.getThreeAppType())){
+			sb.append(",serverAddr=?");
+			values.add(target.getServerAddr());
+		}
+		sb.append(" where id=? ");
+		values.add(target.getId());
+		appManageSqlDao.update(sb.toString(),values.toArray());
 	}
 
 	/**

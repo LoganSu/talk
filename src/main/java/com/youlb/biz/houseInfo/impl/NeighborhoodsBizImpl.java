@@ -548,6 +548,21 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		
 		return null;
 	}
+	@Override
+	public boolean checkNeighborName(Neighborhoods neighborhoods) throws BizException {
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.FNEIBNAME from t_neighborhoods n where n.FNEIBNAME=? ");
+		 values.add(neighborhoods.getNeibName());
+		 if(StringUtils.isNotBlank(neighborhoods.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(neighborhoods.getId());
+		 }
+		 List<String> list = neighborSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 if(list!=null&&!list.isEmpty()){
+			 return true;
+		 }
+		return false;
+	}
 
 	/**根据所属小区查询社区列表
 	 * @param loginUser

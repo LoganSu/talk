@@ -101,15 +101,21 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Neighborhoods neighborhoods,Model model){
-    		if(StringUtils.isBlank(neighborhoods.getNeibName())){
-    			super.message = "社区名称不能为空！";
-    			return  super.message;
-    		}
-    		if(!RegexpUtils.checkNumAndLetter(neighborhoods.getNeibNum(), 5, 5)){
-    			super.message = "社区编号不能为空且为5个数字！";
-    			return  super.message;
-    		}
-    		try {
+    	try {
+		    		if(StringUtils.isBlank(neighborhoods.getNeibName())){
+		    			super.message = "社区名称不能为空！";
+		    			return  super.message;
+		    		}else{
+		    			boolean b = neighborBiz.checkNeighborName(neighborhoods);
+			    		if(b){
+			    			super.message = "社区名称已经存在！";
+			    			return  super.message;
+			    		}
+		    		}
+		    		if(!RegexpUtils.checkNumAndLetter(neighborhoods.getNeibNum(), 5, 5)){
+		    			super.message = "社区编号不能为空且为5个数字！";
+		    			return  super.message;
+		    		}
 		    		//同一个地区 社区编号不能相同
 		    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
 		    		if(b){

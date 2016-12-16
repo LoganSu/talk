@@ -77,28 +77,38 @@
                 </c:choose>
                 
               </tr>
-              <c:if test="${appManage.threeAppType != 'IOS'}">
-	              <tr class="chooseShowTr">
-	                  <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
-	                  <td><div>
-	                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
-	                  </div></td>
-	                   <td><div class="leftFont"><span class="starColor">*</span>版本名称：</div></td>
-	                  <td><div>
-	                     <input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>
-	                  </div></td>
-	              </tr>
-	               <tr class="chooseShowTr">
-	                  <td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>
-	                  <td><div>
-	                     <input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>
-	                  </div></td>
-	                   <td><div class="leftFont"><span class="starColor">*</span>包名：</div></td>
-	                  <td><div>
-	                     <input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>
-	                  </div></td>
-	              </tr>
-              </c:if>
+              <c:choose>
+                 <c:when test="${appManage.threeAppType != 'IOS'}">
+		              <tr class="chooseShowTr">
+		                  <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
+		                  <td><div>
+		                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
+		                  </div></td>
+		                   <td><div class="leftFont"><span class="starColor">*</span>版本名称：</div></td>
+		                  <td><div>
+		                     <input maxlength="50"  name="versionName" value="${appManage.versionName}" class="form-control"/>
+		                  </div></td>
+		              </tr>
+		               <tr class="chooseShowTr">
+		                  <td><div class="firstFont"><span class="starColor">*</span>版本号：</div></td>
+		                  <td><div>
+		                     <input maxlength="50"  name="versionCode" value="${appManage.versionCode}" class="form-control"/>
+		                  </div></td>
+		                   <td><div class="leftFont"><span class="starColor">*</span>包名：</div></td>
+		                  <td><div>
+		                     <input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>
+		                  </div></td>
+		              </tr>
+                 </c:when>
+                 <c:otherwise>
+                     <tr class="chooseShowTr">
+		                  <td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>
+		                  <td><div>
+		                     <input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>
+		                  </div></td>
+		              </tr>
+                 </c:otherwise>
+              </c:choose>
               
               <c:if test="${appManage.appType == 6}">
                 <c:choose>
@@ -579,17 +589,19 @@ function calculate(file,callBack){
 	 			    }
 			    }
 		 }else if($("#appManagesaveForm [name='appType']").val()=='6'){
-				 var sel = $("#appManagesaveForm .appManageSeolect")
-				 var className = sel[0].options[sel[0].selectedIndex].className;
-				 if(className=='andriod'){
-					 var count=uploader.files.length;
-     			    if(count>1){
-     			        hiAlert("提示","最多只能上传一个app");
-     			        return false;
-     			    }else if(count==0){
-     			    	hiAlert("提示","没有要上传的app文件");
-     			    	return false;
-     			    }
+				 var sel = $("#appManagesaveForm .appManageSeolect");
+				 if(sel.length>0){
+					 var className = sel[0].options[sel[0].selectedIndex].className;
+					 if(className=='andriod'){
+						 var count=uploader.files.length;
+	     			    if(count>1){
+	     			        hiAlert("提示","最多只能上传一个app");
+	     			        return false;
+	     			    }else if(count==0){
+	     			    	hiAlert("提示","没有要上传的app文件");
+	     			    	return false;
+	     			    }
+					 }
 				 }
 				 var id = $("#appManagesaveForm [name='id']").val();
 			    	var count=uploader1.files.length;
@@ -783,6 +795,7 @@ function calculate(file,callBack){
 	                   '<input maxlength="50"  name="packageName" value="${appManage.packageName}" class="form-control"/>'+
 	                '</div></td>'
 	               '</tr>';
+	            $("#appManagesaveForm .chooseShowIosTr").remove();
 				$("#appManagesaveForm .appManagesaveTable tr:eq(0)").after(tr);
 				$("#appManagesaveForm").append('<input type="hidden" name="serverAddr" value="${appManage.serverAddr}"/>');
 			}else{
@@ -791,7 +804,14 @@ function calculate(file,callBack){
 				$("#appManagesaveForm [name='serverAddr']").remove();
 				$("#appManagesaveForm .changeInputDiv input").remove();
 				$("#appManagesaveForm .changeInputDiv").append('<input type="text" name="serverAddr" style="width: 300px" class="form-control"/>');
+				var iosTr='<tr class="chooseShowIosTr">'+
+	                '<td><div class="firstFont"><span class="starColor">*</span>APP名称：</div></td>'+
+	                '<td><div>'+
+	                   '<input maxlength="50"  name="appName" value="${appManage.appName}" class="form-control"/>'+
+	                '</div></td>'+
+	               '</tr>'
 				$("#appManagesaveForm .chooseShowTr").remove();
+				$("#appManagesaveForm .appManagesaveTable tr:eq(0)").after(iosTr);
 			}
 		})
   })
