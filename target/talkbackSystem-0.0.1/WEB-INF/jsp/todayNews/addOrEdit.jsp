@@ -31,6 +31,8 @@ private String htmlspecialchars(String str) {
 		   <input type="hidden" name="id" value="${todayNews.id}"/>
 		   <input type="hidden" id="todayNewssDomainIds" value="${todayNews.treecheckbox}"/>
 		   <input type="hidden" name="pictureUrl" value="${todayNews.pictureUrl}"/>
+		   <input type="hidden" name="carrierId" value="${todayNews.carrierId}"/>
+		   
 		   
            <table>
                <tr>

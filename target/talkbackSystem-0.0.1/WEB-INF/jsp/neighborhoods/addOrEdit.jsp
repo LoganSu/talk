@@ -37,10 +37,12 @@
                 <td><div class="firstFont"><span class="starColor">*</span>社区名称：</div></td>
                 <td><div>
                           <select class="form-control" name="neibName">
-	                             <option value="">--请选择--</option>
+	                             <option value="">--请选择-- </option>
 	                             <c:forEach items="${listMap}" var="map">
 <%-- 	                                 <c:forEach items="${map.value}" var="keyMap"> --%>
-	                                    <option <c:if test="${map.fneib_name eq neighborhoods.neibName}">selected="selected"</c:if> value="${map.fneib_name}">${map.fplatform_name}&nbsp;&nbsp;&nbsp;${map.fneib_name}</option>
+	                                    <option <c:if test="${map.fneib_name eq neighborhoods.neibName}">selected="selected"</c:if> value="${map.fneib_name}">
+	                                      ${map.fplatform_name}&nbsp;&nbsp;${map.fneib_name}&nbsp;&nbsp;${map.fneibor_flag}
+	                                    </option>
 <%-- 	                                 </c:forEach> --%>
 	                             </c:forEach>
 	                     </select>

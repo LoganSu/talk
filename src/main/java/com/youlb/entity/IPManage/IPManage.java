@@ -18,10 +18,10 @@ import com.youlb.entity.common.BaseModel;
 @Table(name="t_ip_manage")
 public class IPManage extends BaseModel {
 	private static final long serialVersionUID = 8185483391379268906L;
-	/**ip地址*/
+	/**访问ip地址*/
    @Column(name="fip")
    private String ip;
-   /**端口*/
+   /**https端口*/
    @Column(name="fport")
    private Integer port;
    /**平台名称*/
@@ -48,9 +48,37 @@ public class IPManage extends BaseModel {
    /**社区唯一编号*/
    @Column(name="fneibor_flag")
    private Integer neiborFlag;
+   /**fs外呼端口*/
+   @Column(name="ffs_external_port")
+   private Integer fsExternalPort;
+   /**http端口*/
+   @Column(name="fhttp_port")
+   private Integer httpPort;
+   /**服务器真实ip*/
+   @Column(name="fhttp_ip")
+   private String httpIp;
    
    
-	 
+   
+   
+	public String getHttpIp() {
+		return httpIp;
+	}
+	public void setHttpIp(String httpIp) {
+		this.httpIp = httpIp;
+	}
+	public Integer getHttpPort() {
+		return httpPort;
+	}
+	public void setHttpPort(Integer httpPort) {
+		this.httpPort = httpPort;
+	}
+	public Integer getFsExternalPort() {
+		return fsExternalPort;
+	}
+	public void setFsExternalPort(Integer fsExternalPort) {
+		this.fsExternalPort = fsExternalPort;
+	}
 	public Integer getNeiborFlag() {
 		return neiborFlag;
 	}

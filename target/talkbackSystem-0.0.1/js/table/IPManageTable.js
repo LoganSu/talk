@@ -48,46 +48,64 @@ var IPManageTable ={
             sortable: true
         },{
             field: 'ip',
-            title: 'IP地址',
+            title: '访问IP地址',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
         },{
             field: 'port',
-            title: '端口',
+            title: 'https端口',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
+        },{
+            field: 'httpPort',
+            title: 'http端口',
+            align: 'center',
+            valign: 'middle',
+            sortable: false
+        },{
+            field: 'httpIp',
+            title: 'http真实ip',
+            align: 'center',
+            valign: 'middle',
+            sortable: false
         },{
             field: 'managementStr',
             title: '开通物业功能',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
         },{
             field: 'fsIp',
             title: 'FS IP地址',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
         },{
             field: 'fsPort',
             title: 'FS端口',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
         },{
             field: 'neiborFlag',
             title: '社区唯一标志',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
+        },{
+            field: 'fsExternalPort',
+            title: 'fs外呼端口',
+            align: 'center',
+            valign: 'middle',
+            sortable: false
         },{
             field: 'remark',
             title: '备注',
             align: 'center',
             valign: 'middle',
-            sortable: true
+            sortable: false
         },{
             field: 'operate',
             title: '操作',

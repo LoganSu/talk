@@ -141,6 +141,17 @@
        $(function(){
     	   $("#showRightArea").load($path+"/mc/guidePage/asqGuidePage.do");
        })
+       
+//        $(function(){
+//     	   var moduleName = $("#moduleName").val();
+//     	   var url="";
+//     	   if(moduleName=="infoPublish"){
+//     		   url = $path+"/mc/infoPublish/infoPublishshowPage.do?module=infoPublishTable&modulePath=/infoPublish";
+//     	   }else if(moduleName=="dweller"){
+//     		   url = $path+"/mc/dweller/dwellerListshowPage.do?module=dwellerTable&modulePath=/dweller";
+//     	   }
+//     	      $("#showRightArea").load(url);
+//        })
     </script>
 </head>
   <body>

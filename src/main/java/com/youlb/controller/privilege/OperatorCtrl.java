@@ -78,6 +78,7 @@ public class OperatorCtrl extends BaseCtrl{
 	public String index(Model model,String carrierNum){
     	//爱社区特殊处理页面
     	if("asq".equals(carrierNum)){
+    		model.addAttribute("module", "dweller");
     		return "/asqIndex";
     	}
     	if("1".equals(SysStatic.PLATFORMLEVEL)){

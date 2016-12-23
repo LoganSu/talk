@@ -31,9 +31,9 @@ public class IPManageBizImpl implements IIPManageBiz {
 
 	@Override
 	public void update(IPManage target) throws BizException {
-		String update ="update IPManage set ip=?,port=?,platformName=?,remark=?,platformType=?,neibName=?,management=?,fsIp=?,fsPort=? where id=?";
+		String update ="update IPManage set ip=?,port=?,platformName=?,remark=?,platformType=?,neibName=?,management=?,fsIp=?,fsPort=?,httpPort=?,httpIp=? where id=?";
 		iPManageDao.update(update, new Object[]{target.getIp(),target.getPort(),target.getPlatformName(),target.getRemark(),target.getPlatformType(),
-				target.getNeibName(),target.getManagement(),target.getFsIp(),target.getFsPort(),target.getId()});
+				target.getNeibName(),target.getManagement(),target.getFsIp(),target.getFsPort(),target.getHttpPort(),target.getHttpIp(),target.getId()});
 		
 
 	}

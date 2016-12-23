@@ -82,16 +82,31 @@ public class IPManageCtrl extends BaseCtrl {
     public String save(IPManage iPManage,Model model){
 //    	if(StringUtils.isBlank(iPManage.getIp())||!RegexpUtils.checkIpAddress(iPManage.getIp())){
     	if(StringUtils.isBlank(iPManage.getIp())){
-    		super.message = "ip地址不能为空！";
+    		super.message = "访问IP不能为空！";
     		return  super.message;
     	}
     	if(iPManage.getPort()!=null){
     		if(iPManage.getPort()>65535||!RegexpUtils.checkNumber(iPManage.getPort()+"")){
-    			super.message = "请填写正确的端口！";
+    			super.message = "请填写正确的https端口！";
     			return  super.message;
     		}
     	}else{
-    		super.message = "端口不能为空！";
+    		super.message = "https端口不能为空！";
+			model.addAttribute("message", super.message);
+			return INPUT;
+    	}
+    	
+    	if(StringUtils.isBlank(iPManage.getHttpIp())){
+    		super.message = "服务器真实IP不能为空！";
+    		return  super.message;
+    	}
+    	if(iPManage.getHttpPort()!=null){
+    		if(iPManage.getHttpPort()>65535||!RegexpUtils.checkNumber(iPManage.getHttpPort()+"")){
+    			super.message = "请填写正确的http端口！";
+    			return  super.message;
+    		}
+    	}else{
+    		super.message = "http端口不能为空！";
 			model.addAttribute("message", super.message);
 			return INPUT;
     	}

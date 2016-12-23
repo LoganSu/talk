@@ -14,7 +14,7 @@
 	<div class="functionBut">
 	   <ul class="list-unstyled list-inline">
 	      <c:choose>
-	         <c:when test="${parentId==1}">
+	         <c:when test="${orderNature==1}">
 	             <r:role auth="物业报修/添加">
 	                <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/repairs/toSaveOrUpdate.do" saveUrl="${path}/mc/repairs/saveOrUpdate.do?orderNature=${orderNature}">添加</button></li>
 	            </r:role>
@@ -23,10 +23,10 @@
 	            </r:role>
 	         </c:when>
 	         <c:otherwise>
-		           <r:role auth="客服服务/添加">
+		           <r:role auth="物业投诉/添加">
 		                <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/repairs/toSaveOrUpdate.do" saveUrl="${path}/mc/repairs/saveOrUpdate.do?orderNature=${orderNature}">添加</button></li>
 		            </r:role>
-		            <r:role auth="客服服务/修改">
+		            <r:role auth="物业投诉/修改">
 		                <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/repairs/toSaveOrUpdate.do" saveUrl="${path}/mc/repairs/saveOrUpdate.do?orderNature=${orderNature}">修改</button></li>
 		            </r:role>
 	         

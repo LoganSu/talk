@@ -9,10 +9,16 @@
 		   <input type="hidden" name="id" value="${iPManage.id}"/>
            <table>
               <tr>
-                <td><div class="firstFont"><span class="starColor">*</span>服务器IP：</div></td>
+                <td><div class="firstFont"><span class="starColor">*</span>访问IP：</div></td>
                 <td><div><input name="ip" class="form-control required" title="请填写正确的ip地址"  maxlength="100" value="${iPManage.ip}"/></div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>端口：</div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>https端口：</div></td>
                 <td><div><input name="port" class="form-control required" title="请填写正确的端口" value="${iPManage.port}"/></div></td>
+              </tr>
+              <tr>
+                <td><div class="firstFont"><span class="starColor">*</span>服务器真实IP：</div></td>
+                <td><div><input name="httpIp" class="form-control required" title="请填写正确的ip地址"  maxlength="100" value="${iPManage.httpIp}"/></div></td>
+                 <td><div class="leftFont"><span class="starColor">*</span>http端口：</div></td>
+                <td><div><input name="httpPort" class="form-control required" title="请填写正确的端口" value="${iPManage.httpPort}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>平台名称：</div></td>
