@@ -17,7 +17,16 @@ public class TodayNewsDto {
     public String targetDevice;
     /**创建时间*/
     private Date publishTime;
+    /**社区标签集合 */
+    public List<String> neibTagList;
     
+	 
+	public List<String> getNeibTagList() {
+		return neibTagList;
+	}
+	public void setNeibTagList(List<String> neibTagList) {
+		this.neibTagList = neibTagList;
+	} 
     
 	public Date getPublishTime() {
 		return publishTime;

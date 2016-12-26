@@ -59,14 +59,14 @@ var IPManageTable ={
             valign: 'middle',
             sortable: false
         },{
-            field: 'httpPort',
-            title: 'http端口',
+            field: 'httpIp',
+            title: 'http真实ip',
             align: 'center',
             valign: 'middle',
             sortable: false
         },{
-            field: 'httpIp',
-            title: 'http真实ip',
+            field: 'httpPort',
+            title: 'http端口',
             align: 'center',
             valign: 'middle',
             sortable: false

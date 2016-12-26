@@ -322,6 +322,15 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 					throw new BizException("未找到任何标签");
 				}
 				dto.setTagList(tagList);
+				//全部发布 标签就是社区id
+				if("2".equals(infoPublish.getSendType())){
+					//获取社区id
+					List<String> neibTagList = getNeibTagList(tagList);
+					dto.setNeibTagList(neibTagList);
+					logger.info("neibTagList："+Arrays.toString(neibTagList.toArray()));
+				}else{
+					dto.setNeibTagList(tagList);
+				}
 				logger.info("tagList："+Arrays.toString(infoPublish.getTreecheckbox().toArray()));
 				logger.info("infoPublish:"+JsonUtils.toJson(dto));
 				//调用信息推送接口
@@ -359,7 +368,20 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 			
 		}
 	}
-    /**
+	/**
+	 * h获取社区id集合
+	 * @param tagList
+	 * @return
+	 * @throws BizException 
+	 */
+    private List<String> getNeibTagList(List<String> tagList) throws BizException {
+    	StringBuilder sql = new StringBuilder("WITH RECURSIVE r AS (SELECT d.* FROM t_domain d where 1=1 ");
+    	sql.append(SearchHelper.jointInSqlOrHql(tagList, " d.id "));
+		sql.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) SELECT r.id FROM r where r.flayer=1");
+		return infoPublishSqlDao.pageFindBySql(sql.toString(), new Object[]{tagList});
+	}
+
+	/**
      * 获取域的级别
      * @param domainId
      * @return

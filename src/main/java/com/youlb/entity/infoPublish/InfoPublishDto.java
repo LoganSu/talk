@@ -49,8 +49,16 @@ public class InfoPublishDto{
     /**有效期*/
     public Date expDate;
     public Date publishTime;
-    
+    /**社区标签集合 */
+    public List<String> neibTagList;
 	
+    
+	public List<String> getNeibTagList() {
+		return neibTagList;
+	}
+	public void setNeibTagList(List<String> neibTagList) {
+		this.neibTagList = neibTagList;
+	}
 	public String getId() {
 		return id;
 	}
