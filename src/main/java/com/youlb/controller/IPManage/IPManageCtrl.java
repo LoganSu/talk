@@ -92,8 +92,7 @@ public class IPManageCtrl extends BaseCtrl {
     		}
     	}else{
     		super.message = "https端口不能为空！";
-			model.addAttribute("message", super.message);
-			return INPUT;
+    		return  super.message;
     	}
     	
     	if(StringUtils.isBlank(iPManage.getHttpIp())){
@@ -107,8 +106,7 @@ public class IPManageCtrl extends BaseCtrl {
     		}
     	}else{
     		super.message = "http端口不能为空！";
-			model.addAttribute("message", super.message);
-			return INPUT;
+			return  super.message;
     	}
     	if(StringUtils.isBlank(iPManage.getPlatformName())){
     		super.message = "平台名称不能为空！";
@@ -141,8 +139,7 @@ public class IPManageCtrl extends BaseCtrl {
     		}
     	}else{
     		super.message = "端口不能为空！";
-			model.addAttribute("message", super.message);
-			return INPUT;
+			return  super.message;
     	}
     	try {
     		
