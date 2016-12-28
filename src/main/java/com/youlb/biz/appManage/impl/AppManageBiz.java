@@ -83,7 +83,7 @@ public class AppManageBiz implements IAppManageBiz {
 		values.add(target.getAutoInstal());
 		values.add(target.getAppName());
 		values.add(target.getVersionName());
-		values.add(target.getVersionName());
+		values.add(target.getVersionCode());
 		values.add(target.getPackageName());
 		values.add(target.getVersionDes());
 		values.add(target.getIconUrl());

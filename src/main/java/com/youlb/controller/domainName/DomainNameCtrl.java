@@ -91,18 +91,18 @@ public class DomainNameCtrl extends BaseCtrl {
     			super.message = "域名不能为空";
     			return super.message;
     		}else{
-    			if(1>domainName.getDomain().length()||domainName.getDomain().length()>20){
-    				super.message = "域名为1~20个字符组成";
+    			if(1>domainName.getDomain().length()||domainName.getDomain().length()>100){
+    				super.message = "域名为1~100个字符组成";
         			return super.message;
     			}
     		}
-    		if(StringUtils.isNotBlank(domainName.getId())){
-    			String s = "11,12,13,14";
-    			if(s.contains(domainName.getId())){
-    				super.message = "该条数据不能修改";
-        			return super.message;
-    			}
-    		}
+//    		if(StringUtils.isNotBlank(domainName.getId())){
+//    			String s = "11,12,13,14";
+//    			if(s.contains(domainName.getId())){
+//    				super.message = "该条数据不能修改";
+//        			return super.message;
+//    			}
+//    		}
     		
     		domainNameBiz.saveOrUpdate(domainName,getLoginUser());
 		} catch (Exception e) {
@@ -125,6 +125,13 @@ public class DomainNameCtrl extends BaseCtrl {
 	public String delete(String[] ids,Model model){
 		if(ids!=null&&ids.length>0){
 			try {
+				String s = "11,12,13,14";
+				for(String id:ids){
+					if(s.contains(id)){
+						super.message = "该条数据不能修改";
+	        			return super.message;
+					}
+				}
 				domainNameBiz.delete(ids);
 			} catch (Exception e) {
 				super.message =  "删除出错";

@@ -11,15 +11,16 @@
 		   <div>
 		    <input type="hidden" name="id" value="${carrier.id}"/>
 		    <input type="hidden" name="isNormal" value="${carrier.isNormal}"/>
+		    <input type="hidden" name="domainNameId" value="${carrier.domainNameId}"/>
             <table>
               <tr>
 	                <td><div class="firstFont"><span class="starColor">*</span>名称：</div></td>
 	                <td><div><input name="carrierName" class="form-control required" title="名称不能为空" maxlength="10" value="${carrier.carrierName}"/></div></td>
                     <td><div class="leftFont"><span class="starColor">*</span>二级域名：</div></td>
                     <td><div>
-	                  <select name="domainNameId" class="form-control province">
+	                  <select name="domainNameParentId" class="form-control province">
 	                    <c:forEach var="domainName" items="${domainList}">
-           	                <option value="${domainName.id}">${domainName.domain}</option>
+           	                <option value="${domainName.id}" <c:if test="${domainName.id eq carrier.domainNameParentId}">selected="selected"</c:if> >${domainName.domain}</option>
 	                    </c:forEach>
 	                  </select>
 	                </div></td>

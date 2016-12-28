@@ -105,12 +105,14 @@ public class InfoPublishCtrl extends BaseCtrl {
     		super.message = "有效期要在今天以后！";
 			return  super.message;
     	}
-    	try {
+    	if("2".equals(infoPublish.getSendType())){
     		List<String> treecheckbox = infoPublish.getTreecheckbox();
-    		if(treecheckbox!=null&&treecheckbox.size()!=1){
+    		if(treecheckbox==null||treecheckbox.size()!=1){
     			super.message = "请选择一个域发布信息！";
     			return  super.message;
     		}
+    	}
+    	try {
     		infoPublishBiz.saveOrUpdate(infoPublish,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

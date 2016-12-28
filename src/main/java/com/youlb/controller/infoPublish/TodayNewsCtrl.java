@@ -146,7 +146,13 @@ public class TodayNewsCtrl extends BaseCtrl {
     		super.message="内容不能为空";
     		return super.message;
     	}
-    	
+    	if("2".equals(todayNews.getSendType())){
+    		List<String> treecheckbox = todayNews.getTreecheckbox();
+    		if(treecheckbox==null||treecheckbox.size()!=1){
+    			super.message = "请选择一个域发布信息！";
+    			return  super.message;
+    		}
+    	}
     	FileReader in = null;
     	BufferedReader br=null;
     	FileWriter out=null;

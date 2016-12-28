@@ -96,6 +96,9 @@ public class CarrierBizImpl implements ICarrierBiz {
 		.append(" INNER JOIN t_operator_role tor on tor.froleid=r.id where c.id=?)");
 		carrierSqlDao.executeSql(sb.toString(), new Object[]{id});
 		carrierSqlDao.delete(id);
+		//删除域名
+		String delDomain = "DELETE FROM t_domain_name where id in (SELECT c.fdomain_name_id from t_carrier c where c.id=?)";
+		carrierSqlDao.executeSql(delDomain, new Object[]{id});
 	}
 
 	/**
@@ -126,6 +129,9 @@ public class CarrierBizImpl implements ICarrierBiz {
 		String sql ="select m.fdomainid from t_carrier c INNER JOIN t_carrier_domain m on m.fcarrierId=c.id where c.id=?";
 		List<String> domainids = carrierSqlDao.pageFindBySql(sql,new Object[]{id});
 		carrier.setTreecheckbox(domainids);
+		//转换成父id
+		DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
+		carrier.setDomainNameParentId(domainName.getParentid());
 		return carrier;
 	}
 
@@ -199,8 +205,19 @@ public class CarrierBizImpl implements ICarrierBiz {
 	@Override
 	public void saveOrUpdate(Carrier carrier) throws BizException {
 		String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
+		DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameParentId());
 		//add
 		if(StringUtils.isBlank(carrier.getId())){
+			 //添加运营商域名
+			DomainName sub = new DomainName();
+			sub.setDomain(domainName.getDomain()+"/"+carrier.getCarrierNum()+"/login.do");
+			sub.setPlatform(domainName.getPlatform());
+			sub.setFname(carrier.getCarrierName()+"运营商");
+			sub.setLayer(domainName.getLayer()+1);
+			sub.setParentid(domainName.getId());
+			String domainNameId = (String) domainNameSqlDao.add(sub);
+			//管理域名
+			carrier.setDomainNameId(domainNameId);
 			carrier.setIsNormal(SysStatic.NORMALCARRIER);//普通运营商
 			String carrierId = (String) carrierSqlDao.add(carrier);
 			carrierSqlDao.getCurrSession().flush();
@@ -233,15 +250,6 @@ public class CarrierBizImpl implements ICarrierBiz {
 				//发送密码到手机上
 				Boolean b = SmsUtil.sendSMS(carrier.getTel(), "【赛翼智能】欢迎使用友邻邦产品，为您创建的"+carrier.getCarrierName()+"运营商密码为："+random+"，请妥善保管");
 				 //TODO LOG
-				 //添加运营商域名
-				DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
-				DomainName sub = new DomainName();
-				sub.setDomain(domainName.getDomain()+"/"+carrier.getCarrierNum()+"/login.do");
-				sub.setPlatform(domainName.getPlatform());
-				sub.setFname(carrier.getCarrierName()+"运营商");
-				sub.setLayer(domainName.getLayer()+1);
-				sub.setParentid(domainName.getId());
-				domainNameSqlDao.add(sub);
 				//设置角色的权限
 //			List<Privilege> pList = privilegeSqlDao.find("from Privilege p where p.type=?",new Object[]{SysStatic.NORMALPRIVILEGE});
 //			if(pList!=null&&!pList.isEmpty()){
@@ -270,6 +278,10 @@ public class CarrierBizImpl implements ICarrierBiz {
 						carrierSqlDao.executeSql(sql, new Object[]{domainId,carrier.getId()});
 					}
 				}
+			    //修改域名
+				//获取父域名
+				String updateDomain="update t_domain_name set fdomain=?,fname=? where id=?";
+				carrierSqlDao.executeSql(updateDomain, new Object[]{domainName.getDomain()+"/"+carrier.getCarrierNum()+"/login.do",carrier.getCarrierName()+"运营商",carrier.getDomainNameId()});
 		}
 	}
 	/**判断运营商简称是否存在 

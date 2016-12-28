@@ -53,9 +53,11 @@ text-align: center;
 					           <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}">
 					         </a>
 						     <div class="caption">
+						     <c:if test="${adPublish.opraterType!=1}">
 						       <p>
 						         <a href="#" class="btn btn-xs btn-danger" role="button">删除</a>
 						       </p>
+						       </c:if>
 						     </div>
 					     </div>
 					  </c:forEach>

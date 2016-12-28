@@ -28,6 +28,10 @@ public interface IUnitBiz extends IBaseBiz<Unit>{
 	 */
 	List<Unit> getUnitListBybuildingId(String id)throws BizException;
 
+	boolean checkUnitNum(Unit unit)throws BizException;
+
+	boolean checkUnitName(Unit unit)throws BizException;
+
 
 
 }

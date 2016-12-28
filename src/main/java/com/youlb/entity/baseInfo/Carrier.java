@@ -43,9 +43,12 @@ public class Carrier extends BaseModel {
    /**运营商简称 */
    @Column(name="fcarrierNum")
    private String carrierNum;
-   /**二级域名id */
+   /**关联域名id */
    @Column(name="fdomain_name_id")
    private String domainNameId;
+   /**二级域名id */
+   @Transient
+   private String domainNameParentId;
    
 //   @Transient
 //   private List<String> domainIds;
@@ -56,6 +59,12 @@ public class Carrier extends BaseModel {
    
 	 
 	 
+	public String getDomainNameParentId() {
+		return domainNameParentId;
+	}
+	public void setDomainNameParentId(String domainNameParentId) {
+		this.domainNameParentId = domainNameParentId;
+	}
 	public String getDomainNameId() {
 		return domainNameId;
 	}

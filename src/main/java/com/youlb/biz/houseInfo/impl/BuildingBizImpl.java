@@ -106,8 +106,14 @@ public class BuildingBizImpl implements IBuildingBiz {
 	 */
 	@Override
 	public Building get(Serializable id) throws BizException {
-		
-		return buildingSqlDao.get(id);
+		Building b =buildingSqlDao.get(id);
+		//获取parentid
+		String sql = "select d.fparentid from t_domain d inner join t_building n on n.id=d.fentityid where n.id=?";
+		List<String> list = buildingSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(list!=null&&!list.isEmpty()){
+			b.setParentId(list.get(0));
+		}
+		return b;
 	}
 
 	/**
@@ -235,6 +241,36 @@ public class BuildingBizImpl implements IBuildingBiz {
 			 }
 		 }
 		 return list;
+	}
+	@Override
+	public boolean checkBuildingName(Building building) throws BizException {
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.fbuildingname from t_building n INNER JOIN t_domain d on n.id=d.fentityid where d.fparentid=? ");
+		 values.add(building.getParentId());
+		 if(StringUtils.isNotBlank(building.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(building.getId());
+		 }
+		 List<String> list = buildingSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 if(list!=null&&!list.isEmpty()&&list.contains(building.getBuildingName())){
+			 return true;
+		 }
+		return false;
+	}
+	@Override
+	public boolean checkBuildingNum(Building building) throws BizException {
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.fbuildingnum from t_domain d INNER JOIN t_building n on n.id=d.fentityid where d.fparentid=? ");
+		 values.add(building.getParentId());
+		 if(StringUtils.isNotBlank(building.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(building.getId());
+		 }
+		 List<String> list = buildingSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 if(list!=null&&!list.isEmpty()&&list.contains(building.getBuildingNum())){
+			 return true;
+		 }
+		return false;
 	}
 
 

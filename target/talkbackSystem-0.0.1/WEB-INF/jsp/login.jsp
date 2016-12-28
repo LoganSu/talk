@@ -87,19 +87,51 @@
       
         <script type="text/javascript">
             $(function(){
-//                 // Setting focus
-//                 $('input[name="email"]').focus();
-
-//                 // Setting width of the alert box
-//                 var alert = $('.alert');
-//                 var formWidth = $('.bootstrap-admin-login-form').innerWidth();
-//                 var alertPadding = parseInt($('.alert').css('padding'));
-
-//                 if (isNaN(alertPadding)) {
-//                     alertPadding = parseInt($(alert).css('padding-left'));
-//                 }
-
-//                 $('.alert').width(formWidth - 2 * alertPadding);
+            	if (!!window.ActiveXObject || "ActiveXObject" in window){
+            		}else{
+            			 alert('请使用IE浏览器访问');
+            			 return false;
+            		}
+            	var browser=navigator.appName
+            	var b_version=navigator.appVersion
+            	var version=b_version.split(";");
+            	var trim_Version=version[1].replace(/[ ]/g,"");
+            	if((browser=="Microsoft Internet Explorer" && trim_Version=="MSIE6.0")||(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE7.0")){
+            		     alert('请使用IE8以上版本访问');
+            		     return false;
+                	}
+            	
+//             	var browser=navigator.appName
+//             	var b_version=navigator.appVersion
+//             	var version=b_version.split(";");
+//             	var trim_Version=version[1].replace(/[ ]/g,"");
+//             	alert(browser);
+            	
+//             	alert(trim_Version);
+//             	if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE6.0")
+//             	{
+//             	alert("IE 6.0");
+//             	}
+//             	else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE7.0")
+//             	{
+//             	alert("IE 7.0");
+//             	}
+//             	else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE8.0")
+//             	{
+//             	alert("IE 8.0");
+//             	}
+//             	else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE9.0")
+//             	{
+//             	alert("IE 9.0"); 
+//             	}
+//             	else if(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE10.0")
+//             	{
+//             	alert("IE 10.0"); 
+//             	}
+//             	else if(browser=="Netscape" && trim_Version=="MSIE10.0")
+//             	{
+//             	alert("IE 10.0"); 
+//             	}
             });
         </script>
     </body>

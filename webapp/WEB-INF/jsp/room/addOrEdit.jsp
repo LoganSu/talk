@@ -45,8 +45,8 @@
                 <td><div><input name="gardenArea" class="form-control number" title="花园面积为数字类型"  value="${room.gardenArea}"/></div></td>
                 <td><div class="leftFont">是否空置：</div></td>
                 <td><div><select name="useStatus" class="form-control">
-                             <option value="是" <c:if test="${room.useStatus eq '是'}">selected="selected"</c:if>>是</option>
                              <option value="否" <c:if test="${room.useStatus eq '否'}">selected="selected"</c:if>>否</option>
+                             <option value="是" <c:if test="${room.useStatus eq '是'}">selected="selected"</c:if>>是</option>
                         </select></div></td>
               </tr>
               <tr>

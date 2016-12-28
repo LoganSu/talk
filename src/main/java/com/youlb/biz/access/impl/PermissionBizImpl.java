@@ -250,20 +250,29 @@ public class PermissionBizImpl implements IPermissionBiz {
 	@Override
 	public int writeCard(CardInfo cardInfo) throws ParseException, JsonException, IOException, BizException  {
 //		JNativeTest.writeBasicInfo(cardInfo);
-		//添加ic卡信息
-		//激活状态
-		cardInfo.setCardStatus(SysStatic.LIVING);
+		try{
+			CardInfo c = cardSqlDao.get(cardInfo.getCardSn());
+			if(c!=null){
+				c.setCardStatus(SysStatic.LIVING);
+			}
+			//查不到记录 说明不存在 add
+		}catch(Exception e){
+			//添加ic卡信息
+			//激活状态
+			cardInfo.setCardStatus(SysStatic.LIVING);
 //		设置卡片类型
 //		cardInfo.setCardType(SysStatic.ICCARD);
-		//生成序号8位数
-	    Session session = cardSqlDao.getCurrSession();
-	    SQLQuery query = session.createSQLQuery("SELECT '1'||substring('000000'||nextval('tbl_card_seq'),length(currval('tbl_card_seq')||'')) ");
-	    List<String> list =  query.list();
-	    logger.info("生成序号8位数"+list.get(0));
-	    cardInfo.setCardNo(Integer.parseInt(list.get(0)));
-	    cardSqlDao.add(cardInfo);
+			//生成序号8位数
+			Session session = cardSqlDao.getCurrSession();
+			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('000000'||nextval('tbl_card_seq'),length(currval('tbl_card_seq')||'')) ");
+			List<String> list =  query.list();
+			logger.info("生成序号8位数"+list.get(0));
+			cardInfo.setCardNo(Integer.parseInt(list.get(0)));
+			cardSqlDao.add(cardInfo);
 //	    Session currSession = cardSqlDao.getCurrSession();
-	    session.flush();
+			session.flush();
+		}
+			
 		//添加所有卡片父类表
 //		String sql  ="insert into t_card(fcardsn,fdwellerId,fcardtype) values(?,?,?)";
 //		cardSqlDao.executeSql(sql, new Object[]{cardsn,cardInfo.getdwellerId(),SysStatic.ICCARD});

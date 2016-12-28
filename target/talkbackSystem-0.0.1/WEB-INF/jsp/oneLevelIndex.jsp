@@ -291,30 +291,24 @@
 	                   </div>
 	               </div>
 	        </r:role>
-	         <r:role auth="帐号管理">   
-	           <div class="panel panel-primary">
-	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-	                       <a class="accordion-toggle">帐号管理</a>
-	                   </div>
-	                   <div id="collapseFour" class="panel-collapse collapse" style="height: 0px;">
-	                       <div class="panel-body">
-		                       <ul class="nav nav-pills nav-stacked">
-			                       <r:role auth="用户帐号管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/users/usersshowPage.do?module=usersTable&modulePath=/users">用户帐号管理</a></li>
-		                           </r:role>
-<%-- 		                           <r:role auth="SIP账号在线查询"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountTable&modulePath=/sipCount">SIP账号在线查询</a></li> --%>
+<%-- 	         <r:role auth="帐号管理">    --%>
+<!-- 	           <div class="panel panel-primary"> -->
+<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour"> -->
+<!-- 	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> -->
+<!-- 	                       <a class="accordion-toggle">帐号管理</a> -->
+<!-- 	                   </div> -->
+<!-- 	                   <div id="collapseFour" class="panel-collapse collapse" style="height: 0px;"> -->
+<!-- 	                       <div class="panel-body"> -->
+<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
+<%-- 			                       <r:role auth="用户帐号管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/users/usersshowPage.do?module=usersTable&modulePath=/users">用户帐号管理</a></li> --%>
 <%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="SIP账号关联查询"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=sipCountAllTable&modulePath=/sipCountAll">SIP账号关联查询</a></li> --%>
-<%-- 		                           </r:role> --%>
-	                           </ul>
+<!-- 	                           </ul> -->
 	                             
-	                       </div>
-	                   </div>
-	               </div>
-	        </r:role>
+<!-- 	                       </div> -->
+<!-- 	                   </div> -->
+<!-- 	               </div> -->
+<%-- 	        </r:role> --%>
 	        <r:role auth="版本管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">

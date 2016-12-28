@@ -11,8 +11,7 @@
 $(function(){
 	 //时间控件
 	  $(".datepicker").datepicker();
-	 //连接发卡器
-	  $("#openCardForm .connectCardMachine").on("click",function(){
+	   var  connectCardMachine= function(){
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();
@@ -67,8 +66,68 @@ $(function(){
                })
 		   }else{
 			   hiAlert("提示","发卡器连接异常！");
-		   }
-	})
+		   } 
+	   }
+		  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
+
+	 //连接发卡器
+// 	  $(document).on("click","#openCardForm .connectCardMachine",function(){
+// 		   var connectReader;
+// 		   try{
+// 			   connectReader = myactivex.ConnectReader();
+// 		   }catch(e){
+// 			   hiAlert("提示","发卡器连接出错！");
+// 				return false;
+// 		   }
+// 		   var cardId;
+// 			  try{
+// 				  cardId = myactivex.GetCardId();
+// 			  }catch(e){
+// 				  hiAlert("提示","读取卡片id出错！");
+// 					     return false;
+// 			  }
+// 			  if(jQuery.parseJSON(cardId).code!='0'){
+// 				  hiAlert("提示","请放入卡片！");
+// 				  return false;
+// 			  }
+//            var obj = jQuery.parseJSON(connectReader);
+// 		   if(obj.code=='0'){
+// 			   //加载key
+//                $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+//             	   //有秘钥的初始化key
+//             	   if($data){
+// 	            	   var loadKey;
+// 	            	   var indata = "{\"key\":\""+$data+"\"}";
+// 	          	       try{ 
+// 	          		          loadKey = myactivex.LoadKey(indata);
+// 	            	   }catch(e){
+// 	            		   hiAlert("提示","加载密钥出错！");
+// 	       				     return false;
+// 	            	   }
+// //             	       obj = jQuery.parseJSON(loadKey);
+// 					   //验证卡片是否合法
+// 					   obj = jQuery.parseJSON(myactivex.IsValidCard());
+// 					   if(obj.code!='0'){
+// 						   try{
+// 							   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
+// 						      if(obj.code!='0'){
+// 						    	  hiAlert("提示","此为非法卡片，请更换卡片！");
+// 			       				     return false;
+// 						      }
+// 						   }catch(e){
+// 		            		   hiAlert("提示","初始化卡片出错！");
+// 		       				     return false;
+// 		            	   }
+// 					   }
+//             	   }
+// 					   //如果不合法初始化卡片
+// 						writeCard(cardId);
+            	   
+//                })
+// 		   }else{
+// 			   hiAlert("提示","发卡器连接异常！");
+// 		   }
+// 	})
 	var writeCard=function(cardId){
 		  obj = jQuery.parseJSON(cardId);
 		  var card_id = obj.result.card_id;
@@ -118,6 +177,7 @@ $(function(){
 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
 			  $("#openCardForm table tr:eq(0)").append(readonly);
+			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
 			  break;
           case 2:
         	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
@@ -128,6 +188,7 @@ $(function(){
         	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
 			  $("#openCardForm table tr:eq(0)").append(readonly);
+			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
 		     break;
 		 }
 	 })

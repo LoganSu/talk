@@ -53,14 +53,14 @@ var dwellerTable ={
             valign: 'middle',
             sortable: true
         }, {
-            field: 'idNum',
+            field: 'idNumStr',
             title: '身份证号',
             width: '60',
             align: 'center',
             valign: 'middle',
             sortable: true
         }, {
-            field: 'phone',
+            field: 'phoneStr',
             title: '联系电话',
             width: '60',
             align: 'center',

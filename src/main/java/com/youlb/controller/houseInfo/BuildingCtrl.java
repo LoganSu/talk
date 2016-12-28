@@ -95,9 +95,21 @@ public class BuildingCtrl extends BaseCtrl {
     		if(StringUtils.isBlank(building.getBuildingName())){
     			super.message = "楼栋名称不能为空！";
     			return  super.message;
+    		}else{
+    			boolean b = buildingBiz.checkBuildingName(building);
+	    		if(b){
+	    			super.message = "楼栋名已经存在！";
+	    			return  super.message;
+	    		}
     		}
     		if(!RegexpUtils.checkNumAndLetter(building.getBuildingNum(), 3, 3)){
     			super.message = "楼栋编号不能为空且为3个字符！";
+    			return  super.message;
+    		}
+    		//同一个社区 楼栋编号不能相同
+    		boolean b = buildingBiz.checkBuildingNum(building);
+    		if(b){
+    			super.message = "楼栋编号已经存在！";
     			return  super.message;
     		}
     		if(!RegexpUtils.checkNumber(building.getTotalFloor()+"")){

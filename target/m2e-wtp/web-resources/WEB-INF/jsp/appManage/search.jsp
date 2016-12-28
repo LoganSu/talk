@@ -37,7 +37,7 @@
                 <td><div><input name="versionName" class="form-control"/></div></td>
                 <td><div class="leftFont">版本号：</div></td>
                 <td><div><input name="versionCode" class="form-control"/></div></td>
-                <td><div class="leftFont">更新时间：</div></td>
+                <td><div class="leftFont">上传时间：</div></td>
                 <td><div><input name="createTimeSearch" class="form-control datepicker"/></div></td>
                 <td><div class="leftFont"><button class="btn btn-info btn-sm reset">重置</button></div></td>
                 <td><div class="leftFont"><button class="btn btn-info btn-sm search" rel="${path}/mc/appManage/showList.do">查询</button></div></td>
