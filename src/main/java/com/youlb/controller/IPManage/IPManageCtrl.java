@@ -134,11 +134,20 @@ public class IPManageCtrl extends BaseCtrl {
     	}
     	if(iPManage.getFsPort()!=null){
     		if(iPManage.getFsPort()>65535||!RegexpUtils.checkNumber(iPManage.getFsPort()+"")){
-    			super.message = "请填写正确的端口！";
+    			super.message = "请填写正确的fs端口！";
     			return  super.message;
     		}
     	}else{
-    		super.message = "端口不能为空！";
+    		super.message = "fs端口不能为空！";
+			return  super.message;
+    	}
+    	if(iPManage.getFsExternalPort()!=null){
+    		if(iPManage.getFsExternalPort()>65535||!RegexpUtils.checkNumber(iPManage.getFsExternalPort()+"")){
+    			super.message = "请填写正确的fs外呼端口！";
+    			return  super.message;
+    		}
+    	}else{
+    		super.message = "fs外呼端口不能为空！";
 			return  super.message;
     	}
     	try {

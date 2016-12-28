@@ -520,6 +520,12 @@ function calculate(file,callBack){
 					 hiAlert("提示","IOS地址不能为空");
 					 return false;
 				 }
+				 
+				 var appName = $("#appManagesaveForm [name='appName']").val();
+				 if(!appName){
+					 hiAlert("提示","app名称不能为空");
+					 return false;
+				 } 
 		  }
 		 var versionDes = $("#appManagesaveForm [name='versionDes']").val();
 		 if(!versionDes){

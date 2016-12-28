@@ -36,6 +36,8 @@
                 <td><div><input name="fsIp" class="form-control required" title="FS IP地址不能为空" maxlength="100" value="${iPManage.fsIp}"/></div></td>
                 <td><div class="leftFont">FS端口：</div></td>
                 <td><div><input name="fsPort" class="form-control required" title="FS端口不能为空" maxlength="100" value="${iPManage.fsPort}"/></div></td>
+                <td><div class="leftFont">FS外呼端口：</div></td>
+                <td><div><input name="fsExternalPort" class="form-control required" title="FS端口不能为空" maxlength="100" value="${iPManage.fsExternalPort}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>小区名称：</div></td>

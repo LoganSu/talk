@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.impl.Log4jLoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -15,11 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.youlb.biz.baseInfo.ICarrierBiz;
 import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
-import com.youlb.controller.appManage.AppManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
@@ -42,7 +39,6 @@ import com.youlb.utils.exception.BizException;
 @Scope("prototype")
 public class CarrierCtrl extends BaseCtrl {
 	private static Logger log = LoggerFactory.getLogger(CarrierCtrl.class);
-
 	@Autowired
 	private ICarrierBiz carrierBiz;
 	@Autowired
@@ -126,7 +122,7 @@ public class CarrierCtrl extends BaseCtrl {
     			super.message = "名称不能为空！";
    			      return  super.message;
     		}
-    		if(StringUtils.isBlank(carrier.getDomainNameId())){
+    		if(StringUtils.isBlank(carrier.getDomainNameParentId())){
     			super.message = "二级域名不能为空，请先添加二级域名";
    			      return  super.message;
     		}

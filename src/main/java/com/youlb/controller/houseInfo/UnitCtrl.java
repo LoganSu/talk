@@ -100,17 +100,29 @@ public class UnitCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Unit unit,Model model){
-    	
-    	if(StringUtils.isBlank(unit.getUnitName())){
-    		super.message = "单元名称不能为空!";
-    		 return  super.message;
-    	}
-    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()!=2){
-    		super.message = "单元编号不能为空且为2位数字!";
-    		 return  super.message;
-    	}
-    	try {
-    		unitBiz.saveOrUpdate(unit,getLoginUser());
+    try {
+	    	if(StringUtils.isBlank(unit.getUnitName())){
+	    		super.message = "单元名称不能为空!";
+	    		 return  super.message;
+	    	}else{
+				boolean b = unitBiz.checkUnitName(unit);
+	    		if(b){
+	    			super.message = "单元名称已经存在！";
+	    			return  super.message;
+	    		}
+			}
+	    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()!=2){
+	    		super.message = "单元编号不能为空且为2位数字!";
+	    		 return  super.message;
+	    	}
+	    	//同一个楼栋 单元编号不能相同
+			boolean b = unitBiz.checkUnitNum(unit);
+			if(b){
+				super.message = "单元编号已经存在！";
+				return  super.message;
+			}
+	    	
+	    		unitBiz.saveOrUpdate(unit,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";
 			e.printStackTrace();

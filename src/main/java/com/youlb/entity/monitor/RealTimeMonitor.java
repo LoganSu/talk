@@ -33,10 +33,10 @@ public class RealTimeMonitor extends BaseModel {
     private String address;
     /**经度*/
     @Transient
-	private Double longitude;
+	private String longitude;
 	/**纬度*/
     @Transient
-	private Double latitude;
+	private String latitude;
     /**告警电话*/
     @Transient
 	private String warnPhone;
@@ -47,16 +47,16 @@ public class RealTimeMonitor extends BaseModel {
 	public void setWarnPhone(String warnPhone) {
 		this.warnPhone = warnPhone;
 	}
-	public Double getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Double longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-	public Double getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Double latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 	public String getDeviceCount() {

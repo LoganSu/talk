@@ -53,7 +53,7 @@ private String htmlspecialchars(String str) {
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>内容：</div></td>
                 <td colspan="5"><div>
-                    <textarea style="width: 680px;height: 400px" id="todayNewsDetail" name="todayNewsDetailEditor" rows="" cols="" class="form-control"><%=htmlspecialchars(htmlData)%></textarea>
+                    <textarea style="width: 680px;height: 400px" id="todayNewsDetail" name="" rows="" cols="" class="form-control"><%=htmlspecialchars(htmlData)%></textarea>
                 </div></td>
               </tr>
            </table>
@@ -167,7 +167,7 @@ private String htmlspecialchars(String str) {
 			     uploader.start();
 		   }else{
 			   var param = $("#todayNewssaveForm").serialize();
-   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param,function($data){
+   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.text(),function($data){
    				 if(!$data){
 						 window.hideModal("unnormalModal");
 						 refresh();

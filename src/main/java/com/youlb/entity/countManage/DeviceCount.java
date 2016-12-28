@@ -57,10 +57,10 @@ public class DeviceCount extends BaseModel {
 	private String qrPath;
 	/**经度*/
 	@Column(name="flongitude")
-	private Double longitude;
+	private String longitude;
 	/**纬度*/
 	@Column(name="flatitude")
-	private Double latitude;
+	private String latitude;
 	
 	/**告警电话*/
 	@Column(name="fwarn_phone")
@@ -128,16 +128,16 @@ public class DeviceCount extends BaseModel {
 		this.warnEmail = warnEmail;
 	}
 
-	public Double getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(Double longitude) {
+	public void setLongitude(String longitude) {
 		this.longitude = longitude;
 	}
-	public Double getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(Double latitude) {
+	public void setLatitude(String latitude) {
 		this.latitude = latitude;
 	}
 	public String getQrPath() {

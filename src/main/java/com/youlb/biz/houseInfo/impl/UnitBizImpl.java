@@ -111,7 +111,14 @@ public class UnitBizImpl implements IUnitBiz {
 	 */
 	@Override
 	public Unit get(Serializable id) throws BizException {
-		return unitSqlDao.get(id);
+		Unit u= unitSqlDao.get(id);
+		//获取parentid
+		String sql = "select d.fparentid from t_domain d inner join t_unit n on n.id=d.fentityid where n.id=?";
+		List<String> list = unitSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(list!=null&&!list.isEmpty()){
+			u.setParentId(list.get(0));
+		}
+		return u;
 	}
 
 
@@ -217,6 +224,36 @@ public class UnitBizImpl implements IUnitBiz {
 				 }
 			 }
 			 return list;
+	}
+	@Override
+	public boolean checkUnitNum(Unit unit) throws BizException {
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.FUNITNUM from t_domain d INNER JOIN t_unit n on n.id=d.fentityid where d.fparentid=? ");
+		 values.add(unit.getParentId());
+		 if(StringUtils.isNotBlank(unit.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(unit.getId());
+		 }
+		 List<String> list = unitSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 if(list!=null&&!list.isEmpty()&&list.contains(unit.getUnitNum())){
+			 return true;
+		 }
+		return false;
+	}
+	@Override
+	public boolean checkUnitName(Unit unit) throws BizException {
+		List<Object> values = new ArrayList<Object>();
+		 StringBuilder sb = new StringBuilder("SELECT n.FUNITNAME from t_unit n INNER JOIN t_domain d on n.id=d.fentityid where d.fparentid=?  ");
+		 values.add(unit.getParentId());
+		 if(StringUtils.isNotBlank(unit.getId())){
+			 sb.append(" and n.id!=? ");
+			 values.add(unit.getId());
+		 }
+		 List<String> list = unitSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 if(list!=null&&!list.isEmpty()&&list.contains(unit.getUnitName())){
+			 return true;
+		 }
+		return false;
 	}
 
 }

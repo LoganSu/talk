@@ -199,6 +199,13 @@ public class AdPublishCtrl extends BaseCtrl {
 		    		super.message = "有效期要在今天以后！";
 					return  super.message;
 		    	}
+		    	if("2".equals(adPublish.getSendType())){
+		    		List<String> treecheckbox = adPublish.getTreecheckbox();
+		    		if(treecheckbox==null||treecheckbox.size()!=1){
+		    			super.message = "请选择一个域发布信息！";
+		    			return  super.message;
+		    		}
+		    	}
 				adPublishBiz.saveOrUpdate(adPublish,getLoginUser());
 			} catch (IllegalAccessException e) {
 				super.message="发布出错";

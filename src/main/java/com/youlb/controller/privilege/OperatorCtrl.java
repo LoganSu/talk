@@ -178,15 +178,6 @@ public class OperatorCtrl extends BaseCtrl{
 		try {
 		//获取验证码
 		String code = operatorBiz.getVerificationCode(user,null);
-		if(StringUtils.isBlank(code)){
-			httpSession.setAttribute("errorMessg", "验证码超时，请重新获取");
-			return "redirect:"+getRequest().getContextPath()+"/"+user.getCarrier().getCarrierNum()+"/login.do";
-		}else{
-			if(!code.equals(user.getVerificationCode())){
-				httpSession.setAttribute("errorMessg", "验证码不正确");
-				return "redirect:"+getRequest().getContextPath()+"/"+user.getCarrier().getCarrierNum()+"/login.do";
-			}
-		}
 		
 			if(user.getCarrier()==null||StringUtils.isBlank(user.getCarrier().getCarrierNum())){
 				httpSession.setAttribute("errorMessg", "url错误！");
@@ -200,6 +191,15 @@ public class OperatorCtrl extends BaseCtrl{
 		//    			httpSession.setAttribute("errorMessg", "该用户已经登入");
 //		        		return LOGIN;
 		//    		}
+		    		if(StringUtils.isBlank(code)){
+		    			httpSession.setAttribute("errorMessg", "验证码超时，请重新获取");
+		    			return "redirect:"+getRequest().getContextPath()+"/"+user.getCarrier().getCarrierNum()+"/login.do";
+		    		}else{
+		    			if(!code.equals(user.getVerificationCode())){
+		    				httpSession.setAttribute("errorMessg", "验证码不正确");
+		    				return "redirect:"+getRequest().getContextPath()+"/"+user.getCarrier().getCarrierNum()+"/login.do";
+		    			}
+		    		}
 		    		httpSession.setAttribute(SysStatic.LOGINUSER, loginUser);
 		    		httpSession.setAttribute("errorMessg", "");
 		    		return INDEX;
@@ -340,7 +340,7 @@ public class OperatorCtrl extends BaseCtrl{
     	try {
     		Operator loginUser = getLoginUser();
     		if(StringUtils.isBlank(user.getLoginName())||!RegexpUtils.checkNumAndLetter(user.getLoginName(), 6, 11)){
-    			super.message = "用户名必需由6~11个数字或字母组成";
+    			super.message = "登入名必需由6~11个数字或字母组成";
 				return  super.message;
     		}
     		if(StringUtils.isBlank(user.getId())){

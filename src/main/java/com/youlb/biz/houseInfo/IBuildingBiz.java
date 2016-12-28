@@ -33,6 +33,10 @@ public interface IBuildingBiz extends IBaseBiz<Building>{
 	 * @return
 	 */
 	List<Building> getBuildingListByNeibId(String neibId)throws BizException;
+
+	boolean checkBuildingName(Building building)throws BizException;
+
+	boolean checkBuildingNum(Building building)throws BizException;
 	
 
 

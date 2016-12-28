@@ -119,6 +119,21 @@ public class Dweller extends BaseModel {
 	public String getPhone() {
 		return phone;
 	}
+	public String getPhoneStr() {
+		String phoneStr="";
+		if(StringUtils.isNotBlank(phone)){
+			phoneStr = phone.substring(0, 3)+"****"+phone.substring(7);
+		}
+		return phoneStr;
+	}
+	
+	public String getIdNumStr() {
+		String idNumStr="";
+		if(StringUtils.isNotBlank(idNum)){
+			idNumStr = idNum.substring(0, 6)+"********"+idNum.substring(14);
+		}
+		return idNumStr;
+	}
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}

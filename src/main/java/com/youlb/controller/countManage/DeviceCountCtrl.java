@@ -126,15 +126,23 @@ public class DeviceCountCtrl extends BaseCtrl {
     	try {
     		
     		if(deviceCount.getLatitude()!=null){
-    			if(!RegexpUtils.checkDecimals(deviceCount.getLatitude()+"")){
+    			if(!RegexpUtils.checkDecimals(deviceCount.getLatitude())){
     				super.message = "请填写正确的纬度！";
+    				return super.message;
+    			}
+    			if(deviceCount.getLatitude().length()>20){
+    				super.message = "纬度超出长度范围！";
     				return super.message;
     			}
     		}
     		
     		if(deviceCount.getLongitude()!=null){
-    			if(!RegexpUtils.checkDecimals(deviceCount.getLongitude()+"")){
+    			if(!RegexpUtils.checkDecimals(deviceCount.getLongitude())){
     				super.message = "请填写正确的经度！";
+    				return super.message;
+    			}
+    			if(deviceCount.getLongitude().length()>20){
+    				super.message = "经度超出长度范围！";
     				return super.message;
     			}
     		}

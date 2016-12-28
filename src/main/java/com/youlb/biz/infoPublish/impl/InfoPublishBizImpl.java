@@ -377,7 +377,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
     private List<String> getNeibTagList(List<String> tagList) throws BizException {
     	StringBuilder sql = new StringBuilder("WITH RECURSIVE r AS (SELECT d.* FROM t_domain d where 1=1 ");
     	sql.append(SearchHelper.jointInSqlOrHql(tagList, " d.id "));
-		sql.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) SELECT r.id FROM r where r.flayer=1");
+		sql.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) SELECT r.fentityid FROM r where r.flayer=1");
 		return infoPublishSqlDao.pageFindBySql(sql.toString(), new Object[]{tagList});
 	}
 

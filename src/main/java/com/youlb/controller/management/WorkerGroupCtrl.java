@@ -84,7 +84,7 @@ public class WorkerGroupCtrl extends BaseCtrl {
     			super.message = "请选择所属公司！";
     			return  super.message;
     		}
-    		if(StringUtils.isBlank(workerGroup.getCreateTimeStr())){
+    		if(StringUtils.isBlank(workerGroup.getDepartmentName())){
     			super.message = "组名称不能为空！";
     			return  super.message;
     		}

@@ -80,6 +80,18 @@ var deviceTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'versionNum',
+            title: '版本号',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'softwareType',
+            title: '软件型号',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'remark',
             title: '备注',
             align: 'center',
