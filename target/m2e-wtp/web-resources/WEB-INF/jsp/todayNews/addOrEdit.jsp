@@ -164,6 +164,7 @@ private String htmlspecialchars(String str) {
 			        hiAlert("提示","最多只能上传一个图标");
 			        return false;
 			    }
+			    
 			     uploader.start();
 		   }else{
 			   var param = $("#todayNewssaveForm").serialize();
