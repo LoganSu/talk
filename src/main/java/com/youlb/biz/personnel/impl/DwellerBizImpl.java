@@ -145,8 +145,10 @@ public class DwellerBizImpl implements IDwellerBiz {
 		List<String> idList = new ArrayList<String>();
 		if(ids!=null){
 			for(String id:ids){
-				idList.add(id);
-				delete(id);
+				if(!idList.contains(id)){
+					idList.add(id);
+					delete(id);
+				}
 			}
 			del.append(SearchHelper.jointInSqlOrHql(idList, " d.id "));
 			del.append(")");
