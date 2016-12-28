@@ -129,17 +129,11 @@ public class CarrierBizImpl implements ICarrierBiz {
 		String sql ="select m.fdomainid from t_carrier c INNER JOIN t_carrier_domain m on m.fcarrierId=c.id where c.id=?";
 		List<String> domainids = carrierSqlDao.pageFindBySql(sql,new Object[]{id});
 		carrier.setTreecheckbox(domainids);
-<<<<<<< HEAD
-		//转换成父id
-		DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
-		carrier.setDomainNameParentId(domainName.getParentid());
-=======
 		if(StringUtils.isNotBlank(carrier.getDomainNameId())){
 			//转换成父id
 			DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
 			carrier.setDomainNameParentId(domainName.getParentid());
 		}
->>>>>>> master
 		return carrier;
 	}
 
