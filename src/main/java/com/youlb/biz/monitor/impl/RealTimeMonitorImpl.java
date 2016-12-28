@@ -63,7 +63,7 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
 		sb.append("select * from(select d.fdomainid,r.id,s.fvalue warnType,r.fstatus status,r.fcreatetime createTime,d.fwarn_phone warnPhone from t_real_time_monitor r")
-		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type ");
+		.append(" left join t_devicecount d on d.fdevicecount=r.fdevicecount left join t_staticparam s on s.fkey=r.fwarn_type where 1=1 ");
 		
 		//普通用户过滤域
 		 List<String> domainIds = loginUser.getDomainIds();
