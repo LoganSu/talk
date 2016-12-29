@@ -130,7 +130,7 @@ private String htmlspecialchars(String str) {
 			     		  if(res.key){
 				              $("#todayNewssaveForm [name='pictureUrl']").val(domain+res.key);
 			    	    	 var param = $("#todayNewssaveForm").serialize();
-			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param,function($data){
+			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.text(),function($data){
 			     				 if(!$data){
 									 window.hideModal("unnormalModal");
 									 refresh();
@@ -164,6 +164,7 @@ private String htmlspecialchars(String str) {
 			        hiAlert("提示","最多只能上传一个图标");
 			        return false;
 			    }
+			    
 			     uploader.start();
 		   }else{
 			   var param = $("#todayNewssaveForm").serialize();
