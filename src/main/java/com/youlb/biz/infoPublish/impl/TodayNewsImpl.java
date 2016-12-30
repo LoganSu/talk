@@ -221,15 +221,14 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 				}
 				
 				dto.setTagList(tagList);
-				//全部发布 标签就是社区id
-				if("2".equals(todayNews.getSendType())){
+//				if("2".equals(todayNews.getSendType())){
 					//获取社区id
 					List<String> neibTagList = getNeibTagList(tagList);
 					dto.setNeibTagList(neibTagList);
 					logger.info("neibTagList："+Arrays.toString(neibTagList.toArray()));
-				}else{
-					dto.setNeibTagList(tagList);
-				}
+//				}else{
+//					dto.setNeibTagList(tagList);
+//				}
 				logger.info("tagList："+Arrays.toString(tagList.toArray()));
 				logger.info("todayNews:"+JsonUtils.toJson(dto));
 				//调用信息推送接口

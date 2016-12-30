@@ -330,15 +330,14 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 				if(tagList==null||tagList.isEmpty()){
 					throw new BizException("未找到任何标签");
 				}
-				//全部发布 标签就是社区id
-				if("2".equals(adPublish.getSendType())){
+//				if("2".equals(adPublish.getSendType())){
 					//获取社区id
 					List<String> neibTagList = getNeibTagList(tagList);
 					dto.setNeibTagList(neibTagList);
 					logger.info("neibTagList："+Arrays.toString(neibTagList.toArray()));
-				}else{
-					dto.setNeibTagList(tagList);
-				}
+//				}else{
+//					dto.setNeibTagList(tagList);
+//				}
 				logger.info("tagList："+Arrays.toString(tagList.toArray()));
 				logger.info("adPublish:"+JsonUtils.toJson(dto));
 				

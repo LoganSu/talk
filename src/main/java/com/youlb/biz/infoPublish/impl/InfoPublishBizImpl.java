@@ -323,14 +323,14 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 				}
 				dto.setTagList(tagList);
 				//全部发布 标签就是社区id
-				if("2".equals(infoPublish.getSendType())){
+//				if("2".equals(infoPublish.getSendType())){
 					//获取社区id
 					List<String> neibTagList = getNeibTagList(tagList);
 					dto.setNeibTagList(neibTagList);
 					logger.info("neibTagList："+Arrays.toString(neibTagList.toArray()));
-				}else{
-					dto.setNeibTagList(tagList);
-				}
+//				}else{
+//					dto.setNeibTagList(tagList);
+//				}
 				logger.info("tagList："+Arrays.toString(infoPublish.getTreecheckbox().toArray()));
 				logger.info("infoPublish:"+JsonUtils.toJson(dto));
 				//调用信息推送接口
