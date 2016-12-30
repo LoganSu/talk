@@ -112,6 +112,14 @@ public class RoleCtrl extends BaseCtrl{
 //    		if(loginUser.getLoginName().contains("_")&&!role.getRoleName().contains("_")){
 //    			role.setRoleName(loginUser.getLoginName().substring(0, loginUser.getLoginName().indexOf("_")+1)+role.getRoleName());
 //    		}
+    		//一个运营商只能创建一个空角色
+    		if(role.getDomainIds()==null&&role.getTreecheckbox()==null){
+    			boolean b = roleBiz.checkEmptyRole(role,loginUser);
+    			if(b){
+    				super.message = "一个运营商有且只能创建一个空角色";
+    				return  super.message;
+    			}
+    		}
     		roleBiz.saveOrUpdate(role);
 		} catch (Exception e) {
 			super.message = "操作失败！";

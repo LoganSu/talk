@@ -188,9 +188,9 @@ public class TodayNewsCtrl extends BaseCtrl {
 	    		}
 	    		bw.flush();
 //	            m.addObject("file", file);
-	            int code = QiniuUtils.upload(htmlPath, "todayNews/html/"+htmlFileName);
+	            int code = QiniuUtils.upload(htmlPath, "web/todayNews/html/"+htmlFileName);
 	            if(code==200){
-	    		   todayNews.setNewsUrl(QiniuUtils.URL+"todayNews/html/"+htmlFileName);
+	    		   todayNews.setNewsUrl(QiniuUtils.URL+"web/todayNews/html/"+htmlFileName);
 	    		   todayNewsBiz.saveOrUpdate(todayNews,getLoginUser());
 	            }else{
 	            	super.message="上传文件到七牛失败";

@@ -80,8 +80,21 @@ public class Neighborhoods extends BaseModel {
 	private String parentId;
 	@Transient
 	private String sipNum;
+	@Transient
+	private String sipNumPsw;
 	
 	
+	
+	public String getSipNumPsw() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<a href =\"javascript:alert('");
+		sb.append(sipNumPsw);
+		sb.append("')\">查看</a>");
+		return sb.toString();
+	}
+	public void setSipNumPsw(String sipNumPsw) {
+		this.sipNumPsw = sipNumPsw;
+	}
 	public String getEncodeKey() {
 		return encodeKey;
 	}

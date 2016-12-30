@@ -372,4 +372,15 @@ public class RoleBizImpl implements IRoleBiz {
 			}
 			return roleList;
 	}
+	@Override
+	public boolean checkEmptyRole(Role role, Operator loginUser) throws BizException {
+		 StringBuilder sql = new StringBuilder();
+		 sql.append("SELECT r.id from t_role r INNER JOIN t_carrier c on c.id=r.fcarrierid ");
+		 sql.append(" where c.fcarriernum=? and r.id not in(SELECT sr.froleid from t_role_domain sr) and r.id not in(SELECT rp.froleid from t_role_privilege rp)");
+		 List<String> list = roleSqlDao.pageFindBySql(sql.toString(), new Object[]{loginUser.getCarrier().getCarrierNum()});
+		 if(list!=null&&!list.isEmpty()){
+			 return true;
+		 }
+		 return false;
+	}
 }

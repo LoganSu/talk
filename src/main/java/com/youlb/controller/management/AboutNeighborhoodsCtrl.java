@@ -196,9 +196,9 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     	    			}
     	    		}
     	    		bw.flush();
-    	    		 int code = QiniuUtils.upload(htmlPath, "aboutNeigh/html/"+htmlFileName);
+    	    		 int code = QiniuUtils.upload(htmlPath, "web/aboutNeigh/html/"+htmlFileName);
     		            if(code==200){
-    		            	aboutNeighborhoods.setHtmlUrl(QiniuUtils.URL+"aboutNeigh/html/"+htmlFileName);
+    		            	aboutNeighborhoods.setHtmlUrl(QiniuUtils.URL+"web/aboutNeigh/html/"+htmlFileName);
     		            }
     		        aboutNeighborBiz.saveOrUpdate(aboutNeighborhoods,getLoginUser());
         	} catch (FileNotFoundException e) {

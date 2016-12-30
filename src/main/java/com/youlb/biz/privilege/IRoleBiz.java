@@ -37,4 +37,6 @@ public interface IRoleBiz extends IBaseBiz<Role> {
 	 */
 	List<Role> carrierShowList(Role role, Operator loginUser)throws BizException;
 
+	boolean checkEmptyRole(Role role, Operator loginUser) throws BizException;
+
 }

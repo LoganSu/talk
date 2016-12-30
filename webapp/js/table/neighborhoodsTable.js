@@ -68,6 +68,12 @@ var neighborhoodsTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'sipNumPsw',
+            title: 'sip账号密码',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'contractor',
             title: '承建商',
             align: 'center',

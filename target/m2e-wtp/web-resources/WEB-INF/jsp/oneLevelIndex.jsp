@@ -279,9 +279,9 @@
 		                           <r:role auth="门禁设备管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/device/deviceListshowPage.do?module=deviceTable&modulePath=/device">门禁设备管理</a></li>
 		                           </r:role>
-		                           <r:role auth="设备帐号管理">
-		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/deviceCount/deviceCountshowPage.do?module=deviceCountTable&modulePath=/deviceCount">设备帐号管理</a></li>
-		                           </r:role>
+<%-- 		                           <r:role auth="设备帐号管理"> --%>
+<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/deviceCount/deviceCountshowPage.do?module=deviceCountTable&modulePath=/deviceCount">设备帐号管理</a></li> --%>
+<%-- 		                           </r:role> --%>
 <%-- 		                           <r:role auth="门口机在线状态查询"> --%>
 <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=deviceCountSipTable&modulePath=/deviceCountSip">门口机在线状态查询</a></li> --%>
 <%-- 		                           </r:role> --%>
@@ -291,24 +291,24 @@
 	                   </div>
 	               </div>
 	        </r:role>
-<%-- 	         <r:role auth="帐号管理">    --%>
-<!-- 	           <div class="panel panel-primary"> -->
-<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour"> -->
-<!-- 	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> -->
-<!-- 	                       <a class="accordion-toggle">帐号管理</a> -->
-<!-- 	                   </div> -->
-<!-- 	                   <div id="collapseFour" class="panel-collapse collapse" style="height: 0px;"> -->
-<!-- 	                       <div class="panel-body"> -->
-<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
-<%-- 			                       <r:role auth="用户帐号管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/users/usersshowPage.do?module=usersTable&modulePath=/users">用户帐号管理</a></li> --%>
-<%-- 		                           </r:role> --%>
-<!-- 	                           </ul> -->
+	         <r:role auth="帐号管理">   
+	           <div class="panel panel-primary">
+	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+	                       <a class="accordion-toggle">帐号管理</a>
+	                   </div>
+	                   <div id="collapseFour" class="panel-collapse collapse" style="height: 0px;">
+	                       <div class="panel-body">
+		                       <ul class="nav nav-pills nav-stacked">
+			                       <r:role auth="用户帐号管理">
+		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/users/usersshowPage.do?module=usersTable&modulePath=/users">用户帐号管理</a></li>
+		                           </r:role>
+	                           </ul>
 	                             
-<!-- 	                       </div> -->
-<!-- 	                   </div> -->
-<!-- 	               </div> -->
-<%-- 	        </r:role> --%>
+	                       </div>
+	                   </div>
+	               </div>
+	        </r:role>
 	        <r:role auth="版本管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
