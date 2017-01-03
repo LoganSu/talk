@@ -400,9 +400,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 		sb.append(" where t.cardSn= ? and roomId=?");
 		cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getRoomId()});
 		
-		//调用接口下发黑名单
-		//挂失或者解挂需要推送黑名单
-		if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.LIVING.equals(cardInfo.getCardStatus())){
+		//推送通知
+//		if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.LIVING.equals(cardInfo.getCardStatus())){
 			//指定发送设备（找到设备账号）
 			String deviceCount = findDomainSn(cardInfo.getCardSn());
 			CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -410,8 +409,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
 			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
 			BlackListData bcl = new BlackListData();
-			//挂失
-			if(SysStatic.LOSS.equals(cardInfo.getCardStatus())){
+			//挂失或者注销
+			if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
 				bcl.addBc(new BlackListData.BlackCardData(1, cardInfo.getCardSn()));
 			//解挂		
 			}else{
@@ -430,7 +429,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 					}
 				}
 			}
-		}
+//		}
 	}
 	
 	
