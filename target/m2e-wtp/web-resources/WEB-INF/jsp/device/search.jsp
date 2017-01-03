@@ -26,7 +26,7 @@
                     <li><a href="${path}/mc/device/singleDownModel.do"><button class="btn btn-primary btn-sm">模板下载</button></a></li>
 	            </r:role>
 	            <r:role auth="门禁设备管理/导出">
-                    <li><a href="${path}/mc/device/singleDownfile.do"><button class="btn btn-info btn-sm">导出</button></a></li>
+                    <li><button class="btn btn-info btn-sm exportDeviceInfo">导出</button></li>
 	            </r:role>
 	             <r:role auth="门禁设备管理/导入">
                     <li style="padding-right: 0px"><button class="btn btn-success btn-sm importDeviceInfo">导入</button></li>

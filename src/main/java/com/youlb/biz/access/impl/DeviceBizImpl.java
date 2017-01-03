@@ -2,12 +2,15 @@ package com.youlb.biz.access.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.youlb.biz.access.IDeviceBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.DeviceInfo;
@@ -16,6 +19,7 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.OrderHelperUtils;
+import com.youlb.utils.helper.SearchHelper;
 
 /** 
  * @ClassName: DeviceBizImpl.java 
@@ -192,12 +196,13 @@ public class DeviceBizImpl implements IDeviceBiz {
 	}
 
 	@Override
-	public List<DeviceInfoDto> getDeviceInfoDto()throws BizException {
+	public List<DeviceInfoDto> getDeviceInfoDto(String[] ids)throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<DeviceInfoDto> dtoList = new ArrayList<DeviceInfoDto>();
 		 sb.append("select id,fdevicenum,fdevicemodel,fdevicefactory,fdevicestatus,fappversion,")
-		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn from t_deviceinfo");
-		 List<Object[]> listObj = deviceSqlDao.pageFindBySql(sb.toString());
+		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn from t_deviceinfo where 1=1 ");
+		 sb.append(SearchHelper.jointInSqlOrHql(Arrays.asList(ids), " id "));
+		 List<Object[]> listObj = deviceSqlDao.pageFindBySql(sb.toString(),ids);
 		 if(listObj!=null&&!listObj.isEmpty()){
 			 for(Object[] obj:listObj){
 				 DeviceInfoDto dto = new DeviceInfoDto();

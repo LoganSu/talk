@@ -130,7 +130,18 @@ private String htmlspecialchars(String str) {
 			     		  if(res.key){
 				              $("#todayNewssaveForm [name='pictureUrl']").val(domain+res.key);
 			    	    	 var param = $("#todayNewssaveForm").serialize();
-			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.text(),function($data){
+			    	    	 //标题非空判断
+			    			 var title = $("#todayNewssaveForm .title").val();
+			    			   if(!title){
+			    				   hiAlert("提示","标题不能为空");
+			    			        return false;
+			    				  }
+			    	    	 //内容非空判断
+			  			    if(!editor.text()){
+			  				   hiAlert("提示","内容不能为空");
+			  			        return false;
+			  				   }
+			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html(),function($data){
 			     				 if(!$data){
 									 window.hideModal("unnormalModal");
 									 refresh();
@@ -168,7 +179,18 @@ private String htmlspecialchars(String str) {
 			     uploader.start();
 		   }else{
 			   var param = $("#todayNewssaveForm").serialize();
-   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.text(),function($data){
+			 //标题非空判断
+			 var title = $("#todayNewssaveForm .title").val();
+			   if(!title){
+				   hiAlert("提示","标题不能为空");
+			        return false;
+				  }
+			   //内容非空判断
+			   if(!editor.text()){
+				   hiAlert("提示","内容不能为空");
+			        return false;
+				  }
+   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html(),function($data){
    				 if(!$data){
 						 window.hideModal("unnormalModal");
 						 refresh();

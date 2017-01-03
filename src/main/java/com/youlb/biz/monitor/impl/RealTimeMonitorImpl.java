@@ -126,8 +126,8 @@ public class RealTimeMonitorImpl implements IRealTimeMonitorBiz {
              if(listObj!=null&&!listObj.isEmpty()){
             	 for(Object[] obj:listObj){
             		 PointInfo point = new PointInfo();
-            		 point.setX(obj[0]==null?null:(Double)obj[0]);
-            		 point.setY(obj[1]==null?null:(Double)obj[1]);
+            		 point.setX(obj[0]==null?"":(String)obj[0]);
+            		 point.setY(obj[1]==null?"":(String)obj[1]);
             		 point.setName(obj[2]==null?"":(String)obj[2]);
             		 point.setAddress(obj[3]==null?"":findAddressByRoomId((String)obj[3]));
             		 list.add(point);

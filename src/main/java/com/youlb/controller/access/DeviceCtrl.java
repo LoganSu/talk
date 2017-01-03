@@ -272,13 +272,13 @@ public class DeviceCtrl extends BaseCtrl{
 	     * @return
 	     */
 	    @RequestMapping("/singleDownfile.do")    
-	    public ModelAndView singleDownfile(HttpServletRequest request,HttpServletResponse response,String id,Model model) {
+	    public ModelAndView singleDownfile(HttpServletRequest request,HttpServletResponse response,String[] ids,Model model) {
 	    	 ModelAndView m= new ModelAndView();
 	    	try {
 	    		String path = SMSManageCtrl.class.getClassLoader().getResource("").getPath();
 	    		path=path.substring(0,path.indexOf("WEB-INF"));
 	    		//查询所有的设备数据
-				List<DeviceInfoDto> list = deviceBiz.getDeviceInfoDto();
+				List<DeviceInfoDto> list = deviceBiz.getDeviceInfoDto(ids);
 				String randomUUID = UUID.randomUUID().toString();
 				randomUUID = randomUUID.replace("-", "");
 				log.info("path="+path);

@@ -32,7 +32,7 @@ public interface IDeviceBiz extends IBaseBiz<DeviceInfo> {
 	  * 获取设备信息
 	  * @return
 	  */
-	List<DeviceInfoDto> getDeviceInfoDto()throws BizException;
+	List<DeviceInfoDto> getDeviceInfoDto(String[] ids)throws BizException;
 
 
 }

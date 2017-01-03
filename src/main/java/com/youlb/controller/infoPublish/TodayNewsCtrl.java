@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.infoPublish.ITodayNewsBiz;
-import com.youlb.controller.SMSManage.SMSManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.TodayNews;
 import com.youlb.utils.common.QiniuUtils;

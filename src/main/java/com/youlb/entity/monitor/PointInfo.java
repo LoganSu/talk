@@ -1,8 +1,8 @@
 package com.youlb.entity.monitor;
 
 public class PointInfo {
-  private Double x;
-  private Double y;
+  private String x;
+  private String y;
   private String name;
   private String address;
   private String tel;
@@ -13,7 +13,7 @@ public PointInfo() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public PointInfo(Double x, Double y, String name, String address, String tel) {
+public PointInfo(String x, String y, String name, String address, String tel) {
 	super();
 	this.x = x;
 	this.y = y;
@@ -21,16 +21,16 @@ public PointInfo(Double x, Double y, String name, String address, String tel) {
 	this.address = address;
 	this.tel = tel;
 }
-public Double getX() {
+public String getX() {
 	return x;
 }
-public void setX(Double x) {
+public void setX(String x) {
 	this.x = x;
 }
-public Double getY() {
+public String getY() {
 	return y;
 }
-public void setY(Double y) {
+public void setY(String y) {
 	this.y = y;
 }
 public String getName() {
