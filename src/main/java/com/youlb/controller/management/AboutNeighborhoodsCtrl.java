@@ -162,6 +162,16 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
         		request.setAttribute("message", message);
         		return INPUT;
         	}
+//        	else{
+//        		//过滤特殊字符
+//        		for(String s:SysStatic.SPECIALSTRING){
+//        			if(aboutNeighborhoods.getAboutNeighborhoodsDetail().contains(s)){
+//        				super.message="您提交的相关表单数据字符含有非法字符!";
+//        				request.setAttribute("message", super.message);
+//                		return INPUT;
+//        			}
+//        		}
+//        	}
         	FileReader in = null;
         	BufferedReader br=null;
         	FileWriter out=null;

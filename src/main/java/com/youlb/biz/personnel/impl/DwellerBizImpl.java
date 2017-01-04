@@ -482,6 +482,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 		List<Object> values = new ArrayList<Object>();
 		sb.append("SELECT w.fphone from t_dweller w where w.fphone=? ");
 		values.add(dweller.getPhone());
+//		values.add(dweller.getCarrierId());
 		if(StringUtils.isNotBlank(dweller.getId())){
 			sb.append(" and w.id!=? ");
 			values.add(dweller.getId());

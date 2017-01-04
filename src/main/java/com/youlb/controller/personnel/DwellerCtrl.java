@@ -145,7 +145,7 @@ public class DwellerCtrl extends BaseCtrl {
     				return  super.message;
     			}
     		}
-    		 //检查手机号码是否已经被注册
+    		 //检查手机号码是否已经在同一个运营商里面注册
     	    if(StringUtils.isNotBlank(dweller.getPhone())){
     	    	boolean b = dwellerBiz.checkPhoneExistWebShow(dweller);
     	    	if(b){
