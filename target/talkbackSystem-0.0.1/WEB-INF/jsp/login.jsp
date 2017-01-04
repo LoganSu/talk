@@ -16,6 +16,8 @@
 <script src="${path}/js/common/messages_zh.js" type="text/javascript"></script>
 <script src="${path}/js/common/jquery.metadata.js" type="text/javascript"></script>
 <script src="${path}/js/common/login.js" type="text/javascript"></script>
+    <script src="${path}/js/common/common.js" ></script>
+
 
 <link rel="stylesheet" href="${path}/css/common/bootstrap/bootstrap-theme.min.css" type="text/css">
 <link rel="stylesheet" href="${path}/css/common/bootstrap/bootstrap.min.css" type="text/css">
@@ -29,6 +31,11 @@
     }
 </style>
 <body class="bootstrap-admin-without-padding" style="background-position: center;background-repeat: no-repeat;background-size:cover;background-image: url('${path}/imgs/login.png');">
+        <div style="display: none;" class="alert alert-warning alert-dismissible" role="alert">
+		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		  <strong>警告!</strong>&nbsp;&nbsp;&nbsp;<span class="warnWorld"></span>
+		</div>
+        
         <div class="container" >
             <div class="row">
                 <div class="col-lg-12" style="text-align: center;">
@@ -89,7 +96,8 @@
             $(function(){
             	if (!!window.ActiveXObject || "ActiveXObject" in window){
             		}else{
-            			 alert('请使用IE浏览器访问');
+            			 $(".alert-dismissible .warnWorld").html("推荐使用IE浏览器来访问本网站, 网站的部分功能无法在非IE浏览器上获得有效的支持.");
+            			 $(".alert-dismissible").show();
             			 return false;
             		}
             	var browser=navigator.appName
@@ -97,7 +105,8 @@
             	var version=b_version.split(";");
             	var trim_Version=version[1].replace(/[ ]/g,"");
             	if((browser=="Microsoft Internet Explorer" && trim_Version=="MSIE6.0")||(browser=="Microsoft Internet Explorer" && trim_Version=="MSIE7.0")){
-            		     alert('请使用IE8以上版本访问');
+            		 $(".alert-dismissible .warnWorld").html("请使用IE8以上版本访问本网站");
+        			 $(".alert-dismissible").show();
             		     return false;
                 	}
             	

@@ -31,7 +31,7 @@
                 <td><div>
                     <select class="form-control" name="autoInstal">
                       <option <c:if test="${appManage.autoInstal=='2'}">selected="selected"</c:if> value="2">否</option>
-<%--                       <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option> --%>
+                      <option <c:if test="${appManage.autoInstal=='1'}">selected="selected"</c:if> value="1">是</option>
                     </select>
                 </div></td>
                 <c:choose>

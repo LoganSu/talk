@@ -13,8 +13,15 @@ $(function(){
      //导入
 	$(document).on("click",".importDeviceInfo",function(){
 		 $("#importDeviceInfoForm").submit();
-//		 $("#tableShowList").bootstrapTable('refresh', {
-//			 url: $path+"/mc/device/showList.do",
-//		 });
+	})
+	
+	//导出
+	$(document).on("click",".exportDeviceInfo",function(){
+		var ids = getSelectedIds();
+		if(ids.length<5){
+			hiAlert("提示","请选择需要导出的数据");
+			return false;
+		}
+		window.location.href=$path+"/mc/device/singleDownfile.do?"+ids;
 	})
 })
