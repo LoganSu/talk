@@ -105,6 +105,10 @@ public class InfoPublishCtrl extends BaseCtrl {
     		super.message = "有效期要在今天以后！";
 			return  super.message;
     	}
+    	if(StringUtils.isBlank(infoPublish.getInfoSign())){
+    		super.message = "署名不能为空！";
+			return  super.message;
+    	}
     	if("2".equals(infoPublish.getSendType())){
     		List<String> treecheckbox = infoPublish.getTreecheckbox();
     		if(treecheckbox==null||treecheckbox.size()!=1){

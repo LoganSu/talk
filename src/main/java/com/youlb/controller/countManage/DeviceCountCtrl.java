@@ -125,7 +125,7 @@ public class DeviceCountCtrl extends BaseCtrl {
     public String saveOrUpdate(DeviceCount deviceCount,Model model){
     	try {
     		
-    		if(deviceCount.getLatitude()!=null){
+    		if(StringUtils.isNotBlank(deviceCount.getLatitude())){
     			if(!RegexpUtils.checkDecimals(deviceCount.getLatitude())){
     				super.message = "请填写正确的纬度！";
     				return super.message;
@@ -136,7 +136,7 @@ public class DeviceCountCtrl extends BaseCtrl {
     			}
     		}
     		
-    		if(deviceCount.getLongitude()!=null){
+    		if(StringUtils.isNotBlank(deviceCount.getLongitude())){
     			if(!RegexpUtils.checkDecimals(deviceCount.getLongitude())){
     				super.message = "请填写正确的经度！";
     				return super.message;
