@@ -91,10 +91,10 @@ public class RoomBizImpl implements IRoomBiz {
 	public void update(Room target) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("update Room set roomNum=?,roomFloor=?,certificateNum=?,roomType=?,purpose=?,orientation=?,decorationStatus=?,roomArea=?, ")
-		.append("useArea=?,gardenArea=?,useStatus=?,remark=? where id=?");
+		.append("useArea=?,gardenArea=?,useStatus=?,remark=?,sipNum=? where id=?");
 		roomSqlDao.update(sb.toString(), new Object[]{target.getRoomNum(),target.getRoomFloor(),target.getCertificateNum(),target.getRoomType(),
 			             target.getPurpose(),target.getOrientation(),target.getDecorationStatus(),target.getRoomArea(),target.getUseArea(),
-			             target.getGardenArea(),target.getUseStatus(),target.getRemark(),target.getId()});
+			             target.getGardenArea(),target.getUseStatus(),target.getRemark(),target.getSipNum(),target.getId()});
 	}
 
 	/**
@@ -152,11 +152,11 @@ public class RoomBizImpl implements IRoomBiz {
 	 */
 	@Override
 	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException, ParseException, JsonException, IOException {
+		String sipNum = getSipNum(room.getParentId());
+		room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
 		//add
 		if(StringUtils.isBlank(room.getId())){
 //			Session session = domainSqlDao.getCurrSession();
-//			String sipNum = getSipNum(room.getParentId());
-//			room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
 			room.setPassword(SysStatic.ROOMDEFULTPASSWORD);//设置默认密码
 			//获取分组号
 //			SQLQuery group = session.createSQLQuery("SELECT '8'||substring('0000000'||nextval('tbl_room_sip_group'),length(currval('tbl_room_sip_group')||'')) ");
