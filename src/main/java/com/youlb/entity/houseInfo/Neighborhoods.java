@@ -68,6 +68,9 @@ public class Neighborhoods extends BaseModel {
 	/**16位随机数加密结果*/
 	@Column(name="fencode_key",updatable=false)
 	private String encodeKey;
+	/**社区电话*/
+	@Column(name="fphone")
+	private String phone;
 	
 	/**时间字符串（前台传入）*/
 	@Transient
@@ -85,6 +88,12 @@ public class Neighborhoods extends BaseModel {
 	
 	
 	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public String getSipNumPsw() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<a href =\"javascript:alert('");

@@ -91,7 +91,6 @@
                       <option value="2" <c:if test="${neighborhoods.createSipNum=='2'}">selected="selected"</c:if>>是</option>
                     </select>
                  </div></td>
-<%--                  <c:if test="${neighborhoods.id==null}"> --%>
 	                 <td><div class="leftFont">配置秘钥：</div></td>
 	                 <td><div>
 	                     <select name="useKey" class="form-control">
@@ -99,7 +98,8 @@
 	                          <option value="2" <c:if test="${neighborhoods.useKey=='2'}">selected="selected"</c:if>>启用</option>
 	                    </select>
 	                 </div></td>
-<%--                  </c:if> --%>
+	                 <td><div class="leftFont">电话：</div></td>
+                     <td><div><input name="phone" value="${neighborhoods.phone}"  placeholder="格式：020-88888888" class="form-control"/></div></td>
               </tr>
            </table>
          </form>

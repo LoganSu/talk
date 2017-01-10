@@ -139,7 +139,12 @@ public class NeighborhoodsCtrl extends BaseCtrl {
 		    			super.message = "总商业面积输入为数字类型！";
 		    			return  super.message;
 		    		}
-    		
+    		        if(StringUtils.isNotBlank(neighborhoods.getPhone())){
+    		        	if(!RegexpUtils.checkPhone(neighborhoods.getPhone())){
+    		        		super.message = "请填写正确的电话号码！";
+    		    			return  super.message;
+    		        	}
+    		        }
 				neighborBiz.saveOrUpdate(neighborhoods,getLoginUser());
 			} catch (NumberFormatException e) {
  				e.printStackTrace();

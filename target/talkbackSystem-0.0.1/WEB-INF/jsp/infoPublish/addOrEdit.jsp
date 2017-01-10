@@ -28,8 +28,8 @@
            </table>
            <table>
               <tr>
-                <td><div class="firstFont">署名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
-                <td><div><input name="infoSign" class="form-control" title="署名不能为空！" value="${infoPublish.infoSign}"/></div></td>
+                <td><div class="firstFont"><span class="starColor">*</span>署名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                <td><div><input name="infoSign" class="form-control required" title="署名不能为空！" value="${infoPublish.infoSign}"/></div></td>
                 <td><div class="leftFont">终端类型：</div></td>
                 <td><div>
                    <select name="targetDevice" class="form-control">

@@ -69,7 +69,6 @@ public class DeviceCount extends BaseModel {
 	@Column(name="fwarn_email")
 	private String warnEmail;
 	
-	
 	@Transient
 	private String address;
 	@Transient
