@@ -23,7 +23,7 @@
            <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>有效期：&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
-                <td><div><input name="expDateStr" class="form-control datepicker" title="有效期不能为空！" value="${infoPublish.expDateStr}"/></div></td>
+                <td><div><input name="expDateStr" readonly="readonly" class="form-control datepicker" title="有效期不能为空！" value="${infoPublish.expDateStr}"/></div></td>
               </tr>
            </table>
            <table>

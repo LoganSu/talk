@@ -67,7 +67,7 @@ text-align: center;
               <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>有效期：</div></td>
-                <td><div><input name="expDateStr" class="form-control datepicker" title="有效期不能为空！" value="${adPublish.expDateStr}"/></div></td>
+                <td><div><input name="expDateStr" class="form-control datepicker" readonly="readonly" title="有效期不能为空！" value="${adPublish.expDateStr}"/></div></td>
                 <td><div class="leftFont">终端类型：</div></td>
                 <td><div>
                    <select name="targetDevice" class="form-control targetDevice">
