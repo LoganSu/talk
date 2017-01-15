@@ -31,8 +31,6 @@ $(function(){
 			$("#unnormalModal").modal("show");
 		})
 	});
-	
-	
 	//发布
 	$(document).on("click",".infoPulishPush",function(){
 		var url =$path+"/mc/infoPublish/publish.do";
@@ -45,13 +43,21 @@ $(function(){
 			 hiAlert("提示","请选择一条操作数据！");
 			 return false;
 		 }
+		 for(var i=0;i<selects.length;i++){
+			 var item = selects[i];
+//			 alert(item.selfStr);
+			if(item.selfStr=="否"){
+				 hiAlert("提示","请选择本运营商发布的公告发布！");
+				 return false;
+			}
+		 }
 		 var ids = getSelectedIds();
-		 but.scojs_confirm({
-		        content: "您确定要发布吗？",
-		        param:ids,
-		        action: function(param) {
+//		  var s  = $.scojs_confirm({
+//		        content: "您确定要发布吗？",
+//		        param:ids,
+//		        action: function(param) {
 //		        	alert("发布");
-		            $.post(url,param,function($data){
+		            $.post(url,ids,function($data){
 		            	if(!$data){
 							refresh();
 						}else{
@@ -59,10 +65,13 @@ $(function(){
 						}
 		            });
 		            
-		        }
-		      });	
+//		        }
+//		      });
+//		   s.show();
+//		  $(document).on("click","#confirm_modal .cancel",function(){
+//			  s.close();
+//		  })
 	});
-	
 	
 	//行内详情
 	$(document).on("click",".infoPublishDetail",function(){

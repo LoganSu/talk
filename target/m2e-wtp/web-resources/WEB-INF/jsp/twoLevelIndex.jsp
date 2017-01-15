@@ -145,29 +145,55 @@
 </head>
   <body>
   <%@include file="common/model.jsp" %>
-   <div class="container-fluid">
-       <div class="row" style="margin-right: -15px">
-			<div class="panel panel-primary">
-			    <div class="panel-heading" >
-				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
-				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
-					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
-				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
-			    </div>
-			</div>
-       </div>
+   <div class="container-fluid f-main">
+      <div class="row" style="margin-right: -15px">
+        <div class="header">
+          <!-- <div class="wrap"> -->
+              <i class="logo"></i>
+              <h1>赛翼智慧社区云平台</h1>
+              
+            
+              <div class="btnBox">
+                <a class="goHome" href="${path}/mc/user/index.do">
+                  <i class=""></i>
+                  <span class="" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</span>
+                </a>
+                <a  class="goExit" href="${path}/mc/user/loginOut.do">
+                  <i></i>
+                  <span class="">安全退出</span>
+                </a>
+              </div>
+              <span class="welcome">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </span>
+          <!-- </div> -->
+        </div>
+  		<!-- 	<div class="panel panel-primary">
+  			    <div class="panel-heading" >
+  				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
+  				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
+  					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
+  				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
+  			    </div>
+  			</div> -->
+      </div>
        <div class="row">
-           <div class="col-md-2" style="background-color: #EBEFF2;height: 700px;overflow: auto;z-index: 1000">
+           <div class="col-md-2 f-navList">
+           <div class="rightLine-i" style=""></div>
+           <!-- <div class="jjjj" style="position: fixed;width: 17px;height: 26px;background: url(/imgs/Triangle.png);background-size: 100%;display: none;"></div> -->
                <div class="panel-group" id="accordion2">
-                   <div class="panel-heading">
-                       <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
-                       <strong style="font-size: 24px;">菜单选项</strong>
+                   <div class="toggleBox">
+                      <!--  <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
+                       <strong style="font-size: 24px;">菜单选项</strong> -->
+                       <div class="toggleTag"></div>
                    </div>
-           <r:role auth="房产管理">     
-               <div class="panel panel-primary">
+           <r:role auth="房产管理"> 
+              <!-- <div class="panelWrap-i" style="position: relative;width: 260px;"> -->
+              <!-- <div class="jjjj" style="position: absolute;width: 17px;height: 26px;background: url(/imgs/Triangle.png);background-size: 100%;display: none;top: 10px;right: 0"></div>   -->
+                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                       <span class=" glyphicon glyphicon-globe" aria-hidden="true"></span>
+                       <span class="Item-icon-fangchan1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">房产管理</a>
+                       <i class="bg"></i>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseOne" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -179,13 +205,15 @@
                            </ul>
                        </div>
                    </div>
-               </div>
+                </div>
+              <!-- </div>   -->
            </r:role>
            <r:role auth="运营商管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                       <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                       <span class="Item-icon-yunyin1 Item-icon glyphicon " aria-hidden="true"></span>
                        <a class="accordion-toggle">运营商管理</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -207,8 +235,9 @@
            <r:role auth="安防监控">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseThirteen">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <span class="Item-icon-anfang1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">安防监控</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseThirteen" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -225,8 +254,9 @@
 	        <r:role auth="住户管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEight">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <span class="Item-icon-zhuhu1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">住户管理</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseEight" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -243,8 +273,9 @@
 	        <r:role auth="门禁管理">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFive">
-	                       <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+	                       <span class="Item-icon-mengjing1 Item-icon glyphicon" aria-hidden="true"></span>
 	                       <a class="accordion-toggle">门禁管理</a>
+                         <i class="icon"></i>
 	                   </div>
 	                   <div id="collapseFive" class="panel-collapse collapse" style="height: 0px;">
 	                       <div class="panel-body">
@@ -270,8 +301,9 @@
 	         <r:role auth="设备管理">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwelve">
-	                       <span class="glyphicon glyphicon-gift" aria-hidden="true"></span>
+	                       <span class="Item-icon-shebei1 Item-icon glyphicon" aria-hidden="true"></span>
 	                       <a class="accordion-toggle">设备管理</a>
+                         <i class="icon"></i>
 	                   </div>
 	                   <div id="collapseTwelve" class="panel-collapse collapse" style="height: 0px;">
 	                       <div class="panel-body">
@@ -294,8 +326,9 @@
 	         <r:role auth="帐号管理">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
-	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+	                       <span class="Item-icon-zhanghao1 Item-icon glyphicon" aria-hidden="true"></span>
 	                       <a class="accordion-toggle">帐号管理</a>
+                         <i class="icon"></i>
 	                   </div>
 	                   <div id="collapseFour" class="panel-collapse collapse" style="height: 0px;">
 	                       <div class="panel-body">
@@ -318,8 +351,9 @@
            <r:role auth="信息发布">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSeven">
-	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+	                       <span class="Item-icon-xinxi1 Item-icon glyphicon" aria-hidden="true"></span>
 	                       <a class="accordion-toggle">信息发布</a>
+                         <i class="icon"></i>
 	                   </div>
 	                   <div id="collapseSeven" class="panel-collapse collapse" style="height: 0px;">
 	                       <div class="panel-body">
@@ -342,8 +376,9 @@
 	           <r:role auth="物业服务">   
 	           <div class="panel panel-primary">
 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen">
-	                       <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+	                       <span class="Item-icon-wuye1 Item-icon glyphicon" aria-hidden="true"></span>
 	                       <a class="accordion-toggle">物业服务</a>
+                         <i class="icon"></i>
 	                   </div>
 	                   <div id="collapseTen" class="panel-collapse collapse" style="height: 0px;">
 	                       <div class="panel-body">
@@ -375,8 +410,9 @@
            <r:role auth="权限管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <span class="Item-icon-quanxian1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">权限管理</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseSix" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -399,8 +435,9 @@
              <r:role auth="系统管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseEleven">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <span class="Item-icon-xitong1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">系统管理</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseEleven" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -423,8 +460,9 @@
              </r:role>
              <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseNine">
-                       <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                       <span class="Item-icon-zzanquan1 Item-icon glyphicon" aria-hidden="true"></span>
                        <a class="accordion-toggle">安全管理</a>
+                       <i class="icon"></i>
                    </div>
                    <div id="collapseNine" class="panel-collapse collapse" style="height: 0px;">
                        <div class="panel-body">
@@ -437,9 +475,9 @@
                </div>
            </div>
           </div>
-           <div class="col-md-10">
+           <div class="col-md-10 f-article">
               <!-- 查询条件div 包括功能按钮 -->
-              <div class="row" style="padding-left: 20px">
+              <div class="row" style="padding-left: 15px">
                   
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
                      <p id="houseInfoTree"></p>
@@ -471,5 +509,96 @@
        </div>
        
    </div>
+  <script type="text/javascript">
+    //2017/1/14
+      $('.toggleTag').on('click',function(){
+
+        $('.f-main').toggleClass('toggle');
+        var toggle=$('.f-main').hasClass('toggle');
+        var tagList=$('.f-main .panel-group .panel-heading');
+        if(toggle){
+          //收缩tag
+          $('.panel-collapse.collapse,.f-main .panel i.icon').hide();
+          $('.f-main .panel-group .toggleBox').css({width:'46px'});
+          for(var i=0,len=tagList.length;i<len;i++){
+            $('.f-main.toggle .panel.panel-primary')[i].addEventListener("mouseover", hoverTagList);
+            $('.f-main.toggle .panel.panel-primary')[i].addEventListener("mouseout", hoverTagListOut);
+          }
+          $('.jjjj').hide();
+          $('.f-navList').css({'border-right':'1px solid #c7c7c7'});
+        }else{
+          //展开tag
+          $('.f-navList').css({'border-right':0});
+          $('.f-main .panel i.icon').show();
+          $('.f-main .panel-group .toggleBox').css({width:'249px'});
+          $('.panel-collapse.collapse.in .panel-body').css({
+             'border-top':'1px solid #428bca'
+          });
+          $('.panel-collapse.collapse').css({
+            position:'static',
+            background:'#fff',
+            top:0,
+            left:0,
+            width:'249px',
+            height:'0',
+            display:'inherit',
+            'border-top':0,
+            'border-bottom':0,
+            'border-left':0
+
+          }).find('.panel-body').css({
+            'border-top':'1px solid #cdcdcd'
+          });
+          
+          for(var i=0,len=tagList.length;i<len;i++){
+            $('.f-main .panel-group .panel.panel-primary')[i].removeEventListener("mouseover", hoverTagList);
+            $('.f-main .panel-group .panel.panel-primary')[i].removeEventListener("mouseout", hoverTagListOut);
+          }
+        }
+      });
+
+      $('.f-main .panel-body li a').on('click',function(){
+        $('.panel.panel-primary').find('.panel-heading').removeClass('current');
+        $('.panel,.panel-heading').css({width:'249px'});
+        $(this).parents('.panel').css({width:'260px'}).find('.panel-heading').css({width:'260px'}).addClass('current');
+
+        var jiantouT=$(this).parents('.panel').offset().top;
+        var jiantouL=$(this).parents('.panel').offset().left;
+        $('.jjjj').show();
+         $('.f-main .panel-body li a').removeClass('cur');
+          $(this).addClass('cur');
+      });
+      
+    
+      function hoverTagList(e){
+        var top=$(this).offset().top;
+        var taglistCSS={
+              position:'fixed',
+              background:'#f5f5f5',
+              top:top+'px',
+              left:'45px',
+              width:'200',
+              height:'auto',
+              border:'1px solid #C7C7C7',
+              'border-top':'0'
+        }
+        $(this).find('.panel-collapse').show().css(taglistCSS);
+        // $(this).find('.panel-body').css({'border-top':'none'})
+        $(this).find('.panel-body ul').css({'background':'#fff'});
+        // $(this).find('.panel-body ul').css({'background':'#fff'}).find('li').css({'margin-top':'2px'})
+      }
+      function hoverTagListOut(e){
+        $(this).find('.panel-collapse').hide();
+      }
+      //
+      $('.f-main .panel-group .panel').on('click',function(){
+        var expand=$(this).find('.collapse').hasClass('in');
+        $('.panel-heading').removeClass('cur');
+        if(!expand){
+          $(this).find('.panel-heading').addClass('cur');
+        }
+      })
+
+  </script>
 </body>
 </html>

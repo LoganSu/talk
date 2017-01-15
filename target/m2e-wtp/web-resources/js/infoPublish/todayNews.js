@@ -46,12 +46,20 @@ $(function(){
 			 hiAlert("提示","请选择一条操作数据！");
 			 return false;
 		 }
+		 for(var i=0;i<selects.length;i++){
+			 var item = selects[i];
+//			 alert(item.selfStr);
+			if(item.selfStr=="否"){
+				 hiAlert("提示","请选择本运营商发布的头条发布！");
+				 return false;
+			}
+		 }
 		 var ids = getSelectedIds();
-		 but.scojs_confirm({
-		        content: "您确定要发布吗？",
-		        param:ids,
-		        action: function(param) {
-		            $.post(url,param,function($data){
+//		 but.scojs_confirm({
+//		        content: "您确定要发布吗？",
+//		        param:ids,
+//		        action: function(param) {
+		            $.post(url,ids,function($data){
 		            	if(!$data){
 							refresh();
 						}else{
@@ -59,8 +67,8 @@ $(function(){
 						}
 		            });
 		            
-		        }
-		      });	
+//		        }
+//		      });	
 	});
 	
 	//行内详情

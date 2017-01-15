@@ -117,7 +117,7 @@ var neighborhoodsTable ={
             sortable: true
         },{
             field: 'totalBussnisArea',
-            title: '总商业面积面积(㎡)',
+            title: '总商业面积(㎡)',
             align: 'center',
             valign: 'middle',
             sortable: true

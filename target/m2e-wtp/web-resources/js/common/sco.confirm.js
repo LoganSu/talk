@@ -36,18 +36,17 @@
 		if (typeof this.options.action == 'function') {
 //			alert(222);
 			var self = this;
-//			alert(self);
+//			alert(self.toSource());
 			$modal.find('[data-action]').one("click",function(e) {
 //				alert("param  "+self.options.param);
 				e.preventDefault();
 				self.options.action.call(self,self.options.param);
-				self.close();
+				self.destroy();
 			});
 		} else if (typeof this.options.action == 'string') {
 //			$modal.find('[data-action]').attr('href', this.options.action);
 			$.post(this.options.action);
 		}
-		 
 		this.scomodal = $.scojs_modal(this.options);
 	}
 

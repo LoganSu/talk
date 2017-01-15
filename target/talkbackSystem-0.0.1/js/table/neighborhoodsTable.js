@@ -62,6 +62,12 @@ var neighborhoodsTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'phone',
+            title: '电话',
+            align: 'left',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'sipNum',
             title: 'sip账号',
             align: 'center',

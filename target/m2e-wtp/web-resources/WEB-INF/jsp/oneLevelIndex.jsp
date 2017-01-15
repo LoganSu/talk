@@ -138,32 +138,54 @@
 <%--     <script src="${path}/js/room/room.js" ></script> --%>
     <script src="${path}/js/common/tree.js"></script>
     <script type="text/javascript">
-//        $(function(){
-//     	   $("#showRightArea").load($path+"/mc/guidePage/toGuidePage.do");
-//        })
+       $(function(){
+    	   $("#showRightArea").load($path+"/mc/guidePage/toGuidePage.do");
+       })
     </script>
 </head>
   <body>
   <%@include file="common/model.jsp" %>
-   <div class="container-fluid">
-       <div class="row" style="margin-right: -15px">
-			<div class="panel panel-primary">
-			    <div class="panel-heading" >
-				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
-				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
-					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
-				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
-			    </div>
-			</div>
-       </div>
+   <div class="container-fluid f-main">
+      <div class="row" style="margin-right: -15px">
+        <div class="header">
+          <!-- <div class="wrap"> -->
+              <i class="logo"></i>
+              <h1>赛翼智慧社区云平台</h1>
+              
+            
+              <div class="btnBox">
+                <a class="goHome" href="${path}/mc/user/index.do">
+                  <i class=""></i>
+                  <span class="" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</span>
+                </a>
+                <a  class="goExit" href="${path}/mc/user/loginOut.do">
+                  <i></i>
+                  <span class="">安全退出</span>
+                </a>
+              </div>
+              <span class="welcome">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </span>
+          <!-- </div> -->
+        </div>
+  		<!-- 	<div class="panel panel-primary">
+  			    <div class="panel-heading" >
+  				      <label style="font-size: 30px;padding-left: 100px"><span class="glyphicon glyphicon-home" aria-hidden="false">&nbsp;赛翼智慧社区云平台</span></label>
+  				           <label style="padding-left: 10px;"><button class="btn btn-primary btn-sm li_a" rel="${path}/mc/guidePage/toGuidePage.do?1=1">返回首页</button></label>
+  					       <label style="padding-left: 700px">欢迎： ${loginUser.carrier.carrierName}  ${loginUser.loginName} </label>
+  				       <a style="padding-left: 100px" href="${path}/mc/user/loginOut.do" style="color: white;"><button type="button" class="btn btn-xs btn-warning">退出</button></a>
+  			    </div>
+  			</div> -->
+      </div>
        <div class="row">
-           <div class="col-md-2" style="background-color: #EBEFF2;height: 700px;overflow: auto;z-index: 1000">
+           <div class="col-md-2 f-navList">
+           <div class="rightLine-i" style=""></div>
+           <!-- <div class="jjjj" style="position: fixed;width: 17px;height: 26px;background: url(/imgs/Triangle.png);background-size: 100%;display: none;"></div> -->
                <div class="panel-group" id="accordion2">
-                   <div class="panel-heading">
-                       <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
-                       <strong style="font-size: 24px;">菜单选项</strong>
+                   <div class="toggleBox">
+                      <!--  <span class="glyphicon glyphicon-king" aria-hidden="true"></span>
+                       <strong style="font-size: 24px;">菜单选项</strong> -->
+                       <div class="toggleTag"></div>
                    </div>
-<%--            <r:role auth="房产管理">      --%>
+           <%--            <r:role auth="房产管理">      --%>
 <!--                <div class="panel panel-primary"> -->
 <!--                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne"> -->
 <!--                        <span class=" glyphicon glyphicon-globe" aria-hidden="true"></span> -->
@@ -279,12 +301,6 @@
 		                           <r:role auth="门禁设备管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/device/deviceListshowPage.do?module=deviceTable&modulePath=/device">门禁设备管理</a></li>
 		                           </r:role>
-<%-- 		                           <r:role auth="设备帐号管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/deviceCount/deviceCountshowPage.do?module=deviceCountTable&modulePath=/deviceCount">设备帐号管理</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="门口机在线状态查询"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/sipCount/sipCountshowPage.do?module=deviceCountSipTable&modulePath=/deviceCountSip">门口机在线状态查询</a></li> --%>
-<%-- 		                           </r:role> --%>
 	                           </ul>
 	                             
 	                       </div>
@@ -338,72 +354,7 @@
                    </div>
                </div>
            </r:role>
-<%--            <r:role auth="信息发布">    --%>
-<!-- 	           <div class="panel panel-primary"> -->
-<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSeven"> -->
-<!-- 	                       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> -->
-<!-- 	                       <a class="accordion-toggle">信息发布</a> -->
-<!-- 	                   </div> -->
-<!-- 	                   <div id="collapseSeven" class="panel-collapse collapse" style="height: 0px;"> -->
-<!-- 	                       <div class="panel-body"> -->
-<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
-<%-- 			                       <r:role auth="公告通知发布"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/infoPublish/infoPublishshowPage.do?module=infoPublishTable&modulePath=/infoPublish">公告通知发布</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="广告发布"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/adPublish/adPublishshowPage.do?module=adPublishTable&modulePath=/adPublish">广告发布</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="今日头条"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">今日头条</a></li> --%>
-<%-- 		                           </r:role> --%>
-<!-- 	                           </ul> -->
 	                             
-<!-- 	                       </div> -->
-<!-- 	                   </div> -->
-<!-- 	               </div> -->
-<%-- 	        </r:role> --%>
-<%-- 	           <r:role auth="物业服务">    --%>
-<!-- 	           <div class="panel panel-primary"> -->
-<!-- 	                   <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseTen"> -->
-<!-- 	                       <span class="glyphicon glyphicon-home" aria-hidden="true"></span> -->
-<!-- 	                       <a class="accordion-toggle">物业服务</a> -->
-<!-- 	                   </div> -->
-<!-- 	                   <div id="collapseTen" class="panel-collapse collapse" style="height: 0px;"> -->
-<!-- 	                       <div class="panel-body"> -->
-<!-- 		                       <ul class="nav nav-pills nav-stacked"> -->
-<%-- 		                           <r:role auth="关于小区"> --%>
-<%-- 		                             <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 			                       <r:role auth="物业投诉"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">物业投诉</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="物业报修"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=1">物业报修</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- <%-- 		                           <r:role auth="费用管理"> --%> 
-<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/todayNews/todayNewsshowPage.do?module=todayNewsTable&modulePath=/todayNews">费用管理</a></li> --%> 
-<%-- <%-- 		                           </r:role> --%> 
-<%-- <%--                                    <r:role auth="公司管理"> --%> 
-<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/management/department/company">公司管理</a></li> --%> 
-<%-- <%-- 		                           </r:role> --%> 
-<%-- 		                           <r:role auth="组织架构"> --%>
-<%-- 		                             <li><a tree_id="managementDepartmentTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/departmentCompany">组织架构</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="员工管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/worker/workershowPage.do?module=workerTable&modulePath=/worker">员工管理</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- 		                           <r:role auth="分组管理"> --%>
-<%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li> --%>
-<%-- 		                           </r:role> --%>
-<%-- <%-- 		                           <r:role auth="费用管理"> --%> 
-<%-- <%-- 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/billManage/billManageshowPage.do?module=billManageTable&modulePath=/billManage">费用管理</a></li> --%> 
-<%-- <%-- 		                           </r:role> --%> 
-<!-- 	                           </ul> -->
-	                             
-<!-- 	                       </div> -->
-<!-- 	                   </div> -->
-<!-- 	               </div> -->
-<%-- 	        </r:role>           --%>
            <r:role auth="权限管理">     
                <div class="panel panel-primary">
                    <div class="panel-heading" data-toggle="collapse" data-parent="#accordion2" href="#collapseSix">
@@ -445,17 +396,9 @@
                                <!-- module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/IPManage/IPManageListshowPage.do?module=IPManageTable&modulePath=/IPManage">服务器IP管理</a></li>
                              </r:role>
-<%--                              <r:role auth="短信网关配置"> --%>
-<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/SMSManage/SMSManageListshowPage.do?module=SMSManageTable&modulePath=/SMSManage">短信网关配置</a></li> --%>
-<%--                              </r:role> --%>
                              <r:role auth="门口机型号定义 ">
-<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/doorMachine/doorMachineListshowPage.do?module=doorMachineTable&modulePath=/doorMachine">门口机型号定义</a></li>
                              </r:role>
-<%--                              <r:role auth="域名管理 "> --%>
-<%--                                <li><a tree_id="domainNameTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName">域名管理</a></li> --%>
-<%--                              </r:role> --%>
                            </ul>
                        </div>
                    </div>
@@ -475,25 +418,11 @@
                        </div>
                    </div>
                </div>
-<!--                <div class="panel panel-primary"> -->
-<!--                    <div class="panel-heading" data-toggle="collapse"data-parent="#accordion2" href="#collapseTen"> -->
-<!--                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> -->
-<!--                        <a class="accordion-toggle">chars</a> -->
-<!--                    </div> -->
-<!--                    <div id="collapseTen" class="panel-collapse collapse" style="height: 0px;"> -->
-<!--                        <div class="panel-body"> -->
-<!--                            <ul class="nav nav-pills nav-stacked"> -->
-<!--                                module table json对象， modulePath 是在js/table里面定义的 search.jsp路径对象 -->
-<%--                                <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/chars/charsshowPage.do?modulePath=/chars">chars</a></li> --%>
-<!--                            </ul> -->
-<!--                        </div> -->
-<!--                    </div> -->
-<!--                </div> -->
            </div>
           </div>
-           <div class="col-md-10">
+           <div class="col-md-10 f-article">
               <!-- 查询条件div 包括功能按钮 -->
-              <div class="row" style="padding-left: 20px">
+              <div class="row" style="padding-left: 15px">
                   
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
                      <p id="houseInfoTree"></p>
@@ -525,5 +454,96 @@
        </div>
        
    </div>
+  <script type="text/javascript">
+    //2017/1/14
+      $('.toggleTag').on('click',function(){
+
+        $('.f-main').toggleClass('toggle');
+        var toggle=$('.f-main').hasClass('toggle');
+        var tagList=$('.f-main .panel-group .panel-heading');
+        if(toggle){
+          //收缩tag
+          $('.panel-collapse.collapse,.f-main .panel i.icon').hide();
+          $('.f-main .panel-group .toggleBox').css({width:'46px'});
+          for(var i=0,len=tagList.length;i<len;i++){
+            $('.f-main.toggle .panel.panel-primary')[i].addEventListener("mouseover", hoverTagList);
+            $('.f-main.toggle .panel.panel-primary')[i].addEventListener("mouseout", hoverTagListOut);
+          }
+          $('.jjjj').hide();
+          $('.f-navList').css({'border-right':'1px solid #c7c7c7'});
+        }else{
+          //展开tag
+          $('.f-navList').css({'border-right':0});
+          $('.f-main .panel i.icon').show();
+          $('.f-main .panel-group .toggleBox').css({width:'249px'});
+          $('.panel-collapse.collapse.in .panel-body').css({
+             'border-top':'1px solid #428bca'
+          });
+          $('.panel-collapse.collapse').css({
+            position:'static',
+            background:'#fff',
+            top:0,
+            left:0,
+            width:'249px',
+            height:'0',
+            display:'inherit',
+            'border-top':0,
+            'border-bottom':0,
+            'border-left':0
+
+          }).find('.panel-body').css({
+            'border-top':'1px solid #cdcdcd'
+          });
+          
+          for(var i=0,len=tagList.length;i<len;i++){
+            $('.f-main .panel-group .panel.panel-primary')[i].removeEventListener("mouseover", hoverTagList);
+            $('.f-main .panel-group .panel.panel-primary')[i].removeEventListener("mouseout", hoverTagListOut);
+          }
+        }
+      });
+
+      $('.f-main .panel-body li a').on('click',function(){
+        $('.panel.panel-primary').find('.panel-heading').removeClass('current');
+        $('.panel,.panel-heading').css({width:'249px'});
+        $(this).parents('.panel').css({width:'260px'}).find('.panel-heading').css({width:'260px'}).addClass('current');
+
+        var jiantouT=$(this).parents('.panel').offset().top;
+        var jiantouL=$(this).parents('.panel').offset().left;
+        $('.jjjj').show();
+         $('.f-main .panel-body li a').removeClass('cur');
+          $(this).addClass('cur');
+      });
+      
+    
+      function hoverTagList(e){
+        var top=$(this).offset().top;
+        var taglistCSS={
+              position:'fixed',
+              background:'#f5f5f5',
+              top:top+'px',
+              left:'45px',
+              width:'200',
+              height:'auto',
+              border:'1px solid #C7C7C7',
+              'border-top':'0'
+        }
+        $(this).find('.panel-collapse').show().css(taglistCSS);
+        // $(this).find('.panel-body').css({'border-top':'none'})
+        $(this).find('.panel-body ul').css({'background':'#fff'});
+        // $(this).find('.panel-body ul').css({'background':'#fff'}).find('li').css({'margin-top':'2px'})
+      }
+      function hoverTagListOut(e){
+        $(this).find('.panel-collapse').hide();
+      }
+      //
+      $('.f-main .panel-group .panel').on('click',function(){
+        var expand=$(this).find('.collapse').hasClass('in');
+        $('.panel-heading').removeClass('cur');
+        if(!expand){
+          $(this).find('.panel-heading').addClass('cur');
+        }
+      })
+
+  </script>
 </body>
 </html>
