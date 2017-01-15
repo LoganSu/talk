@@ -1,0 +1,257 @@
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td,figure{padding:0;margin:0;}
+table{border-collapse:collapse;border-spacing:0;}
+del,ins{text-decoration:none}
+fieldset,img{border:0;}
+body,button,input,select,textarea{font:13px/1.125 "Microsoft Yahei",Arial,Helvetica,sans-serif; color: #333;}
+input,select,img{vertical-align:middle}
+input,select{outline:none}
+ul,ol{list-style:none}
+label{cursor:pointer}
+h1,h2,h3,h4,h5,h6{font-size:100%; font-weight: normal;}
+address,cite,dfn,em,var{font-style:normal;}
+body{-ms-text-size-adjust:none;-o-user-select:none;-o-text-size-adjust:none;user-select:none;text-size-adjust:none;font:13px/1.125 "Microsoft Yahei",Arial,Helvetica,sans-serif;min-height:100%;background: #e8e8e8;}
+a{-webkit-user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:rgba(0,0,0,0);text-decoration: none;}
+
+html{
+
+}
+body {
+
+}
+
+@media only screen and (min-width: 500px) {
+
+}
+
+
+/*动画过渡*/
+@keyframes fadeAnimate {
+	0%{
+		
+	}
+	100%{
+		
+	}
+}
+
+.clearfix:after{
+	display: block;
+	content: ".";
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+/*login: .html*/
+.f-login .header,.f-login .contain,.f-login .article,.f-login .footer{
+    min-width: 1280px;
+}
+.wrap{
+	width: 1280px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+.contain .wrap{
+	position: relative;
+    height: 560px;
+}
+.f-login{
+	
+}
+.f-login .header{
+    height: 48px;
+    background: rgb(51, 51, 51);
+    color: #fff;
+    line-height: 48px;
+    font-size: 14px;
+    text-indent: 20px;
+}
+.f-login .header i{
+    width: 30px;
+    height: 30px;
+    background: url(/imgs/logoA.png);
+    float: left;
+    margin: 8px;
+}
+.f-login .header h1{
+    line-height: 48px;
+    font-size: 18px;
+}
+.f-login .contain{
+	height: 560px;
+    background: url(/imgs/containA.png) center;
+    position: relative;
+    background-size: 130% 150%;
+    -moz-background-size: 130% 150%;
+    -webkit-background-size: 130% 150%;
+    -o-background-size: 130% 150%;
+    transition: all 10s;
+    position: relative;
+    width: 100%;
+    margin: 0;
+}
+.f-login .contain.hover{
+    background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -webkit-background-size: 100% 100%;
+	-o-background-size: 100% 100%;
+}
+.f-login .contain .mask{
+	background: #333;
+	opacity: .9;
+	transition: all 10s;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+.f-login .contain.hover .mask{
+	opacity: 0;
+}
+.f-login .textInfo{
+    font-size: 24px;
+    color: #fff;
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    height: 40px;
+    line-height: 40px;
+    margin-top: -20px;
+    z-index: 10;
+}
+.f-login .form,.f-login .formBg{
+    width: 280px;
+    height: 390px;
+    padding: 40px;
+    border-radius: 5px;
+    right: 250px;
+    position: absolute;
+    top: 65px;
+}
+.f-login .form{
+	z-index: 10;
+}
+.f-login .contain .formBg{
+	background: #fff;
+	opacity: .8;
+	z-index: 1;
+	transition: all 10s;
+}
+.f-login .contain.hover .formBg{
+	opacity: .5;
+}
+.f-login .form .heading{
+    font-size: 26px;
+    line-height: 30px;
+    /*margin-bottom: 15px;*/
+}
+.f-login .form input{
+    height: 30px;
+    line-height: 30px;
+    padding: 5px 10px;
+    width: 200px;
+    border: 0;
+    margin: 7px 0;
+}
+.f-login .form input[type=checkbox]{
+	width: 14px;
+    height: 14px;
+    vertical-align: text-bottom;
+    vertical-align: middle;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.f-login .form input[type=tel]{
+	width: 130px;
+    float: left;
+    margin-right: 10px;
+}
+.f-login .form .mixed{
+	text-align: right;
+    line-height: 30px;
+}
+.f-login .form .mixed label{
+    vertical-align: middle;
+}
+.f-login .form .btnSend{
+	height: 30px;
+    width: 60px;
+    background: #fff;
+    border: 0;
+    float: right;
+    margin: 7px 0;
+    cursor: pointer;
+    outline: none;
+    color: #333;
+}
+.f-login .btnLogin{
+	height: 30px;
+    text-align: center;
+    line-height: 30px;
+    background: #26A69A;
+    color: #fff;
+    margin-top: 35px;
+    cursor: pointer;
+    display: block;
+    border: 0;
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+}
+
+.f-login .article{
+	padding: 100px 0;
+    text-indent: 200px;
+}
+.f-login .article i{
+    width: 18px;
+    height: 18px;
+    background: #26C6DA;
+    display: inline-block;
+    margin-right: 10px;
+}
+.f-login .article h2{
+    font-size: 18px;
+    color: #101010;
+    line-height: 50px;
+    text-indent: 170px;
+}
+.f-login .article p{
+    color: #555;
+    line-height: 30px;
+}
+.f-login .footer{
+    background: #aaa;
+    padding: 25px 0;
+    color: #fff;
+    text-align: center;
+    line-height: 22px;
+}
+/*login: .html--end*/
+label.error,label.msg {
+    position: absolute;
+    left: 0;
+    top: 65px;
+    color: #D33B4B;
+    font-weight: normal;
+    font-size: 10px;
+}
+.input-group label.error {
+    top: 45px;
+}
+
+td{
+    position: relative;
+}
+.banben{
+    width: 200px;
+    margin-bottom: -70px;
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    left: -200px;
+    text-align: center;
+    color: #000;
+    opacity: .6;
+    font-size: 12px;
+}

@@ -53,30 +53,28 @@ $(function() {
                        //定时器设置按钮失效和恢复
 					   var i = 600;
 					   var remain;//剩余时间
-					  // var timer = setInterval(function(){
-						 //   remain = --i;
-						 //   _this.html(remain+"s 后可重新获取");
-						 //   _this.attr("disabled","disabled");
-						 //   if(remain==0){
-							//    clearInterval(timer);
-							//    _this.html("获取验证码");
-							//    _this.removeAttr("disabled");
-						 //   }
-					  //  } , 1000);
+					  var timer = setInterval(function(){
+						   remain = --i;
+						   _this.html(remain+"s 后可重新获取");
+						   _this.attr("disabled","disabled");
+						   if(remain==0){
+							   clearInterval(timer);
+							   _this.html("获取验证码");
+							   _this.removeAttr("disabled");
+						   }
+					   } , 1000);
 					   
 				   } 
-				   $("#loginForm .msg,#loginForm label.error").remove();
+				   $("#loginForm .msg").remove();
 				   _this.parent().parent().parent().append("<label class='msg'>"+$data+"</label>");
 			   });
 		   }else{
-		   		$("#loginForm .loginName").focus();
-			   // $("#loginForm .loginName").next().remove();
-			   // $("#loginForm .loginName").parent().append("<label class='error'>请输入用户名</label>");
+			   $("#loginForm .loginName").next().remove();
+			   $("#loginForm .loginName").parent().append("<label>请输入用户名</label>");
 		   }
 	   })
 	//提交
    	$("#loginForm").on("submit",function(){
-   		$("#loginForm .msg").remove();
    		   var url = $(this).attr("rel");
 	   	   var carrierNum = $("#loginForm .carrierNum").val();
 		   var loginName = $("#loginForm .loginName").val();
@@ -92,9 +90,7 @@ $(function() {
 		   }
 			   
      })
-     $('.txtCode').keyup(function(){
-     	$(this).parents('td').find('label.msg').remove();
-     })
+     
      
 //     var handler = function(bnt){
 //	    	alert(1111);
