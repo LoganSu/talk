@@ -6,6 +6,7 @@
 $(function(){
 	$(document).on("click",".roomImport",function(){
 		 $("#importRoomfoForm").submit();
+		 $(this).attr("disabled", true); 
 	})
 })
 </script>
@@ -35,7 +36,7 @@ $(function(){
 <%--           <r:role auth="房间/导出">   --%>
             <!--delete类 公共删除  -->
              <li><a href="${path}/mc/room/singleDownfile.do?parentId=${parentId}"><button class="btn btn-info btn-sm">导出</button></a></li>
-             <li><button class="btn btn-info btn-sm roomImport" rel="${path}/mc/room/singleDownfile.do">导入</button></li>
+             <li><button class="btn btn-success btn-sm roomImport" rel="${path}/mc/room/singleDownfile.do">导入</button></li>
               <li style="padding-left: 0px;">
                      <form id="importRoomfoForm" action="${path}/mc/room/importRoomInfo.do" target="roomInfoSubmitFrame" enctype="multipart/form-data" method="post">
                        <input type="hidden" name="parentId" value="${parentId}" />

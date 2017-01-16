@@ -41,7 +41,7 @@
 //				alert("param  "+self.options.param);
 				e.preventDefault();
 				self.options.action.call(self,self.options.param);
-				self.destroy();
+				self.close();
 			});
 		} else if (typeof this.options.action == 'string') {
 //			$modal.find('[data-action]').attr('href', this.options.action);

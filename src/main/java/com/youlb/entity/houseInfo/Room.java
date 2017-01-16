@@ -73,6 +73,7 @@ public class Room extends BaseModel {
    private String parentId;
    @Transient
    private String unitId;
+   
     //绑定户主信息
 //    public String getHomeHost(){
 //    	if(StringUtils.isNotBlank(this.hostInfoId)){
@@ -214,6 +215,5 @@ public class Room extends BaseModel {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-   
    
 }

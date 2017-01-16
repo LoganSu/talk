@@ -13,6 +13,7 @@ $(function(){
      //导入
 	$(document).on("click",".importDeviceInfo",function(){
 		 $("#importDeviceInfoForm").submit();
+		 $(this).attr("disabled", true);
 	})
 	
 	//导出

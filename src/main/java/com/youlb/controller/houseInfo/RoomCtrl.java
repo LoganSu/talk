@@ -198,6 +198,7 @@ public class RoomCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Room room,Model model){
+    	
     	try {
     		if(!RegexpUtils.checkNumber(room.getRoomNum())){
     			super.message = "房号不能为空且不大于5个数字";
@@ -346,7 +347,7 @@ public class RoomCtrl extends BaseCtrl {
     }  
     
     /**
-     * 导入设备信息
+     * 导入房间信息
      * @param user
      * @param model
      * @return
@@ -418,7 +419,6 @@ public class RoomCtrl extends BaseCtrl {
 		}
     	return INPUT;
     }
-    
 	
 	 /**
      * 导出白名单
