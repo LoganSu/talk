@@ -43,10 +43,10 @@ body {
 }
 /*login: .html*/
 .f-login .header,.f-login .contain,.f-login .article,.f-login .footer{
-    min-width: 1280px;
+    min-width: 1024px;
 }
 .wrap{
-	width: 1280px;
+	width: 1024px;
 	margin: 0 auto;
 	overflow: hidden;
 }
@@ -124,7 +124,7 @@ body {
     height: 390px;
     padding: 40px;
     border-radius: 5px;
-    right: 250px;
+    right: 150px;
     position: absolute;
     top: 65px;
 }

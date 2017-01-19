@@ -474,8 +474,15 @@ a{-webkit-user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:rg
   height: auto!important;
   /*max-height: 800px!important;*/
 }
-.f-main .col-md-2{
+.f-article .col-md-2{
   top: 50px;
+  width: 16.66666667%;
+  float: left;
+}
+.f-article .col-md-10 {
+  float: left;
+  width: 83.33333333%;
+
 }
 /*.f-article .col-md-10{
   position: absolute;
@@ -530,7 +537,7 @@ a{-webkit-user-select:none;-webkit-user-drag:none;-webkit-tap-highlight-color:rg
   background: #c7c7c7;
 }
 .f-main.toggle .rightLine-i{
-  right: 1px;
+  right: 0px;
   z-index: 111;
 }
 
