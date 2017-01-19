@@ -70,37 +70,39 @@ $(function(){
 					return false;
 			   }
 			   //加载key
-               $.post($path+"/mc/permission/getKey.do","roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($data){
-            	   if($data){
+               $.post($path+"/mc/permission/getKey.do","roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($key){
+            	   if($key){
 	            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
 	        			   if($data){
 	        			        hiAlert("提示",$data);
 	        			   }else{
 	        				   //有秘钥的初始化key
-	                    	   if($data){
+	                    	   if($key){
 	        	            	   var loadKey,RestoreCardKey,obj;
-	        	            	   var indata = "{\"key\":\""+$data+"\"}";
+// 	        	            	   alert($key);
+	        	            	   var indata = "{\"key\":\""+$key+"\"}";
 	        	          	       try{ 
 	        	          		          loadKey = myactivex.LoadKey(indata);
-	        	          		         obj = jQuery.parseJSON(RestoreCardKey);
+	        	          		         obj = jQuery.parseJSON(loadKey);
 	        	          		         if(obj.code!='0'){
 	        						    	  hiAlert("提示","加载密钥出错！");
 	        			       				     return false;
 	        						      }
 	        	            	   }catch(e){
-	        	            		   hiAlert("提示","加载密钥出错！");
+	        	            		   hiAlert("提示",obj.msg);
 	        	       				     return false;
 	        	            	   }
 	        	            	 }
 	        	            	   try {
-	        	            		    RestoreCardKey = myactivex.RestoreCardKey();  
+	        	            		    RestoreCardKey = myactivex.RestoreCardKey();
 	        	            		    obj = jQuery.parseJSON(RestoreCardKey);
+	        	            		    alert(obj.toSource());
 	        	            		    if(obj.code!='0'){
 	        						    	  hiAlert("提示","注销卡片失败！");
 	        			       				     return false;
 	        						      }
 	        		       			} catch (e) {
-	        		       			   hiAlert("提示","注销卡片失败！");
+	        		       			   hiAlert("提示",obj.msg);
 	        		       			   return false;
 	        		       			}
 	        				   

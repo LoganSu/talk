@@ -95,6 +95,11 @@ public class InfoPublishCtrl extends BaseCtrl {
     	if(StringUtils.isBlank(infoPublish.getInfoDetail())){
     		super.message = "内容不能为空！";
 			return  super.message;
+    	}else{
+    		if(infoPublish.getInfoDetail().length()>200){
+    			super.message = "内容长度超出200字符！";
+    			return  super.message;
+    		}
     	}
     	if(StringUtils.isBlank(infoPublish.getExpDateStr())){
     		super.message = "有效期不能为空！";

@@ -144,7 +144,7 @@
               <tr>
               <td><div class="firstFont"><span class="starColor">*</span>版本说明：</div></td>
                 <td colspan="4"><div>
-                  <textarea name="versionDes" maxlength="200" class="form-control" style="width: 560px" rows="3" cols="5">${appManage.versionDes}</textarea>
+                  <textarea name="versionDes" <c:if test="${appManage.appType == 6}">maxlength="50"</c:if> <c:if test="${appManage.appType != 6}">maxlength="200"</c:if> class="form-control" style="width: 560px" rows="3" cols="5">${appManage.versionDes}</textarea>
 <%--                   <input name="versionDes" class="form-control" value="${appManage.versionDes}"/> --%>
                 </div></td>
                 

@@ -254,6 +254,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 			CardInfo c = cardSqlDao.get(cardInfo.getCardSn());
 			if(c!=null){
 				c.setCardStatus(SysStatic.LIVING);
+				c.setRoomId(cardInfo.getRoomId());
 			}
 			//查不到记录 说明不存在 add
 		}catch(Exception e){

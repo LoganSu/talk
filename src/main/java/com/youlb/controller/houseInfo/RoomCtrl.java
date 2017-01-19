@@ -208,8 +208,8 @@ public class RoomCtrl extends BaseCtrl {
     			super.message = "房号不能超过5个数字";
     			return  super.message;
     		}
-    		if(!RegexpUtils.checkNumber(room.getRoomFloor()+"")){
-    			super.message = "楼层不能为空且为数字";
+    		if(!RegexpUtils.checkNumber(room.getRoomFloor()+"")||room.getRoomFloor()<0){
+    			super.message = "楼层不能为空且为正整数";
     			return  super.message;
     		}
     		//判断单元下面房间号是否已经存在

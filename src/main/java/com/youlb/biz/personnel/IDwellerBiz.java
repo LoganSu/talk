@@ -36,7 +36,7 @@ public interface IDwellerBiz extends IBaseBiz<Dweller> {
      * @param phone
      * @return
      */
-	boolean checkPhoneExistWebShow(Dweller dweller)throws BizException;
+	String checkPhoneExistWebShow(Dweller dweller)throws BizException;
     /**
      * 通过域id获取运营商id
      * @param treecheckbox

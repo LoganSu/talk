@@ -115,22 +115,22 @@ public class DwellerCtrl extends BaseCtrl {
     	    }
     	   
     	    //顶级运营商如果指定房间 修改运营商为被指定的域的运营商
-    		if(SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
-    			if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()){
-    				List<String> carrierId = dwellerBiz.getCarrierByDomainId(dweller.getTreecheckbox());
-    				//获取两个运营商 不允许一个用户绑定跨域地址，一个域的用户智能绑定一个运营商的房间
-    				if(carrierId!=null&&carrierId.size()>1){
-    					super.message = "用户绑定房间不能跨运营商，请创建新的用户绑定！";
-    					return  super.message;
-    				}else if(carrierId!=null&&carrierId.size()==1){
-    					dweller.setCarrierId(carrierId.get(0));
-    				}
-    			}else{
-    				dweller.setCarrierId(loginUser.getCarrier().getId());//设置运营商id
-    			}
-    		}else{
-    			dweller.setCarrierId(loginUser.getCarrier().getId());//设置运营商id
-    		}
+//    		if(SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
+//    			if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()){
+//    				List<String> carrierId = dwellerBiz.getCarrierByDomainId(dweller.getTreecheckbox());
+//    				//获取两个运营商 不允许一个用户绑定跨域地址，一个域的用户智能绑定一个运营商的房间
+//    				if(carrierId!=null&&carrierId.size()>1){
+//    					super.message = "用户绑定房间不能跨运营商，请创建新的用户绑定！";
+//    					return  super.message;
+//    				}else if(carrierId!=null&&carrierId.size()==1){
+//    					dweller.setCarrierId(carrierId.get(0));
+//    				}
+//    			}else{
+//    				dweller.setCarrierId(loginUser.getCarrier().getId());//设置运营商id
+//    			}
+//    		}else{
+//    			dweller.setCarrierId(loginUser.getCarrier().getId());//设置运营商id
+//    		}
     		//判断电话的正确性
     		if(StringUtils.isNotBlank(dweller.getPhone())){
     			if(!RegexpUtils.checkMobile(dweller.getPhone())&&!RegexpUtils.checkPhone(dweller.getPhone())){
@@ -147,9 +147,9 @@ public class DwellerCtrl extends BaseCtrl {
     		}
     		 //检查手机号码是否已经在同一个运营商里面注册
     	    if(StringUtils.isNotBlank(dweller.getPhone())){
-    	    	boolean b = dwellerBiz.checkPhoneExistWebShow(dweller);
-    	    	if(b){
-    	    		super.message = "该联系电话已经被注册！";
+    	    	String b = dwellerBiz.checkPhoneExistWebShow(dweller);
+    	    	if(StringUtils.isNotBlank(b)){
+    	    		super.message = "该手机号码已经绑定该"+b+"房产";
     	    		return  super.message;
     	    	}
     	    }

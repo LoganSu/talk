@@ -118,6 +118,11 @@ public class RepairsCtrl extends BaseCtrl{
     		if(StringUtils.isBlank(repairs.getServiceContent())){
     			super.message = "内容不能为空！";
     			return  super.message;
+    		}else{
+    			if(repairs.getServiceContent().length()>200){
+        			super.message = "内容长度超出200字符！";
+        			return  super.message;
+        		}
     		}
     		repairsBiz.saveOrUpdate(repairs,getLoginUser());
 		} catch (Exception e) {

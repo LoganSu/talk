@@ -34,6 +34,7 @@ $(function(){
 		   if(obj.code=='0'){
 			   //加载key
                $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+//             	   alert($data);
             	   //有秘钥的初始化key
             	   if($data){
 	            	   var loadKey;
@@ -47,8 +48,10 @@ $(function(){
 //             	       obj = jQuery.parseJSON(loadKey);
 					   //验证卡片是否合法
 					   obj = jQuery.parseJSON(myactivex.IsValidCard());
+					   alert(myactivex.IsValidCard());
 					   if(obj.code!='0'){
 						   try{
+							   alert(myactivex.InitCardKey_1());
 							   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
 						      if(obj.code!='0'){
 						    	  hiAlert("提示","此为非法卡片，请更换卡片！");

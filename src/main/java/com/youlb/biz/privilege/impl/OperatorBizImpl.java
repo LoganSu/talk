@@ -248,9 +248,9 @@ public class OperatorBizImpl implements IOperatorBiz {
 			   Operator loginUser = list.get(0);
 			   //绑定运营商信息
 			    sb = new StringBuilder();
-			    sb.append("select c.id,c.fcarriername,c.fisnormal,c.fcarriernum")
+			    sb.append("select c.id,c.fcarriername,c.fisnormal,c.fcarriernum,c.fplatform_name ")
 			   .append(" from t_carrier c INNER JOIN t_role r on r.fcarrierid=c.id INNER JOIN t_operator_role tor")
-			    .append(" on tor.froleid=r.id where tor.foperatorid=? GROUP BY c.id,c.fcarriername,c.fisnormal,c.fcarriernum");
+			    .append(" on tor.froleid=r.id where tor.foperatorid=? GROUP BY c.id,c.fcarriername,c.fisnormal,c.fcarriernum,c.fplatform_name");
 			    Object[] obj =  (Object[]) operatorSqlDao.findObjectBySql(sb.toString(), new Object[]{loginUser.getId()});
 			    Carrier carrier = new Carrier();
 			    if(obj!=null){
@@ -258,6 +258,7 @@ public class OperatorBizImpl implements IOperatorBiz {
 			    	carrier.setCarrierName(obj[1]==null?null:(String)obj[1]);
 			    	carrier.setIsNormal(obj[2]==null?null:(String)obj[2]);
 			    	carrier.setCarrierNum(obj[3]==null?null:(String)obj[3]);
+			    	carrier.setPlatformName(obj[4]==null?null:(String)obj[4]);
 			    }
 			    loginUser.setCarrier(carrier);
 			    //判断密码是否正确

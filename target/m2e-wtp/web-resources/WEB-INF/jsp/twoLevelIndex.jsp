@@ -35,7 +35,7 @@
 <!--         <link rel="stylesheet" href="dist/css/bootstrap-multiselect.css" type="text/css"> -->
 <!--         <script type="text/javascript" src="dist/js/bootstrap-multiselect.js"></script> -->
 <%--     <script type="text/javascript" src="${path}/js/common/bootstrap/bootstrap-multiselect-collapsible-groups.js"></script> --%>
-	<script src="${path}/js/common/ajaxfileupload.js"></script>
+	  <script src="${path}/js/common/ajaxfileupload.js"></script>
     <script src="${path}/js/common/init.js"></script>
     <script src="${path}/js/qiniu/dist/qiniu.js"></script>
 <%--     <script src="${path}/js/qiniu/scripts/main.js"></script> --%>
@@ -150,7 +150,14 @@
         <div class="header">
           <!-- <div class="wrap"> -->
               <i class="logo"></i>
-              <h1>赛翼智慧社区云平台</h1>
+              <c:choose>
+                <c:when test="${loginUser.carrier.platformName!=null}">
+                   <h1>${loginUser.carrier.platformName}</h1>
+                </c:when>
+                <c:otherwise>
+                    <h1>赛翼智慧社区云平台</h1>
+                </c:otherwise>
+              </c:choose>
               
             
               <div class="btnBox">
@@ -475,7 +482,7 @@
                </div>
            </div>
           </div>
-           <div class="col-md-10 f-article">
+          <div class="col-md-10 f-article">
               <!-- 查询条件div 包括功能按钮 -->
               <div class="row" style="padding-left: 15px">
                   
@@ -506,7 +513,7 @@
               </div>
                
            </div>
-       </div>
+      </div>
        
    </div>
   <script type="text/javascript">
@@ -525,7 +532,7 @@
             $('.f-main.toggle .panel.panel-primary')[i].addEventListener("mouseout", hoverTagListOut);
           }
           $('.jjjj').hide();
-          $('.f-navList').css({'border-right':'1px solid #c7c7c7'});
+          // $('.f-navList').css({'border-right':'1px solid #c7c7c7'});
         }else{
           //展开tag
           $('.f-navList').css({'border-right':0});
@@ -572,14 +579,17 @@
     
       function hoverTagList(e){
         var top=$(this).offset().top;
+        // var scrollY=window.scrollY;//window.scrollY 属于window对象，firefox、chrome，opera支持，IE不支持，忽略Doctype规则。
+        var scrollY=window.pageYOffset;
         var taglistCSS={
               position:'fixed',
               background:'#f5f5f5',
-              top:top+'px',
-              left:'45px',
+              top:(top-scrollY)+'px',
+              left:'44px',
               width:'200',
               height:'auto',
               border:'1px solid #C7C7C7',
+              // overflow:hidden,
               'border-top':'0'
         }
         $(this).find('.panel-collapse').show().css(taglistCSS);
@@ -597,7 +607,7 @@
         if(!expand){
           $(this).find('.panel-heading').addClass('cur');
         }
-      })
+      });    
 
   </script>
 </body>

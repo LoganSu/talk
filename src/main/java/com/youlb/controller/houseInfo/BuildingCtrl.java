@@ -112,8 +112,8 @@ public class BuildingCtrl extends BaseCtrl {
     			super.message = "楼栋编号已经存在！";
     			return  super.message;
     		}
-    		if(!RegexpUtils.checkNumber(building.getTotalFloor()+"")){
-    			super.message = "层数不能为空且为数字！";
+    		if(!RegexpUtils.checkNumber(building.getTotalFloor()+"")||Integer.parseInt(building.getTotalFloor())<0){
+    			super.message = "层数不能为空且为正整数！";
     			return  super.message;
     		}
     		if(StringUtils.isNotBlank(building.getBuildHeight())&&!RegexpUtils.checkDecimals(building.getBuildHeight())){

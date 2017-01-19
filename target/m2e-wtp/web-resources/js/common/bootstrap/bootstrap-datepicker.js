@@ -674,7 +674,8 @@
 				visualPadding = 10,
 				container = $(this.o.container),
 				windowWidth = container.width(),
-				windowHeight = container.height(),
+				// windowHeight = container.height(),//右边内容，.f-article绝对定位高度有变动;
+				windowHeight = Math.max(container.height(),document.documentElement.clientHeight);
 				scrollTop = container.scrollTop(),
 				appendOffset = container.offset();
 

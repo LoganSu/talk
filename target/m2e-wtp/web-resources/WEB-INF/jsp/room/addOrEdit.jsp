@@ -12,7 +12,7 @@
                 <td><div class="leftFont"><span class="starColor">*</span>房号：</div></td>
                 <td><div><input name="roomNum" class="form-control required" maxlength="5" title="房号不能为空且不大于5个数字" value="${room.roomNum}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>楼层：</div></td>
-                <td><div><input name="roomFloor" class="form-control required number" title="楼层不能为空且为数字" value="${room.roomFloor}"/></div></td>
+                <td><div><input name="roomFloor" class="form-control required number" title="楼层不能为空且为正整数" value="${room.roomFloor}"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>房产证号：</div></td>
                 <td><div><input name="certificateNum" class="form-control required" title="房产证号不能为空" value="${room.certificateNum}"/></div></td>
               </tr>

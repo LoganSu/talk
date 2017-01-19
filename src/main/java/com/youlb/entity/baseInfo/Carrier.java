@@ -46,6 +46,9 @@ public class Carrier extends BaseModel {
    /**关联域名id */
    @Column(name="fdomain_name_id")
    private String domainNameId;
+   /**平台名称 */
+   @Column(name="fplatform_name")
+   private String platformName;
    /**二级域名id */
    @Transient
    private String domainNameParentId;
@@ -59,6 +62,12 @@ public class Carrier extends BaseModel {
    
 	 
 	 
+	public String getPlatformName() {
+		return platformName;
+	}
+	public void setPlatformName(String platformName) {
+		this.platformName = platformName;
+	}
 	public String getDomainNameParentId() {
 		return domainNameParentId;
 	}

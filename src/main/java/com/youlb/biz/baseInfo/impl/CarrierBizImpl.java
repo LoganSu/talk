@@ -150,7 +150,7 @@ public class CarrierBizImpl implements ICarrierBiz {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select * from (select c.id id,c.fcarriername carrierName,c.ftel tel,c.fpostcode postcode,c.ffax fax,c.faddress address,c.fremark remark,")
-		 .append("c.fisnormal isNormal,c.FCREATETIME createTime,c.fcarrierNum carrierNum from t_carrier c inner join t_carrier_domain tcd on tcd.fcarrierid=c.id where 1=1");
+		 .append("c.fisnormal isNormal,c.FCREATETIME createTime,c.fcarrierNum carrierNum,c.fplatform_name platformName from t_carrier c inner join t_carrier_domain tcd on tcd.fcarrierid=c.id where 1=1");
 		 //普通运营商只能看到自己所属运营商 看不到admin运营商
 		 if(SysStatic.NORMALCARRIER.equals(loginUser.getCarrier().getIsNormal())){
 			 sb.append(" and c.id =?");
@@ -167,7 +167,7 @@ public class CarrierBizImpl implements ICarrierBiz {
 			}else{
 				return list;
 			}
-		 sb.append(" GROUP BY c.id,c.fcarriername,c.ftel,c.fpostcode,c.ffax,c.faddress,c.fremark,c.FCREATETIME,c.fisnormal,c.fcarrierNum) t where 1=1");
+		 sb.append(" GROUP BY c.id,c.fcarriername,c.ftel,c.fpostcode,c.ffax,c.faddress,c.fremark,c.FCREATETIME,c.fisnormal,c.fcarrierNum,c.fplatform_name) t where 1=1");
 		 if(StringUtils.isNotBlank(target.getCarrierName())){
 			 sb.append(" and t.carrierName like ?");
 			 values.add("%"+target.getCarrierName()+"%");	 
@@ -191,6 +191,7 @@ public class CarrierBizImpl implements ICarrierBiz {
                  carrier.setIsNormal(obj[7]==null?null:(String)obj[7]);
                  carrier.setCreateTime(obj[8]==null?null:(Date)obj[8]);
                  carrier.setCarrierNum(obj[9]==null?null:(String)obj[9]);
+                 carrier.setPlatformName(obj[10]==null?null:(String)obj[10]);
                  carrier.setPager(target.getPager());
                  list.add(carrier);
 			 }
@@ -233,8 +234,8 @@ public class CarrierBizImpl implements ICarrierBiz {
 				Operator operator = new Operator();
 				operator.setLoginName(SysStatic.ADMIN);//设置admin用户
 				//获取随机密码
-				String random = SmsUtil.random();
-				operator.setPassword(SHAEncrypt.digestPassword(random));//设置获取随机密码
+//				String random = SmsUtil.random();
+				operator.setPassword(SHAEncrypt.digestPassword(carrier.getTel()));//设置密码为手机号码
 				operator.setIsAdmin(SysStatic.NORMALADMIN);//管理员
 				operator.setPhone(carrier.getTel());
 				operator.setRealName(carrier.getCarrierName()+"("+SysStatic.ADMIN+")");
@@ -250,7 +251,7 @@ public class CarrierBizImpl implements ICarrierBiz {
 				String addRoleOperator ="insert into t_operator_role (foperatorid,froleid) values(?,?)";
 				roleSqlDao.executeSql(addRoleOperator, new Object[]{operatorId,roleId});
 				//发送密码到手机上
-				Boolean b = SmsUtil.sendSMS(carrier.getTel(), "【赛翼智能】欢迎使用友邻邦产品，为您创建的"+carrier.getCarrierName()+"运营商密码为："+random+"，请妥善保管");
+//				Boolean b = SmsUtil.sendSMS(carrier.getTel(), "【赛翼智能】欢迎使用友邻邦产品，为您创建的"+carrier.getCarrierName()+"运营商密码为："+random+"，请妥善保管");
 				 //TODO LOG
 				//设置角色的权限
 //			List<Privilege> pList = privilegeSqlDao.find("from Privilege p where p.type=?",new Object[]{SysStatic.NORMALPRIVILEGE});

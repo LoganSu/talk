@@ -35,6 +35,7 @@ $(function(){
 		 <form id="workersaveForm" action="">
 		   <input type="hidden" name="id" value="${worker.id}"/>
 <%-- 		   <input type="hidden" class="departmentTree" value="${departmentTree}"/> --%>
+            <span style="color: red;">说明：app登录密码与手机号码一致</span>
            <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>姓名：</div></td>

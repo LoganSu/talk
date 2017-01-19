@@ -23,7 +23,13 @@ var carrierTable ={
             sortable: false
         },{
             field: 'carrierName',
-            title: '名称',
+            title: '运营商名称',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'platformName',
+            title: '平台名称',
             align: 'center',
             valign: 'middle',
             sortable: true

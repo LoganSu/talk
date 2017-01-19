@@ -188,12 +188,17 @@ public class DwellerBizImpl implements IDwellerBiz {
 		.append("w.fnativeplace nativePlace,w.fcompanyname companyName,w.fremark remark,w.fcreatetime createTime,dd.fdwellertype dwellerType,d.fentityid entityid")
 		.append(" from t_dweller w left join t_domain_dweller dd on dd.fdwellerid=w.id left join t_domain d on d.id=dd.fdomainid where 1=1 ");
 		//不是特殊管理员需要过滤域
-//		List<String> domainIds = loginUser.getDomainIds();
-		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
-			sb.append(" and w.fcarrier_id=? ");
-			values.add(loginUser.getCarrier().getId());
+		List<String> domainIds = loginUser.getDomainIds();
+		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
+			sb.append(SearchHelper.jointInSqlOrHql(domainIds, " d.id "));
+			values.add(domainIds);
 		}
-		sb.append(")t where t.idNum is not null ");//不显示子账号，子账号没有身份证号码
+		
+//		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
+//			sb.append(" and w.fcarrier_id=? ");
+//			values.add(loginUser.getCarrier().getId());
+//		}
+		sb.append(")t where 1=1 ");//不显示子账号，子账号没有身份证号码
 		if(StringUtils.isNotBlank(target.getFname())){
 			sb.append(" and t.fname like ?");
 			values.add("%"+target.getFname()+"%");
@@ -284,7 +289,17 @@ public class DwellerBizImpl implements IDwellerBiz {
 //				dwellerSqlDao.update(dweller);
 //			}else{
 				dweller.setId(null);
-				String dwellerId = (String) dwellerSqlDao.add(dweller);
+				//判断电话号码是否已经存在
+				String dwellerId="";
+				String checkPhone = "select id from t_dweller where fphone=? ";
+				List<String> ids= dwellerSqlDao.pageFindBySql(checkPhone, new Object[]{dweller.getPhone()});
+			    if(ids!=null&&!ids.isEmpty()){
+			    	dwellerId=ids.get(0);
+			    	dweller.setId(dwellerId);
+			    	dwellerSqlDao.update(dweller);
+				}else{
+					 dwellerId = (String) dwellerSqlDao.add(dweller);
+				}
 				dwellerSqlDao.getCurrSession().flush();
 				if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()){
 					for(String domainid:dweller.getTreecheckbox()){
@@ -475,28 +490,39 @@ public class DwellerBizImpl implements IDwellerBiz {
 		return null;
 	}
     /**
-     * 检查手机号是否已经被注册过滤 检查web页面需要显示的住户
+     * 检查手机号是否已经帮定所选择的房产
      * @param phone
      * @return
      * @throws BizException 
      * @see com.youlb.biz.personnel.IDwellerBiz#checkPhoneExist(java.lang.String)
      */
 	@Override
-	public boolean checkPhoneExistWebShow(Dweller dweller) throws BizException {
+	public String checkPhoneExistWebShow(Dweller dweller) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
-		sb.append("SELECT w.fphone from t_dweller w where w.fphone=? and fcarrier_id=? ");
+		sb.append("SELECT w.id from t_dweller w where w.fphone=?");
 		values.add(dweller.getPhone());
-		values.add(dweller.getCarrierId());
+//		values.add(dweller.getCarrierId());
 		if(StringUtils.isNotBlank(dweller.getId())){
 			sb.append(" and w.id!=? ");
 			values.add(dweller.getId());
 		}
 		List<String> find = dwellerSqlDao.pageFindBySql(sb.toString(), values.toArray());
 		if(find!=null&&!find.isEmpty()){
-			return true;
+			String fdwellerid=find.get(0);
+			if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()&&StringUtils.isNotBlank(fdwellerid)){
+				String sql = "select d.fremark from t_domain_dweller dd inner join t_domain d on d.id=dd.fdomainid where fdwellerid=? and fdomainid=? ";
+				for(String domainid:dweller.getTreecheckbox()){
+					List<String> fdomainids  = dwellerSqlDao.pageFindBySql(sql, new Object[]{fdwellerid,domainid});
+					if(fdomainids!=null&&!fdomainids.isEmpty()){
+						return fdomainids.get(0);
+					}
+				}
+				
+			}
 		}
-		return false;
+		
+		return null;
 	}
 	
 	/**
