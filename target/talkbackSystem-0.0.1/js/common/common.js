@@ -263,7 +263,7 @@ var requiredValidata=function(array){
 var numberValidata=function(array){
 	var flag = false;
 	$.each(array,function(i,obj){
-		if($(obj).val()&&!$(obj).val().match("^[0-9]+(.[0-9])?$")||($(obj).attr("maxlength")&&$(obj).val().length!=$(obj).attr("maxlength"))){
+		if($(obj).val()&&!$(obj).val().match("^[0-9]+(.[0-9])?$")||($(obj).attr("maxlength")&&$(obj).val().length>$(obj).attr("maxlength"))){
 			
 			hiAlert("提示",$(obj).attr("title"));
 			flag = false;
