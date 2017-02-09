@@ -12,7 +12,7 @@ $(function(){
 			    browse_button: 'firstPage_fileInput_id',         // 上传选择的点选按钮，必需
 			    uptoken_url: $path+'/mc/qiniu/token',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
 			    get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-			    domain: 'http://upload.gdsayee.com.cn/',     // bucket域名，下载资源时用到，必需
+			    domain: $qiniu,     // bucket域名，下载资源时用到，必需
 			    container: 'firstPage_fileInput_idDiv',             // 上传区域DOM ID，默认是browser_button的父元素
 			    max_file_size: '2mb',             // 最大文件体积限制
 			    flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径

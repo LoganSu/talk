@@ -49,7 +49,7 @@ var buildingTable ={
             sortable: true
         }, {
             field: 'buildingNum',
-            title: '楼栋编号',
+            title: '呼叫号码',
             align: 'center',
             valign: 'middle',
             sortable: true

@@ -18,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.ParseException;
 import org.quartz.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,11 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.youlb.biz.staticParam.IStaticParamBiz;
 import com.youlb.entity.staticParam.StaticParam;
 import com.youlb.utils.common.DES3;
+import com.youlb.utils.common.QiniuUtils;
 import com.youlb.utils.common.QuartzService;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.DateHelper;
 
 
@@ -69,6 +72,7 @@ public class InitServlet extends HttpServlet {
 		ServletContext context = config.getServletContext();
 		ApplicationContext app = WebApplicationContextUtils.getWebApplicationContext(context);
 		IStaticParamBiz staticParamBiz = (IStaticParamBiz) app.getBean("staticParamBiz");
+		
 		try{
 			initSysParam(config);
 		}catch(BizException e){
@@ -98,7 +102,13 @@ public class InitServlet extends HttpServlet {
 			logger.error("初始定时器出错");
 			e.printStackTrace();
 		}
-		
+		InitData init = new InitData();
+		try {
+			init.InitRoomSipGroupDate(app);
+		} catch (ParseException | IOException | BizException | JsonException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
  	}
 	
 	private static void initQuartzService(ServletConfig config) throws IOException, ClassNotFoundException{
@@ -172,7 +182,7 @@ public class InitServlet extends HttpServlet {
 		String qiniubackup = (String) proper.get("qiniubackup.dir");
 		SysStatic.QINIUBACKUP=qiniubackup;
 		logger.info("七牛备份地址 qiniubackup::"+qiniubackup);
-		//七牛备份地址
+		//一级平台地址
 		String firstServer = (String) proper.get("firstServer.http");
 		SysStatic.FIRSTSERVER=firstServer;
 		logger.info("一级平台地址firstServer::"+firstServer);
@@ -180,6 +190,15 @@ public class InitServlet extends HttpServlet {
 		String platformLevel = (String) proper.get("platform.level");
 		SysStatic.PLATFORMLEVEL=platformLevel;
 		logger.info("平台级别::"+platformLevel);
+		//七牛上传空间
+		String bucketname = (String) proper.get("qiniu.bucketname");
+		QiniuUtils.bucketname=bucketname;
+		logger.info("七牛上传空间::"+bucketname);
+		//七牛url
+		String qiniuUrl = (String) proper.get("qiniu.url");
+		QiniuUtils.URL=qiniuUrl;
+		logger.info("qiniuUrl::"+qiniuUrl);
+		
 		
 		//特殊字符
 		String specialString = (String) proper.get("special.string");

@@ -45,7 +45,7 @@ var areaTable ={
             sortable: true
         },{
             field: 'areaNum',
-            title: '地区编号',
+            title: '呼叫号码',
             align: 'center',
             width: '60',
             valign: 'middle',

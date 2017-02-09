@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +17,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.access.IPermissionBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.access.CardInfo;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
@@ -258,8 +261,8 @@ public class PermissionCtrl extends BaseCtrl {
     @ResponseBody
     public CardInfo connectCardMachine(CardInfo cardInf,Model model){
 		try {
-			boolean b = permissionBiz.checkCardExist(cardInf);
-			if(b){
+			CardInfo c = permissionBiz.checkCardExist(cardInf);
+			if(c!=null&&!SysStatic.CANCEL.equals(c.getCardStatus())){
 				return null;
 			}
 		} catch (BizException e) {
@@ -281,13 +284,21 @@ public class PermissionCtrl extends BaseCtrl {
     public String writeCard(CardInfo cardInfo,Model model){
     	//检查卡片是否已经使用
     	try {
-    	boolean b = permissionBiz.checkCardExist(cardInfo);
-    	if(b){
-    		super.message="1";
-    		return super.message;
-    	}
+    		CardInfo c = permissionBiz.checkCardExist(cardInfo);
+    	if(c!=null){
+    		//注销的卡可以重新发卡
+    		if(SysStatic.CANCEL.equals(c.getCardStatus())){
+    			permissionBiz.updateCardInfo(c);
+    			super.message="0";
+    			return super.message;
+    		}else{
+    			super.message="1";
+    			return super.message;
+    		}
+    	}else{
     		int i = permissionBiz.writeCard(cardInfo);
-			super.message=i+"";
+    		super.message=i+"";
+    	}
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -32,8 +32,8 @@
                     </c:if>
                   </select>
                 </div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>编号：</div></td>
-                <td><div><input name="areaNum" class="form-control areaNum required number" title="编号不能为空且为3个数字，请填写区号" readonly="readonly" maxlength="3" value="${area.areaNum}"/></div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>呼叫号码：</div></td>
+                <td><div><input name="areaNum" class="form-control areaNum required number" title="呼叫号码不能为空且为3个数字，请填写区号" readonly="readonly" maxlength="3" value="${area.areaNum}"/></div></td>
               </tr>
               <tr>
                 <td><div>备注：</div></td>

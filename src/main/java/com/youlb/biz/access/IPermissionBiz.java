@@ -48,7 +48,7 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param cardSn
 	 * @return
 	 */
-	boolean checkCardExist(CardInfo cardInf) throws BizException;
+	CardInfo checkCardExist(CardInfo cardInf) throws BizException;
 
 	/**根据相应条件 获取card map
 	 * @param cardInfo
@@ -97,5 +97,8 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @return
 	 */
 	CardInfo getImg(Integer id) throws BizException;
+
+   
+	void updateCardInfo(CardInfo cardInfo)throws BizException;
    
 }

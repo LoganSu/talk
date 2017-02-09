@@ -48,8 +48,8 @@
 	                     </select>
 <%--                     <input name="neibName" value="${neighborhoods.neibName}" maxlength="20" <c:if test="${neighborhoods.id!=null}">readonly="readonly"</c:if> placeholder="添加成功不能修改"  title="社区名称不能为空" class="form-control required"/> --%>
                     </div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>社区编号：</div></td>
-                <td><div><input name="neibNum" value="${neighborhoods.neibNum}" maxlength="5" title="社区编号不能为空且为5位整数" class="form-control required number"/></div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>呼叫号码：</div></td>
+                <td><div><input name="neibNum" value="${neighborhoods.neibNum}" maxlength="5" title="呼叫号码不能为空且为5位整数" class="form-control required number"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>社区地址：</div></td>
                 <td><div><input name="address" value="${neighborhoods.address}" title="社区地址不能为空" class="form-control required"/></div></td>
               </tr>

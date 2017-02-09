@@ -52,17 +52,24 @@ $(function(){
 			}
 		 }
 		 var ids = getSelectedIds();
+		 
+		 bootstrapQ.confirm('<span style="color:black;font-size:16px">您确定要发布吗？</span>',function(){
+			 $.post(url,ids,function($data){
+	            	if(!$data){
+						refresh();
+					}else{
+						hiAlert("提示",$data);
+					}
+	            });
+		},function(){
+//			alert('点击了取消');
+		});
+		 
 //		 but.scojs_confirm({
 //		        content: "您确定要发布吗？",
 //		        param:ids,
 //		        action: function(param) {
-		            $.post(url,ids,function($data){
-		            	if(!$data){
-							refresh();
-						}else{
-							hiAlert("提示",$data);
-						}
-		            });
+		            
 		            
 //		        }
 //		      });	
@@ -101,16 +108,27 @@ $(function(){
 	$(document).on("click",".adPublishDelete",function(){
 		var id = $(this).attr("rel");
 		var url =$path+"/mc/adPublish/delete.do";
-		if(confirm("确定要删除该数据吗？")){
-			//获取已选择记录id
-			$.post(url,"ids="+id,function($data){
-				if(!$data){
-					refresh();
-				}else{
-					hiAlert("提示",$data);
-				}
-			})
-		}
+			bootstrapQ.confirm('<span style="color:black;font-size:16px">您确定要删除记录吗？</span>',function(){
+				 $.post(url,ids="+id",function($data){
+		            	if(!$data){
+							refresh();
+						}else{
+							hiAlert("提示",$data);
+						}
+		            });
+			},function(){
+//				alert('点击了取消');
+			});
+//		if(confirm("确定要删除该数据吗？")){
+//			//获取已选择记录id
+//			$.post(url,"ids="+id,function($data){
+//				if(!$data){
+//					refresh();
+//				}else{
+//					hiAlert("提示",$data);
+//				}
+//			})
+//		}
 	 })
 	 //删除
 	 $(document).on("click","#thumbnailDiv .btn-danger",function(){
@@ -148,20 +166,17 @@ $(function(){
 				 }
 				 var ids = getSelectedIds();
 				var url = $path+"/mc/adPublish/delete.do";
-				but.scojs_confirm({
-			        content: "您确定要删除记录吗？",
-			        param:ids,
-			        action: function(param) {
-//			        	alert("删除");
-			            $.post(url,param,function($data){
+				bootstrapQ.confirm('<span style="color:black;font-size:16px">您确定要删除记录吗？</span>',function(){
+					 $.post(url,ids,function($data){
 			            	if(!$data){
 								refresh();
 							}else{
 								hiAlert("提示",$data);
 							}
 			            });
-			            
-			        }
-			      });
+				},function(){
+//					alert('点击了取消');
+				});
+				
 		 })
 })

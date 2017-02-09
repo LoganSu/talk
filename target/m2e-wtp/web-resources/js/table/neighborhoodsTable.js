@@ -51,7 +51,7 @@ var neighborhoodsTable ={
             sortable: true
         },{
             field: 'neibNum',
-            title: '社区编号',
+            title: '呼叫号码',
             align: 'center',
             valign: 'middle',
             sortable: true

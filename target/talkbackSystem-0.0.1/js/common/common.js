@@ -211,21 +211,35 @@ $(function(){
 				 }
 				 var ids = getSelectedIds();
 				var url = but.attr("rel");
-				 but.scojs_confirm({
-			        content: "您确定要删除记录吗？",
-			        param:ids,
-			        action: function(param) {
-			            $.post(url,param,function($data){
-			            	if($data){
-			            		hiAlert("提示",$data);
-							}else{
+				
+				bootstrapQ.confirm('<span style="color:black;font-size:16px">您确定要删除记录吗？</span>',function(){
+					 $.post(url,ids,function($data){
+			            	if(!$data){
 								refresh();
-								 flushTree();
+							}else{
+								hiAlert("提示",$data);
 							}
 			            });
-			            
-			        }
-			      });	
+				},function(){
+//					alert('点击了取消');
+				});
+				
+				
+//				 but.scojs_confirm({
+//			        content: "您确定要删除记录吗？",
+//			        param:ids,
+//			        action: function(param) {
+//			            $.post(url,param,function($data){
+//			            	if($data){
+//			            		hiAlert("提示",$data);
+//							}else{
+//								refresh();
+//								 flushTree();
+//							}
+//			            });
+//			            
+//			        }
+//			      });	
 		 })
 })
 

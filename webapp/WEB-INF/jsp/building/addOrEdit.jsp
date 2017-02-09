@@ -32,8 +32,8 @@ $(document).ready(function() {
               <tr>
                 <td><div class="leftFont"><span class="starColor">*</span>楼栋名称：</div></td>
                 <td><div><input name="buildingName" value="${building.buildingName}" maxlength="20" title="楼栋名称不能为空" class="form-control required"/></div></td>
-                <td><div class="leftFont"><span class="starColor">*</span>楼栋编号：</div></td>
-                <td><div><input name="buildingNum" value="${building.buildingNum}" maxlength="3" title="楼栋编号不能为空且为3个字符" class="form-control required"/></div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>呼叫号码：</div></td>
+                <td><div><input name="buildingNum" value="${building.buildingNum}" maxlength="3" title="呼叫号码不能为空且为3个字符" class="form-control required"/></div></td>
                 <td><div class="leftFont"><span class="starColor">*</span>层数：</div></td>
                 <td><div><input name="totalFloor" value="${building.totalFloor}" title="层数不能为空且为正整数" maxlength="4" class="form-control required"/></div></td>
               </tr>

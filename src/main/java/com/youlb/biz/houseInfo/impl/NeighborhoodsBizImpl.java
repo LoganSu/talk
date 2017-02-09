@@ -108,7 +108,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
       
       if(target.getUseDate()!=null){
     	  sb.append("useDate=?,");
-    	  list.add(target.getEndBuildDate());
+    	  list.add(target.getUseDate());
       }
       
       

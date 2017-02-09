@@ -50,5 +50,12 @@ public interface IRoomBiz extends IBaseBiz<Room> {
 	void saveBatch(List<RoomInfoDto> readExcelContent,Operator loginUser,String parentId) throws BizException, IllegalAccessException, InvocationTargetException, NumberFormatException, ParseException, JsonException, IOException;
 
 	List<RoomInfoDto> getRoomInfoDto(String parentId)throws BizException;
+	/**
+	 * 更新房间的sipNum
+	 * @param areaNum
+	 */
+	void updateSipNum(String oldNum,String newNum,int layer)throws BizException ;
+     
+	String getStartNum(String id,int layer)throws BizException ;
 
 }

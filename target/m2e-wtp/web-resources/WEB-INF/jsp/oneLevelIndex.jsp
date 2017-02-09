@@ -150,7 +150,14 @@
         <div class="header">
           <!-- <div class="wrap"> -->
                 <i class="logo"></i>
-                <h1>${loginUser.carrier.platformName}</h1>
+                <c:choose>
+                <c:when test="${loginUser.carrier.platformName!=null}">
+                   <h1>${loginUser.carrier.platformName}</h1>
+                </c:when>
+                <c:otherwise>
+                    <h1>赛翼智慧社区云平台</h1>
+                </c:otherwise>
+              </c:choose>
                 <div class="btnBox">
                     <a class="goHome" href="${path}/mc/user/index.do">
                         <i class=""></i>

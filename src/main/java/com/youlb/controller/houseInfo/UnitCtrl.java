@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.houseInfo.IBuildingBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
+import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.biz.houseInfo.IUnitBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.houseInfo.Building;
 import com.youlb.entity.houseInfo.Unit;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
@@ -41,6 +43,13 @@ public class UnitCtrl extends BaseCtrl {
 	private INeighborhoodsBiz neighborBiz;
 	@Autowired
 	private IDomainBiz domainBiz;
+	@Autowired
+    private IRoomBiz roomBiz;
+	
+	
+	public void setRoomBiz(IRoomBiz roomBiz) {
+		this.roomBiz = roomBiz;
+	}
 	public void setDomainBiz(IDomainBiz domainBiz) {
 		this.domainBiz = domainBiz;
 	}
@@ -111,8 +120,8 @@ public class UnitCtrl extends BaseCtrl {
 	    			return  super.message;
 	    		}
 			}
-	    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()!=2){
-	    		super.message = "单元编号不能为空且为2位数字!";
+	    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()>5){
+	    		super.message = "单元编号不能为空且小于5位数字!";
 	    		 return  super.message;
 	    	}
 	    	//同一个楼栋 单元编号不能相同
@@ -121,7 +130,16 @@ public class UnitCtrl extends BaseCtrl {
 				super.message = "单元编号已经存在！";
 				return  super.message;
 			}
-	    	
+			 //更新操作
+			if(StringUtils.isNotBlank(unit.getId())){
+				Unit a = unitBiz.get(unit.getId());
+				//编号有更新操作
+				if(!a.getUnitNum().equals(unit.getUnitNum())){
+					//查询父级编号
+					String startNum = roomBiz.getStartNum(unit.getId(),4);
+					roomBiz.updateSipNum(startNum+"-"+a.getUnitNum(),unit.getUnitNum(),4);
+				}
+			}
 	    		unitBiz.saveOrUpdate(unit,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

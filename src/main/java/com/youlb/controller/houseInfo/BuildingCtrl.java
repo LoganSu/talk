@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.houseInfo.IBuildingBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
+import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Building;
+import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
@@ -38,6 +40,13 @@ public class BuildingCtrl extends BaseCtrl {
 	private INeighborhoodsBiz neighborBiz;
 	@Autowired
 	private IDomainBiz domainBiz;
+	@Autowired
+    private IRoomBiz roomBiz;
+	
+	
+	public void setRoomBiz(IRoomBiz roomBiz) {
+		this.roomBiz = roomBiz;
+	}
 	public void setDomainBiz(IDomainBiz domainBiz) {
 		this.domainBiz = domainBiz;
 	}
@@ -120,6 +129,17 @@ public class BuildingCtrl extends BaseCtrl {
     			super.message = "楼高为数字类型！";
     			return  super.message;
     		}
+    		
+    		 //更新操作
+			if(StringUtils.isNotBlank(building.getId())){
+				Building a = buildingBiz.get(building.getId());
+				//编号有更新操作
+				if(!a.getBuildingNum().equals(building.getBuildingNum())){
+					//查询父级编号
+					String startNum = roomBiz.getStartNum(building.getId(),3);
+					roomBiz.updateSipNum(startNum+"-"+a.getBuildingNum(),building.getBuildingNum(),3);
+				}
+			}
     		buildingBiz.saveOrUpdate(building,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

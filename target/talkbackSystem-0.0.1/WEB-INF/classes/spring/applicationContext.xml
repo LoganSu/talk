@@ -18,7 +18,7 @@
 <!--   <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">  -->
      <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"> 
 <!--           <property name="jdbcUrl" value="jdbc:postgresql://db.ylb.cn:5432/freeswitch" /> -->
-          <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.78:5432/freeswitch" />
+          <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.242:5432/freeswitch" />
 <!--           <property name="jdbcUrl" value="jdbc:postgresql://192.168.1.242:5432/freeswitch" /> -->
           <property name="user" value="postgres" />
 		  <property name="password" value="wjp3557730" />
@@ -27,11 +27,11 @@
           <property name="driverClass" value="org.postgresql.Driver"></property>
 
 		  <!-- 最大链接数-->
-		  <property name="maxPoolSize" value="10" />
+		  <property name="maxPoolSize" value="200" />
 		  <!-- 最少链接数-->
 		  <property name="minPoolSize" value="5" />
 		  <!-- 初始化链接池 -->
-		  <property name="initialPoolSize" value="10" />
+		  <property name="initialPoolSize" value="200" />
 		  <!-- 连接池每次同时获得的链 接数 -->
 		  <property name="acquireIncrement" value="5" />
 		  <!-- 最大失效时间 -->

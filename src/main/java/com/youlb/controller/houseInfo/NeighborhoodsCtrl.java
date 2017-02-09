@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
+import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.houseInfo.Area;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
@@ -46,7 +48,13 @@ public class NeighborhoodsCtrl extends BaseCtrl {
 	private IDomainBiz domainBiz;
 	@Autowired
 	private IAreaBiz areaBiz;
+	@Autowired
+    private IRoomBiz roomBiz;
 	
+	
+	public void setRoomBiz(IRoomBiz roomBiz) {
+		this.roomBiz = roomBiz;
+	}
 	public void setAreaBiz(IAreaBiz areaBiz) {
 		this.areaBiz = areaBiz;
 	}
@@ -145,6 +153,17 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     		    			return  super.message;
     		        	}
     		        }
+		      //更新操作
+				if(StringUtils.isNotBlank(neighborhoods.getId())){
+					Neighborhoods a = neighborBiz.get(neighborhoods.getId());
+					//编号有更新操作
+					if(!a.getNeibNum().equals(neighborhoods.getNeibNum())){
+						//查询父级编号
+						String startNum = roomBiz.getStartNum(neighborhoods.getId(),2);
+						roomBiz.updateSipNum(startNum+"-"+a.getNeibNum(),neighborhoods.getNeibNum(),2);
+					}
+				}
+    				
 				neighborBiz.saveOrUpdate(neighborhoods,getLoginUser());
 			} catch (NumberFormatException e) {
  				e.printStackTrace();

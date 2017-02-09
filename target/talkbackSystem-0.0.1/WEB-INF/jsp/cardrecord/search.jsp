@@ -18,9 +18,9 @@ $(".datepicker").datepicker();
            <table>
               <tr>
                 <td><div class="firstFont">时间范围：</div></td>
-                <td><div><input name="startTime" class="form-control datepicker"/></div></td>
+                <td><div><input name="startTime" readonly="readonly" class="form-control datepicker"/></div></td>
                 <td><div class="firstFont">至</div></td>
-                <td><div><input name="endTime" class="form-control datepicker"/></div></td>
+                <td><div><input name="endTime" readonly="readonly" class="form-control datepicker"/></div></td>
                 <td><div class="leftFont">卡号：</div></td>
                 <td><div><input name="cardsn" class="form-control"/></div></td>
                 <td><div class="leftFont"><button class="btn btn-info btn-sm reset">重置</button></div></td>

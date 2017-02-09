@@ -127,6 +127,10 @@ public class HouseInfoTreeCtrl extends BaseCtrl {
 		List<QTree> treeList = new ArrayList<QTree>();
     	if(list!=null&&!list.isEmpty()){
 			for(Domain d:list){
+				//房间不显示
+				if(disRoom!=null&&disRoom&&d.getLayer()==4){
+					return treeList;
+				}
 				List<Domain> dlist = domainBiz.getDomainByParentId(d.getId(),loginUser,dwellerId);
 				QTree tree = new QTree();
 					tree.setText(d.getRemark());
@@ -148,10 +152,10 @@ public class HouseInfoTreeCtrl extends BaseCtrl {
 						url = "";
 						tList = null;
 					}
-					//房间不显示
-					if(disRoom!=null&&disRoom&&d.getLayer()==3){
-						  tList = null;
-					}
+//					//房间不显示
+//					if(disRoom!=null&&disRoom&&d.getLayer()==3){
+//						  tList = null;
+//					}
 					tree.setChildren(tList);
 					tree.setUrl(url);
 					treeList.add(tree);

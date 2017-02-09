@@ -153,7 +153,7 @@ public class RoomBizImpl implements IRoomBiz {
 	@Override
 	public void saveOrUpdate(Room room,Operator loginUser) throws NumberFormatException, BizException, ParseException, JsonException, IOException {
 		String sipNum = getSipNum(room.getParentId());
-		room.setSipNum(sipNum+room.getRoomNum());//设置sip账号
+		room.setSipNum(sipNum+"-"+room.getRoomNum());//设置sip账号
 		//add
 		if(StringUtils.isBlank(room.getId())){
 //			Session session = domainSqlDao.getCurrSession();
@@ -253,7 +253,7 @@ public class RoomBizImpl implements IRoomBiz {
 		List<Object[]> list = domainSqlDao.pageFindBySql(sql, new Object[]{domainId});
 		StringBuilder sb = new StringBuilder();
 		getSipNumDetail(list.get(0),sb);
-		return sb.toString();
+		return sb.toString().substring(1);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class RoomBizImpl implements IRoomBiz {
 			List<Object[]> list = domainSqlDao.pageFindBySql(sql.toString(), new Object[]{id});
 			if(!list.isEmpty()){
 				Object[] subObj = list.get(0);
-				sb.insert(0, subObj[2]);
+				sb.insert(0, "-"+subObj[2]);
 				if(subObj[1]!=null){
 					getSipNumDetail(subObj, sb);
 				}
@@ -464,6 +464,83 @@ public class RoomBizImpl implements IRoomBiz {
 			 }
 		 }
 		return list;
+	}
+    /**
+     * 更新房间的sipNum
+     * @throws BizException 
+     */
+	@Override
+	public void updateSipNum(String oldNum,String newNum,int layer) throws BizException {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" update t_room set fsipnum= ");
+		//地区修改
+		if(layer==1){
+			sb.append("? ||'-'||split_part(fsipnum, '-', 2)||'-'||split_part(fsipnum, '-', 3)||'-'||split_part(fsipnum, '-', 4)||'-'||split_part(fsipnum, '-', 5)");
+		}else if(layer==2){
+			//社区修改
+			sb.append("split_part(fsipnum, '-', 1) ||'-'|| ? ||'-'||split_part(fsipnum, '-', 3)||'-'||split_part(fsipnum, '-', 4)||'-'||split_part(fsipnum, '-', 5)");
+		}else if(layer==3){
+			//楼栋修改
+			sb.append("split_part(fsipnum, '-', 1) ||'-'||split_part(fsipnum, '-', 2)||'-'|| ? ||'-'||split_part(fsipnum, '-', 4)||'-'||split_part(fsipnum, '-', 5)");
+		}else if(layer==4){
+			//单元修改
+			sb.append("split_part(fsipnum, '-', 1) ||'-'||split_part(fsipnum, '-', 2)||'-'||split_part(fsipnum, '-', 3)||'-'|| ? ||'-'||split_part(fsipnum, '-', 5)");
+		}
+		
+		sb.append(" where fsipnum like ?");
+		roomSqlDao.updateSQL(sb.toString(), new Object[]{newNum,oldNum+"%"});
+	}
+
+	@Override
+	public String getStartNum(String id, int layer) throws BizException {
+		if(layer==2){
+			StringBuilder sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) ")
+			.append("SELECT a.fareanum FROM r INNER JOIN t_area a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> areaList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+			if(areaList!=null&&!areaList.isEmpty()){
+				return areaList.get(0);
+			}
+		}else if(layer==3){
+			StringBuilder sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) ")
+			.append("SELECT a.fareanum FROM r INNER JOIN t_area a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> areaList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+			
+			 sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
+			.append("SELECT a.fneibnum FROM r INNER JOIN t_neighborhoods a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> neibList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+			if(areaList!=null&&!areaList.isEmpty()&&neibList!=null&&!neibList.isEmpty()){
+				return areaList.get(0)+"-"+neibList.get(0);
+			}
+		}else if(layer==4){
+			StringBuilder sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) ")
+			.append("SELECT a.fareanum FROM r INNER JOIN t_area a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> areaList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+
+			sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
+			.append("SELECT a.fneibnum FROM r INNER JOIN t_neighborhoods a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> neibList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+
+			sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid = ? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid ) ")
+			.append("SELECT a.fbuildingnum FROM r INNER JOIN t_building a on a.id=r.fentityid where r.fentityid is not null");
+			List<String> buildingList = roomSqlDao.pageFindBySql(sb.toString(),new Object[]{id});
+			if(areaList!=null&&!areaList.isEmpty()&&neibList!=null&&!neibList.isEmpty()&&buildingList!=null&&!buildingList.isEmpty()){
+				return areaList.get(0)+"-"+neibList.get(0)+"-"+buildingList.get(0);
+			}
+		}
+		
+		return null;
 	}
 
 }

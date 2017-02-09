@@ -242,8 +242,8 @@ public class AppManageBiz implements IAppManageBiz {
 					 ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
 					 if(resultDto!=null){
 						 if(!"0".equals(resultDto.getCode())){
-							 logger.error("信息推送出错！");
-							 throw new BizException("信息推送出错");
+							 logger.error(resultDto.getMsg());
+							 throw new BizException(resultDto.getMsg());
 						 }
 					 }
 				 } 

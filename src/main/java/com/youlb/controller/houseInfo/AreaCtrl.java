@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
+import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Address;
 import com.youlb.entity.houseInfo.Area;
@@ -34,6 +35,8 @@ public class AreaCtrl extends BaseCtrl {
 	@Autowired
 	private IAreaBiz areaBiz;
 	@Autowired
+    private IRoomBiz roomBiz;
+	@Autowired
 	private IDomainBiz domainBiz;
 	public void setAreaBiz(IAreaBiz areaBiz) {
 		this.areaBiz = areaBiz;
@@ -41,9 +44,9 @@ public class AreaCtrl extends BaseCtrl {
 	public void setDomainBiz(IDomainBiz domainBiz) {
 		this.domainBiz = domainBiz;
 	}
-
-
-
+	public void setRoomBiz(IRoomBiz roomBiz) {
+		this.roomBiz = roomBiz;
+	}
 	/**
 	 * 显示table数据
 	 * @return
@@ -118,6 +121,16 @@ public class AreaCtrl extends BaseCtrl {
 				super.message = "城市已存在！";
 				return  super.message;
 			}
+			
+			//更新操作
+			if(StringUtils.isNotBlank(area.getId())){
+				Area a = areaBiz.get(area.getId());
+				//编号有更新操作
+				if(!a.getAreaNum().equals(area.getAreaNum())){
+					roomBiz.updateSipNum(a.getAreaNum(),area.getAreaNum(),1);
+				}
+			}
+			
     		areaBiz.saveOrUpdate(area,getLoginUser());
 		} catch (Exception e) {
 			super.message = "操作失败！";

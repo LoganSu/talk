@@ -90,10 +90,10 @@ public class DwellerCtrl extends BaseCtrl {
     public String save(Dweller dweller,Model model){
     	try {
     		Operator loginUser = getLoginUser();
-//    		if(dweller.getTreecheckbox()==null||dweller.getTreecheckbox().isEmpty()){
-//    			super.message = "请选择地址！";
-//    			return  super.message;
-//    		}
+    		if(dweller.getTreecheckbox()==null||dweller.getTreecheckbox().isEmpty()){
+    			super.message = "请选择地址！";
+    			return  super.message;
+    		}
     		if(StringUtils.isBlank(dweller.getFname())){
 	    		super.message = "姓名不能为空！";
 	    		return  super.message;

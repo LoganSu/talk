@@ -7,11 +7,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.countManage.ISipCountBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.appManage.AppManage;
 import com.youlb.entity.countManage.SipCount;
 import com.youlb.utils.exception.BizException;
 @Controller
@@ -84,8 +86,42 @@ public class SipCountCtrl extends BaseCtrl {
 			return address;
 		} catch (BizException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace(); 
 		}
 		return null;
 	}
+	
+	 /**
+     * 跳转到添加、更新页面
+     * @return
+     */
+    @RequestMapping("/toRestDevice.do")
+   	public String toRestDevice(String[] ids,SipCount sipCount,Model model){
+    	if(ids!=null&&ids.length==1){
+    		model.addAttribute("username",ids[0]);
+    	}
+//    	String opraterType = appManage.getOpraterType();
+//    	try {
+//	    	if(ids!=null&&ids.length>0){
+//				appManage = appManageBiz.get(ids[0]);
+//	    		appManage.setOpraterType(opraterType);
+//	    	}
+//	    	if(SysStatic.two.equals(appManage.getAppType())){
+//	    		List<AppManage> appList = appManageBiz.getOldVersion();
+//	    		model.addAttribute("appList",appList);
+//	    	}
+//	    	//门口机需要选择类型
+//	    	if("1".equals(appManage.getAppType())){
+//	    		//获取软件型号列表
+//	    		List<String> softwareTypeList = doorMachineBiz.getSoftwareTypeList();
+//	    		model.addAttribute("softwareTypeList",softwareTypeList);
+//	    	}
+//	    	model.addAttribute("appManage",appManage);
+//    	} catch (BizException e) {
+//    		// TODO Auto-generated catch block
+//    		e.printStackTrace();
+//    	}
+   		return "/deviceCountSip/resetDevice";
+   	}
+
 }

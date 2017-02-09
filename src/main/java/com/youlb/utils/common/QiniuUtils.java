@@ -26,9 +26,9 @@ public class QiniuUtils {
 	 public static String ACCESS_KEY = "hojgJGktFTEHjSsGFJWHtkj7hgsiVY9NNZFWW7Zs";
 	 public static String SECRET_KEY = "G-9k5uef_zxofDvDAn84rj8qCiVJgiBuGAOTeoEh";
 	  //要上传的空间
-	 public static String bucketname = "sayee";
+	 public static String bucketname = "";
 	 //url
-	 public static String URL = "http://upload.gdsayee.com.cn/";
+	 public static String URL = "";
 	  //密钥配置
 	 public static  Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
 

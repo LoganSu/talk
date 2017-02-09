@@ -94,9 +94,9 @@
   				$.each($data,function(index,obj){
   					arr.push("&ids="+obj);
   				})
-//  				alert(arr.join("").toString());
+  				var p = arr.join("").toString();
   				//获取点数据
-  				$.post($path+'/mc/realTimeMonitor/getData.do',arr.toString(),function($data){
+  				$.post($path+'/mc/realTimeMonitor/getData.do',p,function($data){
   					marker_function(map,$data);
   					//删除作用域里面的id
   					$.post($path+'/mc/realTimeMonitor/removeRealTimeMonitorId.do',arr.toString(),function($d){})
