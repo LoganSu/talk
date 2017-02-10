@@ -102,13 +102,13 @@ public class InitServlet extends HttpServlet {
 			logger.error("初始定时器出错");
 			e.printStackTrace();
 		}
-		InitData init = new InitData();
-		try {
-			init.InitRoomSipGroupDate(app);
-		} catch (ParseException | IOException | BizException | JsonException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		InitData init = new InitData();
+//		try {
+//			init.InitRoomSipGroupDate(app);
+//		} catch (ParseException | IOException | BizException | JsonException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
  	}
 	
 	private static void initQuartzService(ServletConfig config) throws IOException, ClassNotFoundException{
