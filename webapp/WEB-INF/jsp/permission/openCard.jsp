@@ -21,7 +21,7 @@ $(function(){
 		   }
 		   var cardId;
 			  try{
-				  cardId = myactivex.GetCardId();
+				  cardId = myactivex.GetCardId2();
 			  }catch(e){
 				  hiAlert("提示","读取卡片id出错！");
 					     return false;
@@ -32,41 +32,52 @@ $(function(){
 			  }
            var obj = jQuery.parseJSON(connectReader);
 		   if(obj.code=='0'){
-			   //加载key
-               $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']").val(),function($data){
-//             	   alert($data);
-            	   //有秘钥的初始化key
-            	   if($data){
-	            	   var loadKey;
-	            	   var indata = "{\"key\":\""+$data+"\"}";
-	          	       try{ 
-	          		          loadKey = myactivex.LoadKey(indata);
-	            	   }catch(e){
-	            		   hiAlert("提示","加载密钥出错！");
-	       				     return false;
-	            	   }
-//             	       obj = jQuery.parseJSON(loadKey);
-					   //验证卡片是否合法
-					   obj = jQuery.parseJSON(myactivex.IsValidCard());
-					   alert(myactivex.IsValidCard());
-					   if(obj.code!='0'){
-						   try{
-							   alert(myactivex.InitCardKey_1());
-							   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
-						      if(obj.code!='0'){
-						    	  hiAlert("提示","此为非法卡片，请更换卡片！");
+			   //判断卡片是否已经初始化秘钥
+			   $.post($path+"/mc/permission/isInitKey.do?a="+Math.random(),"cardSn="+jQuery.parseJSON(cardId).result.card_id+"&roomId="+$("#openCardForm [name='roomId']").val(),function($a){
+// 				   alert($a);
+				   //没有加载秘钥且是同一社区的的卡
+				   if($a=='0'){
+					   //加载key
+		               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+// 		            	   alert($data);
+		            	   //有秘钥的初始化key
+		            	   if($data){
+			            	   var loadKey;
+			            	   var indata = "{\"key\":\""+$data+"\"}";
+			          	       try{ 
+			          		          loadKey = myactivex.LoadKey(indata);
+			            	   }catch(e){
+			            		   hiAlert("提示","加载密钥出错！");
 			       				     return false;
-						      }
-						   }catch(e){
-		            		   hiAlert("提示","初始化卡片出错！");
-		       				     return false;
+			            	   }
+		//             	       obj = jQuery.parseJSON(loadKey);
+							   //验证卡片是否合法
+							   obj = jQuery.parseJSON(myactivex.IsValidCard());
+		// 					   alert(myactivex.IsValidCard());
+							   if(obj.code!='0'){
+								   try{
+		// 							   alert(myactivex.InitCardKey_1());
+									   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
+								      if(obj.code!='0'){
+								    	  hiAlert("提示","此为非法卡片，请更换卡片！");
+					       				     return false;
+								      }
+								   }catch(e){
+				            		   hiAlert("提示","初始化卡片出错！");
+				       				     return false;
+				            	   }
+							   }
 		            	   }
-					   }
-            	   }
-					   //如果不合法初始化卡片
+							   //如果不合法初始化卡片
+								writeCard(cardId);
+		            	   
+		               })
+				   }else if($a=='1'){
 						writeCard(cardId);
-            	   
-               })
+				   }else{
+					   hiAlert("提示",$a);
+				   }
+			   })
 		   }else{
 			   hiAlert("提示","发卡器连接异常！");
 		   } 
@@ -84,7 +95,7 @@ $(function(){
 // 		   }
 // 		   var cardId;
 // 			  try{
-// 				  cardId = myactivex.GetCardId();
+// 				  cardId = myactivex.GetCardId2();
 // 			  }catch(e){
 // 				  hiAlert("提示","读取卡片id出错！");
 // 					     return false;
@@ -137,7 +148,7 @@ $(function(){
 		  var roomId = $("#openCardForm [name='roomId']").val();
 		  if(obj.code=='0'&&card_id){
 		  $("#openCardForm .cardSn").val(card_id);
-			  $.post($path+"/mc/permission/connectCardMachine.do","cardSn="+card_id+"&roomId="+roomId,function($data){
+			  $.post($path+"/mc/permission/connectCardMachine.do?a="+Math.random(),"cardSn="+card_id+"&roomId="+roomId,function($data){
 				  if(!$data){
 					  hiAlert("提示","该卡已经绑定此房产，请更换新卡！");
  					   return false;
@@ -156,7 +167,7 @@ $(function(){
 			return false;
 		}
 		//保存卡片信息
-		$.post($path+"/mc/permission/writeCard.do",data,function($data){
+		$.post($path+"/mc/permission/writeCard.do?a="+Math.random(),data,function($data){
 			if($data=="1"){
 		       hiAlert("提示","该卡已经绑定此房产，请更换新卡！");
 		       return false;

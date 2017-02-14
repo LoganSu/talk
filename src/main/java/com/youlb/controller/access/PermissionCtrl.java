@@ -322,5 +322,51 @@ public class PermissionCtrl extends BaseCtrl {
     	return super.message;
     }
     
-    
+		/**
+	     * 判断卡片是否已经初始化秘钥
+	     * @param cardInfo
+	     * @param model
+	     * @return
+	     */
+	     
+	    @RequestMapping("/isInitKey.do")
+	    @ResponseBody
+	    public String isInitKey(CardInfo cardInfo,Model model){
+	    	if(StringUtils.isNotBlank(cardInfo.getCardSn())&&StringUtils.isNotBlank(cardInfo.getRoomId())){
+	    		try {
+					return	permissionBiz.isInitKey(cardInfo.getCardSn(),cardInfo.getRoomId());
+				} catch (BizException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}else{
+	    		return "卡片id和房间不能为空！";
+	    	}
+	    	return null;
+    }
+	    
+	    
+	    /**
+	     * 判断是不是最后注销的卡
+	     * @param cardInfo
+	     * @param model
+	     * @return
+	     */
+	     
+	    @RequestMapping("/isLastCard.do")
+	    @ResponseBody
+	    public String isLastCard(CardInfo cardInfo,Model model){
+	    	if(StringUtils.isNotBlank(cardInfo.getCardSn())){
+	    		try {
+					return	permissionBiz.isLastCard(cardInfo.getCardSn());
+				} catch (BizException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}else{
+	    		return "卡片id不能为空！";
+	    	}
+	    	return null;
+    }
+	    
 }

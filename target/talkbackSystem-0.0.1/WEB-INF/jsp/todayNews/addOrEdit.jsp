@@ -141,7 +141,8 @@ private String htmlspecialchars(String str) {
 			  				   hiAlert("提示","内容不能为空");
 			  			        return false;
 			  				   }
-			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html(),function($data){
+			  			     var regExp = new RegExp("&nbsp;", "g");
+			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html().replace(regExp, " "),function($data){
 			     				 if(!$data){
 									 window.hideModal("unnormalModal");
 									 refresh();
@@ -190,7 +191,9 @@ private String htmlspecialchars(String str) {
 				   hiAlert("提示","内容不能为空");
 			        return false;
 				  }
-   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html(),function($data){
+			   var regExp = new RegExp("&nbsp;", "g");
+//   	    	 alert(editor.html().replace(regExp, " "));
+   			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html().replace(regExp, " "),function($data){
    				 if(!$data){
 						 window.hideModal("unnormalModal");
 						 refresh();

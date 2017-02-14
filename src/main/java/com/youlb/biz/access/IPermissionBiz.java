@@ -100,5 +100,20 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 
    
 	void updateCardInfo(CardInfo cardInfo)throws BizException;
+
+	/**
+	 * 判断卡片是否已经初始化秘钥
+	 * @param cardSn
+	 * @return
+	 * @throws BizException
+	 */
+	String isInitKey(String cardSn,String roomId)throws BizException;
+
+	/**
+	 * 判断是不是最后注销的卡
+	 * @param cardSn
+	 * @return
+	 */
+	String isLastCard(String cardSn)throws BizException;
    
 }

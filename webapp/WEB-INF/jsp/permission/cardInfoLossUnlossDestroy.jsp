@@ -61,85 +61,89 @@ $(function(){
 		   var data = $("#lossAndOpenForm").serialize();
 		   //注销需要清空卡片秘钥
 		   var cardStatus = $("#lossAndOpenForm [name='cardStatus']").val();
-		   if(cardStatus=='3'){
-			   var connectReader;
-			   try{
-				   connectReader = myactivex.ConnectReader();
-			   }catch(e){
-				   hiAlert("提示","发卡器连接出错！");
-					return false;
-			   }
-			   //加载key
-               $.post($path+"/mc/permission/getKey.do","roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($key){
-            	   if($key){
-	            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
-	        			   if($data){
-	        			        hiAlert("提示",$data);
-	        			   }else{
-	        				   //有秘钥的初始化key
-	                    	   if($key){
-	        	            	   var loadKey,RestoreCardKey,obj;
-// 	        	            	   alert($key);
-	        	            	   var indata = "{\"key\":\""+$key+"\"}";
-	        	          	       try{ 
-	        	          		          loadKey = myactivex.LoadKey(indata);
-	        	          		         obj = jQuery.parseJSON(loadKey);
-	        	          		         if(obj.code!='0'){
-	        						    	  hiAlert("提示","加载密钥出错！");
-	        			       				     return false;
-	        						      }
-	        	            	   }catch(e){
-	        	            		   hiAlert("提示",obj.msg);
-	        	       				     return false;
-	        	            	   }
-	        	            	 }
-	        	            	   try {
-	        	            		    RestoreCardKey = myactivex.RestoreCardKey();
-	        	            		    obj = jQuery.parseJSON(RestoreCardKey);
-	        	            		    alert(obj.toSource());
-	        	            		    if(obj.code!='0'){
-	        						    	  hiAlert("提示","注销卡片失败！");
-	        			       				     return false;
-	        						      }
-	        		       			} catch (e) {
-	        		       			   hiAlert("提示",obj.msg);
-	        		       			   return false;
-	        		       			}
-	        				   
-	              			   $("#unnormalModal").modal("hide");
-	              			  $("#tableShowList").bootstrapTable('refresh', {
-	              				url: $path+'/mc/room/showList.do',
-	              			});
-	        			   }
-	        		   });
-            	   }else{
-            		   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
-	        			   if($data){
-	        			        hiAlert("提示",$data);
-	        			   }else{
-	              			    $("#unnormalModal").modal("hide");
-	              			   $("#tableShowList").bootstrapTable('refresh', {
-	              				url: $path+'/mc/room/showList.do',
-	              			});
-	        			   }
-	        		   });
-            		   
-            	   }
-            	   
-               })
-			   
-		   }else{
-			   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
-    			   if($data){
-    			        hiAlert("提示",$data);
-    			   }else{
-          			   $("#unnormalModal").modal("hide");
-          			  $("#tableShowList").bootstrapTable('refresh', {
-          				url: $path+'/mc/room/showList.do',
-          			});
-    			   }
-    		   });
-		   }
+			   //最后一张卡注销时还原卡片
+			   $.post($path+"/mc/permission/isLastCard.do?a="+Math.random(),data,function($a){
+					   if(cardStatus=='3'&&$a=="0"){
+						   var connectReader;
+						   try{
+							   connectReader = myactivex.ConnectReader();
+						   }catch(e){
+							   hiAlert("提示","发卡器连接出错！");
+								return false;
+						   }
+						   //加载key
+			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($key){
+			            	   if($key){
+				            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
+				        			   if($data){
+				        			        hiAlert("提示",$data);
+				        			   }else{
+				        				   //有秘钥的初始化key
+				                    	   if($key){
+				        	            	   var loadKey,RestoreCardKey,obj;
+			// 	        	            	   alert($key);
+				        	            	   var indata = "{\"key\":\""+$key+"\"}";
+				        	          	       try{
+				        	          		          loadKey = myactivex.LoadKey(indata);
+				        	          		         obj = jQuery.parseJSON(loadKey);
+				        	          		         if(obj.code!='0'){
+				        						    	  hiAlert("提示","秘钥不正确！");
+				        			       				     return false;
+				        						      }
+				        	            	   }catch(e){
+				        	            		   hiAlert("提示","加载密钥出错！");
+				        	       				     return false;
+				        	            	   }
+				        	            	 }
+				        	            	   try {
+				        	            		    RestoreCardKey = myactivex.RestoreCardKey();
+				        	            		    obj = jQuery.parseJSON(RestoreCardKey);
+			// 	        	            		    alert(obj.toSource());
+				        	            		    if(obj.code!='0'){
+				        						    	  hiAlert("提示","注销卡片失败！");
+				        			       				     return false;
+				        						      }
+				        		       			} catch (e) {
+				        		       			   hiAlert("提示","卡片秘钥还原失败！");
+				        		       			   return false;
+				        		       			}
+				        				   
+				              			   $("#unnormalModal").modal("hide");
+				              			  $("#tableShowList").bootstrapTable('refresh', {
+				              				url: $path+'/mc/room/showList.do',
+				              			});
+				        			   }
+				        		   });
+			            	   }else{
+			            		   $.post($path+"/mc/permission/lossUnlossDestroy.do?a="+Math.random(),data,function($data){
+				        			   if($data){
+				        			        hiAlert("提示",$data);
+				        			   }else{
+				              			    $("#unnormalModal").modal("hide");
+				              			   $("#tableShowList").bootstrapTable('refresh', {
+				              				url: $path+'/mc/room/showList.do',
+				              			});
+				        			   }
+				        		   });
+			            		   
+			            	   }
+			            	   
+			               })
+						   
+					   }else{
+						   $.post($path+"/mc/permission/lossUnlossDestroy.do?a="+Math.random(),data,function($data){
+			    			   if($data){
+			    			        hiAlert("提示",$data);
+			    			   }else{
+			          			   $("#unnormalModal").modal("hide");
+			          			  $("#tableShowList").bootstrapTable('refresh', {
+			          				url: $path+'/mc/room/showList.do',
+			          			});
+			    			   }
+			    		   });
+					   }
+					   
+			   })
 		   
 	  })
 	 

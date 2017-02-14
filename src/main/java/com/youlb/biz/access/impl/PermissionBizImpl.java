@@ -421,8 +421,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 			}
 		}else{
 			 //(对卡操作)
-			 sb.append(" where t.cardSn= ? ");
-			 cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn()});
+			 sb.append(" where t.cardSn= ? and t.cardStatus!=? ");
+			 cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),"3"});
 			 deviceCount = findDomainSn(cardInfo.getCardSn());
 		}
 		if(StringUtils.isBlank(deviceCount)){
@@ -755,4 +755,53 @@ public class PermissionBizImpl implements IPermissionBiz {
 //		  e.printStackTrace();
 //	  }
 //}
+	/**
+	 * 判断卡片是否已经初始化秘钥
+	 */
+	@Override
+	public String isInitKey(String cardSn,String roomId) throws BizException { 
+		String sql ="SELECT froomid from t_cardinfo where fcardsn=? and fcardstatus!=?";
+		List<String> list = cardSqlDao.pageFindBySql(sql, new Object[]{cardSn,SysStatic.CANCEL});
+		//获取房间的社区域id
+		String neibId = getNeibDomainId(roomId);
+		if(list!=null&&!list.isEmpty()){
+			//获取已经绑定房间的社区域id
+			String alreadyNeibId = getNeibDomainId(list.get(0));
+			if(alreadyNeibId!=null&&alreadyNeibId.equals(neibId)){
+				return "1";
+			}else{
+				return "一张卡片只能在一个社区使用！";
+			}
+		}
+		return "0";
+	}
+	/**
+	 * 判断是不是最后注销的卡
+	 */
+	@Override
+	public String isLastCard(String cardSn) throws BizException {
+		String sql ="SELECT fcardsn from t_cardinfo where fcardsn=? and fcardstatus!=?";
+		List<String> list = cardSqlDao.pageFindBySql(sql, new Object[]{cardSn,SysStatic.CANCEL});
+		if(list!=null&&list.size()==1){
+			return "0";
+		}
+		return "1";
+	}
+	
+	/**
+	 * 通过房间id获取社区域id
+	 * @param roomId
+	 * @return
+	 * @throws BizException
+	 */
+	public String getNeibDomainId(String roomId) throws BizException{
+		StringBuffer sb = new StringBuffer();
+		sb.append("WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  r.id FROM r where flayer=1");
+		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{roomId});
+		 if(listObj!=null&&!listObj.isEmpty()){
+			 return listObj.get(0);
+		 }
+		return "";
+	}
 }
