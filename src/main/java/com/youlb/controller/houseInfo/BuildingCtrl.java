@@ -112,13 +112,13 @@ public class BuildingCtrl extends BaseCtrl {
 	    		}
     		}
     		if(!RegexpUtils.checkNumAndLetter(building.getBuildingNum(), 3, 3)){
-    			super.message = "楼栋编号不能为空且为3个字符！";
+    			super.message = "呼叫号码不能为空且为3个字符！";
     			return  super.message;
     		}
     		//同一个社区 楼栋编号不能相同
     		boolean b = buildingBiz.checkBuildingNum(building);
     		if(b){
-    			super.message = "楼栋编号已经存在！";
+    			super.message = "呼叫号码已经存在！";
     			return  super.message;
     		}
     		if(!RegexpUtils.checkNumber(building.getTotalFloor()+"")||Integer.parseInt(building.getTotalFloor())<0){

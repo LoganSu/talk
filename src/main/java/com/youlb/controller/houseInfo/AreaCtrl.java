@@ -106,12 +106,12 @@ public class AreaCtrl extends BaseCtrl {
    			    return  super.message;
     		}
     		if(StringUtils.isBlank(area.getAreaNum())||area.getAreaNum().length()!=3){
-    			super.message = "编号不能为空且为3个数字，请填写区号！";
+    			super.message = "呼叫号码不能为空且为3个数字，请填写区号！";
    			    return  super.message;
     		}else{
     			boolean b = areaBiz.checkAreaNumFromArea(area);
     			if(b){
-    				super.message = "编号已经存在！";
+    				super.message = "呼叫号码已经存在！";
        			    return  super.message;
     			}
     		}

@@ -121,13 +121,13 @@ public class UnitCtrl extends BaseCtrl {
 	    		}
 			}
 	    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()>5){
-	    		super.message = "单元编号不能为空且小于5位数字!";
+	    		super.message = "呼叫号码不能为空且小于5位数字!";
 	    		 return  super.message;
 	    	}
 	    	//同一个楼栋 单元编号不能相同
 			boolean b = unitBiz.checkUnitNum(unit);
 			if(b){
-				super.message = "单元编号已经存在！";
+				super.message = "呼叫号码已经存在！";
 				return  super.message;
 			}
 			 //更新操作

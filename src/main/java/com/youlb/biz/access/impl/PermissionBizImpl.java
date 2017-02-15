@@ -290,7 +290,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 		//推送白名单
 		
 		//指定发送设备（找到设备账号）
-		String deviceCount = findDomainSn(cardInfo.getCardSn());
+		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getRoomId());
 		logger.info("门口机账号："+deviceCount);
 		//没有设备账号 说明没有安装没口机
 		if(StringUtils.isBlank(deviceCount)){
@@ -326,10 +326,42 @@ public class PermissionBizImpl implements IPermissionBiz {
 	}
 	
 	@Override
-	public void updateCardInfo(CardInfo cardInfo) throws BizException {
+	public void updateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
 		String update = "update CardInfo set cardStatus=? where cardSn=? and roomId=? ";
 		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getCardSn(),cardInfo.getRoomId()});
-		
+		//指定发送设备（找到设备账号）
+		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getRoomId());
+		logger.info("门口机账号："+deviceCount);
+		//没有设备账号 说明没有安装没口机
+		if(StringUtils.isBlank(deviceCount)){
+			logger.info("没有安装门口机，设备账号为空");
+			throw new BizException("没有安装门口机，设备账号为空");
+		}else{
+			CloseableHttpClient httpClient = HttpClients.createDefault();
+			HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");
+			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+			logger.info("白名单推送设备："+deviceCount);
+			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
+			BlackListData bcl = new BlackListData();
+			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
+			logger.info("白名单："+JsonUtils.toJson(bcl));
+			formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
+			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+			request.setEntity(uefEntity);
+			CloseableHttpResponse response = httpClient.execute(request);
+			if(response.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = response.getEntity();
+				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+				if(resultDto!=null){
+					if(!"0".equals(resultDto.getCode())&&!"3001".equals(resultDto.getCode())){//设备没有登录也发卡成功
+						logger.error(resultDto.getMsg());
+						throw new BizException(resultDto.getMsg());
+					}
+				}else{
+					logger.info("白名单推送成功！");
+				}
+			} 
+		}
 	}
     /**
      * 获取卡片信息
@@ -398,7 +430,6 @@ public class PermissionBizImpl implements IPermissionBiz {
 	@Override
 	public void lossUnlossDestroy(CardInfo cardInfo) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
 		StringBuilder sb = new StringBuilder();
-		String deviceCount ="";
 		sb.append("update CardInfo t set t.cardStatus=?");
 		//如果是注销 需要解除卡跟人和卡跟房子的关联关系(注销需要对房间单独操作)
 		if(SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
@@ -412,51 +443,53 @@ public class PermissionBizImpl implements IPermissionBiz {
 //			cardSqlDao.updateSQL(update, new Object[]{cardInfo.getDwellerId()});
 			sb.append(" where t.cardSn= ? and roomId=?");
 			cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getRoomId()});
-			//推最近的一个门口机
+			//注销不做推送
 			//获取最近门口机的域id
-			String domainId = getNearDevice(cardInfo);
-			if(StringUtils.isNotBlank(domainId)){
-				//获取需要推送的设备账号
-				deviceCount= getDeviceCount(domainId);
-			}
+//			String domainId = getNearDevice(cardInfo);
+//			if(StringUtils.isNotBlank(domainId)){
+//				//获取需要推送的设备账号
+//				deviceCount= getDeviceCount(domainId);
+//			}
 		}else{
 			 //(对卡操作)
 			 sb.append(" where t.cardSn= ? and t.cardStatus!=? ");
 			 cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),"3"});
-			 deviceCount = findDomainSn(cardInfo.getCardSn());
-		}
-		if(StringUtils.isBlank(deviceCount)){
-			throw new BizException("没有需要推送的设备账号");
-		}
-		//推送通知
-//		if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.LIVING.equals(cardInfo.getCardStatus())){
-			//指定发送设备（找到设备账号）
-			CloseableHttpClient httpClient = HttpClients.createDefault();
-			HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");
-			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
-			BlackListData bcl = new BlackListData();
-			//挂失或者注销
-			if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
-				bcl.addBc(new BlackListData.BlackCardData(1, cardInfo.getCardSn()));
-			//解挂		
-			}else{
-				bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
-			}
-			formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
-			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-			request.setEntity(uefEntity);
-			CloseableHttpResponse response = httpClient.execute(request);
-			if(response.getStatusLine().getStatusCode()!=200){
-				HttpEntity entity_rsp = response.getEntity();
-				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
-				if(resultDto!=null){
-					if(!"0".equals(resultDto.getCode())){
-						throw new BizException("信息推送"+resultDto.getMsg());
-					}
+			 String deviceCount = findDomainSn(cardInfo.getCardSn());
+			 
+				if(StringUtils.isBlank(deviceCount)){
+					throw new BizException("没有需要推送的设备账号");
 				}
-			}
-//		}
+				//推送通知
+//				if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.LIVING.equals(cardInfo.getCardStatus())){
+					//指定发送设备(找到设备账号)
+					CloseableHttpClient httpClient = HttpClients.createDefault();
+					HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");
+					List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+					formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
+					BlackListData bcl = new BlackListData();
+					//挂失或者注销
+					if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
+						bcl.addBc(new BlackListData.BlackCardData(1, cardInfo.getCardSn()));
+					//解挂
+					}else{
+						bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
+					}
+					formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
+					UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+					request.setEntity(uefEntity);
+					CloseableHttpResponse response = httpClient.execute(request);
+					if(response.getStatusLine().getStatusCode()!=200){
+						HttpEntity entity_rsp = response.getEntity();
+						ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+						if(resultDto!=null){
+							if(!"0".equals(resultDto.getCode())){
+								throw new BizException("信息推送"+resultDto.getMsg());
+							}
+						}
+					}
+//				}
+		}
+	
 	}
 	
 	/**
@@ -496,7 +529,6 @@ public class PermissionBizImpl implements IPermissionBiz {
 		}
 		return null;
 	}
-	
 	/**通过卡片序列号找到该卡拥有权限的domainsn 多个使用,分隔
 	 * @param cardSn
 	 * @return
@@ -510,6 +542,29 @@ public class PermissionBizImpl implements IPermissionBiz {
 		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
 		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
 		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn});
+		if(deviceCountList!=null&&!deviceCountList.isEmpty()){
+			StringBuilder deviceCountStr = new StringBuilder();
+			for(String deviceCount:deviceCountList){
+				deviceCountStr.append(deviceCount+",");
+			}
+			deviceCountStr.deleteCharAt(deviceCountStr.length()-1);
+			return deviceCountStr.toString();
+		}
+		return null;
+	}
+	/**通过卡片序列号找到该卡拥有权限的domainsn 多个使用,分隔
+	 * @param cardSn
+	 * @return
+	 * @throws BizException 
+	 */
+	private String findDomainSn(String cardSn,String roomId) throws BizException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
+		.append("WITH RECURSIVE r AS ( ")
+		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.fentityid=ci.froomid where ci.fcardsn=? and ci.froomid=? ")
+		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
+		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
+		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn,roomId});
 		if(deviceCountList!=null&&!deviceCountList.isEmpty()){
 			StringBuilder deviceCountStr = new StringBuilder();
 			for(String deviceCount:deviceCountList){

@@ -56,8 +56,8 @@ public class SmsUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String message = "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈";
-		Boolean b = sendSMS("15974105603", message);
+		String message = "大boss，收到信息微信回复一下";
+		Boolean b = sendSMS("17702030597", message);
 		System.out.println(b);
 	}
 	

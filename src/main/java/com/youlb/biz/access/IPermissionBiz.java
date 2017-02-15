@@ -1,6 +1,7 @@
 package com.youlb.biz.access;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -99,7 +100,7 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	CardInfo getImg(Integer id) throws BizException;
 
    
-	void updateCardInfo(CardInfo cardInfo)throws BizException;
+	void updateCardInfo(CardInfo cardInfo)throws BizException,UnsupportedEncodingException,IOException, ParseException, JsonException;
 
 	/**
 	 * 判断卡片是否已经初始化秘钥

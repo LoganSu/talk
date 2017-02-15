@@ -121,13 +121,13 @@ public class NeighborhoodsCtrl extends BaseCtrl {
 			    		}
 		    		}
 		    		if(!RegexpUtils.checkNumAndLetter(neighborhoods.getNeibNum(), 5, 5)){
-		    			super.message = "社区编号不能为空且为5位整数！";
+		    			super.message = "呼叫号码不能为空且为5位整数！";
 		    			return  super.message;
 		    		}
 		    		//同一个地区 社区编号不能相同
 		    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
 		    		if(b){
-		    			super.message = "社区编号已经存在！";
+		    			super.message = "呼叫号码已经存在！";
 		    			return  super.message;
 		    		}
 		    		

@@ -130,9 +130,13 @@ public class CarrierBizImpl implements ICarrierBiz {
 		List<String> domainids = carrierSqlDao.pageFindBySql(sql,new Object[]{id});
 		carrier.setTreecheckbox(domainids);
 		if(StringUtils.isNotBlank(carrier.getDomainNameId())){
-			//转换成父id
-			DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
-			carrier.setDomainNameParentId(domainName.getParentid());
+			try{
+				//转换成父id
+				DomainName domainName = domainNameSqlDao.get(carrier.getDomainNameId());
+				carrier.setDomainNameParentId(domainName.getParentid());
+			}catch(BizException e){
+				e.printStackTrace();
+			}
 		}
 		return carrier;
 	}

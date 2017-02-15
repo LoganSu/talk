@@ -30,6 +30,9 @@ $(function(){
 				  hiAlert("提示","请放入卡片！");
 				  return false;
 			  }
+			  //设置卡片类型
+			  var cardType = jQuery.parseJSON(cardId).result.is_ic;
+			  $("#openCardForm .cardType").val(cardType);
            var obj = jQuery.parseJSON(connectReader);
 		   if(obj.code=='0'){
 			   //判断卡片是否已经初始化秘钥
@@ -180,32 +183,32 @@ $(function(){
 		
 	 });
 	 
-	 $("#openCardForm .cardType").on("change",function(){
-		 var cardType = $(this)[0].options[$(this)[0].selectedIndex].value;
-		 var countTypeIntVal = parseInt(cardType);
-		 var readonly ='<td><div><input name="cardSn" readonly="readonly" class="form-control cardSn required"/></div></td><td><div class="leftFont"><button type="button" class="btn btn-info btn-sm connectCardMachine">连接发卡器</button></div></td>';
-		 var writeonly ='<td><div><input name="cardSn" class="form-control cardSn required"/></div></td><td><div class="leftFont"></div></td>';
+// 	 $("#openCardForm .cardType").on("change",function(){
+// 		 var cardType = $(this)[0].options[$(this)[0].selectedIndex].value;
+// 		 var countTypeIntVal = parseInt(cardType);
+// 		 var readonly ='<td><div><input name="cardSn" readonly="readonly" class="form-control cardSn required"/></div></td><td><div class="leftFont"><button type="button" class="btn btn-info btn-sm connectCardMachine">连接发卡器</button></div></td>';
+// 		 var writeonly ='<td><div><input name="cardSn" class="form-control cardSn required"/></div></td><td><div class="leftFont"></div></td>';
 
-		 switch(countTypeIntVal){
-		  case 1:
-			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
-			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
-			  $("#openCardForm table tr:eq(0)").append(readonly);
-			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
-			  break;
-          case 2:
-        	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
- 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
-        	  $("#openCardForm table tr:eq(0)").append(writeonly);
-			  break;
-          default:
-        	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
-			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
-			  $("#openCardForm table tr:eq(0)").append(readonly);
-			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
-		     break;
-		 }
-	 })
+// 		 switch(countTypeIntVal){
+// 		  case 1:
+// 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+// 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+// 			  $("#openCardForm table tr:eq(0)").append(readonly);
+// 			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
+// 			  break;
+//           case 2:
+//         	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+//  			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+//         	  $("#openCardForm table tr:eq(0)").append(writeonly);
+// 			  break;
+//           default:
+//         	  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+// 			  $("#openCardForm table tr:eq(0) td:eq(1)").remove();
+// 			  $("#openCardForm table tr:eq(0)").append(readonly);
+// 			  $("#openCardForm .connectCardMachine").on("click",connectCardMachine);
+// 		     break;
+// 		 }
+// 	 })
 	 
 })
 </script>
@@ -215,14 +218,16 @@ $(function(){
   <div  id="openCardDiv">
      <form id="openCardForm" action="">
          <input type="hidden" name="roomId" value="${cardInfo.roomId}"/>
+         <input type="hidden" class="cardType" name="cardType" value="${cardInfo.cardType}"/>
          <table>
             <tr>
-               <td><div class="firstFont">
-               <select name="cardType" class="cardType form-control" style="width: 80px">
-                 <option value="1">IC卡</option>
-                 <option value="2">身份证</option>
-                 <option value="3">银行卡</option>
-               </select></div></td>
+               <td><div class="firstFont">卡片ID
+<!--                <select name="cardType" class="cardType form-control" style="width: 80px"> -->
+<!--                  <option value="">卡片ID</option> -->
+<!--                 <option value="2">身份证</option> --> 
+<!--                  <option value="3">银行卡</option> -->
+<!--                </select> -->
+               </div></td>
                <td><div><input name="cardSn" readonly="readonly" class="form-control cardSn required"/></div></td>
                <td><div class="leftFont">
                   <button type="button" class="btn btn-info btn-sm connectCardMachine">连接发卡器</button>
