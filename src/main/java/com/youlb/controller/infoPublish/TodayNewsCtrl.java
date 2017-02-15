@@ -111,6 +111,7 @@ public class TodayNewsCtrl extends BaseCtrl {
 					int end = sb.indexOf("</body>");
 					//获取内容
 					String infoDetail = sb.substring(start+6, end);
+//					infoDetail=infoDetail.replaceAll("&nbsp;", " ");
 					request.setAttribute("infoDetail", infoDetail);
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
@@ -159,7 +160,7 @@ public class TodayNewsCtrl extends BaseCtrl {
     	File file =null;
 			try {
 	    		String detail = todayNews.getTodayNewsDetailEditor();
-	    		detail = detail.replaceAll(" ", "&nbsp;");
+//	    		detail = detail.replaceAll(" ", "&nbsp;");
 	    		String rootPath = request.getSession().getServletContext().getRealPath("/");
 	    		//拷贝原始的html文件
 	    		in = new FileReader(new File(rootPath+"origin.html"));
