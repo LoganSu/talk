@@ -24,7 +24,7 @@
 	 <!-- 查询form div  --> 
     <div class="searchInfoDiv">
           <form id="domainNameSearchForm" action="" method="post">
-            <input type="hidden" class="hiddenId" name="id" value="${id}"/>
+            <input type="hidden" class="hiddenId" name="parentid" value="${parentid}"/>
         </form>
        </div>  
 </body>

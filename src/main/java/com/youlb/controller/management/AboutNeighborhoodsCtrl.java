@@ -16,10 +16,12 @@ import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,14 +37,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.infoPublish.IAdPublishBiz;
 import com.youlb.biz.management.IAboutNeighborhoodsBiz;
 import com.youlb.biz.staticParam.IStaticParamBiz;
 import com.youlb.controller.SMSManage.SMSManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.common.Domain;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.entity.management.AboutNeighborhoods;
 import com.youlb.entity.management.AboutNeighborhoodsRemark;
+import com.youlb.entity.management.Department;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.QiniuUtils;
 import com.youlb.utils.common.RegexpUtils;
@@ -70,6 +75,13 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     private IAdPublishBiz adPublishBiz;
 	public void setAdPublishBiz(IAdPublishBiz adPublishBiz) {
 		this.adPublishBiz = adPublishBiz;
+	}
+	
+	@Autowired
+	private IDomainBiz domainBiz;
+	
+	public void setDomainBiz(IDomainBiz domainBiz) {
+		this.domainBiz = domainBiz;
 	}
 	/**
 	 * 显示table数据
@@ -477,4 +489,43 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 		}
     	return adPic;
     }
+    
+    @RequestMapping("/getNodes.do")
+	@ResponseBody
+	public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel){
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		try {
+			Domain sd = new Domain();
+			sd.setParentId(id);
+			List<Domain> dList = domainBiz.showList(sd,getLoginUser());
+			if(dList!=null&&!dList.isEmpty()){
+				for(Domain d:dList){
+					HashMap<String,Object> hm = new HashMap<String,Object>();   
+					hm.put("id",d.getId());//id属性  ，数据传递
+					hm.put("name", d.getRemark()); //name属性，显示节点名称 
+					hm.put("level", level==null?0:level+1);//设置层级
+					if(StringUtils.isNotBlank(nocheckLevel)){
+						if(nocheckLevel.contains(level+"")){
+						   hm.put("nocheck", true);
+						}
+					}
+					 sd = new Domain();
+					sd.setParentId(d.getId());
+//					List<Domain> child = domainBiz.showList(sd,getLoginUser());
+					if(level==null){
+						hm.put("isParent", true);
+					}else{
+						hm.put("isParent", false);
+					}
+					hm.put("pId", id);  
+					
+					list.add(hm);  
+				}  
+			}
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

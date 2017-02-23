@@ -21,7 +21,7 @@ $(function(){
 		   }
 		   var cardId;
 			  try{
-				  cardId = myactivex.GetCardId2();
+				  cardId = myactivex.GetCardId();
 			  }catch(e){
 				  hiAlert("提示","读取卡片id出错！");
 					     return false;
@@ -98,7 +98,7 @@ $(function(){
 // 		   }
 // 		   var cardId;
 // 			  try{
-// 				  cardId = myactivex.GetCardId2();
+// 				  cardId = myactivex.GetCardId();
 // 			  }catch(e){
 // 				  hiAlert("提示","读取卡片id出错！");
 // 					     return false;

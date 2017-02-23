@@ -56,9 +56,9 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("from DomainName where 1=1");
-		 if(StringUtils.isNotBlank(target.getId())){
+		 if(StringUtils.isNotBlank(target.getParentid())){
 			 sb.append(" and parentid=? ");
-			 values.add(target.getId());
+			 values.add(target.getParentid());
 		 }else{
 			 sb.append(" and (parentid is null or parentid='') ");
 		 }

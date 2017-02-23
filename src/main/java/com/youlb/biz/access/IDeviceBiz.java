@@ -33,6 +33,11 @@ public interface IDeviceBiz extends IBaseBiz<DeviceInfo> {
 	  * @return
 	  */
 	List<DeviceInfoDto> getDeviceInfoDto(String[] ids)throws BizException;
+	 /**
+	  *  激活设备
+	  * @param ids
+	  */
+	void setLive(String[] ids)throws BizException;
 
 
 }

@@ -69,7 +69,7 @@
            <c:if test="${deviceCount.id == null}">
 	           <div class="firstFont">地址选择：</div>
 	           <div>
-	             <p id="deviceCountShowTree"></p>
+                 <ul id="deviceCountShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
 	           </div> 
            </c:if>
          </form>
@@ -77,63 +77,12 @@
  </div>
 </body>
 <script type="text/javascript">
-var showAddress = function(){
-// 	 var countType = $("#deviceCountsaveForm .countType").val();
-// 	 var countTypeIntVal = parseInt(countType);
-// 	  switch(countTypeIntVal){
-// 	  case 3:
-	    // 显示 1级 社区tree
-		$('#deviceCountShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				checkbox:true,
-				checkboxLink:false,//是否联动多选框
-				checkboxPartShow:true,//显示部分多选框
-				layer: [1,2,3,4],
-				showurl:false
-		});
-// 	    break;
-// 	  default:
-		// 显示 34级tree
-// 		$('#deviceCountShowTree').bstree({
-// 				url: $path+'/mc/carrier',
-// 				height:'auto',
-// 				open: false,
-// 				checkbox:true,
-// 				checkboxLink:false,//是否联动多选框
-// 				checkboxPartShow:true,//显示部分多选框
-// 				layer: [1,2,3,4],
-// 				showurl:false
-// 		});
-	     
-// 	  }
-}
-
-// var showCallNum = function(){
-// 	 var countType = $("#deviceCountsaveForm .countType").val();
-// 	 var countTypeIntVal = parseInt(countType);
-// 	  switch(countTypeIntVal){
-// 	  case 3:
-		  
-// 	    break;
-// 	  default:
-	     
-// 	  }
-// }
-
-
-
   $(function(){
-	  showAddress();
-// 	  $("#deviceCountsaveForm .countType").on('change',function(){
-// 		  showCallNum();
-// 	  })
-  
-	//多选框回显
-	var treecheckbox = $("#deviceCountDomainIds").val();
-	if(treecheckbox){
-	    $("#deviceCountShowTree ."+treecheckbox).prop('checked',true);
+// 	  var id = $("#dwellersaveForm [name='id']").val();
+// 	  var treecheckbox = "${dweller.treecheckbox}";
+    var id = "${deviceCount.id}"
+	if(!id){
+	  zTree("deviceCountShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,null, null)
 	}
   })
 </script>

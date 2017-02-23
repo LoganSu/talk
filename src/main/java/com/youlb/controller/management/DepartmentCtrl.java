@@ -1,6 +1,7 @@
 package com.youlb.controller.management;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.management.IDepartmentBiz;
+import com.youlb.biz.management.IWorkerBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.common.Domain;
 import com.youlb.entity.management.Department;
+import com.youlb.entity.management.Worker;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 /**
@@ -37,6 +41,13 @@ public class DepartmentCtrl extends BaseCtrl {
 	public void setDepartmentBiz(IDepartmentBiz departmentBiz) {
 		this.departmentBiz = departmentBiz;
 	}
+	
+	@Autowired
+	private IWorkerBiz workerBiz;
+	public void setWorkerBiz(IWorkerBiz workerBiz) {
+		this.workerBiz = workerBiz;
+	}
+
 	/**
 	 * 显示table数据
 	 * @return
@@ -230,5 +241,99 @@ public class DepartmentCtrl extends BaseCtrl {
 		}
 		return super.message;
 	}
+	@RequestMapping("/getNodes.do")
+	@ResponseBody
+	public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel){
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		try {
+			Department sd = new Department();
+			sd.setParentId(id);
+			List<Department> dList = departmentBiz.showList(sd,getLoginUser());
+			if(dList!=null&&!dList.isEmpty()){
+				for(Department d:dList){
+					HashMap<String,Object> hm = new HashMap<String,Object>();   
+					hm.put("id",d.getId());//id属性  ，数据传递
+					hm.put("name", d.getDepartmentName()); //name属性，显示节点名称 
+					hm.put("level", level==null?0:level+1);//设置层级
+					if(StringUtils.isNotBlank(nocheckLevel)){
+						if(nocheckLevel.contains(level+"")){
+						   hm.put("nocheck", true);
+						}
+					}
+					 sd = new Department();
+					sd.setParentId(d.getId());
+					List<Department> child = departmentBiz.showList(sd,getLoginUser());
+					if(child!=null&&!child.isEmpty()){
+						hm.put("isParent", true);
+					}else{
+						hm.put("isParent", false);
+					}
+					hm.put("pId", id);  
+					
+					list.add(hm);  
+				}  
+			}
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
+	
+	@RequestMapping("/getWorkerNodes.do")
+	@ResponseBody
+	public List<HashMap<String,Object>> getWorkerNodes(String id,String name,Integer level,String nocheckLevel){
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		try {
+			level = level==null?0:level+1;
+			Department sd = new Department();
+			sd.setParentId(id);
+			List<Department> dList = departmentBiz.showList(sd,getLoginUser());
+			if(dList!=null&&!dList.isEmpty()){
+				for(Department d:dList){
+					HashMap<String,Object> hm = new HashMap<String,Object>();   
+					hm.put("id",d.getId());//id属性  ，数据传递
+					hm.put("name", d.getDepartmentName()); //name属性，显示节点名称 
+					hm.put("level", level);//设置层级
+					if(StringUtils.isNotBlank(nocheckLevel)){
+						if(nocheckLevel.contains(level+"")){
+						   hm.put("nocheck", true);
+						}
+					}
+					 sd = new Department();
+					sd.setParentId(d.getId());
+					List<Department> child = departmentBiz.showList(sd,getLoginUser());
+					List<Worker> workerList = workerBiz.getWorkerList(d.getId());
+					if((child!=null&&!child.isEmpty())||(workerList!=null&&!workerList.isEmpty())){
+						hm.put("isParent", true);
+					}else{
+						hm.put("isParent", false);
+					}
+					hm.put("pId", id);  
+					
+					list.add(hm);  
+				}  
+			}
+			if(StringUtils.isNotBlank(id)){
+				List<Worker> workerList = workerBiz.getWorkerList(id);
+				if(workerList!=null&&!workerList.isEmpty()){
+					for(Worker w:workerList){
+						HashMap<String,Object> hm = new HashMap<String,Object>();   
+						hm.put("id",w.getId());//id属性  ，数据传递
+						hm.put("name", w.getWorkerName()); //name属性，显示节点名称 
+						hm.put("level", level);//设置层级
+						hm.put("isParent", false);
+//						hm.put("nocheck", false);
+						hm.put("pId", id);  
+						list.add(hm);  
+					}
+				}
+			}
+		} catch (BizException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

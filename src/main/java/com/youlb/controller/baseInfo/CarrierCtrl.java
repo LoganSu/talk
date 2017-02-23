@@ -1,6 +1,7 @@
 package com.youlb.controller.baseInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.baseInfo.ICarrierBiz;
 import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
@@ -226,7 +228,7 @@ public class CarrierCtrl extends BaseCtrl {
      * @param ids
      * @param model
      * @return
-     */
+    
 	@RequestMapping(value = "/tree", method = RequestMethod.POST)
     @ResponseBody
 	public QJson domainList(Carrier carrier){
@@ -257,26 +259,53 @@ public class CarrierCtrl extends BaseCtrl {
 		}
    		return json;
 	}
+	 */
 	
-	 /**
-     * 把集合转换成树状图数据
-     * @param privilegeList
-     * @return 
-     */
-    private List<QTree> objToTree(List<Domain> domainList){
-    	 List<QTree> listTree = new ArrayList<QTree>();
-    	if(domainList!=null){
-    		for(Domain domain:domainList){
-    			QTree tree = new QTree();
-    			tree.setId(domain.getId());//id
-    			tree.setText(domain.getRemark());//名称
-    			tree.setChecked(domain.getChecked()==null?false:true);//是否选中
-    			tree.setChildren(objToTree(domain.getChildren()));
-    			tree.setLayer(domain.getLayer());
-    			listTree.add(tree);
-    		}
-    	}
-    	return listTree;
-    }
-	
+	/**
+     * 显示域对象
+     * @param ids
+     * @param model
+     * @return
+     
+	@RequestMapping(value = "/getNodes.do", method = RequestMethod.POST)
+    @ResponseBody
+	public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel){
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+		if(StringUtils.isNotBlank(id)){
+			try {
+				Carrier carrier = carrierBiz.get(id);
+				List<Domain> domainList = domainBiz.getDomainList(carrier, getLoginUser());
+				if(domainList!=null&&!domainList.isEmpty()){
+					for(Domain domain:domainList){
+						HashMap<String,Object> hm = new HashMap<String,Object>();   
+						hm.put("id",domain.getId());//id属性  ，数据传递
+						hm.put("name", domain.getRemark()); //name属性，显示节点名称 
+						hm.put("level", level==null?0:level+1);//设置层级
+						if(StringUtils.isNotBlank(nocheckLevel)){
+							if(nocheckLevel.contains(level+"")){
+							   hm.put("nocheck", true);
+							}
+						}
+						List<Domain> child = domainBiz.getDomainByParentId(domain.getId(),getLoginUser());
+						if(child!=null&&!child.isEmpty()){
+							hm.put("isParent", true);
+						}else{
+							hm.put("isParent", false);
+						}
+						hm.put("pId", id);  
+						
+						list.add(hm);  
+					}  
+				}
+				
+			} catch (BizException e) {
+				log.error("获取运营商信息出错");
+				e.printStackTrace();
+			}
+		}
+				
+   		return list;
+	}
+	*/
+	 
 }

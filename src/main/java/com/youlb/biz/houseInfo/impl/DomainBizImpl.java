@@ -359,4 +359,35 @@ public class DomainBizImpl implements IDomainBiz {
 		 }
 		return null;
 	}
+
+	@Override
+	public List<Domain> getDomainByParentId(String id,Operator loginUser,Boolean isAll) throws BizException {
+		List<Domain> list = new ArrayList<Domain>();
+		List<Object> values = new ArrayList<Object>();
+		StringBuilder sql= new StringBuilder(" select d.id,d.fremark from t_domain d where d.fparentid=? ");
+		values.add(id);
+		//显示全部节点 过滤数据
+		List<String> domainIds = loginUser.getDomainIds();
+		if(isAll){
+			if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
+				sql.append(SearchHelper.jointInSqlOrHql(loginUser.getDomainIds(), " d.id "));
+				sql.append(" order by d.fcreatetime");
+				values.add(domainIds);
+			}
+		}else{
+			sql.append(SearchHelper.jointInSqlOrHql(loginUser.getDomainIds(), " d.id "));
+			sql.append(" order by d.fcreatetime");
+			values.add(domainIds);
+		}
+		List<Object[]> listObj = domainSqlDao.pageFindBySql(sql.toString(), values.toArray());
+		if(listObj!=null&&!listObj.isEmpty()){
+			for(Object[] obj:listObj){
+				Domain domain = new Domain();
+				domain.setId(obj[0]==null?"":(String)obj[0]);
+				domain.setRemark(obj[1]==null?"":(String)obj[1]);
+				list.add(domain);
+			}
+		}
+		return list;
+	}
 }

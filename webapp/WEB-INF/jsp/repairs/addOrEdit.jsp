@@ -5,41 +5,54 @@
 <script type="text/javascript">
 $(function(){
 	// 普通tree
-	$('#repairsShowTree').bstree({
-			url: $path+'/mc/carrier',
-			height:'600',
-			open: true,
-			checkbox:true,
-			checkboxLink:false,
-			checkboxPartShow:true,//显示部分多选框
-			layer: [4],
-			showurl:false
-	});
-	//多选框回显
-	var domainId = $("#repairssaveForm .domainId").val();
-	if(domainId){
-		$("#repairsShowTree ."+$.trim(domainId)).prop('checked',true);
-	}
 	
-	$("#repairsShowTree .treecheckbox").on("click",function(){
-		$("#repairsShowTree .treecheckbox").prop('checked',false);
-		$(this).prop('checked',true);
-		var domainId = $(this).val();
-		$("#repairssaveForm .domainId").val(domainId);
-		$.post($path+"/mc/room/getAddressByDomainId.do","domainId="+domainId,function($address){
-		   $("#repairssaveForm .address").html($address);
-		})
+	  var id = $("#repairssaveForm [name='id']").val();
+	  var treecheckbox = "${repairs.domainId}";
+	  var zTreeObj = zTree("repairsShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox),zTreeOnCheck, null)
+// 	$('#repairsShowTree').bstree({
+// 			url: $path+'/mc/carrier',
+// 			height:'600',
+// 			open: true,
+// 			checkbox:true,
+// 			checkboxLink:false,
+// 			checkboxPartShow:true,//显示部分多选框
+// 			layer: [4],
+// 			showurl:false
+// 	});
+// 	//多选框回显
+// 	var domainId = $("#repairssaveForm .domainId").val();
+// 	if(domainId){
+// 		$("#repairsShowTree ."+$.trim(domainId)).prop('checked',true);
+// 	}
+	
+// 	$("#repairsShowTree .chk").on("click",function(){
+// 		var nodes = zTreeObj.getCheckedNodes(true);
+// 		alert(nodes);
+// 		$("#repairsShowTree .treecheckbox").prop('checked',false);
+// 		$(this).prop('checked',true);
+// 		var domainId = $(this).val();
+// 		$("#repairssaveForm .domainId").val(domainId);
+// 		$.post($path+"/mc/room/getAddressByDomainId.do","domainId="+domainId,function($address){
+// 		   $("#repairssaveForm .address").html($address);
+// 		})
 			
 		
-	})
+// 	})
 })
+		  function zTreeOnCheck(event, treeId, treeNode){
+			  var nodes = zTreeObj.getCheckedNodes(true);
+			  $("#repairssaveForm .domainId").val(treeNode.id);
+			  $.post($path+"/mc/room/getAddressByDomainId.do","domainId="+treeNode.id,function($address){
+		 		   $("#repairssaveForm .address").html($address);
+		 	   })
+		}
 
 </script>
 <!-- <div>    -->
 
 <div class="row">
   <div class="col-md-4">
-        <p id="repairsShowTree"></p> 
+	  <ul id="repairsShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
   </div>
   <div class="col-md-1"></div>
   <div class="col-md-7">

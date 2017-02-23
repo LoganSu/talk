@@ -26,6 +26,8 @@
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
      <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
      <link href="${path}/css/qiniu/main.css" rel="stylesheet">
+     <link href="${path}/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+     
      
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
@@ -54,7 +56,7 @@
     <script src="${path}/js/common/bootstrap/bootstrap-datepicker.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-treeview.js"></script>
-<%--     <script src="${path}/js/common/bootstrap/bootstrap-multiselect.js"></script> --%>
+    <script src="${path}/js/common/ztree/jquery.ztree.all-3.5.min.js"></script>
     
     <script src="${path}/js/common/bootstrap/bootstrap-progressbar.js" type="text/javascript"></script>
     <script src="${path}/js/common/jquery.validate.js" type="text/javascript"></script>
@@ -487,19 +489,21 @@
               <div class="row" style="padding-left: 15px">
                   
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="houseInfoTree"></p>
+<!--                      <p id="houseInfoTree"></p> -->
+                     <ul id="houseInfoTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="authorityTree"></p>
+                     <ul id="authorityTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                     
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="managementDepartmentTree"></p>
+                     <ul id="managementDepartmentTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="neighborhoodsTree"></p>
+                     <ul id="neighborhoodsTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="domainNameTree"></p>
+                     <ul id="domainNameTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   
                   

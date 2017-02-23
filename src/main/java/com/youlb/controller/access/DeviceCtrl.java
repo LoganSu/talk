@@ -338,4 +338,22 @@ public class DeviceCtrl extends BaseCtrl{
 	    	return m;
 	    }
 	    
+	    /**
+	     * 激活设备
+	     * @param ids
+	     * @param model
+	     * @return
+	     */
+		@RequestMapping("/setLive.do")
+		@ResponseBody
+		public String setLive(String[] ids,Model model){
+			if(ids!=null&&ids.length>0){
+				try {
+					deviceBiz.setLive(ids);
+				} catch (Exception e) {
+					super.message =  "激活设备出错";
+				}
+			}
+			return super.message;
+		}
 }

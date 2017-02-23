@@ -32,7 +32,7 @@ public class WorkerGroup extends BaseModel {
 	private String departmentName;
 	/**员工id集合*/
 	@Transient
-	private List<String> workerIds;
+	private List<String> treecheckbox;
 	
 	
 	public String getPowerStr(){
@@ -61,12 +61,14 @@ public class WorkerGroup extends BaseModel {
 	}
 	
 	
-	public List<String> getWorkerIds() {
-		return workerIds;
+	public List<String> getTreecheckbox() {
+		return treecheckbox;
 	}
-	public void setWorkerIds(List<String> workerIds) {
-		this.workerIds = workerIds;
+
+	public void setTreecheckbox(List<String> treecheckbox) {
+		this.treecheckbox = treecheckbox;
 	}
+
 	public String getRemark() {
 		return remark;
 	}

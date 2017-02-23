@@ -29,7 +29,7 @@ private String htmlspecialchars(String str) {
 	   <div>
 		 <form id="todayNewssaveForm" name="todayNewssaveForm" action="" target="todayNewsSubmitFrame" enctype="multipart/form-data" method="post">
 		   <input type="hidden" name="id" value="${todayNews.id}"/>
-		   <input type="hidden" id="todayNewssDomainIds" value="${todayNews.treecheckbox}"/>
+<%-- 		   <input type="hidden" id="todayNewssDomainIds" value="${todayNews.treecheckbox}"/> --%>
 		   <input type="hidden" name="pictureUrl" value="${todayNews.pictureUrl}"/>
 		   <input type="hidden" name="carrierId" value="${todayNews.carrierId}"/>
 		   
@@ -71,7 +71,8 @@ private String htmlspecialchars(String str) {
 		              </tr>
 		           </table>
 	                <div style="width: 500px;height: 300px;overflow: auto;">
-	                     <p id="todayNewsShowTree"></p>           
+	                     <ul id="todayNewsShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+	                          
 	                </div>
 	           </div>
 	           <!-- 详情不显示按钮 -->
@@ -141,6 +142,17 @@ private String htmlspecialchars(String str) {
 			  				   hiAlert("提示","内容不能为空");
 			  			        return false;
 			  				   }
+			  			  var nodes = zTreeObj.getCheckedNodes(true);
+			  	 		   var treecheckbox;
+			  	 		      if(nodes){
+			  	 		    	  var arr = new Array();
+			  	 		    	  $.each(nodes,function(i,obj){
+			  	 		    		  arr.push(obj.id);
+			  	 		    	  });
+			  	 		    	  var parr = arr.join("&treecheckbox=");
+			  	 		    	  treecheckbox = "&treecheckbox="+parr;
+			  	 		    	  param=param+treecheckbox;
+			  	 		      }
 			  			     var regExp = new RegExp("&nbsp;", "g");
 			     			 $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html().replace(regExp, " "),function($data){
 			     				 if(!$data){
@@ -192,7 +204,17 @@ private String htmlspecialchars(String str) {
 			        return false;
 				  }
 			   var regExp = new RegExp("&nbsp;", "g");
-//   	    	 alert(editor.html().replace(regExp, " "));
+			   var nodes = zTreeObj.getCheckedNodes(true);
+	 		   var treecheckbox;
+	 		      if(nodes){
+	 		    	  var arr = new Array();
+	 		    	  $.each(nodes,function(i,obj){
+	 		    		  arr.push(obj.id);
+	 		    	  });
+	 		    	  var parr = arr.join("&treecheckbox=");
+	 		    	  treecheckbox = "&treecheckbox="+parr;
+	 		    	  param=param+treecheckbox;
+	 		      }
    			   $.post($path+'/mc/todayNews/saveOrUpdate.do',param+"&todayNewsDetailEditor="+editor.html().replace(regExp, " "),function($data){
    				 if(!$data){
 						 window.hideModal("unnormalModal");
@@ -239,26 +261,29 @@ private String htmlspecialchars(String str) {
 	});
     
 		// 普通tree
-		$('#todayNewsShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				checkbox:true,
-				checkboxLink:false,
-				showurl:false,
-				checkboxPartShow:true,
-				layer:[1,2,3,4]
-		});
-		//多选框回显
-		var treecheckbox = $("#todayNewssDomainIds").val();
-		//java代码 treecheckbox==null 则 treecheckbox=[]
-		if(treecheckbox.length>2){
-			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-			var arr= treecheckbox.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#todayNewsShowTree ."+$.trim(obj)).prop('checked',true);
-			  });
-		}
+	   var id = $("#todayNewssaveForm [name='id']").val();
+	   var treecheckbox = "${todayNews.treecheckbox}";
+	   zTree("todayNewsShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+// 		$('#todayNewsShowTree').bstree({
+// 				url: $path+'/mc/carrier',
+// 				height:'auto',
+// 				open: false,
+// 				checkbox:true,
+// 				checkboxLink:false,
+// 				showurl:false,
+// 				checkboxPartShow:true,
+// 				layer:[1,2,3,4]
+// 		});
+// 		//多选框回显
+// 		var treecheckbox = $("#todayNewssDomainIds").val();
+// 		//java代码 treecheckbox==null 则 treecheckbox=[]
+// 		if(treecheckbox.length>2){
+// 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
+// 			var arr= treecheckbox.split(",");
+// 			  $.each(arr,function(index,obj){
+// 				  $("#todayNewsShowTree ."+$.trim(obj)).prop('checked',true);
+// 			  });
+// 		}
 		
 	    //选择文件之后执行上传  
 //  	    $('#todayNewssaveForm .sure').on('click', function() {

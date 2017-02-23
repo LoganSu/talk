@@ -130,7 +130,7 @@ public class AboutNeighborhoodsTreeCtrl  extends BaseCtrl{
 		List<QTree> treeList = new ArrayList<QTree>();
     	if(list!=null&&!list.isEmpty()){
 			for(Domain d:list){
-				List<Domain> dlist = domainBiz.getDomainByParentId(d.getId(),loginUser,path);
+				List<Domain> dlist = domainBiz.getDomainByParentId(d.getId(),loginUser,true);
 				QTree tree = new QTree();
 					tree.setText(d.getRemark());
 					tree.setId(d.getId());

@@ -3,10 +3,7 @@
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <body>
-<script type="text/javascript">
 
-
-</script>
 <div>
 	   <div>
 		 <form id="areasaveForm" action="">

@@ -1,9 +1,11 @@
 package com.youlb.controller.privilege;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.biz.privilege.IRoleBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.controller.personnel.DwellerCtrl;
+import com.youlb.entity.common.Domain;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.utils.exception.BizException;
 
@@ -133,4 +136,43 @@ public class PrivilegeCtrl extends BaseCtrl {
 			}
 		 return list;
 	 }
+	 
+	   @RequestMapping("/getNodes.do")
+		@ResponseBody
+		public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel){
+			List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+			Privilege privilege = new Privilege();
+			privilege.setParentId(id);
+			try {
+				List<Privilege> pList = privilegeBiz.showList(privilege,getLoginUser());
+				if(pList!=null&&!pList.isEmpty()){
+					for(Privilege p:pList){
+						HashMap<String,Object> hm = new HashMap<String,Object>();   
+						hm.put("id",p.getId());//id属性  ，数据传递
+						hm.put("name", p.getName()); //name属性，显示节点名称 
+						hm.put("level", level==null?0:level+1);//设置层级
+						if(StringUtils.isNotBlank(nocheckLevel)){
+							if(nocheckLevel.contains(level+"")){
+							   hm.put("nocheck", true);
+							}
+						}
+						privilege = new Privilege();
+						privilege.setParentId(p.getId());
+						List<Privilege> child = privilegeBiz.showList(privilege,getLoginUser());
+						if(child!=null&&!child.isEmpty()){
+							hm.put("isParent", true);
+						}else{
+							hm.put("isParent", false);
+						}
+						hm.put("pId", id);  
+						
+						list.add(hm);  
+					}  
+				}
+			} catch (BizException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return list;
+		}
 }

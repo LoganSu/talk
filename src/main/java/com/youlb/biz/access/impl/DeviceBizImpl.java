@@ -233,6 +233,16 @@ public class DeviceBizImpl implements IDeviceBiz {
 		 }
 		return dtoList;
 	}
-
+    /**
+     * 激活设备
+     * @throws BizException 
+     */
+	@Override
+	public void setLive(String[] ids) throws BizException {
+		List<String> asList = Arrays.asList(ids);
+		StringBuilder setLive = new StringBuilder("update t_deviceinfo set fdevicestatus=? where 1=1 ");
+		setLive.append(SearchHelper.jointInSqlOrHql(asList, " id "));
+		deviceSqlDao.updateSQL(setLive.toString(), new Object[]{"1",asList});
+	}
 
 }

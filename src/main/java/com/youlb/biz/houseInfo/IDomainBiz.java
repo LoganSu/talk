@@ -69,4 +69,6 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	 */
 	String getNeiborKey(String roomId)throws BizException;
 
+	List<Domain> getDomainByParentId(String id,Operator loginUser,Boolean isAll)throws BizException;
+
 }

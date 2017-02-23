@@ -61,7 +61,7 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 		WorkerGroup workerGroup= workerGroupDao.get(id);
 		String sql ="select fworker_id from t_worker_to_group where fgroup_id=?";
 		List<String> workerIds = workerGroupDao.pageFindBySql(sql, new Object[]{id});
-		workerGroup.setWorkerIds(workerIds);
+		workerGroup.setTreecheckbox(workerIds);
 		return workerGroup;
 	}
 
@@ -111,8 +111,8 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 		 //add
 		 if(StringUtils.isBlank(workerGroup.getId())){
 			 String id = (String)workerGroupDao.add(workerGroup);
-			 if(workerGroup.getWorkerIds()!=null&&!workerGroup.getWorkerIds().isEmpty()){
-				 for(String workerId :workerGroup.getWorkerIds()){
+			 if(workerGroup.getTreecheckbox()!=null&&!workerGroup.getTreecheckbox().isEmpty()){
+				 for(String workerId :workerGroup.getTreecheckbox()){
 					 workerGroupDao.executeSql(insert, new Object[]{id,workerId});
 				 }
 			 }
@@ -124,8 +124,8 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 			 String delete = "delete from t_worker_to_group where fgroup_id=?";
 			 workerGroupDao.executeSql(delete, new Object[]{workerGroup.getId()});
 			 //插入新关系
-			 if(workerGroup.getWorkerIds()!=null&&!workerGroup.getWorkerIds().isEmpty()){
-				 for(String workerId :workerGroup.getWorkerIds()){
+			 if(workerGroup.getTreecheckbox()!=null&&!workerGroup.getTreecheckbox().isEmpty()){
+				 for(String workerId :workerGroup.getTreecheckbox()){
 					 workerGroupDao.executeSql(insert, new Object[]{workerGroup.getId(),workerId});
 				 }
 			 }
@@ -208,8 +208,8 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 		 String delete = "delete from t_worker_to_group where fgroup_id=?";
 		 workerGroupDao.executeSql(delete, new Object[]{workerGroup.getId()});
 		 //插入新关系
-		 if(workerGroup.getWorkerIds()!=null&&!workerGroup.getWorkerIds().isEmpty()){
-			 for(String workerId :workerGroup.getWorkerIds()){
+		 if(workerGroup.getTreecheckbox()!=null&&!workerGroup.getTreecheckbox().isEmpty()){
+			 for(String workerId :workerGroup.getTreecheckbox()){
 				 workerGroupDao.executeSql(insert, new Object[]{workerGroup.getId(),workerId});
 			 }
 		 }

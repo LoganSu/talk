@@ -14,9 +14,20 @@
             <table>
               <tr>
                 <td><div class="firstFont">重启时间：</div></td>
-                <td><div><input name="deviceNum" class="form-control" value="${device.deviceNum}"/></div></td>
+                <td><div>
+                   <select>
+                     <option value="0">立即重启</option>
+                     <option value="10">10分钟后重启</option>
+                     <option value="30">30分钟后重启</option>
+                   </select>
+                </div></td>
                 <td><div class="leftFont">重启类型：</div></td>
-                <td><div><input name="deviceModel" class="form-control" value="${device.deviceModel}"/></div></td>
+                <td><div>
+                     <select>
+                     <option value="0">app重启</option>
+                     <option value="1">整机断电重启</option>
+                   </select>
+                </div></td>
               </tr>
            </table>
            </div>

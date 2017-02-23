@@ -53,7 +53,8 @@
            </table>
            <div class="firstFont">地址选择：</div>
            <div>
-             <p id="dwellerShowTree"></p>
+             <ul id="dwellerShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+             
            </div>  
          </form>
 	   </div>
@@ -61,29 +62,33 @@
 </body>
 <script type="text/javascript">
   $(function(){
+	  
+	  var id = $("#dwellersaveForm [name='id']").val();
+	  var treecheckbox = "${dweller.treecheckbox}";
+	  zTree("dwellerShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
 	//显示多选框的级别
 		// 普通tree
-	    var param= "dwellerId=" +$("#dwellersaveForm [name=id]").val();
-		$('#dwellerShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				param:param,
-				checkbox:true,
-				checkboxPartShow:true,//显示部分多选框
-				layer: [4],
-				showurl:false
-		});
-		//多选框回显
-		var treecheckbox = $("#dwellerDomainIds").val();
-		//java代码 treecheckbox==null 则 treecheckbox=[]
-		if(treecheckbox.length>2){
-			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-			var arr= treecheckbox.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#dwellerShowTree ."+obj.trim()).prop('checked',true);
-			  });
-		}
+// 	    var param= "dwellerId=" +$("#dwellersaveForm [name=id]").val();
+// 		$('#dwellerShowTree').bstree({
+// 				url: $path+'/mc/carrier',
+// 				height:'auto',
+// 				open: false,
+// 				param:param,
+// 				checkbox:true,
+// 				checkboxPartShow:true,//显示部分多选框
+// 				layer: [4],
+// 				showurl:false
+// 		});
+// 		//多选框回显
+// 		var treecheckbox = $("#dwellerDomainIds").val();
+// 		//java代码 treecheckbox==null 则 treecheckbox=[]
+// 		if(treecheckbox.length>2){
+// 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
+// 			var arr= treecheckbox.split(",");
+// 			  $.each(arr,function(index,obj){
+// 				  $("#dwellerShowTree ."+obj.trim()).prop('checked',true);
+// 			  });
+// 		}
   })
 </script>
 </html>

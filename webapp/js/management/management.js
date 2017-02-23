@@ -135,6 +135,17 @@ $(function(){
 		   var url=$path+"/mc/workerGroup/addWorker.do";
 		   var param = $("#workerGroupAddWorkersaveForm").serialize();
 		   var groupId = $("#workerGroupAddWorkersaveForm .groupId").val();
+			 var nodes = zTreeObj.getCheckedNodes(true);
+			 var treecheckbox;
+		      if(nodes){
+		    	  var arr = new Array();
+		    	  $.each(nodes,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&treecheckbox=");
+		    	  treecheckbox = "&treecheckbox="+parr;
+		    	  param=param+treecheckbox;
+		      }
 		   $.post(url,param,function($data){
 			   if($data){
 				   hiAlert("提示",$data);

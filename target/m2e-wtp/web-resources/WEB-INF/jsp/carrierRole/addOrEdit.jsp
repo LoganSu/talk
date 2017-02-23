@@ -31,11 +31,11 @@
            </table>
            </div>
 <!--            <div  style="margin-top: 20px;margin-left: 20px;"> -->
-<!--                <div><label>选择可操作权限：</label></div> -->
+               <div><label>选择可操作权限：</label></div>
 <!--                <div class="showRolesTable" style="height: 500px"> -->
 <!--                </div> -->
 <!--            </div> -->
-           <p id="carrierRolesprivilegeShowTree"></p>
+           <ul id="carrierRolesprivilegeShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
          </form>
 	   </div>
  </div>
@@ -47,10 +47,13 @@ padding-left: 20px
 </style>
 <script type="text/javascript">
   $(function(){
-		  var id = $("#carrierRolesaveForm [name='id']").val();
-		  var params = "id="+id;
+	  var id = $("#carrierRolesaveForm [name='id']").val();
+	  var treecheckbox = "${role.privilegeIds}";
+	  zTree("carrierRolesprivilegeShowTree", ["id","name","level"],[],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
+	  
+// 		  var params = "id="+id;
 		  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName,params)
-			domainTree("carrierRolesprivilegeShowTree", $path+'/mc/role', false, true, true, false,false,null,null,params);
+// 			domainTree("carrierRolesprivilegeShowTree", $path+'/mc/role', false, true, true, false,false,null,null,params);
 		    // 普通tree
 // 			$('#carrierRolesprivilegeShowTree').bstree({
 // 					url: $path+'/mc/role',

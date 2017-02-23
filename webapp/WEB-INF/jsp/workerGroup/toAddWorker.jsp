@@ -52,29 +52,34 @@
 	   if(departmentId){
 		   showTree(departmentId);
 	   }
-	   var workerIds = $("#workerGroupAddWorkersaveForm .workerIds").val();
-		if(workerIds.length>2){
-			workerIds=workerIds.substring(1,workerIds.length-1);
-			var arr= workerIds.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#workerGroupAddWorkerShowTree ."+$.trim(obj)).prop('checked',true);
-			  });
-		}
+// 	   var workerIds = $("#workerGroupAddWorkersaveForm .workerIds").val();
+// 		if(workerIds.length>2){
+// 			workerIds=workerIds.substring(1,workerIds.length-1);
+// 			var arr= workerIds.split(",");
+// 			  $.each(arr,function(index,obj){
+// 				  $("#workerGroupAddWorkerShowTree ."+$.trim(obj)).prop('checked',true);
+// 			  });
+// 		}
  })
  function queryParams(params) {
 	   return initSearchParams("",params);
 	}
+ 
+
 	 function showTree(departmentId){
-			$('#workerGroupAddWorkerShowTree').bstree({
-				url: $path+'/mc/departmentWorkerTree',
-				height:'auto',
-				param:'departmentId='+departmentId,
-				open: false,
-				checkbox:true,
-				checkboxLink:true,
-				treecheckboxFiledName:'workerIds',
-				showurl:false
-		   })
+		 var id = $("#workerGroupAddWorkersaveForm [name='id']").val();
+		 var treecheckbox = "${workerGroup.treecheckbox}";
+		 zTree("workerGroupAddWorkerShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+// 			$('#workerGroupAddWorkerShowTree').bstree({
+// 				url: $path+'/mc/departmentWorkerTree',
+// 				height:'auto',
+// 				param:'departmentId='+departmentId,
+// 				open: false,
+// 				checkbox:true,
+// 				checkboxLink:true,
+// 				treecheckboxFiledName:'workerIds',
+// 				showurl:false
+// 		   })
 		}
 </script>
 <div>
@@ -85,9 +90,10 @@
 		 <form id="workerGroupAddWorkersaveForm" action="">
 		   <input type="hidden" name="id" class="groupId" value="${workerGroup.id}"/>
 		    <input type="hidden" class="departmentId" value="${workerGroup.departmentId}"/>
-		    <input type="hidden" class="workerIds" value="${workerGroup.workerIds}"/>
+<%-- 		    <input type="hidden" class="workerIds" value="${workerGroup.workerIds}"/> --%>
                <div class="firstFont">人员列表：</div>
-               <p id="workerGroupAddWorkerShowTree"></p>
+                 <ul id="workerGroupAddWorkerShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+               
                <!-- 详情不显示按钮 -->
 	           <div class="modal-footer">
 		         <!--操作按钮 -->
