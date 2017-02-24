@@ -15,10 +15,10 @@
             <r:role auth="域名管理/修改">
                 <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/domainName/toSaveOrUpdate.do?parentid=${parentid}" saveUrl="${path}/mc/domainName/saveOrUpdate.do">修改</button></li>
             </r:role>
-            <r:role auth="域名管理/删除">
-	            <!--delete类 公共删除  -->
-	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/domainName/delete.do">删除</button></li>
-            </r:role>
+<%--             <r:role auth="域名管理/删除"> --%>
+<!-- 	            delete类 公共删除  -->
+<%-- 	            <li><button class="btn btn-danger btn-sm delete" rel="${path}/mc/domainName/delete.do">删除</button></li> --%>
+<%--             </r:role> --%>
          </ul>
 	 </div>
 	 <!-- 查询form div  --> 
