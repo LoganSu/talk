@@ -82,7 +82,7 @@
 // 	  var treecheckbox = "${dweller.treecheckbox}";
     var id = "${deviceCount.id}"
 	if(!id){
-	  zTree("deviceCountShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,null, null)
+		zTreeObj = zTree("deviceCountShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,null, null)
 	}
   })
 </script>

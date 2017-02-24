@@ -106,6 +106,7 @@ $(function(){
 					 if(!$data){
 						 $("#unnormalModal").modal("hide");
 						 refresh();
+						 zTreeObj.reAsyncChildNodes(null, "refresh");
 					 }else{
 						 hiAlert("提示",$data);
 					 }
@@ -117,6 +118,7 @@ $(function(){
 				 if(!$data){
 					 $("#unnormalModal").modal("hide");
 					 refresh();
+					 zTreeObj.reAsyncChildNodes(null, "refresh");
 				 }else{
 					 hiAlert("提示",$data);
 				 }

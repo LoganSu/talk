@@ -71,6 +71,9 @@ public class Neighborhoods extends BaseModel {
 	/**社区电话*/
 	@Column(name="fphone")
 	private String phone;
+	/**社区编号。与一级平台的社区编号相同*/
+	@Column(name="fneibor_flag")
+	private Integer neiborFlag;
 	
 	/**时间字符串（前台传入）*/
 	@Transient
@@ -88,6 +91,12 @@ public class Neighborhoods extends BaseModel {
 	
 	
 	
+	public Integer getNeiborFlag() {
+		return neiborFlag;
+	}
+	public void setNeiborFlag(Integer neiborFlag) {
+		this.neiborFlag = neiborFlag;
+	}
 	public String getPhone() {
 		return phone;
 	}

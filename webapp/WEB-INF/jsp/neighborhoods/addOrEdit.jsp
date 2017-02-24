@@ -17,10 +17,9 @@
 // 		   });
 // 	   })
 	   //市联动
-// 	   $("#neighborhoodssaveForm .city").on("change",function(){
-// 		   var areaNum = $(this).children("option:selected").attr("areaNum");
-// 		   $("#neighborhoodssaveForm  .areaNum").val(areaNum);
-// 	   })
+	   $("#neighborhoodssaveForm .neibName").on("change",function(){
+		  $("#neighborhoodssaveForm [name='neiborFlag']").val( $("#neighborhoodssaveForm .neibName option:selected").attr("title"));
+	   })
 	   //时间控件
 	     $(".datepicker").datepicker();
    })
@@ -32,15 +31,16 @@
 		 <form id="neighborhoodssaveForm" action="">
 		 <input type="hidden" name="id" value="${neighborhoods.id}"/>
 		 <input type="hidden" name="parentId" value="${neighborhoods.parentId}"/>
+		 <input type="hidden" name="neiborFlag" value=""/>
            <table>
                <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>社区名称：</div></td>
                 <td><div>
-                          <select class="form-control" name="neibName">
+                          <select class="form-control neibName" name="neibName">
 	                             <option value="">--请选择-- </option>
 	                             <c:forEach items="${listMap}" var="map">
 <%-- 	                                 <c:forEach items="${map.value}" var="keyMap"> --%>
-	                                    <option <c:if test="${map.fneib_name eq neighborhoods.neibName}">selected="selected"</c:if> value="${map.fneib_name}">
+	                                    <option title="${map.fneibor_flag}" <c:if test="${map.fneib_name eq neighborhoods.neibName}">selected="selected"</c:if> value="${map.fneib_name}">
 	                                      ${map.fplatform_name}&nbsp;&nbsp;${map.fneib_name}&nbsp;&nbsp;${map.fneibor_flag}
 	                                    </option>
 <%-- 	                                 </c:forEach> --%>

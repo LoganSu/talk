@@ -465,16 +465,20 @@ public class DwellerBizImpl implements IDwellerBiz {
 								String checkUsers = "select id from t_users where id=?";
 								List<String> usersId = dwellerSqlDao.pageFindBySql(checkUsers, new Object[]{userMap.get("id")});
 								if(usersId==null||usersId.isEmpty()){
-							    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
-								    //{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
-								    dwellerSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
-								    		user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
 	                                //{id=87, username=15974102603, mobilePhone=15974102603, cryptedPsw=e10adc3949ba59abbe56e057f20f883e, status=3, createTime=2016-11-14 16:01:39, carrier=中国移动, attribution=湖南长沙}
 									String t_user ="insert into t_users (id,fusername,fmobile_phone,fcrypted_password,fstatus,FCREATETIME,fcarrier,fattribution) values(?,?,?,?,?,?,?,?)";
 									dwellerSqlDao.executeSql(t_user,new Object[]{userMap.get("id"),userMap.get("username"),userMap.get("mobilePhone"),userMap.get("cryptedPsw"),userMap.get("status"),
 											DateHelper.strParseDate((String)userMap.get("createTime"), "yyyy-MM-dd HH:mm:ss"),userMap.get("carrier"),userMap.get("attribution")});
 								}
-
+								String checkSip = "select local_sip from users where local_sip=?";
+								List<String> localSip = dwellerSqlDao.pageFindBySql(checkSip, new Object[]{user_sipMap.get("linkId")});
+								if(localSip==null||localSip.isEmpty()){
+									String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
+									//{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
+									dwellerSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
+											user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
+								}
+								
 							}
 					     }
 					}else{

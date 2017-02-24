@@ -263,7 +263,7 @@ private String htmlspecialchars(String str) {
 		// 普通tree
 	   var id = $("#todayNewssaveForm [name='id']").val();
 	   var treecheckbox = "${todayNews.treecheckbox}";
-	   zTree("todayNewsShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	   zTreeObj = zTree("todayNewsShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 // 		$('#todayNewsShowTree').bstree({
 // 				url: $path+'/mc/carrier',
 // 				height:'auto',

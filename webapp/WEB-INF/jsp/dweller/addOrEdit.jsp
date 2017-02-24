@@ -65,7 +65,7 @@
 	  
 	  var id = $("#dwellersaveForm [name='id']").val();
 	  var treecheckbox = "${dweller.treecheckbox}";
-	  zTree("dwellerShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("dwellerShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
 	//显示多选框的级别
 		// 普通tree
 // 	    var param= "dwellerId=" +$("#dwellersaveForm [name=id]").val();

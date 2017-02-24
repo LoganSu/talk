@@ -81,7 +81,7 @@
 
 	  var id = $("#infoPublishsaveForm [name='id']").val();
 	  var treecheckbox = "${infoPublish.treecheckbox}";
-	  zTree("infoPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("infoPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 	  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName)
 // 		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false,true,[1,2,3,4]);
 

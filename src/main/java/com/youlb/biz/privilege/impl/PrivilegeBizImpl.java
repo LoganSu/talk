@@ -12,6 +12,7 @@ import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Privilege;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.helper.OrderHelperUtils;
 
@@ -117,20 +118,76 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 	 */
 	@Override
 	public List<Privilege> showList(Privilege privilege, Operator loginUser) throws BizException {
-		StringBuilder sb = new StringBuilder();
-		List<Object> values = new ArrayList<Object>();
-		sb.append("from Privilege t where 1=1 ");
-		if(StringUtils.isNotBlank(privilege.getParentId())){
-			sb.append(" and t.parentId=?");
-			values.add(privilege.getParentId());
-		}else{
-			sb.append(" and (t.parentId is null or t.parentId = '')");
-		}
-		OrderHelperUtils.getOrder(sb, privilege, "t.", "t.groupOrder");
-		List<Privilege> list = privilegeSqlDao.pageFind(sb.toString(), values.toArray(), privilege.getPager());
+//		StringBuilder sb = new StringBuilder();
+//		List<Object> values = new ArrayList<Object>();
+//		sb.append("from Privilege t where 1=1 ");
+//		if(StringUtils.isNotBlank(privilege.getParentId())){
+//			sb.append(" and t.parentId=?");
+//			values.add(privilege.getParentId());
+//		}else{
+//			sb.append(" and (t.parentId is null or t.parentId = '')");
+//		}
+//		OrderHelperUtils.getOrder(sb, privilege, "t.", "t.groupOrder");
+//		List<Privilege> list = privilegeSqlDao.pageFind(sb.toString(), values.toArray(), privilege.getPager());
+//		return list;
+		 StringBuilder sb = new StringBuilder();
+		 List<Object> values = new ArrayList<Object>();
+		 sb.append("SELECT p.id,p.fname from  t_privilege p ");
+		 //除了特殊admin其他用户只显示自己拥有的权限
+		 if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
+			 if(StringUtils.isNotBlank(privilege.getParentId())){
+					sb.append(" INNER JOIN  t_role_privilege trp on p.id=trp.fprivilegeid INNER JOIN t_operator_role tor ON tor.froleid=trp.froleid ")
+					.append("where tor.foperatorid=? and p.FPARENTID=?");
+					values.add(loginUser.getId());
+					values.add(privilege.getParentId());
+				}else{
+//					sb.append(" where  (o.parentId is null or o.parentId = '')");
+					sb.append(" INNER JOIN  t_role_privilege trp on p.id=trp.fprivilegeid INNER JOIN t_operator_role tor ON tor.froleid=trp.froleid ")
+					.append("where tor.foperatorid=? and (p.FPARENTID is null or p.FPARENTID ='')");
+					values.add(loginUser.getId());
+				}
+			 
+		 }else{
+			 if(StringUtils.isNotBlank(privilege.getParentId())){
+					sb.append(" where p.FPARENTID=?");
+					values.add(privilege.getParentId());
+				}else{
+					sb.append(" where (p.FPARENTID is null or p.FPARENTID = '')");
+				}
+		 }
+		 sb.append(" order by p.fgrouporder");
+		 List<Object[]> listObj =  privilegeSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 List<Privilege> list = new ArrayList<Privilege>();
+		   if(listObj!=null&&!listObj.isEmpty()){
+			   for(Object[] obj:listObj){
+				   Privilege p = new Privilege();
+				   p.setPager(privilege.getPager());
+				   p.setId(obj[0]==null?"":(String)obj[0]);
+				   p.setName(obj[1]==null?"":(String)obj[1]);
+				   list.add(p);
+			   }
+		   }
+//		 List<Privilege> pList = objToModel(listObj);
+//		 List<Privilege> list = getPrivilegeList(pList,role,loginUser);
 		return list;
 	}
-
+	/**
+	 * 权限数组转对象
+	 * @param listObj
+	 * @return
+	 */
+   private List<Privilege> objToModel(List<Object[]> listObj){
+	   List<Privilege> list = new ArrayList<Privilege>();
+	   if(listObj!=null&&!listObj.isEmpty()){
+		   for(Object[] obj:listObj){
+			   Privilege privilege = new Privilege();
+			   privilege.setId(obj[0]==null?"":(String)obj[0]);
+			   privilege.setName(obj[1]==null?"":(String)obj[1]);
+			   list.add(privilege);
+		   }
+	   }
+	   return list;
+   }
 	/**
 	 * @param id
 	 * @param loginUser

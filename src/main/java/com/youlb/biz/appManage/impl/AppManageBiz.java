@@ -130,9 +130,11 @@ public class AppManageBiz implements IAppManageBiz {
 	@Override
 	public AppManage get(Serializable id) throws BizException {
 		AppManage appManage = appManageSqlDao.get(id);
-		String hql = "select da.fdomainid from t_domain_appmanage da where da.fappmanageid=?";
-		List<String> domainIds = appManageSqlDao.pageFindBySql(hql, new Object[]{id});
-		appManage.setTreecheckbox(domainIds);
+		if(SysStatic.two.equals(appManage.getSendType())){
+			String hql = "select da.fneibor_flag from t_appmange_ipmanage da where da.fapp_manage_id=?";
+			List<String> domainIds = appManageSqlDao.pageFindBySql(hql, new Object[]{id});
+			appManage.setIpManageIds(domainIds);
+		}
 		return appManage;
 	}
 
@@ -182,7 +184,6 @@ public class AppManageBiz implements IAppManageBiz {
 	 */
 	@Override
 	public void saveOrUpdate(AppManage appManage, Operator loginUser) throws ParseException, JsonException, IOException, BizException {
-//		String sql="insert into t_domain_appmanage(fappmanageid,fdomainid) values (?,?)";
 		 //add
 		 if(StringUtils.isBlank(appManage.getId())){
 			 appManage.setId(null);
@@ -194,59 +195,37 @@ public class AppManageBiz implements IAppManageBiz {
 //				 }
 //			 }
 			 String id = (String) appManageSqlDao.add(appManage);
+			 appManageSqlDao.getCurrSession().flush();
 			 //手机app做推送
 			 if(SysStatic.two.equals(appManage.getAppType())){
-				 //	门口机和管理机 需要操作中间表
-//				 if(SysStatic.one.equals(appManage.getAppType())||SysStatic.three.equals(appManage.getAppType())){
-//					 if(appManage.getTreecheckbox()!=null){
-//						 for(String domainId:appManage.getTreecheckbox()){
-//							 appManageSqlDao.executeSql(sql, new Object[]{id,domainId});
-//						 }
-//					 }
-//				 }
 //				 获取taglist
 //				 List<String> tagList = getTagList(appManage, loginUser);
 				 List<String> tagList = new ArrayList<String>();
 				 tagList.add("4028816755c94fe50155c96c0ec70005");
-//				 if(tagList==null){
-//					 throw new BizException("未找到目标设备");
-//				 }
-//				 推送升级信息
-				 VersionInfo info = new VersionInfo();
-				 info.setTagList(tagList);//目标推送标签
-				 info.setDesc(appManage.getVersionDes());//说明
-				 info.setMd5_code(appManage.getMd5Value());//app的md5值
-				 info.setSize(appManage.getAppSize());//app大小
-				 info.setUrl(appManage.getServerAddr()+appManage.getRelativePath());//下载路径
-				 info.setVersion_code(appManage.getVersionCode());//版本号
-				 info.setVersion_name(appManage.getVersionName());//版本名称
-				 info.setTargetDevive(appManage.getAppType());//app类型 1手机 2门口机
-//				 是否强制升级
-				 if("1".equals(appManage.getAutoInstal())){
-					 info.setAuto_instal(false);
-				 }else if("2".equals(appManage.getAutoInstal())){
-					 info.setAuto_instal(true);
+				 //做推送
+				pushInfo(appManage, tagList);
+              //门口机需要按社区升级  需要操作中间表
+			 }else if(SysStatic.one.equals(appManage.getAppType())){
+				 String sql="insert into t_appmange_ipmanage(fapp_manage_id,fneibor_flag) values (?,?)";
+				 List<String> tagList = new ArrayList<String>();
+				 //选择全部升级
+				 if(SysStatic.one.equals(appManage.getSendType())){
+					 String find = "select to_char(t.fneibor_flag,'9999999999') from t_ip_manage t";
+					 tagList = appManageSqlDao.pageFindBySql(find, new Object[]{});
+				 //选择社区升级
+				 }else if(SysStatic.two.equals(appManage.getSendType())){
+					 tagList = appManage.getIpManageIds();
 				 }
-				 String infoJson = JsonUtils.toJson(info);
+				 if(tagList==null||tagList.isEmpty()){
+					 throw new BizException("暂无社区信息，推送失败");
+				 }
+				 //信息入库中间表
+				 for(String neiborFlag:tagList){
+					 appManageSqlDao.executeSql(sql, new Object[]{id,neiborFlag.trim()});
+				 }
+				 //做推送
+//				 pushInfo(appManage, tagList);
 				 
-				 CloseableHttpClient httpClient = HttpClients.createDefault();
-				 HttpPost request = new HttpPost(SysStatic.HTTP+"/publish/pushAppVersionInfo.json");
-				 List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-				 logger.info("版本信息："+infoJson);
-				 formParams.add(new BasicNameValuePair("infoJson", infoJson));
-				 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-				 request.setEntity(uefEntity);
-				 CloseableHttpResponse response = httpClient.execute(request);
-				 if(response.getStatusLine().getStatusCode()==200){
-					 HttpEntity entity_rsp = response.getEntity();
-					 ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
-					 if(resultDto!=null){
-						 if(!"0".equals(resultDto.getCode())){
-							 logger.error(resultDto.getMsg());
-							 throw new BizException(resultDto.getMsg());
-						 }
-					 }
-				 } 
 			 }
 			 
 	     //update		 
@@ -271,6 +250,53 @@ public class AppManageBiz implements IAppManageBiz {
 		 }
 		
 		
+	}
+	   /**
+	    * 版本推送
+	    * @param appManage
+	    * @param tagList
+	    * @throws ParseException
+	    * @throws JsonException
+	    * @throws IOException
+	    * @throws BizException
+	    */
+	   private void pushInfo(AppManage appManage,List<String> tagList) throws ParseException, JsonException, IOException, BizException{
+		 //推送升级信息
+		 VersionInfo info = new VersionInfo();
+		 info.setTagList(tagList);//目标推送标签
+		 info.setDesc(appManage.getVersionDes());//说明
+		 info.setMd5_code(appManage.getMd5Value());//app的md5值
+		 info.setSize(appManage.getAppSize());//app大小
+		 info.setUrl(appManage.getServerAddr()+appManage.getRelativePath());//下载路径
+		 info.setVersion_code(appManage.getVersionCode());//版本号
+		 info.setVersion_name(appManage.getVersionName());//版本名称
+		 info.setTargetDevive(appManage.getAppType());//app类型 1手机 2门口机
+//		 是否强制升级
+		 if("1".equals(appManage.getAutoInstal())){
+			 info.setAuto_instal(false);
+		 }else if("2".equals(appManage.getAutoInstal())){
+			 info.setAuto_instal(true);
+		 }
+		 String infoJson = JsonUtils.toJson(info);
+		 
+		 CloseableHttpClient httpClient = HttpClients.createDefault();
+		 HttpPost request = new HttpPost(SysStatic.HTTP+"/publish/pushAppVersionInfo.json");
+		 List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+		 logger.info("版本信息："+infoJson);
+		 formParams.add(new BasicNameValuePair("infoJson", infoJson));
+		 UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+		 request.setEntity(uefEntity);
+		 CloseableHttpResponse response = httpClient.execute(request);
+		 if(response.getStatusLine().getStatusCode()==200){
+			 HttpEntity entity_rsp = response.getEntity();
+			 ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+			 if(resultDto!=null){
+				 if(!"0".equals(resultDto.getCode())){
+					 logger.error(resultDto.getMsg());
+					 throw new BizException(resultDto.getMsg());
+				 }
+			 }
+		 }
 	}
 
 	/**获取需要升级的版本

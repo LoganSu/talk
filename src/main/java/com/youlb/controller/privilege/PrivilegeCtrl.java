@@ -139,7 +139,7 @@ public class PrivilegeCtrl extends BaseCtrl {
 	 
 	   @RequestMapping("/getNodes.do")
 		@ResponseBody
-		public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel){
+		public List<HashMap<String,Object>> getNodes(String id,String name,Integer level,String nocheckLevel,String roleId){
 			List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
 			Privilege privilege = new Privilege();
 			privilege.setParentId(id);

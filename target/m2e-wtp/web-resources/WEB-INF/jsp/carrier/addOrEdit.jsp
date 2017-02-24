@@ -71,7 +71,7 @@ padding-left: 20px
 	  var id = $("#carriersaveForm [name='id']").val();
 	  var treecheckbox = "${carrier.treecheckbox}";
 
-	  zTree("carrierShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("carrierShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
 	  
 	  //显示多选框的级别
 	    // 普通tree

@@ -8,7 +8,7 @@ $(function(){
 	
 	  var id = $("#companyDepartmentsaveForm [name='id']").val();
 	  var treecheckbox = "${department.domainIds}";
-	  zTree("companyDepartmentShowTree", ["id","name","level"],["nocheckLevel","0234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("companyDepartmentShowTree", ["id","name","level"],["nocheckLevel","0234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 	
 // 	domainTree("companyDepartmentShowTree", $path+'/mc/carrier', false, true, false, false, true, [1], 'domainIds');
 	// 域tree

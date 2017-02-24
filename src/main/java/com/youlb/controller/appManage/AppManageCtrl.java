@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youlb.biz.IPManage.IIPManageBiz;
 import com.youlb.biz.appManage.IAppManageBiz;
 import com.youlb.biz.doorMachine.IDoorMachineBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.IPManage.IPManage;
 import com.youlb.entity.appManage.AppManage;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
@@ -50,7 +52,11 @@ public class AppManageCtrl extends BaseCtrl {
 	public void setDoorMachineBiz(IDoorMachineBiz doorMachineBiz) {
 		this.doorMachineBiz = doorMachineBiz;
 	}
-	
+	@Autowired
+	private IIPManageBiz iPManageBiz;
+	public void setiPManageBiz(IIPManageBiz iPManageBiz) {
+		this.iPManageBiz = iPManageBiz;
+	}
 //	@Overrideyyyyyyyyyyy
 //	public String search(String modulePath, String appType, Model model) {
 //		model.addAttribute("appType", appType);
@@ -93,15 +99,10 @@ public class AppManageCtrl extends BaseCtrl {
 	    		List<String> softwareTypeList = doorMachineBiz.getSoftwareTypeList();
 	    		model.addAttribute("softwareTypeList",softwareTypeList);
 	    	}
-	    	//获取父节点
-	//    	if(StringUtils.isNotBlank(domain.getParentId())){
-	//    		Domain parentDomain = domainBiz.get(domain.getParentId());
-	//    		domain.setParentName(parentDomain.getName());//父节点名称
-	//    		domain.setLevel(parentDomain.getLevel());//父节点等级
-	//    	}else{
-	//    		domain.setParentId("1");
-	//    	}
 	    	model.addAttribute("appManage",appManage);
+	    	List<IPManage> ipManageList = iPManageBiz.showList(new IPManage(), getLoginUser());
+	    	model.addAttribute("ipManageList",ipManageList);
+
     	} catch (BizException e) {
     		// TODO Auto-generated catch block
     		e.printStackTrace();

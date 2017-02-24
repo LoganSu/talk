@@ -18,7 +18,7 @@ $(function(){
 	function showTree(departmentId){
 	   var id = $("#workerGroupsaveForm [name='id']").val();
 	   var treecheckbox = "${workerGroup.treecheckbox}";
-	   zTree("workerGroupShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	   zTreeObj = zTree("workerGroupShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 	
 // 		$('#workerGroupShowTree').bstree({
 // 			url: $path+'/mc/departmentWorkerTree',

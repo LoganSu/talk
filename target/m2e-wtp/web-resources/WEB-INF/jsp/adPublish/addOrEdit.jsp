@@ -186,7 +186,7 @@ text-align: center;
 	  
 	  var id = $("#adPublishsaveForm [name='id']").val();
 	  var treecheckbox = "${adPublish.treecheckbox}";
-	  zTree("adPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("adPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 		// 普通tree
 // 		$('#adPublishShowTree').bstree({
 // 				url: $path+'/mc/carrier',

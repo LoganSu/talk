@@ -11,6 +11,7 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.youlb.entity.IPManage.IPManage;
 import com.youlb.entity.common.BaseModel;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.helper.DateHelper;
@@ -76,6 +77,12 @@ public class AppManage extends BaseModel {
 	 /**软件型号*/
     @Column(name="fsoftware_type")
     private String softwareType;
+    /**门口机升级类型  1全部区域升级   2指定区域升级*/
+    @Column(name="fsendtype")
+    private String sendType;
+    /**ip管理id 参数*/
+    @Transient
+    private List<String> ipManageIds;
 	
 	/**日期搜索条件*/
 	@Transient
@@ -90,6 +97,23 @@ public class AppManage extends BaseModel {
 	private String appSizeStr;
 	
 	
+	public List<String> getIpManageIds() {
+		return ipManageIds;
+	}
+
+	public void setIpManageIds(List<String> ipManageIds) {
+		this.ipManageIds = ipManageIds;
+	}
+
+
+	public String getSendType() {
+		return sendType;
+	}
+
+	public void setSendType(String sendType) {
+		this.sendType = sendType;
+	}
+
 	public String getAppSizeStr() {
 		return appSizeStr;
 	}

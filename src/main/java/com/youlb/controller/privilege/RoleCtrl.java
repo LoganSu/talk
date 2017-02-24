@@ -2,6 +2,7 @@ package com.youlb.controller.privilege;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -131,36 +132,20 @@ public class RoleCtrl extends BaseCtrl{
      * 获取树状结构权限列表
      * @return
      */
-    @RequestMapping(value = "/tree", method = RequestMethod.POST)
+    @RequestMapping(value = "/getNodes.do", method = RequestMethod.POST)
     @ResponseBody
-   	public QJson privilegeList(Role role){
-    	QJson json = new QJson();
-    	if(StringUtils.isNotBlank(role.getId())){
+   	public List<HashMap<String,Object>> privilegeList(String id,String name,Integer level,String nocheckLevel,String roleId){
+		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
+    	if(StringUtils.isNotBlank(roleId)){
     		try {
-				role = roleBiz.get(role.getId());
+    			Role role = roleBiz.get(roleId);
+    			List<Privilege> privilegeList = roleBiz.getPrivilegeList(getLoginUser(),role);
 			} catch (BizException e) {
 				log.error("获取单个数据失败");
 				e.printStackTrace();
 			}
 		}
-    	Operator loginUser = getLoginUser();
-    	//获取权限列表
-		try {
-	    	List<Privilege> privilegeList = roleBiz.getPrivilegeList(loginUser,role);
-	    	QTree t = new QTree();
-	    	t.setText("操作权限");
-	    	t.setUrl("checkfalse");
-	    	List<QTree> children = objToTree(privilegeList);
-	    	t.setChildren(children);;
-	    	json.setMsg("OK");
-	    	json.setObject(t);
-	    	json.setSuccess(true);
-	    	json.setType("1");
-		} catch (BizException e) {
-			log.error("获取操作权限数据失败");
-			e.printStackTrace();
-		}
-   		return json;
+   		return list;
    	}
     /**
      * 把集合转换成树状图数据

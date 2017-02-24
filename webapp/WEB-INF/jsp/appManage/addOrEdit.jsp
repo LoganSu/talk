@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <body>
 <div>
@@ -162,9 +163,35 @@
 		      </tbody>
 			</table>
            <!-- 门口机app和管理机的app可以指定目标 -->
-           <c:if test="${appManage.appType ==1||appManage.appType ==3}">
-<!-- 	           <div style="margin-top: 10px"><label>选择升级目标</label></div> -->
+           <c:if test="${(appManage.appType ==1 && appManage.id ==null)||(appManage.appType ==1 && appManage.opraterType==1)}">
+              <div style="margin-top: 10px"><label>选择升级范围</label></div>
 	           <div class="choeseArea">
+		           <table>
+		              <tr>
+		                <td><div><input type="radio" checked="checked" name="sendType" value="1" <c:if test="${appManage.sendType==1}">checked="checked"</c:if>/></div></td>
+		                <td><div>全部</div></td>
+		              </tr>
+		              <tr>
+		                <td><div><input type="radio" name="sendType" value="2" <c:if test="${appManage.sendType==2}">checked="checked"</c:if>/></div></td>
+		                <td><div>指定范围</div></td>
+		                <td></td>
+		              </tr>
+		           </table>
+	                <div class="showRolesTable" style="height: 500px">
+			              <div>
+				            <c:forEach items="${ipManageList}" var="ipManage" varStatus="staus">
+			                       <!--五个换行-->
+		                           <c:if test="${staus.index>0&&staus.index%5==0}">
+		                             <br/>
+		                           </c:if>
+			                     <input name="ipManageIds" value="${ipManage.neiborFlag}" <c:if test="${fn:contains(appManage.ipManageIds, ipManage.neiborFlag) && appManage.sendType==2}">checked="checked"</c:if> type="checkbox"/><span>${ipManage.neibName}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+				            </c:forEach>
+			              </div>
+			                
+			           </div>
+	            </div>
+<!-- 	           <div style="margin-top: 10px"><label>选择升级目标</label></div> -->
+<!-- 	           <div class="choeseArea"> -->
 <!-- 		           <table> -->
 <!-- 		              <tr> -->
 <%-- 		                <td><div><input type="radio" name="upgradeType" value="1" <c:if test="${appManage.upgradeType==1}">checked="checked"</c:if>/></div></td> --%>
@@ -197,7 +224,7 @@
 <!-- 	                <div style="width: 500px;height: 400px;overflow: auto;"> -->
 <!-- 	                     <p id="appManageShowTree"></p>               -->
 <!-- 	                </div> -->
-	           </div>
+<!-- 	           </div> -->
            </c:if>
            <!-- 详情不显示按钮 -->
 	           <div class="modal-footer">
@@ -641,25 +668,6 @@ function calculate(file,callBack){
 	  
 	  
 	  
-		// 普通tree
-		$('#appManageShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				checkbox:true,
-				checkboxLink:false,//是否联动
-				showurl:false
-		});
-		//多选框回显
-		var treecheckbox = $("#appManageDomainIds").val();
-		//java代码 treecheckbox==null 则 treecheckbox=[]
-		if(treecheckbox.length>2){
-			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-			var arr= treecheckbox.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#appManageShowTree ."+obj.trim()).prop('checked',true);
-			  });
-		}
 		//
 		$("#appManagesaveForm .appManageSeolect").on("change",function(){
 			var className = $(this)[0].options[$(this)[0].selectedIndex].className;

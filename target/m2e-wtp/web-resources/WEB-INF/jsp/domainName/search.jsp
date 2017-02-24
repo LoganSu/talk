@@ -10,10 +10,10 @@
          <ul class="list-unstyled list-inline">
             <!-- 添加saveOrUpdateBtn类 跳转到自己定义的add页面  rel跳转页面url  saveUrl 保存到数据库url -->
             <r:role auth="域名管理/添加">
-                <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/domainName/toSaveOrUpdate.do?parentid=${id}" saveUrl="${path}/mc/domainName/saveOrUpdate.do">添加</button></li>
+                <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/domainName/toSaveOrUpdate.do?parentid=${parentid}" saveUrl="${path}/mc/domainName/saveOrUpdate.do">添加</button></li>
             </r:role>
             <r:role auth="域名管理/修改">
-                <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/domainName/toSaveOrUpdate.do?parentid=${id}" saveUrl="${path}/mc/domainName/saveOrUpdate.do">修改</button></li>
+                <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/domainName/toSaveOrUpdate.do?parentid=${parentid}" saveUrl="${path}/mc/domainName/saveOrUpdate.do">修改</button></li>
             </r:role>
             <r:role auth="域名管理/删除">
 	            <!--delete类 公共删除  -->

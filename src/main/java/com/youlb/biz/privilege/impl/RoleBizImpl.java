@@ -250,7 +250,6 @@ public class RoleBizImpl implements IRoleBiz {
 	 */
 	@Override
 	public List<Privilege> getPrivilegeList(Operator loginUser,Role role) throws BizException {
-//		 String hql = "from Privilege t where t.parentId is null or t.parentId =''";
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("SELECT p.id,p.fname from  t_privilege p ");

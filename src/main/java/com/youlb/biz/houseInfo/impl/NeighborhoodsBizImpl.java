@@ -112,11 +112,12 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
       }
       
       
-      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=?,useKey=?,phone=? where id=?");
+      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=?,useKey=?,phone=?,neiborFlag=? where id=?");
       list.add(target.getTotalBuildArea());list.add(target.getTotalBussnisArea());list.add(target.getGreeningRate());
       list.add(target.getPlotRatio());list.add(target.getRemark());list.add(target.getCreateSipNum());
       list.add(target.getUseKey());
       list.add(target.getPhone());
+      list.add(target.getNeiborFlag());
       list.add(target.getId());
     	  neighborSqlDao.update(sb.toString(),list.toArray());
 	}
@@ -403,7 +404,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		 sb.append("select * from (select n.id id,n.FNEIBNAME neibName,n.FNEIBNUM neibNum,n.FCONTRACTOR contractor," )
 		 .append(" n.FADDRESS address,n.FSTARTBUILDDATE startBuildDate,n.FENDBUILDDATE endBuildDate,")
 		 .append("n.FUSEDATE useDate,n.FTOTALAREA totalArea,n.FTOTALBUILDAREA totalBuildArea,n.FTOTALBUSSNISAREA totalBussnisArea,")
-		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,n.fcreate_sip_num,u.user_password sipNumPsw,n.fphone ")
+		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,n.fcreate_sip_num,u.user_password sipNumPsw,n.fphone phone,n.fneibor_flag neiborFlag")
 		 .append(" from t_neighborhoods n inner join t_domain d on d.fentityid = n.id left join users u on u.local_sip=n.id where d.fparentid=? ");
 		 values.add(target.getParentId());
 		 
@@ -449,6 +450,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 					}
 					neibor.setSipNumPsw(obj[17]==null?"":(String)obj[17]);
 					neibor.setPhone(obj[18]==null?"":(String)obj[18]);
+					neibor.setNeiborFlag(obj[19]==null?null:(Integer)obj[19]);
 					neibor.setPager(pager);
 					neiborList.add(neibor);
 				}

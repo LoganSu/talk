@@ -1,4 +1,4 @@
-	var zTreeObj;
+	var zTreeObj,zTreeObjTwo;
 	//配置参数
 	function setting(treeId,autoParam,otherParam,asyncUrl,checkEnable,chkboxType,zTreeOnClick,zTreeOnAsyncSuccess,zTreeOnCheck){
 		treeId : treeId,
@@ -55,7 +55,7 @@
 	  var dataEcho = function(id,treecheckbox){
 		  var zTreeOnAsyncSuccess;
 		  if(id&&treecheckbox){
-			 var zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+			  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
 				//子节点回显
 				 if(treeNode){
 					 $.each(treeNode.children,function(i,obj){
@@ -79,8 +79,9 @@
 	  }
 	 
 	 function zTree(treeId,autoParam,otherParam,asyncUrl,checkEnable,chkboxType,zTreeOnClick,zTreeOnAsyncSuccess,zTreeOnCheck,zTreeNodes){
-		 zTreeObj = $.fn.zTree.init($("#"+treeId), setting(treeId,autoParam,otherParam,asyncUrl,checkEnable,chkboxType,zTreeOnClick,zTreeOnAsyncSuccess,zTreeOnCheck), zTreeNodes);
-		 return zTreeObj;
+//		 $.fn.zTree.init($("#"+treeId), setting(treeId,autoParam,otherParam,asyncUrl,checkEnable,chkboxType,zTreeOnClick,zTreeOnAsyncSuccess,zTreeOnCheck), zTreeNodes);
+		 return $.fn.zTree.init($("#"+treeId), setting(treeId,autoParam,otherParam,asyncUrl,checkEnable,chkboxType,zTreeOnClick,zTreeOnAsyncSuccess,zTreeOnCheck), zTreeNodes);
+
 	 }
 	
 	

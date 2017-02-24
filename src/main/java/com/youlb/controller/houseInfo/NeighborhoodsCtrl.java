@@ -22,7 +22,6 @@ import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.INeighborhoodsBiz;
 import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.entity.houseInfo.Area;
 import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.RegexpUtils;
@@ -109,7 +108,7 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     @ResponseBody
     public String save(Neighborhoods neighborhoods,Model model){
-    	try {
+    	try {       
 		    		if(StringUtils.isBlank(neighborhoods.getNeibName())){
 		    			super.message = "社区名称不能为空！";
 		    			return  super.message;
