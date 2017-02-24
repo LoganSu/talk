@@ -33,7 +33,7 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 
 	@Override
 	public void delete(Serializable id) throws BizException {
-		 domainNameSqlDao.delete(id);
+		 domainNameSqlDao.deleteLogic(id);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 	public List<DomainName> showList(DomainName target, Operator loginUser)throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
-		 sb.append("from DomainName where 1=1");
+		 sb.append("from DomainName where delFlag=1 ");//逻辑删除
 		 if(StringUtils.isNotBlank(target.getParentid())){
 			 sb.append(" and parentid=? ");
 			 values.add(target.getParentid());
