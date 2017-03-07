@@ -15,7 +15,7 @@ text-align: center;
 	   <form id="adPublishsaveForm" name="adPublishsaveForm">
 		   <input type="hidden" name="id" value="${adPublish.id}"/>
 		   <input type="hidden" name="adType" value="${adPublish.adType}"/>
-		   <input type="hidden" id="adPublishDomainIds" value="${adPublish.treecheckbox}"/>
+<%-- 		   <input type="hidden" id="adPublishDomainIds" value="${adPublish.treecheckbox}"/> --%>
 		   <input type="hidden" name="carrierId" value="${adPublish.carrierId}"/>
               <div class="firstFont"><span class="starColor">*</span>上传媒体文件：</div>
               <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div>
@@ -91,7 +91,7 @@ text-align: center;
 		              </tr>
 		           </table>
 	                <div style="width: 500px;height: 300px;overflow: auto;">
-	                     <p id="adPublishShowTree"></p>              
+	                     <ul id="adPublishShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
 	                </div>
 	           </div>
 	           <!-- 详情不显示按钮 -->
@@ -184,29 +184,31 @@ text-align: center;
 		    }
 		});
 	  
-	  
+	  var id = $("#adPublishsaveForm [name='id']").val();
+	  var treecheckbox = "${adPublish.treecheckbox}";
+	  zTreeObj = zTree("adPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 		// 普通tree
-		$('#adPublishShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				checkbox:true,
-				checkboxLink:false,
-				showurl:false,
-				checkboxPartShow:true,
-				layer:[1,2,3,4]
+// 		$('#adPublishShowTree').bstree({
+// 				url: $path+'/mc/carrier',
+// 				height:'auto',
+// 				open: false,
+// 				checkbox:true,
+// 				checkboxLink:false,
+// 				showurl:false,
+// 				checkboxPartShow:true,
+// 				layer:[1,2,3,4]
 				
-		});
-		//多选框回显
- 		var treecheckbox = $("#adPublishDomainIds").val();
- 		//java代码 treecheckbox==null 则 treecheckbox=[]
- 		if(treecheckbox.length>2){
- 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
- 			var arr= treecheckbox.split(",");
-			  $.each(arr,function(index,obj){
- 				  $("#adPublishShowTree ."+$.trim(obj)).prop('checked',true);
- 			  });
- 		}
+// 		});
+// 		//多选框回显
+//  		var treecheckbox = $("#adPublishDomainIds").val();
+//  		//java代码 treecheckbox==null 则 treecheckbox=[]
+//  		if(treecheckbox.length>2){
+//  			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
+//  			var arr= treecheckbox.split(",");
+// 			  $.each(arr,function(index,obj){
+//  				  $("#adPublishShowTree ."+$.trim(obj)).prop('checked',true);
+//  			  });
+//  		}
  		 //切换单选框
  	   $("#adPublishsaveForm .sendTimeAbled").on("click",function(){
  		   $("#adPublishsaveForm .datepicker").attr("disabled",false);
@@ -252,8 +254,20 @@ text-align: center;
  	    
  	    
  	    $("#adPublishsaveForm .sure").on("click",function(){
- 	    	var data = $("#adPublishsaveForm").serialize();
- 	    	$.post($path+"/mc/adPublish/saveOrUpdate.do",data,function($data){
+ 	    	var param = $("#adPublishsaveForm").serialize();
+ 	    	var nodes = zTreeObj.getCheckedNodes(true);
+ 		   var treecheckbox;
+ 		      if(nodes){
+ 		    	  var arr = new Array();
+ 		    	  $.each(nodes,function(i,obj){
+ 		    		  arr.push(obj.id);
+ 		    	  });
+ 		    	  var parr = arr.join("&treecheckbox=");
+ 		    	  treecheckbox = "&treecheckbox="+parr;
+ 		    	  param=param+treecheckbox;
+ 		      }
+ 	    	
+ 	    	$.post($path+"/mc/adPublish/saveOrUpdate.do",param,function($data){
  	    		if($data){
  	    			hiAlert("提示",$data);
  	    			return false;

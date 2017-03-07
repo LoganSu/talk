@@ -22,7 +22,7 @@ public interface IRoleBiz extends IBaseBiz<Role> {
 	/**
 	 * @param role
 	 */
-	void saveOrUpdate(Role role)throws BizException;
+	void saveOrUpdate(Role role,Operator loginUser)throws BizException;
 
 	/**获取权限列表
 	 * @param loginUser

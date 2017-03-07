@@ -454,5 +454,16 @@ public class AdPublishBizImpl implements IAdPublishBiz {
 		List<AdPublishPicture> adPics = adPiclDao.find(find, new Object[]{id});
 		return adPics;
 	}
+    /**
+     * 查询所有的父节点
+     */
+	@Override
+	public List<String> getParentIds(String id) throws BizException{
+		StringBuilder sb =new StringBuilder();
+		sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d INNER JOIN t_domain_adpublish tdd on tdd.fdomainid=d.id where tdd.fadpublishid = ?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid)")
+		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
+		return adPiclDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
 
 }

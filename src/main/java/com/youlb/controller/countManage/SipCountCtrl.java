@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.countManage.ISipCountBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.entity.appManage.AppManage;
 import com.youlb.entity.countManage.SipCount;
 import com.youlb.utils.exception.BizException;
 @Controller
@@ -92,13 +91,13 @@ public class SipCountCtrl extends BaseCtrl {
 	}
 	
 	 /**
-     * 跳转到添加、更新页面
+     * 跳转到重启页面
      * @return
      */
     @RequestMapping("/toRestDevice.do")
-   	public String toRestDevice(String[] ids,SipCount sipCount,Model model){
-    	if(ids!=null&&ids.length==1){
-    		model.addAttribute("username",ids[0]);
+   	public String toRestDevice(String[] usernames,SipCount sipCount,Model model){
+    	if(usernames!=null&&usernames.length==1){
+    		model.addAttribute("username",usernames[0]);
     	}
 //    	String opraterType = appManage.getOpraterType();
 //    	try {
@@ -123,5 +122,23 @@ public class SipCountCtrl extends BaseCtrl {
 //    	}
    		return "/deviceCountSip/resetDevice";
    	}
+    
+    /**
+     * 重启
+     * @param user
+     * @param model
+     * @return
+     */
+    @RequestMapping("/restDevice.do")
+    @ResponseBody
+    public String restDevice(String username,String reset_time,String reset_type){
+    	try {
+    		sipCountBiz.restDevice(username,reset_time,reset_type);
+		} catch (Exception e) {
+			super.message = "操作失败！";
+			e.printStackTrace();
+		}
+    	 return  super.message;
+    } 
 
 }

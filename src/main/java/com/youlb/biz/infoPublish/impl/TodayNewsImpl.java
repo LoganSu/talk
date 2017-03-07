@@ -313,5 +313,14 @@ public class TodayNewsImpl implements ITodayNewsBiz {
 		 }
 		return null;
 	}
+
+	@Override
+	public List<String> getParentIds(String id) throws BizException {
+		StringBuilder sb =new StringBuilder();
+		sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d INNER JOIN t_domain_todaynews tdd on tdd.fdomainid=d.id where tdd.ftodaynewsid = ?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid)")
+		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
+		return todayNewsSqlDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
   
 }

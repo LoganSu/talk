@@ -612,5 +612,17 @@ public class DwellerBizImpl implements IDwellerBiz {
 		sb.append(" group by fcarrierid");
 		return dwellerSqlDao.pageFindBySql(sb.toString(), new Object[]{treecheckbox});
 	}
+    /**
+     * 查询所有的父节点
+     * @throws BizException 
+     */
+	@Override
+	public List<String> getParentIds(String id) throws BizException {
+		StringBuilder sb =new StringBuilder();
+		sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d INNER JOIN t_domain_dweller tdd on tdd.fdomainid=d.id where tdd.fdwellerid = ?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid)")
+		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
+		return dwellerSqlDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
 
 }

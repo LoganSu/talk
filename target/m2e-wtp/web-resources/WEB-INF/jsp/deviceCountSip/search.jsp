@@ -15,7 +15,7 @@
          <ul class="list-unstyled list-inline">
          <r:role auth="门口机在线状态查询/重启">
             <!--重启 -->
-            <li><button class="btn btn-success btn-sm resetDevice" rel="${path}/mc/sipCount/resetDevice.do?">重启</button></li>
+            <li><button class="btn btn-success btn-sm resetDevice">重启</button></li>
           </r:role>
          </ul>
 	 </div>
@@ -60,14 +60,14 @@
 				 hiAlert("提示","请选择一条操作数据！");
 				 return false;
 			 }
-			 var ids = $.map(selects, function (row) {
+			 var usernames = $.map(selects, function (row) {
 			        return row.username;
-			    }).join("&ids=");
-		     $.post($path+"/mc/sipCount/toRestDevice.do","ids="+ids,function(addHtml){
+			    }).join("&username=");
+		     $.post($path+"/mc/sipCount/toRestDevice.do","usernames="+usernames,function(addHtml){
 					//设置标题
-		            $("#myModalLabel").html("重启");
-					$("#myModal .modal-body").html(addHtml);
-					$("#myModal").modal("show");
+		            $("#unnormalModalLabel").html("重启");
+					$("#unnormalModal .modal-body").html(addHtml);
+					$("#unnormalModal").modal("show");
 				});
     	   })
     	   

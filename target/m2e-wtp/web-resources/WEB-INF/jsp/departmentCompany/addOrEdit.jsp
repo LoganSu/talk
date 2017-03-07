@@ -8,37 +8,41 @@ $(function(){
 	
 	  var id = $("#companyDepartmentsaveForm [name='id']").val();
 	  var treecheckbox = "${department.domainIds}";
-	  zTreeObj = zTree("companyDepartmentShowTree", ["id","name","level"],["nocheckLevel","0234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	  var parentIds = "${parentIds}"
+	  zTreeObj = zTree("companyDepartmentShowTree", ["id","name","level"],["nocheckLevel","0234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,companyDepartmentDataEcho(id,treecheckbox,parentIds), null)
 	
-// 	domainTree("companyDepartmentShowTree", $path+'/mc/carrier', false, true, false, false, true, [1], 'domainIds');
-	// 域tree
-// 	$('#companyDepartmentShowTree').bstree({
-// 			url: $path+'/mc/carrier',
-// 			height:'auto',
-// 			open: false,
-// 			checkbox:true,
-// 			checkboxPartShow:true,//显示部分多选框
-// 			layer: [1],
-// 			treecheckboxFiledName:'domainIds',
-// 			showurl:false
-// 	});
-	//域数据回显
-// 	var domainIds = $("#companyDepartmentdomainIds").val();
-	//java代码 treecheckbox==null 则 treecheckbox=[]
-// 	alert(domainIds.toSource());
-// 	if(domainIds.length>2){
-// 		domainIds=domainIds.substring(1,domainIds.length-1);
-// 		var arr= domainIds.split(",");
-// 		  $.each(arr,function(index,obj){
-// 			  $("#companyDepartmentShowTree ."+$.trim(obj)).prop('checked',true);
-// 		  });
-// 	}else{
-// 		var checkboxArr = $("#companyDepartmentShowTree .treecheckbox")
-// 		$.each(checkboxArr,function(index,obj){
-// 			  $(this).prop('checked',true);
-// 		  });
-// 	}
-	
+	//数据回显函数
+	  function companyDepartmentDataEcho(id,treecheckbox,parentIds){
+		  var zTreeOnAsyncSuccess;
+		  if(id&&treecheckbox&&parentIds){
+			  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+				//子节点回显
+				 if(treeNode){
+					 $.each(treeNode.children,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						    zTreeObj.reAsyncChildNodes(treeNode.children[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(treeNode.children[i], true, false);
+						 }
+					 })
+					//第一级节点回显
+				 }else{
+				     var nodes = zTreeObj.getNodes();
+				     $.each(nodes,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						        zTreeObj.reAsyncChildNodes(nodes[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(nodes[i], true, false);
+						 }
+					 })
+				 }
+		     };
+		  }
+		  
+		  return zTreeOnAsyncSuccess;
+	  }
 })
 
 </script>

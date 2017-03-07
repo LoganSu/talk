@@ -32,4 +32,5 @@ public interface IDepartmentBiz extends IBaseBiz<Department> {
 	 */
 	String checkDomain(String domainId)throws BizException;
 	void delete(String[] ids, String parentId)throws BizException;
+	List<String> getParentIds(String string)throws BizException ;
 }

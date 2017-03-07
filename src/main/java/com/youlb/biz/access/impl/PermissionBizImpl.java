@@ -2,12 +2,8 @@ package com.youlb.biz.access.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.youlb.biz.access.IPermissionBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.BlackListData;
@@ -303,7 +298,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 			logger.info("白名单推送设备："+deviceCount);
 			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
 			BlackListData bcl = new BlackListData();
-			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
+			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn(),new Date().getTime()+""));
 			logger.info("白名单："+JsonUtils.toJson(bcl));
 			formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
 			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
@@ -343,7 +338,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 			logger.info("白名单推送设备："+deviceCount);
 			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
 			BlackListData bcl = new BlackListData();
-			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
+			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn(),new Date().getTime()+""));
 			logger.info("白名单："+JsonUtils.toJson(bcl));
 			formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
 			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
@@ -469,10 +464,10 @@ public class PermissionBizImpl implements IPermissionBiz {
 					BlackListData bcl = new BlackListData();
 					//挂失或者注销
 					if(SysStatic.LOSS.equals(cardInfo.getCardStatus())||SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
-						bcl.addBc(new BlackListData.BlackCardData(1, cardInfo.getCardSn()));
+						bcl.addBc(new BlackListData.BlackCardData(1, cardInfo.getCardSn(),new Date().getTime()+""));
 					//解挂
 					}else{
-						bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn()));
+						bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn(),new Date().getTime()+""));
 					}
 					formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
 					UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");

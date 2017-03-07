@@ -9,6 +9,8 @@
 		    <input type="hidden" name="id" value="${role.id}"/>
 		    <input type="hidden" name="carrierId" value="${role.carrierId}"/>
 		    <input type="hidden" name="isAdmin" value="${role.isAdmin}"/>
+		    <input type="hidden" name="checked" value=""/>
+		    
             <table>
 <!--               <tr> -->
 <!--                  <td><div class="leftFont"><span class="starColor">*</span>选择运营商：</div></td> -->
@@ -31,11 +33,11 @@
            </table>
            </div>
 <!--            <div  style="margin-top: 20px;margin-left: 20px;"> -->
-<!--                <div><label>选择可操作权限：</label></div> -->
+               <div><label>选择可操作权限：</label></div>
 <!--                <div class="showRolesTable" style="height: 500px"> -->
 <!--                </div> -->
 <!--            </div> -->
-           <p id="carrierRolesprivilegeShowTree"></p>
+           <ul id="carrierRolesprivilegeShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
          </form>
 	   </div>
  </div>
@@ -47,10 +49,32 @@ padding-left: 20px
 </style>
 <script type="text/javascript">
   $(function(){
-		  var id = $("#carrierRolesaveForm [name='id']").val();
-		  var params = "id="+id;
+	  var id = $("#carrierRolesaveForm [name='id']").val();
+	  var treecheckbox = "${role.privilegeIds}";
+	  zTreeObj = zTree("carrierRolesprivilegeShowTree", ["id","name","level"],[],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), zTreeOnCheck)
+	  
+	  
+	  
+	   //设置有费用管理权限的角色标记 后台做数据同步
+        function zTreeOnCheck(event, treeId, treeNode) {
+	          $("#carrierRolesaveForm [name='checked']").val("");
+	          var nodes = zTreeObj.getCheckedNodes(true);
+	          $.each(nodes,function(i,obj){
+				  if(obj.name=="费用管理"&&obj.checked){
+					   $("#carrierRolesaveForm [name='checked']").val("1");
+				  }
+	          })
+          };
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+// 		  var params = "id="+id;
 		  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName,params)
-			domainTree("carrierRolesprivilegeShowTree", $path+'/mc/role', false, true, true, false,false,null,null,params);
+// 			domainTree("carrierRolesprivilegeShowTree", $path+'/mc/role', false, true, true, false,false,null,null,params);
 		    // 普通tree
 // 			$('#carrierRolesprivilegeShowTree').bstree({
 // 					url: $path+'/mc/role',

@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.SQLQuery;
@@ -388,6 +390,28 @@ public class DomainBizImpl implements IDomainBiz {
 				list.add(domain);
 			}
 		}
+		return list;
+	}
+    /**
+     * 获取树结构数据
+     * @throws BizException 
+     */
+	@Override
+	public  List<Map<String,String>> domainTree() throws BizException {
+//		 StringBuilder sb = new StringBuilder();
+		 String sql = "select t.id,t.fparentid,t.fremark from t_domain t where t.fparentid is not null";
+		 List<Object[]> listObj = domainSqlDao.pageFindBySql(sql, new Object[]{});
+		 List<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		 if(listObj!=null&&!listObj.isEmpty()){
+				for(Object[] obj:listObj){
+					Map<String,String> map = new HashMap<String,String>();
+					map.put("id", obj[0]==null?"":(String)obj[0]);
+					map.put("parentId", obj[1]==null?"":(String)obj[1]);
+					map.put("name", obj[2]==null?"":(String)obj[2]);
+					list.add(map);
+				}
+			}
+				 
 		return list;
 	}
 }

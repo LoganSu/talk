@@ -39,7 +39,7 @@ public interface IOperatorBiz extends IBaseBiz<Operator>{
 	 * @param user
 	 * @param loginUser
 	 */
-	void saveOrUpdate(Operator user)throws BizException;
+	void saveOrUpdate(Operator user,Operator loginUser)throws BizException;
 
 	/**获取角色列表
 	 * @param loginUser

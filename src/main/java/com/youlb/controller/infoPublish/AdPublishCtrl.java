@@ -1,16 +1,12 @@
 package com.youlb.controller.infoPublish;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,15 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.youlb.biz.infoPublish.IAdPublishBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.infoPublish.AdPublish;
 import com.youlb.entity.infoPublish.AdPublishPicture;
-import com.youlb.utils.common.JsonUtils;
-import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.DateHelper;
@@ -82,6 +74,11 @@ public class AdPublishCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
     		try {
 				adPublish = adPublishBiz.get(ids[0]);
+				//选择区域发送处理数据回显
+				if("2".equals(adPublish.getSendType())){
+					List<String> parentIds = adPublishBiz.getParentIds(ids[0]);
+					model.addAttribute("parentIds",parentIds);
+				}
 			} catch (BizException e) {
 				log.error("获取单条数据失败");
 				e.printStackTrace();

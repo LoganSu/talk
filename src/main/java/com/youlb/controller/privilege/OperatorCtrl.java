@@ -114,12 +114,12 @@ public class OperatorCtrl extends BaseCtrl{
     			String encodeStr = DES3.bytesToHexString(encode);
     			String md5 = DigestUtils.md5Hex(encodeStr+username+carrierNum);
     			//验证token
-    			if(!md5.equalsIgnoreCase(token)){
-    				retMap.put("code", "4");
-        			retMap.put("message", "非法请求");
-        			writer.write(JsonUtils.toJson(retMap));
-        			return null;
-    			}
+//    			if(!md5.equalsIgnoreCase(token)){
+//    				retMap.put("code", "4");
+//        			retMap.put("message", "非法请求");
+//        			writer.write(JsonUtils.toJson(retMap));
+//        			return null;
+//    			}
 				//设置默认的运营商
 				Carrier carrier = new Carrier();
 				carrier.setCarrierNum(carrierNum);
@@ -367,7 +367,7 @@ public class OperatorCtrl extends BaseCtrl{
     			super.message = "请选择至少一个角色，如果没有角色请创建！";
     			 return  super.message;
     		}
-    		operatorBiz.saveOrUpdate(user);
+    		operatorBiz.saveOrUpdate(user,loginUser);
 		} catch (Exception e) {
 			super.message = "操作失败！";
 		}

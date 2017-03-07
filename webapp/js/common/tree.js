@@ -61,6 +61,7 @@
 					 $.each(treeNode.children,function(i,obj){
 						 if(treecheckbox.indexOf(obj.id)>0){
 							 zTreeObj.checkNode(treeNode.children[i], true, false);
+							 zTreeObj.reAsyncChildNodes(treeNode.children[i], "refresh");
 						 }
 					 })
 					//第一级节点回显
@@ -69,6 +70,7 @@
 				     $.each(nodes,function(i,obj){
 						 if(treecheckbox.indexOf(obj.id)>0){
 							 zTreeObj.checkNode(nodes[i], true, false);
+							 zTreeObj.reAsyncChildNodes(nodes[i], "refresh");
 						 }
 					 })
 				 }

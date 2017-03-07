@@ -81,29 +81,42 @@
 
 	  var id = $("#infoPublishsaveForm [name='id']").val();
 	  var treecheckbox = "${infoPublish.treecheckbox}";
-	  zTreeObj = zTree("infoPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
-	  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName)
-// 		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false,true,[1,2,3,4]);
-
-		// 普通tree
-// 		$('#infoPublishShowTree').bstree({
-// 				url: $path+'/mc/carrier',
-// 				height:'auto',
-// 				open: false,
-// 				checkbox:true,
-// 				checkboxLink:false,
-// 				showurl:false
-// 		});
-		//多选框回显
-// 		var treecheckbox = $("#infoPublishDomainIds").val();
-// 		//java代码 treecheckbox==null 则 treecheckbox=[]
-// 		if(treecheckbox.length>2){
-// 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-// 			var arr= treecheckbox.split(",");
-// 			  $.each(arr,function(index,obj){
-// 				  $("#infoPublishShowTree ."+$.trim(obj)).prop('checked',true);
-// 			  });
-// 		}
+	  var parentIds = "${parentIds}"
+	  zTreeObj = zTree("infoPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,infoPublishDataEcho(id,treecheckbox,parentIds), null)
+	  
+		//数据回显函数
+	  function infoPublishDataEcho(id,treecheckbox,parentIds){
+		  var zTreeOnAsyncSuccess;
+		  if(id&&treecheckbox&&parentIds){
+			  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+				//子节点回显
+				 if(treeNode){
+					 $.each(treeNode.children,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						    zTreeObj.reAsyncChildNodes(treeNode.children[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(treeNode.children[i], true, false);
+						 }
+					 })
+					//第一级节点回显
+				 }else{
+				     var nodes = zTreeObj.getNodes();
+				     $.each(nodes,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						        zTreeObj.reAsyncChildNodes(nodes[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(nodes[i], true, false);
+						 }
+					 })
+				 }
+		     };
+		  }
+		  
+		  return zTreeOnAsyncSuccess;
+	  }
+	  
 		//确定按钮
 	   $("#infoPublishsaveForm .sure").on("click",function(){
 		   var url=$path+"/mc/infoPublish/saveOrUpdate.do";

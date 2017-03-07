@@ -52,5 +52,11 @@ public interface IAdPublishBiz extends IBaseBiz<AdPublish> {
      * @return
      */
 	List<AdPublishPicture> getPicByAdpublishId(String id)throws BizException;
+    /**
+     * 查询所有的父节点
+     * @param string
+     * @return
+     */
+	List<String> getParentIds(String string)throws BizException;
 
 }

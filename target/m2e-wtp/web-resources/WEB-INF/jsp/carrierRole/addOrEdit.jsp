@@ -9,6 +9,8 @@
 		    <input type="hidden" name="id" value="${role.id}"/>
 		    <input type="hidden" name="carrierId" value="${role.carrierId}"/>
 		    <input type="hidden" name="isAdmin" value="${role.isAdmin}"/>
+		    <input type="hidden" name="checked" value=""/>
+		    
             <table>
 <!--               <tr> -->
 <!--                  <td><div class="leftFont"><span class="starColor">*</span>选择运营商：</div></td> -->
@@ -49,7 +51,26 @@ padding-left: 20px
   $(function(){
 	  var id = $("#carrierRolesaveForm [name='id']").val();
 	  var treecheckbox = "${role.privilegeIds}";
-	  zTree("carrierRolesprivilegeShowTree", ["id","name","level"],[],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
+	  zTreeObj = zTree("carrierRolesprivilegeShowTree", ["id","name","level"],[],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), zTreeOnCheck)
+	  
+	  
+	  
+	   //设置有费用管理权限的角色标记 后台做数据同步
+        function zTreeOnCheck(event, treeId, treeNode) {
+	          $("#carrierRolesaveForm [name='checked']").val("");
+	          var nodes = zTreeObj.getCheckedNodes(true);
+	          $.each(nodes,function(i,obj){
+				  if(obj.name=="费用管理"&&obj.checked){
+					   $("#carrierRolesaveForm [name='checked']").val("1");
+				  }
+	          })
+          };
+	  
+	  
+	  
+	  
+	  
+	  
 	  
 // 		  var params = "id="+id;
 		  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName,params)

@@ -65,30 +65,41 @@
 	  
 	  var id = $("#dwellersaveForm [name='id']").val();
 	  var treecheckbox = "${dweller.treecheckbox}";
-	  zTreeObj = zTree("dwellerShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
-	//显示多选框的级别
-		// 普通tree
-// 	    var param= "dwellerId=" +$("#dwellersaveForm [name=id]").val();
-// 		$('#dwellerShowTree').bstree({
-// 				url: $path+'/mc/carrier',
-// 				height:'auto',
-// 				open: false,
-// 				param:param,
-// 				checkbox:true,
-// 				checkboxPartShow:true,//显示部分多选框
-// 				layer: [4],
-// 				showurl:false
-// 		});
-// 		//多选框回显
-// 		var treecheckbox = $("#dwellerDomainIds").val();
-// 		//java代码 treecheckbox==null 则 treecheckbox=[]
-// 		if(treecheckbox.length>2){
-// 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-// 			var arr= treecheckbox.split(",");
-// 			  $.each(arr,function(index,obj){
-// 				  $("#dwellerShowTree ."+obj.trim()).prop('checked',true);
-// 			  });
-// 		}
+	  var parentIds = "${parentIds}"
+	  zTreeObj = zTree("dwellerShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dwrellerDataEcho(id,treecheckbox,parentIds), null)
+
   })
+	//数据回显函数
+	  function dwrellerDataEcho(id,treecheckbox,parentIds){
+		  var zTreeOnAsyncSuccess;
+		  if(id&&treecheckbox&&parentIds){
+			  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+				//子节点回显
+				 if(treeNode){
+					 $.each(treeNode.children,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						    zTreeObj.reAsyncChildNodes(treeNode.children[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(treeNode.children[i], true, false);
+						 }
+					 })
+					//第一级节点回显
+				 }else{
+				     var nodes = zTreeObj.getNodes();
+				     $.each(nodes,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						        zTreeObj.reAsyncChildNodes(nodes[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(nodes[i], true, false);
+						 }
+					 })
+				 }
+		     };
+		  }
+		  
+		  return zTreeOnAsyncSuccess;
+	  }
 </script>
 </html>

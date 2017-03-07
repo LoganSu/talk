@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.management.IDepartmentBiz;
 import com.youlb.biz.management.IWorkerBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.entity.common.Domain;
 import com.youlb.entity.management.Department;
 import com.youlb.entity.management.Worker;
 import com.youlb.utils.common.RegexpUtils;
@@ -97,6 +96,9 @@ public class DepartmentCtrl extends BaseCtrl {
     		
 			try {
 				Department department = departmentBiz.get(ids[0]);
+				//选择区域发送处理数据回显
+				List<String> parentIds = departmentBiz.getParentIds(ids[0]);
+				model.addAttribute("parentIds",parentIds);
 				model.addAttribute("department", department);
 			} catch (BizException e) {
 				log.error("获取单条数据失败");
@@ -283,12 +285,16 @@ public class DepartmentCtrl extends BaseCtrl {
 	
 	@RequestMapping("/getWorkerNodes.do")
 	@ResponseBody
-	public List<HashMap<String,Object>> getWorkerNodes(String id,String name,Integer level,String nocheckLevel){
+	public List<HashMap<String,Object>> getWorkerNodes(String id,String name,Integer level,String nocheckLevel,String departmentId){
 		List<HashMap<String,Object>> list = new ArrayList<HashMap<String,Object>>();
 		try {
 			level = level==null?0:level+1;
 			Department sd = new Department();
-			sd.setParentId(id);
+			if(StringUtils.isBlank(id)){
+				sd.setParentId(departmentId);
+			}else{
+				sd.setParentId(id);
+			}
 			List<Department> dList = departmentBiz.showList(sd,getLoginUser());
 			if(dList!=null&&!dList.isEmpty()){
 				for(Department d:dList){

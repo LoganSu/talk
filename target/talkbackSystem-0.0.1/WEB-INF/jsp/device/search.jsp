@@ -15,6 +15,9 @@
 <%--                 <r:role auth="门禁设备管理/添加"> --%>
 <%--                     <li><button class="btn btn-success btn-sm saveOrUpdateBtn" rel="${path}/mc/device/toSaveOrUpdate.do?parentId=${parentId}" saveUrl="${path}/mc/device/saveOrUpdate.do">添加</button></li> --%>
 <%--                 </r:role> --%>
+                <r:role auth="门禁设备管理/激活设备">
+                    <li><button class="btn btn-success btn-sm setLive">激活设备</button></li>
+	            </r:role>
                 <r:role auth="门禁设备管理/修改">
                     <li><button class="btn btn-warning btn-sm saveOrUpdateBtn" rel="${path}/mc/device/toSaveOrUpdate.do?parentId=${parentId}" saveUrl="${path}/mc/device/saveOrUpdate.do">修改</button></li>
 	            </r:role>

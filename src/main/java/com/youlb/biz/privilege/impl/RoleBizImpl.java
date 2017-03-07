@@ -2,13 +2,17 @@ package com.youlb.biz.privilege.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 import com.youlb.biz.privilege.IRoleBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.common.Pager;
@@ -122,10 +126,11 @@ public class RoleBizImpl implements IRoleBiz {
 	 * @see com.youlb.biz.privilege.IRoleBiz#saveOrUpdate(com.youlb.entity.privilege.Role)
 	 */
 	@Override
-	public void saveOrUpdate(Role role) throws BizException {
+	public void saveOrUpdate(Role role,Operator loginUser) throws BizException {
 //		roleSqlDao.saveOrUpdate(role);
 		String role_privilege ="insert into t_role_privilege (froleid,fprivilegeid) values(?,?)";
 		String role_domain ="insert into t_role_domain (froleid,fdomainid) values(?,?)";
+		List<String> domainIds = role.getDomainIds();
 		//add
 		if(StringUtils.isBlank(role.getId())){
 			String roleId = (String) roleSqlDao.add(role);
@@ -138,7 +143,6 @@ public class RoleBizImpl implements IRoleBiz {
 				}
 			}
 			
-			List<String> domainIds = role.getDomainIds();
 			if(domainIds!=null&&!domainIds.isEmpty()){
 				//插入角色域中间表
 				for(String domainId:domainIds){
@@ -166,14 +170,39 @@ public class RoleBizImpl implements IRoleBiz {
 			 String dele_role_domain = "delete from t_role_domain where froleid=?";
 			 roleSqlDao.executeSql(dele_role_domain, new Object[]{role.getId()});
 			 //更新用户角色中间表
-			 List<String> domainIds = role.getDomainIds();
+//			 List<String> domainIds = role.getDomainIds();
 				if(domainIds!=null&&!domainIds.isEmpty()){
 					///插入角色域中间表
 					for(String domainId:domainIds){
 						roleSqlDao.executeSql(role_domain, new Object[]{role.getId(),domainId});
 					}
 				}
+				//角色权限有 费用管理 功能的用户都要同步数据到支付平台（cheked=1）
+				if(new Integer(1).equals(role.getChecked())){
+					String carrier = loginUser.getCarrier().getCarrierNum();
+					//找出拥有此角色的所有用户做域数据同步
+					StringBuilder sb = new StringBuilder();
+					sb.append("select a.floginname, array_to_string (ARRAY(SELECT trd.fdomainid from t_role r INNER JOIN ")
+					.append("t_operator_role top on top.froleid=r.id INNER JOIN t_role_domain trd on trd.froleid=r.id ")
+					.append(" where top.foperatorid=a.oid ),',') from (SELECT o.floginname floginname,o.id oid from t_role r  ")
+					.append(" INNER JOIN t_operator_role top on top.froleid=r.id INNER JOIN t_operator o on o.id=top.foperatorid")
+					.append(" where r.id=? GROUP BY o.floginname,o.id) a");
+					List<Object[]> listObj = roleSqlDao.pageFindBySql(sb.toString(), new Object[]{role.getId()});
+//					List<Map<String,List<String>>> domainList= new ArrayList<Map<String,List<String>>>();
+					Map<String,List<String>> map = new HashMap<String,List<String>>();
+					if(listObj!=null&&!listObj.isEmpty()){
+						for(Object[] obj:listObj){
+							String domains =  obj[1]==null?"":(String)obj[1];
+							if(obj[0]!=null&&StringUtils.isNotBlank(domains)){
+								String[] domainArr= domains.split(",");
+								map.put(carrier+"-"+(String) obj[0], Arrays.asList(domainArr));
+							}
+						}
+					}
+					System.out.println(map);
+				}
 		}
+		
 		
 	}
 

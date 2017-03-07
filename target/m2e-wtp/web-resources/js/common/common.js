@@ -2,6 +2,11 @@
 $(function(){
  //加载右边页面公共方法
 	$(document).on("click",".li_a",function(){
+		$("#showRightAreaIframe").remove();
+		var showRightArea = $("#showRightArea");
+		 if(showRightArea.size()<1){
+			  $("#personshowImg").before('<div class="col-md-10" id="showRightArea" ></div>');
+		  }
 		  //隐藏打开的树状结构
 		  $(".treeDiv").hide();
 		  //隐藏显示的图片
@@ -140,7 +145,9 @@ $(function(){
 	    	  treecheckbox = "&domainIds="+parr;
 	    	  param=param+treecheckbox;
 		     }
-	      
+	         //用完之后清空数据
+	         zTreeObj=null;
+	         zTreeObjTwo=null;
 		     var title = $("#myModalLabel").html();
 			 var url;
 			 if(title=="重置密码"){

@@ -3,6 +3,7 @@ package com.youlb.biz.privilege.impl;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -318,20 +319,23 @@ public class OperatorBizImpl implements IOperatorBiz {
 	 * @see com.youlb.biz.privilege.IOperatorBiz#saveOrUpdate(com.youlb.entity.privilege.Operator, com.youlb.entity.privilege.Operator)
 	 */
 	@Override
-	public void saveOrUpdate(Operator user) throws BizException {
+	public void saveOrUpdate(Operator user,Operator loginUser) throws BizException {
 		String sql = "insert into T_OPERATOR_ROLE (FOPERATORID,FROLEID) values (?,?)";
+		List<String> roleIds = user.getRoleIds();
+		String carrier = loginUser.getCarrier().getCarrierNum();
+
 		//add
 		if(StringUtils.isBlank(user.getId())){
 			user.setPassword(SHAEncrypt.digestPassword(user.getLoginName()));
 			String operatorId = (String) operatorSqlDao.add(user);
 			operatorSqlDao.getCurrSession().flush();
-			List<String> roleIds = user.getRoleIds();
 			if(roleIds!=null&&!roleIds.isEmpty()){
 				//选择了角色插入中间表
 				for(String roleId:roleIds){
 					operatorSqlDao.executeSql(sql, new Object[]{operatorId,roleId});
 				}
 			}
+			
 		//update
 		}else{
 			//更新用户表
@@ -341,13 +345,42 @@ public class OperatorBizImpl implements IOperatorBiz {
 			 String dele = "delete from T_OPERATOR_ROLE where FOPERATORID=?";
 			 operatorSqlDao.executeSql(dele, new Object[]{user.getId()});
 			 //更新用户角色中间表
-			 List<String> roleIds = user.getRoleIds();
 				if(roleIds!=null&&!roleIds.isEmpty()){
 					//插入新关系
 					for(String roleId:roleIds){
 						operatorSqlDao.executeSql(sql, new Object[]{user.getId(),roleId});
 					}
 				}
+		}
+		//如果是有费用管理模块的用户需要同步数据到支付平台
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT p.fname from t_role_privilege trp INNER JOIN t_privilege p on p.id=trp.fprivilegeid ")
+		.append(" INNER JOIN t_role r on r.id=trp.froleid where p.fname=? ");
+		sb.append(SearchHelper.jointInSqlOrHql(roleIds, " r.id "));
+		List<String> list = operatorSqlDao.pageFindBySql(sb.toString(), new Object[]{"费用管理",roleIds});
+		if(list!=null&&!list.isEmpty()){
+			Map<String,List<String>> map = new HashMap<String,List<String>>();
+			//通过选择的角色获取域集合
+//			if(StringUtils.isBlank(user.getId())){
+				//通过角色获取域权限数据
+				sb = new StringBuilder();
+				sb.append("SELECT fdomainid from  t_role_domain where 1=1 ");
+				sb.append(SearchHelper.jointInSqlOrHql(roleIds, " froleid "));
+				List<String> domainList = operatorSqlDao.pageFindBySql(sb.toString(), new Object[]{roleIds});
+				map.put(carrier+"-"+user.getLoginName(),domainList);
+				//更新的时候
+//			}else{
+//				//做用户域数据同步
+//				sb = new StringBuilder();
+//				sb.append("SELECT trd.fdomainid from t_role r INNER JOIN t_operator_role top on top.froleid=r.id INNER JOIN ")
+//				.append(" t_role_domain trd on trd.froleid=r.id where top.foperatorid=?");
+//				List<String> domainList = operatorSqlDao.pageFindBySql(sb.toString(), new Object[]{user.getId()});
+//				if(domainList!=null&&!domainList.isEmpty()){
+//					map.put(carrier+"-"+user.getLoginName(),domainList);
+//				}
+				System.out.println(map);
+//			}
+			// TODO 调用接口
 		}
 	}
 

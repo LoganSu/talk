@@ -1,21 +1,42 @@
 package com.youlb.biz.countManage.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.ParseException;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.youlb.biz.access.impl.PermissionBizImpl;
 import com.youlb.biz.countManage.ISipCountBiz;
 import com.youlb.dao.common.BaseDaoBySql;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.countManage.SipCount;
 import com.youlb.entity.privilege.Operator;
+import com.youlb.utils.common.JsonUtils;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 
 @Service("sipCountBiz")
 public class SipCountBizImpl implements ISipCountBiz {
+	/** 日志输出 */
+	private static Logger logger = LoggerFactory.getLogger(SipCountBizImpl.class);
 	@Autowired
 	private BaseDaoBySql<SipCount> sipCountlDao;
 	public void setSipCountlDao(BaseDaoBySql<SipCount> sipCountlDao) {
@@ -261,6 +282,33 @@ public class SipCountBizImpl implements ISipCountBiz {
 			 }
 		 }
 		return list;
+	}
+    /**
+     * 重启
+     * @throws IOException 
+     * @throws ClientProtocolException 
+     * @throws JsonException 
+     * @throws ParseException 
+     */
+	@Override
+	public void restDevice(String username, String reset_time, String reset_type)
+			throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
+		 HttpGet request = new HttpGet(SysStatic.HTTP+"/device/device_remote_reset.json?username="+username+"&reset_time="+reset_time+"&reset_type="+reset_type);
+		 CloseableHttpClient httpClient = HttpClients.createDefault();
+		 CloseableHttpResponse response = httpClient.execute(request);
+			if(response.getStatusLine().getStatusCode()==200){
+				HttpEntity entity_rsp = response.getEntity();
+				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+				if(resultDto!=null){
+					if(!"0".equals(resultDto.getCode())){
+						logger.error(resultDto.getMsg());
+						throw new BizException(resultDto.getMsg());
+					}
+				}else{
+					logger.info("门口机重启推送成功！");
+				}
+			} 
+		
 	}
 	
 }

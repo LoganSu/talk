@@ -36,12 +36,20 @@ public class BlackListData {
 	public static class BlackCardData {
 		private Integer typ;		// 操作类型:挂失-1/解挂-0
 		private String  cid;		// 卡序列号
+		private String  time;		// 时间戳
 		public BlackCardData() {}
-		public BlackCardData(Integer type, String cid) {
+		public BlackCardData(Integer type, String cid, String time) {
 			this.typ = type;
 			this.cid = cid;
+			this.time = time;
 		}
 		
+		public String getTime() {
+			return time;
+		}
+		public void setTime(String time) {
+			this.time = time;
+		}
 		public Integer getTyp() {
 			return typ;
 		}

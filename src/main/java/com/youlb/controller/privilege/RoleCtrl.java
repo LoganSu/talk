@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,14 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.youlb.biz.baseInfo.ICarrierBiz;
 import com.youlb.biz.privilege.IRoleBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.entity.privilege.Role;
-import com.youlb.entity.vo.QJson;
 import com.youlb.entity.vo.QTree;
 import com.youlb.utils.exception.BizException;
 
@@ -121,7 +118,7 @@ public class RoleCtrl extends BaseCtrl{
     				return  super.message;
     			}
     		}
-    		roleBiz.saveOrUpdate(role);
+    		roleBiz.saveOrUpdate(role,loginUser);
 		} catch (Exception e) {
 			super.message = "操作失败！";
 			e.printStackTrace();

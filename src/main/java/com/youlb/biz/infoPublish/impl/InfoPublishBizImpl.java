@@ -471,5 +471,14 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		return null;
 	}
 
+	@Override
+	public List<String> getParentIds(String id) throws BizException {
+		StringBuilder sb =new StringBuilder();
+		sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d INNER JOIN t_domain_infopublish tdd on tdd.fdomainid=d.id where tdd.finfopublishid = ?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid)")
+		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
+		return infoPublishSqlDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
+
 
 }

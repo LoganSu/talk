@@ -55,6 +55,9 @@ public class WorkerGroupCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
 			try {
 				WorkerGroup workerGroup = workerGroupBiz.get(ids[0]);
+				//选择区域发送处理数据回显
+				List<String> parentIds = workerGroupBiz.getParentIds(ids[0]);
+				model.addAttribute("parentIds",parentIds);
 				model.addAttribute("workerGroup",workerGroup);
 			} catch (BizException e) {
 				log.error("获取单个数据失败");
@@ -125,6 +128,9 @@ public class WorkerGroupCtrl extends BaseCtrl {
     	if(StringUtils.isNotBlank(id)){
 			try {
 				WorkerGroup workerGroup = workerGroupBiz.get(id);
+				//选择区域发送处理数据回显
+				List<String> parentIds = workerGroupBiz.getParentIds(id);
+				model.addAttribute("parentIds",parentIds);
 				model.addAttribute("workerGroup",workerGroup);
 			} catch (BizException e) {
 				log.error("获取员工组数据失败");

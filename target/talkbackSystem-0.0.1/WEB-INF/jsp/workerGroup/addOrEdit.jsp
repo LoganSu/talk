@@ -14,26 +14,22 @@ $(function(){
    if(update_departmentId){
 	   showTree(update_departmentId);
    }
-	var workerIds = $("#workerGroupsaveForm .workerIds").val();
-	if(workerIds.length>2){
-		workerIds=workerIds.substring(1,workerIds.length-1);
-		var arr= workerIds.split(",");
-		  $.each(arr,function(index,obj){
-			  $("#workerGroupShowTree ."+$.trim(obj)).prop('checked',true);
-		  });
-	}
 })
 	function showTree(departmentId){
-		$('#workerGroupShowTree').bstree({
-			url: $path+'/mc/departmentWorkerTree',
-			height:'auto',
-			param:'departmentId='+departmentId,
-			open: false,
-			checkbox:true,
-			checkboxLink:true,
-			treecheckboxFiledName:'workerIds',
-			showurl:false
-	   })
+	   var id = $("#workerGroupsaveForm [name='id']").val();
+	   var treecheckbox = "${workerGroup.treecheckbox}";
+	   zTreeObj = zTree("workerGroupShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	
+// 		$('#workerGroupShowTree').bstree({
+// 			url: $path+'/mc/departmentWorkerTree',
+// 			height:'auto',
+// 			param:'departmentId='+departmentId,
+// 			open: false,
+// 			checkbox:true,
+// 			checkboxLink:true,
+// 			treecheckboxFiledName:'workerIds',
+// 			showurl:false
+// 	   })
 	}
 	
 </script>
@@ -41,7 +37,7 @@ $(function(){
 	   <div>
 		 <form id="workerGroupsaveForm" action="">
 		   <input type="hidden" name="id" value="${workerGroup.id}"/>
-		   <input type="hidden" class="workerIds" value="${workerGroup.workerIds}"/>
+<%-- 		   <input type="hidden" class="workerIds" value="${workerGroup.workerIds}"/> --%>
            <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>所属公司：</div></td>
@@ -71,7 +67,8 @@ $(function(){
               </tr>
            </table>
                <div class="firstFont">选择人员：</div>
-               <p id="workerGroupShowTree"></p>
+               <ul id="workerGroupShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+               
          </form>
 	   </div>
  </div>

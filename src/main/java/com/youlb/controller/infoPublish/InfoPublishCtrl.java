@@ -66,6 +66,11 @@ public class InfoPublishCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
     		try {
 				infoPublish = infoPublishBiz.get(ids[0]);
+				//选择区域发送处理数据回显
+				if("2".equals(infoPublish.getSendType())){
+					List<String> parentIds = infoPublishBiz.getParentIds(ids[0]);
+					model.addAttribute("parentIds",parentIds);
+				}
 			} catch (BizException e) {
 				log.error("获取单条数据失败");
 				e.printStackTrace();

@@ -83,14 +83,18 @@ public class TodayNewsCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
     		try {
 				todayNews = todayNewsBiz.get(ids[0]);
-			} catch (BizException e1) {
-				log.error("获取单条数据失败");
+	    		//如果是全部推送类型不需要返回标签
+	    		if("1".equals(todayNews.getSendType())){
+	    			todayNews.setTreecheckbox(null);
+	    		}else if("2".equals(todayNews.getSendType())){
+	    			//选择区域发送处理数据回显
+					List<String> parentIds = todayNewsBiz.getParentIds(ids[0]);
+					model.addAttribute("parentIds",parentIds);
+	    		}
+    		} catch (BizException e1) {
+				log.error("获取数据失败");
 				e1.printStackTrace();
 			}
-    		//如果是全部推送类型不需要返回标签
-    		if("1".equals(todayNews.getSendType())){
-    			todayNews.setTreecheckbox(null);
-    		}
     		todayNews.setOpraterType(opraterType);
     		String urlStr = todayNews.getNewsUrl();
     		if(StringUtils.isNotBlank(urlStr)){

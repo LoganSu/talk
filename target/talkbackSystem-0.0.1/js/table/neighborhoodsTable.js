@@ -56,6 +56,12 @@ var neighborhoodsTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'neiborFlag',
+            title: '一级平台编号',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'address',
             title: '社区地址',
             align: 'left',

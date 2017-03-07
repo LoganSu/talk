@@ -7,9 +7,7 @@
 		 <form id="rolesaveForm" action="">
 		   <div>
 		    <input type="hidden" name="id" value="${role.id}"/>
-<%-- 		    <input type="hidden" name="carrierId" value="${role.carrierId}"/> --%>
-<%-- 		    <input type="hidden" name="isAdmin" value="${role.isAdmin}"/> --%>
-<%-- 		    <input type="hidden" id="roleDomainIds" value="${role.domainIds}"/> --%>
+		    <input type="hidden" name="checked" value=""/>
             <table>
 <!--               <tr> -->
 <!--                  <td><div class="leftFont"><span class="starColor">*</span>选择运营商：</div></td> -->
@@ -54,15 +52,34 @@ padding-left: 20px
   $(function(){
 	  var id = $("#rolesaveForm [name='id']").val();
 	     var privilegeIds = "${role.privilegeIds}";
-		 zTreeObj = zTree("privilegeShowTree", ["id","name","level"],["roleId",id],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,privilegeIds), null)
+		 zTreeObj = zTree("privilegeShowTree", ["id","name","level"],["roleId",id],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,privilegeIds), zTreeOnCheck)
+		 var nodes = zTreeObj.getSelectedNodes();
+			if (nodes.length>0) {
+				$.each(nodes,function(i,obj){
+					zTreeObj.reAsyncChildNodes(obj, "refresh");
+				})
+			}
+		 
 		 
 		 var domainIds = "${role.domainIds}";
-		 zTreeObjTwo = zTree("domainShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEchoTwo(id,domainIds), null)
-
-	  
-  })
+		 zTreeObjTwo = zTree("domainShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEchoTwo(id,domainIds), zTreeOnCheck)
+		
+		 
+		 
+		 
+  })     
+        //设置有费用管理权限的角色标记 后台做数据同步
+        function zTreeOnCheck(event, treeId, treeNode) {
+	          $("#rolesaveForm [name='checked']").val("");
+	          var nodes = zTreeObj.getCheckedNodes(true);
+	          $.each(nodes,function(i,obj){
+				  if(obj.name=="费用管理"&&obj.checked){
+					   $("#rolesaveForm [name='checked']").val("1");
+				  }
+	          })
+          };
   
-        //数据回显函数
+        //加载树成功之后数据回显函数
 		  function dataEchoTwo(id,treecheckbox){
 			  var zTreeOnAsyncSuccess;
 			  if(id&&treecheckbox){
@@ -72,6 +89,9 @@ padding-left: 20px
 						 $.each(treeNode.children,function(i,obj){
 							 if(treecheckbox.indexOf(obj.id)>0){
 								 zTreeObjTwo.checkNode(treeNode.children[i], true, false);
+								 zTreeObjTwo.reAsyncChildNodes(treeNode.children[i], "refresh");
+//                                  var node = zTreeObjTwo.getNodeByTId(treeNode.children[i].id);
+//                                  zTreeObjTwo.expandNode(node, true, false);
 							 }
 						 })
 						//第一级节点回显
@@ -80,6 +100,10 @@ padding-left: 20px
 					     $.each(nodes,function(i,obj){
 							 if(treecheckbox.indexOf(obj.id)>0){
 								 zTreeObjTwo.checkNode(nodes[i], true, false);
+								 zTreeObjTwo.reAsyncChildNodes(nodes[i], "refresh");
+								 
+// 								 var node = zTreeObjTwo.getNodeByTId(nodes[i].id);
+//                                  zTreeObjTwo.expandNode(node, true, false);
 							 }
 						 })
 					 }

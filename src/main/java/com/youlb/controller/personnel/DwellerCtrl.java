@@ -71,10 +71,14 @@ public class DwellerCtrl extends BaseCtrl {
     	if(ids!=null&&ids.length>0){
     		try {
 				dweller = dwellerBiz.get(ids[0]);
+				List<String> parentIds = dwellerBiz.getParentIds(ids[0]);
+				model.addAttribute("parentIds",parentIds);
 			} catch (BizException e) {
 				log.error("获取单个数据失败");
 				e.printStackTrace();
 			}
+    		//查询所有的父节点
+
     	}
     	model.addAttribute("dweller",dweller);
    		return "/dweller/addOrEdit";

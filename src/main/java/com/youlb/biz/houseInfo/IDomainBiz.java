@@ -2,6 +2,7 @@ package com.youlb.biz.houseInfo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.baseInfo.Carrier;
@@ -70,5 +71,10 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
 	String getNeiborKey(String roomId)throws BizException;
 
 	List<Domain> getDomainByParentId(String id,Operator loginUser,Boolean isAll)throws BizException;
+    /**
+     * 获取树结构数据
+     * @return
+     */
+	 List<Map<String,String>> domainTree()throws BizException ;
 
 }

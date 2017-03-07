@@ -410,6 +410,10 @@
 		                           <r:role auth="分组管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
 		                           </r:role>
+		                           <r:role auth="费用管理">
+		                             <li><a class="rongbang_pay" href="javascript:void(0)" rel="http://test.masget.com:8234/masgetweb/redirect/subsys.do?session=mscwmzutkb8dc546uyy477u0goxvzPp&page=rent">费用管理</a></li>
+		                           </r:role>
+		                           
 	                           </ul>
 	                             
 	                       </div>
@@ -507,9 +511,10 @@
                   </div>
                   
                   
-                  <div class="col-md-10" id="showRightArea" >
+<!--                       <div class="col-md-10" id="showRightArea" ></div> -->
+<!--                       <iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe> -->
                      
-                  </div>
+                  
                   <!-- 图片显示div -->
                   <div id="personshowImg"  class="col-md-2" style="display: none;padding-top: 50px; overflow: hidden;">
                      <img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="">
@@ -520,7 +525,27 @@
       </div>
        
    </div>
+  
   <script type="text/javascript">
+   $(function(){
+	   $(".rongbang_pay").on("click",function(){
+		  $("#showRightArea").remove();
+		  var iframe =  $("#showRightAreaIframe");
+		  if(iframe.size()<1){
+			  $("#personshowImg").before('<iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe>');
+		  }
+		  //隐藏打开的树状结构
+		  $(".treeDiv").hide();
+		  //隐藏显示的图片
+		  $("#personshowImg").hide();
+		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+		  
+// 		  $("#showRightAreaIframe").addClass("col-md-10");
+// 		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+		  
+	   })
+	   
+   })
     //2017/1/14
       $('.toggleTag').on('click',function(){
 

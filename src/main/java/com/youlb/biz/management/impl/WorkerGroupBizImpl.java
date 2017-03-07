@@ -215,4 +215,14 @@ public class WorkerGroupBizImpl implements IWorkerGroupBiz {
 		 }
 	}
 
+	@Override
+	public List<String> getParentIds(String id) throws BizException {
+		StringBuilder sb =new StringBuilder();
+		sb.append("WITH RECURSIVE r AS (SELECT d.* from t_department d INNER JOIN t_worker tdd on tdd.fdepartmentid=d.id where tdd.id in ")
+		.append(" (SELECT wg.fworker_id from t_worker_to_group wg where wg.fgroup_id=?)")
+		.append(" union ALL SELECT t_department.* FROM t_department, r WHERE t_department.id = r.fparentid)")
+		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
+		return workerGroupDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
+
 }

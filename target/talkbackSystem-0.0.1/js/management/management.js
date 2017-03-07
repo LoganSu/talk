@@ -69,6 +69,17 @@ $(function(){
 		   var url=$path+"/mc/department/companySaveOrUpdate.do";
 		   var param = $("#companyDepartmentsaveForm").serialize();
 		   var id = $("#companyDepartmentsaveForm input[name='id']").val();
+		   
+			 if(zTreeObj){
+				 var nodes = zTreeObj.getCheckedNodes(true);
+		    	  var arr = new Array();
+		    	  $.each(nodes,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&domainIds=");
+		    	  var treecheckbox = "&domainIds="+parr;
+		    	  param=param+treecheckbox;
+		      }
 		   $.post(url,param,function($data){
 			   if($data){
 				   hiAlert("提示",$data);
@@ -76,6 +87,7 @@ $(function(){
 				   $("#tableShowList").bootstrapTable('refresh', {
 					   url: $path+"/mc/department/showList.do"
 				   });
+
 				   //更新之后关闭弹出框
 				   if(id){
 					   $("#unnormalModal").modal("hide");
@@ -86,7 +98,11 @@ $(function(){
 						   $(obj).val("");
 					   })
 				   }
-				   tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
+				   var zTreeOnClick =  function(event, treeId, treeNode){
+						$("#showRightArea").load($path+"/mc/department/departmentshowPage.do?module=departmentTable&modulePath=/department&parentId="+treeNode.id);
+					 }
+
+					  zTreeObj = zTree("managementDepartmentTree", ["id","name","level"],[],$path+"/mc/department/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 			   }
 			 });
 	   })
@@ -103,6 +119,8 @@ $(function(){
 				 $("#tableShowList").bootstrapTable('refresh', {
 						url: $path+"/mc/department/showList.do"
 					});
+				 zTreeObj.reAsyncChildNodes(null, "refresh");
+
 				 //更新之后关闭弹出框
 				 if(id){
 					$("#unnormalModal").modal("hide");
@@ -114,7 +132,10 @@ $(function(){
 					 })
 					 
 				 }
-				 tree("managementDepartmentTree",  $path+'/mc/departmentTree',true);
+				 var zTreeOnClick =  function(event, treeId, treeNode){
+						$("#showRightArea").load($path+"/mc/department/departmentshowPage.do?module=departmentTable&modulePath=/department&parentId="+treeNode.id);
+					 }
+				  zTreeObj = zTree("managementDepartmentTree", ["id","name","level"],[],$path+"/mc/department/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 			   }
 			 });
 	   })
@@ -135,6 +156,17 @@ $(function(){
 		   var url=$path+"/mc/workerGroup/addWorker.do";
 		   var param = $("#workerGroupAddWorkersaveForm").serialize();
 		   var groupId = $("#workerGroupAddWorkersaveForm .groupId").val();
+			 var nodes = zTreeObj.getCheckedNodes(true);
+			 var treecheckbox;
+		      if(nodes){
+		    	  var arr = new Array();
+		    	  $.each(nodes,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&treecheckbox=");
+		    	  treecheckbox = "&treecheckbox="+parr;
+		    	  param=param+treecheckbox;
+		      }
 		   $.post(url,param,function($data){
 			   if($data){
 				   hiAlert("提示",$data);

@@ -8,7 +8,7 @@
 	   <form id="infoPublishsaveForm" name="infoPublishsaveForm" enctype="multipart/form-data" method="post">
 		   <input type="hidden" name="id" value="${infoPublish.id}"/>
 		   <input type="hidden" name="carrierId" value="${infoPublish.carrierId}"/>
-		   <input type="hidden" id="infoPublishDomainIds" value="${infoPublish.treecheckbox}"/>
+<%-- 		   <input type="hidden" id="infoPublishDomainIds" value="${infoPublish.treecheckbox}"/> --%>
 		   <input type="hidden" name="infoType" value="${infoPublish.infoType}"/>
            <table>
               <tr>
@@ -54,7 +54,7 @@
 		              </tr>
 		           </table>
 	                <div style="width: 500px;height: 300px;overflow: auto;">
-	                     <p id="infoPublishShowTree"></p>              
+	                    <ul id="infoPublishShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
 	                </div>
 	           </div>
 	           <!-- 详情不显示按钮 -->
@@ -78,8 +78,12 @@
 // 			language: 'cn', 
 // 		 });
   $(function(){
+
+	  var id = $("#infoPublishsaveForm [name='id']").val();
+	  var treecheckbox = "${infoPublish.treecheckbox}";
+	  zTreeObj = zTree("infoPublishShowTree", ["id","name","level"],["nocheckLevel","0"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
 	  //domainTree(id, url, open, checkbox, checkboxLink, showurl, checkboxPartShow, layer, treecheckboxFiledName)
-		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false,true,[1,2,3,4]);
+// 		domainTree("infoPublishShowTree", $path+'/mc/carrier', false, true, false, false,true,[1,2,3,4]);
 
 		// 普通tree
 // 		$('#infoPublishShowTree').bstree({
@@ -91,19 +95,30 @@
 // 				showurl:false
 // 		});
 		//多选框回显
-		var treecheckbox = $("#infoPublishDomainIds").val();
-		//java代码 treecheckbox==null 则 treecheckbox=[]
-		if(treecheckbox.length>2){
-			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
-			var arr= treecheckbox.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#infoPublishShowTree ."+$.trim(obj)).prop('checked',true);
-			  });
-		}
+// 		var treecheckbox = $("#infoPublishDomainIds").val();
+// 		//java代码 treecheckbox==null 则 treecheckbox=[]
+// 		if(treecheckbox.length>2){
+// 			treecheckbox=treecheckbox.substring(1,treecheckbox.length-1);
+// 			var arr= treecheckbox.split(",");
+// 			  $.each(arr,function(index,obj){
+// 				  $("#infoPublishShowTree ."+$.trim(obj)).prop('checked',true);
+// 			  });
+// 		}
 		//确定按钮
 	   $("#infoPublishsaveForm .sure").on("click",function(){
 		   var url=$path+"/mc/infoPublish/saveOrUpdate.do";
 		   var param = $("#infoPublishsaveForm").serialize();
+		   var nodes = zTreeObj.getCheckedNodes(true);
+		   var treecheckbox;
+		      if(nodes){
+		    	  var arr = new Array();
+		    	  $.each(nodes,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&treecheckbox=");
+		    	  treecheckbox = "&treecheckbox="+parr;
+		    	  param=param+treecheckbox;
+		      }
 		   $.post(url,param,function($data){
 				 if(!$data){
 					 $("#tableShowList").bootstrapTable('refresh', {

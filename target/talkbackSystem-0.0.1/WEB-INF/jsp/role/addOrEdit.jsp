@@ -7,9 +7,7 @@
 		 <form id="rolesaveForm" action="">
 		   <div>
 		    <input type="hidden" name="id" value="${role.id}"/>
-<%-- 		    <input type="hidden" name="carrierId" value="${role.carrierId}"/> --%>
-<%-- 		    <input type="hidden" name="isAdmin" value="${role.isAdmin}"/> --%>
-		    <input type="hidden" id="roleDomainIds" value="${role.domainIds}"/>
+		    <input type="hidden" name="checked" value=""/>
             <table>
 <!--               <tr> -->
 <!--                  <td><div class="leftFont"><span class="starColor">*</span>选择运营商：</div></td> -->
@@ -32,10 +30,12 @@
            </table>
            </div>
 <!--            <div  style="margin-top: 20px;margin-left: 20px;"> -->
-<!--                <div><label>选择可操作权限：</label></div> -->
+               <div><label>选择可操作权限：</label></div>
 <!--                <div class="showRolesTable" style="height: 500px"> -->
-                   <p id="privilegeShowTree"></p>
-                   <p id="domainShowTree"></p>     
+               <ul id="privilegeShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+           	    <div><label>选择域权限：</label></div>
+                <ul id="domainShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                   
 <!--                </div> -->
 <!--            </div> -->
            
@@ -51,76 +51,49 @@ padding-left: 20px
 <script type="text/javascript">
   $(function(){
 	  var id = $("#rolesaveForm [name='id']").val();
-	  var params = "id="+id;
-	    // 操作权限tree
-		$('#privilegeShowTree').bstree({
-				url: $path+'/mc/role',
-				param :params,
-				height:'auto',
-// 				open: true,
-				showurl:false,
-				checkbox:true
-		});
+	     var privilegeIds = "${role.privilegeIds}";
+		 zTreeObj = zTree("privilegeShowTree", ["id","name","level"],["roleId",id],$path+"/mc/privilege/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,privilegeIds), zTreeOnCheck)
+		 
+		 var domainIds = "${role.domainIds}";
+		 zTreeObjTwo = zTree("domainShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEchoTwo(id,domainIds), null)
+
 	  
-		// 域tree
-		$('#domainShowTree').bstree({
-				url: $path+'/mc/carrier',
-				height:'auto',
-				open: false,
-				checkbox:true,
-				checkboxLink:true,
-				treecheckboxFiledName:'domainIds',
-				showurl:false
-		});
-		//域数据回显
-		var domainIds = $("#roleDomainIds").val();
-		//java代码 treecheckbox==null 则 treecheckbox=[]
-		if(domainIds.length>2){
-			domainIds=domainIds.substring(1,domainIds.length-1);
-			var arr= domainIds.split(",");
-			  $.each(arr,function(index,obj){
-				  $("#domainShowTree ."+$.trim(obj)).prop('checked',true);
-			  });
-		}
-// 	  $.post($path+"/mc/role/privilegeList.do","id="+id,function($data){
-// 		  var $div = $(".showRolesTable");
-// 		  eachPrivilege($data, $div);
-// 	  })
-	  
-// 	 //选择了子节点默认选中所有的父节点
-// 	 $(document).on('click',".showRolesTableDiv [name='privilegeIds']",function(){
-// 		var checks =  $(this).parents(".showRolesTableDiv").children("input");
-// 		if(checks.prop("checked")){
-// 			checks.prop("checked",true);
-// 		}
-// 	 })	  
-// 	 //父节点取消选择，子节点全部取消,全选
-// 	 $(document).on('click',".showRolesTableDiv [name='privilegeIds']",function(){
-// 		 var checks = $(this).parent().find("input");
-// 		 if(checks.prop("checked")){
-// 				checks.prop("checked",true);
-// 			}else{
-// 				checks.prop("checked",false);
-// 			}
-// 	 })
-// 	 //递归显示权限列表
-// 	 var eachPrivilege =  function(list,$div){
-// 		 $.each(list,function(i,obj){
-// 			 var divStr = "";
-// 			 if(obj.checked==1){
-// 				 divStr = "<div class='showRolesTableDiv'><input name='privilegeIds' checked='checked' value='"+obj.id+"' type='checkbox'/><span>"+obj.name+"</span></div>";
-// 			 }else{
-// 				 divStr = "<div class='showRolesTableDiv'><input name='privilegeIds' value='"+obj.id+"' type='checkbox'/><span>"+obj.name+"</span></div>";
-// 			 }
-// 			 $div.append(divStr);
-// 			var $subDiv = $("#rolesaveForm [value='"+obj.id+"']").parent();
-// 			 if(obj.children){
-// 				 eachPrivilege(obj.children,$subDiv);
-// 			 }
-// 		 });
-// 	  }
-	
-	  
-	  
-  })
+  })     
+        //设置有费用管理权限的角色标记 后台做数据同步
+        function zTreeOnCheck(event, treeId, treeNode) {
+	          $("#rolesaveForm [name='checked']").val("");
+	          var nodes = zTreeObj.getCheckedNodes(true);
+	          $.each(nodes,function(i,obj){
+				  if(obj.name=="费用管理"&&obj.checked){
+					   $("#rolesaveForm [name='checked']").val("1");
+				  }
+	          })
+          };
+  
+        //加载树成功之后数据回显函数
+		  function dataEchoTwo(id,treecheckbox){
+			  var zTreeOnAsyncSuccess;
+			  if(id&&treecheckbox){
+				  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+					//子节点回显
+					 if(treeNode){
+						 $.each(treeNode.children,function(i,obj){
+							 if(treecheckbox.indexOf(obj.id)>0){
+								 zTreeObjTwo.checkNode(treeNode.children[i], true, false);
+							 }
+						 })
+						//第一级节点回显
+					 }else{
+					     var nodes = zTreeObjTwo.getNodes();
+					     $.each(nodes,function(i,obj){
+							 if(treecheckbox.indexOf(obj.id)>0){
+								 zTreeObjTwo.checkNode(nodes[i], true, false);
+							 }
+						 })
+					 }
+			     };
+			  }
+			  
+			  return zTreeOnAsyncSuccess;
+		  }
  </script>

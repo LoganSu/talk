@@ -5,7 +5,12 @@
 <body>
 <script type="text/javascript">
 $(function(){
-	domainTree("companyDepartmentShowTree", $path+'/mc/carrier', false, true, false, false, true, [1], 'domainIds');
+	
+	  var id = $("#companyDepartmentsaveForm [name='id']").val();
+	  var treecheckbox = "${department.domainIds}";
+	  zTreeObj = zTree("companyDepartmentShowTree", ["id","name","level"],["nocheckLevel","0234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
+	
+// 	domainTree("companyDepartmentShowTree", $path+'/mc/carrier', false, true, false, false, true, [1], 'domainIds');
 	// 域tree
 // 	$('#companyDepartmentShowTree').bstree({
 // 			url: $path+'/mc/carrier',
@@ -18,21 +23,21 @@ $(function(){
 // 			showurl:false
 // 	});
 	//域数据回显
-	var domainIds = $("#companyDepartmentdomainIds").val();
+// 	var domainIds = $("#companyDepartmentdomainIds").val();
 	//java代码 treecheckbox==null 则 treecheckbox=[]
 // 	alert(domainIds.toSource());
-	if(domainIds.length>2){
-		domainIds=domainIds.substring(1,domainIds.length-1);
-		var arr= domainIds.split(",");
-		  $.each(arr,function(index,obj){
-			  $("#companyDepartmentShowTree ."+$.trim(obj)).prop('checked',true);
-		  });
-	}else{
+// 	if(domainIds.length>2){
+// 		domainIds=domainIds.substring(1,domainIds.length-1);
+// 		var arr= domainIds.split(",");
+// 		  $.each(arr,function(index,obj){
+// 			  $("#companyDepartmentShowTree ."+$.trim(obj)).prop('checked',true);
+// 		  });
+// 	}else{
 // 		var checkboxArr = $("#companyDepartmentShowTree .treecheckbox")
 // 		$.each(checkboxArr,function(index,obj){
 // 			  $(this).prop('checked',true);
 // 		  });
-	}
+// 	}
 	
 })
 
@@ -42,7 +47,7 @@ $(function(){
 	   <div>
 		 <form id="companyDepartmentsaveForm" class="departmentsaveForm" action="">
 		   <input type="hidden" name="id" value="${department.id}"/>
-		   <input type="hidden" id="companyDepartmentdomainIds" value="${department.domainIds}"/>
+<%-- 		   <input type="hidden" id="companyDepartmentdomainIds" value="${department.domainIds}"/> --%>
            <table>
               <tr style="">
                 <td><div class="firstFont"><span class="starColor">*</span>公司名称：</div></td>
@@ -57,7 +62,8 @@ $(function(){
                 <td colspan="3"><div><input name="description" style="width: 400px" maxlength="100" class="form-control" value="${department.description}"/></div></td>
               </tr>
            </table>
-           <p id="companyDepartmentShowTree"></p>
+           	  <ul id="companyDepartmentShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+           
            <!-- 详情不显示按钮 -->
 	      <div class="modal-footer">
                <input type="button" class="btn btn-primary sure" value="确定"/> 

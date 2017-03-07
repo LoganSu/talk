@@ -69,18 +69,43 @@
 	 function showTree(departmentId){
 		 var id = $("#workerGroupAddWorkersaveForm [name='id']").val();
 		 var treecheckbox = "${workerGroup.treecheckbox}";
-		 zTree("workerGroupAddWorkerShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,dataEcho(id,treecheckbox), null)
-// 			$('#workerGroupAddWorkerShowTree').bstree({
-// 				url: $path+'/mc/departmentWorkerTree',
-// 				height:'auto',
-// 				param:'departmentId='+departmentId,
-// 				open: false,
-// 				checkbox:true,
-// 				checkboxLink:true,
-// 				treecheckboxFiledName:'workerIds',
-// 				showurl:false
-// 		   })
-		}
+		 var parentIds = "${parentIds}"
+
+		 zTreeObj = zTree("workerGroupAddWorkerShowTree", ["id","name","level"],["departmentId",departmentId,"nocheckLevel","0123"],$path+"/mc/department/getWorkerNodes.do",true,{"Y": "", "N": ""},null,workerGroupAddWorkerDataEcho(id,treecheckbox,parentIds), null)
+	 }
+	 
+	//数据回显函数
+	  function workerGroupAddWorkerDataEcho(id,treecheckbox,parentIds){
+		  var zTreeOnAsyncSuccess;
+		  if(id&&treecheckbox&&parentIds){
+			  zTreeOnAsyncSuccess = function(event, treeId, treeNode, msg) {
+				//子节点回显
+				 if(treeNode){
+					 $.each(treeNode.children,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						    zTreeObj.reAsyncChildNodes(treeNode.children[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(treeNode.children[i], true, false);
+						 }
+					 })
+					//第一级节点回显
+				 }else{
+				     var nodes = zTreeObj.getNodes();
+				     $.each(nodes,function(i,obj){
+						 if(parentIds.indexOf(obj.id)>0){
+						        zTreeObj.reAsyncChildNodes(nodes[i], "refresh");
+						 }
+						 if(treecheckbox.indexOf(obj.id)>0){
+							 zTreeObj.checkNode(nodes[i], true, false);
+						 }
+					 })
+				 }
+		     };
+		  }
+		  
+		  return zTreeOnAsyncSuccess;
+	  }
 </script>
 <div>
        <div>

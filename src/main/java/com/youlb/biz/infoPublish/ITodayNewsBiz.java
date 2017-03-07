@@ -3,6 +3,7 @@ package com.youlb.biz.infoPublish;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -31,6 +32,8 @@ public interface ITodayNewsBiz extends IBaseBiz<TodayNews> {
 	 * @param loginUser
 	 */
 	public void publish(String[] ids, Operator loginUser)throws BizException, IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
+
+	public List<String> getParentIds(String string)throws BizException;
 
 
  

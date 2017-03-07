@@ -2,6 +2,11 @@
 $(function(){
  //加载右边页面公共方法
 	$(document).on("click",".li_a",function(){
+		$("#showRightAreaIframe").remove();
+		var showRightArea = $("#showRightArea");
+		 if(showRightArea.size()<1){
+			  $("#personshowImg").before('<div class="col-md-10" id="showRightArea" ></div>');
+		  }
 		  //隐藏打开的树状结构
 		  $(".treeDiv").hide();
 		  //隐藏显示的图片
@@ -14,36 +19,56 @@ $(function(){
 				  $("#"+treeId).parent().show();
 				  //修改列表div样式
 				  $("#showRightArea").removeClass("col-md-12").addClass("col-md-10");
-				  var url,param,open;
 				  if(treeId=="houseInfoTree"){
-					  param="disRoom=true";
-					  open=true;
-					  url= $path+'/mc/houseInfoTree';//房产信息数
+					  //设置单击事件
+						 var zTreeOnClick = function(event, treeId, treeNode){
+							 if(treeNode.level==0){
+								 $("#showRightArea").load($path+"/mc/neighborhoods/neighborhoodsListshowPage.do?module=neighborhoodsTable&modulePath=/neighborhoods&parentId="+treeNode.id+"&aa="+new Date().getTime());
+							 }else if(treeNode.level==1){
+								 $("#showRightArea").load($path+"/mc/building/buildingListshowPage.do?module=buildingTable&modulePath=/building&parentId="+treeNode.id+"&aa="+new Date().getTime());
+							 }else if(treeNode.level==2){
+								 $("#showRightArea").load($path+"/mc/unit/unitListshowPage.do?module=unitTable&modulePath=/unit&parentId="+treeNode.id+"&aa="+new Date().getTime());
+							 }else if(treeNode.level==3){
+								 $("#showRightArea").load($path+"/mc/room/roomListshowPage.do?module=roomTable&modulePath=/room&parentId="+treeNode.id+"&aa="+new Date().getTime());
+							 }
+						 }
+						 //初始化顶级节点
+//						 var zTreeNodes = {"id":"1", "name":"区域信息", isParent:true,nocheck:true};
+						 zTreeObj = zTree("houseInfoTree", ["id","name","level"],["isAll",false],$path+"/mc/domain/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }else if(treeId=="authorityTree"){
-					  url= $path+'/mc/privilegeTree';//操作权限加载树状结构
-					  open=false;
+					    //设置单击事件
+					  var zTreeOnClick =function(event, treeId, treeNode){
+							$("#showRightArea").load($path+"/mc/privilege/privilegeListshowPage.do?module=privilegeTable&modulePath=/privilege&parentId="+treeNode.id);
+						 }
+						 //初始化顶级节点
+//						 var zTreeNodes = {"id":"", "name":"权限列表", isParent:true,nocheck:true};
+					  zTreeObj = zTree("authorityTree", ["id","name","level"],[],$path+"/mc/privilege/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }else if(treeId=="managementDepartmentTree"){
-					  url= $path+'/mc/departmentTree';//物业组织架构加载树状结构
-					  open=true;
+					     //设置单击事件
+					  var zTreeOnClick =  function(event, treeId, treeNode){
+							$("#showRightArea").load($path+"/mc/department/departmentshowPage.do?module=departmentTable&modulePath=/department&parentId="+treeNode.id);
+						 }
+						 //初始化顶级节点
+//						 var zTreeNodes = {"id":"", "name":"组织架构", isParent:true,nocheck:true};
+					  zTreeObj = zTree("managementDepartmentTree", ["id","name","level"],[],$path+"/mc/department/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }else if(treeId=="neighborhoodsTree"){
-					  url= $path+'/mc/aboutNeighborhoodsTree';//社区树
-					  open=true;
+					   //设置单击事件
+					  var zTreeOnClick =  function(event, treeId, treeNode){
+							$("#showRightArea").load($path+"/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?module=aboutNeighborhoodsTable&modulePath=/aboutNeighborhoods&neighborDomainId="+treeNode.id+"&aa="+new Date().getTime());
+						 }
+						 //初始化顶级节点
+//						 var zTreeNodes = {"id":"", "name":"社区列表", isParent:true,nocheck:true};
+					  zTreeObj = zTree("neighborhoodsTree", ["id","name","level"],[],$path+"/mc/aboutNeighborhoods/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }else if(treeId=="domainNameTree"){
-					  url= $path+'/mc/domainNameTree';//域名树
-					  open=true;
+					  //设置单击事件
+					  var zTreeOnClick =  function(event, treeId, treeNode){
+							$("#showRightArea").load($path+"/mc/domainName/domainNameListshowPage.do?module=domainNameTable&modulePath=/domainName&parentid="+treeNode.id);
+						 }
+						 //初始化顶级节点
+//						 var zTreeNodes = {"id":"", "name":"社区列表", isParent:true,nocheck:true};
+					  zTreeObj = zTree("domainNameTree", ["id","name","level"],[],$path+"/mc/domainName/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }
-				  tree(treeId, url,open,param);
-				  $(document).on("click","#"+treeId+" li a",function(){
-					  var data = $(this).attr("data");
-					  if(data){
-						  var arr= data.split(";")
-						  var id=arr[0].substring(3);
-						  if(arr[1].substring(4)){
-							  $("#showRightArea").load(arr[1].substring(4));
-						  }
-					  }
-					  
-				  })
+				   
 			  }
 		//显示图片	  
 		}else if($(this).hasClass("cardInfo")){
@@ -96,9 +121,32 @@ $(function(){
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）
 	 $("#myModal .modalSave").on("click",function(){
-		     
+		 var param = $("#myModal").find("form").serialize();
+		 //一个树
+		 var treecheckbox;
+		 if(zTreeObj){
+			 var nodes = zTreeObj.getCheckedNodes(true);
+	    	  var arr = new Array();
+	    	  $.each(nodes,function(i,obj){
+	    		  arr.push(obj.id);
+	    	  });
+	    	  var parr = arr.join("&treecheckbox=");
+	    	  treecheckbox = "&treecheckbox="+parr;
+	    	  param=param+treecheckbox;
+	      }
+	      //两个树
+	      if(zTreeObjTwo){
+              var nodesTwo = zTreeObjTwo.getCheckedNodes(true);
+	    	  var arr = new Array();
+	    	  $.each(nodesTwo,function(i,obj){
+	    		  arr.push(obj.id);
+	    	  });
+	    	  var parr = arr.join("&domainIds=");
+	    	  treecheckbox = "&domainIds="+parr;
+	    	  param=param+treecheckbox;
+		     }
+	      
 		     var title = $("#myModalLabel").html();
-			 var param = $("#myModal").find("form").serialize();
 			 var url;
 			 if(title=="重置密码"){
 				 url=$(".updatePasw").attr("saveUrl");
@@ -154,7 +202,7 @@ $(function(){
 					 if(!$data){
 						 refresh();
 						 //如果显示树状的div不隐藏添加或修改完之后刷新一下树
-						 flushTree();
+						 zTreeObj.reAsyncChildNodes(null, "refresh");
 					 }else{
 						 hiAlert("提示",$data);
 					 }
@@ -216,6 +264,8 @@ $(function(){
 					 $.post(url,ids,function($data){
 			            	if(!$data){
 								refresh();
+								 zTreeObj.reAsyncChildNodes(null, "refresh");
+
 							}else{
 								hiAlert("提示",$data);
 							}
@@ -353,71 +403,63 @@ var hideModal = function(id){
 	$("#"+id).modal("hide");
 }
 //显示树状结构
-var domainTree= function(id,url,open,checkbox,checkboxLink,showurl,checkboxPartShow,layer,treecheckboxFiledName,params){
-	// 普通tree
-	$('#'+id).bstree({
-			url: url,
-			height:'auto',
-			open: open,
-			param :params,
-			checkbox:checkbox,
-			checkboxLink:checkboxLink,
-			checkboxPartShow:checkboxPartShow,
-			layer:layer,
-			treecheckboxFiledName:treecheckboxFiledName,
-			showurl:showurl
-	});
-}
+//var domainTree= function(id,url,open,checkbox,checkboxLink,showurl,checkboxPartShow,layer,treecheckboxFiledName,params){
+//	// 普通tree
+//	$('#'+id).bstree({
+//			url: url,
+//			height:'auto',
+//			open: open,
+//			param :params,
+//			checkbox:checkbox,
+//			checkboxLink:checkboxLink,
+//			checkboxPartShow:checkboxPartShow,
+//			layer:layer,
+//			treecheckboxFiledName:treecheckboxFiledName,
+//			showurl:showurl
+//	});
+//}
 
-var tree = function(id,url,open,param){
-	// 普通tree
-	$('#'+id).bstree({
-			url: url,
-			param:param,
-			height:'700px',
-			open: open,
-			showurl:false
-	});
-}
+//var tree = function(id,url,open,param){
+//	// 普通tree
+//	$('#'+id).bstree({
+//			url: url,
+//			param:param,
+//			height:'700px',
+//			open: open,
+//			showurl:false
+//	});
+//}
 
 //刷新树
-var flushTree = function(){
-    //如果显示树状的div不隐藏添加或修改完之后刷新一下树
-	var treeId,url,param,open,param;
-	var a = $("#houseInfoTree").parent().is(":visible");
-	if(a){
-		  treeId="houseInfoTree";
-		  param="disRoom=true";
-		  open=true;
-		  url= $path+'/mc/houseInfoTree';//房产信息数
-	}
-	var b = $("#authorityTree").parent().is(":visible");
-	if(b){
-		 treeId="authorityTree";
-		 url= $path+'/mc/privilegeTree';//操作权限加载树状结构
-		 open=false;
-	}
-	var c = $("#managementDepartmentTree").parent().is(":visible");
-	if(c){
-		 treeId="managementDepartmentTree";
-		 url= $path+'/mc/departmentTree';//物业组织架构加载树状结构
-		 open=true;
-	}
-	var d = $("#neighborhoodsTree").parent().is(":visible");
-	 if(d){
-		 treeId="neighborhoodsTree";
-		 url= $path+'/mc/aboutNeighborhoodsTree';//社区树
-		 open=true;
-	  }
-	 var d = $("#domainNameTree").parent().is(":visible");
-	 if(d){
-		 treeId="domainNameTree";
-		 url= $path+'/mc/domainNameTree';//社区树
-		 open=true;
-	  }
-	  tree(treeId, url,open,param);
- 
-}
+//var flushTree = function(){
+//    //如果显示树状的div不隐藏添加或修改完之后刷新一下树
+//	var a = $("#houseInfoTree").parent().is(":visible");
+//	if(a){
+////		var parentId=$(".searchInfoDiv [name='parentId']");
+////		var node = zTreeObj.getNodeByTId(parentId.val());
+////		alert(node);
+//		zTreeObj.reAsyncChildNodes(node, "refresh");
+//	}
+//	var b = $("#authorityTree").parent().is(":visible");
+//	if(b){
+//		   zTreeObj.reAsyncChildNodes(null, "refresh");
+//	}
+//	var c = $("#managementDepartmentTree").parent().is(":visible");
+//	if(c){
+//		   zTreeObj.reAsyncChildNodes(null, "refresh");
+//
+//	}
+//	var d = $("#neighborhoodsTree").parent().is(":visible");
+//	 if(d){
+//		   zTreeObj.reAsyncChildNodes(null, "refresh");
+//
+//	  }
+//	 var d = $("#domainNameTree").parent().is(":visible");
+//	 if(d){
+//		   zTreeObj.reAsyncChildNodes(null, "refresh");
+//	  }
+// 
+//}
 
 /**获取查询参数字符串*/
 var initSearchParams = function(formId,params){

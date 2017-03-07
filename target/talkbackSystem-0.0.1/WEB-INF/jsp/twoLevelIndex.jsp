@@ -26,6 +26,8 @@
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
      <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
      <link href="${path}/css/qiniu/main.css" rel="stylesheet">
+     <link href="${path}/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+     
      
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
@@ -54,7 +56,7 @@
     <script src="${path}/js/common/bootstrap/bootstrap-datepicker.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-treeview.js"></script>
-<%--     <script src="${path}/js/common/bootstrap/bootstrap-multiselect.js"></script> --%>
+    <script src="${path}/js/common/ztree/jquery.ztree.all-3.5.min.js"></script>
     
     <script src="${path}/js/common/bootstrap/bootstrap-progressbar.js" type="text/javascript"></script>
     <script src="${path}/js/common/jquery.validate.js" type="text/javascript"></script>
@@ -408,6 +410,10 @@
 		                           <r:role auth="分组管理">
 		                             <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
 		                           </r:role>
+		                           <r:role auth="费用管理">
+		                             <li><a class="rongbang_pay" href="javascript:void(0)" rel="http://test.masget.com:8234/masgetweb/redirect/subsys.do?session=mscwmzutkb8dc546uyy477u0goxvzPp&page=rent">费用管理</a></li>
+		                           </r:role>
+		                           
 	                           </ul>
 	                             
 	                       </div>
@@ -487,25 +493,28 @@
               <div class="row" style="padding-left: 15px">
                   
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="houseInfoTree"></p>
+<!--                      <p id="houseInfoTree"></p> -->
+                     <ul id="houseInfoTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="authorityTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="managementDepartmentTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="neighborhoodsTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="domainNameTree"></p>
-                  </div>
-                  
-                  
-                  <div class="col-md-10" id="showRightArea" >
+                     <ul id="authorityTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                      
                   </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="managementDepartmentTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="neighborhoodsTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="domainNameTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  
+                  
+<!--                       <div class="col-md-10" id="showRightArea" ></div> -->
+<!--                       <iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe> -->
+                     
+                  
                   <!-- 图片显示div -->
                   <div id="personshowImg"  class="col-md-2" style="display: none;padding-top: 50px; overflow: hidden;">
                      <img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="">
@@ -516,7 +525,27 @@
       </div>
        
    </div>
+  
   <script type="text/javascript">
+   $(function(){
+	   $(".rongbang_pay").on("click",function(){
+		  $("#showRightArea").remove();
+		  var iframe =  $("#showRightAreaIframe");
+		  if(iframe.size()<1){
+			  $("#personshowImg").before('<iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe>');
+		  }
+		  //隐藏打开的树状结构
+		  $(".treeDiv").hide();
+		  //隐藏显示的图片
+		  $("#personshowImg").hide();
+		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+		  
+// 		  $("#showRightAreaIframe").addClass("col-md-10");
+// 		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+		  
+	   })
+	   
+   })
     //2017/1/14
       $('.toggleTag').on('click',function(){
 

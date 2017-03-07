@@ -51,9 +51,10 @@
            </table>
            </div>
 <!-- 		   <div  style="margin-top: 20px;margin-left: 20px;"> -->
-<!-- 	               <div><label>选择区域：</label></div> -->
+	               <div><label>选择区域：</label></div>
 <!-- 	               <div class="showDomainTable" style="height: 500px"> -->
-	                 <p id="carrierShowTree"></p>
+	                 <ul id="carrierShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+	                 
 <!-- 	               </div> -->
 <!-- 	       </div>         -->
          </form>
@@ -67,20 +68,22 @@ padding-left: 20px
 </style>
 <script type="text/javascript">
   $(function(){
-	  
 	  var id = $("#carriersaveForm [name='id']").val();
-	  var params = "id="+id;
+	  var treecheckbox = "${carrier.treecheckbox}";
+
+	  zTreeObj = zTree("carrierShowTree", ["id","name","level"],[],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox), null)
+	  
 	  //显示多选框的级别
 	    // 普通tree
-		$('#carrierShowTree').bstree({
-				url: $path+'/mc/carrier',
-				param :params,
-// 				open:false,
-				showurl:false,
-				checkboxPartShow:true,
-				layer:[0,1,2,3,4],
-				checkbox:true
-		});
+// 		$('#carrierShowTree').bstree({
+// 				url: $path+'/mc/carrier',
+// 				param :params,
+// // 				open:false,
+// 				showurl:false,
+// 				checkboxPartShow:true,
+// 				layer:[0,1,2,3,4],
+// 				checkbox:true
+// 		});
 	    
 // 	  var id = $("#carriersaveForm [name='id']").val();
 // 	  $.post($path+"/mc/carrier/domainList.do","id="+id,function($data){

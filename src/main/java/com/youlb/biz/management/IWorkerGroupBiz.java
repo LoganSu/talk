@@ -31,5 +31,6 @@ public interface IWorkerGroupBiz extends IBaseBiz<WorkerGroup> {
 	 * @param loginUser
 	 */
 	void addWorker(WorkerGroup workerGroup, Operator loginUser)throws BizException;
+	List<String> getParentIds(String string)throws BizException;
 
 }

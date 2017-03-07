@@ -43,5 +43,11 @@ public interface IDwellerBiz extends IBaseBiz<Dweller> {
      * @return
      */
 	List<String> getCarrierByDomainId(List<String> treecheckbox)throws BizException;
+	/**
+	 * 查询所有的父节点
+	 * @param string
+	 * @return
+	 */
+	List<String> getParentIds(String string)throws BizException;
 
 }
