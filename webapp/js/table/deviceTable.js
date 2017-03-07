@@ -42,6 +42,18 @@ var deviceTable ={
             valign: 'middle',
             sortable: true
         },{
+            field: 'liveTimeStr',
+            title: '激活时间',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'createTimeStr',
+            title: '登记时间',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'deviceNum',
             title: '设备编号',
             align: 'center',

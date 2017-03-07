@@ -53,7 +53,7 @@
 				//设置标题
 	            $("#myModalLabel").html("重置密码");
 				$("#myModal .modal-body").html(addHtml);
-				$("#myModal").modal("show");
+				$("#myModal").modal({backdrop: 'static', keyboard: false});
 			})
 	    	})
     })

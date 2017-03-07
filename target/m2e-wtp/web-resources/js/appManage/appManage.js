@@ -22,7 +22,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	
@@ -37,7 +37,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("修改");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	//行内详情
@@ -50,7 +50,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("详情");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	

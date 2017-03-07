@@ -7,7 +7,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("设置密码");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
      //导入

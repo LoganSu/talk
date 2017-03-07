@@ -67,7 +67,7 @@
 					//设置标题
 		            $("#unnormalModalLabel").html("重启");
 					$("#unnormalModal .modal-body").html(addHtml);
-					$("#unnormalModal").modal("show");
+					$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 				});
     	   })
     	   

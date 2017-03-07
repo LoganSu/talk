@@ -113,10 +113,10 @@ $(function(){
 			 }
 		}
 		$.post(url,data,function(addHtml){
-			//设置标题
+			//设置标题 modal({backdrop: 'static', keyboard: false});
             $("#myModalLabel").html(title);
 			$("#myModal .modal-body").html(addHtml);
-			$("#myModal").modal("show");
+			$("#myModal").modal({backdrop: 'static', keyboard: false});
 		});
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）
@@ -145,7 +145,9 @@ $(function(){
 	    	  treecheckbox = "&domainIds="+parr;
 	    	  param=param+treecheckbox;
 		     }
-	      
+	         //用完之后清空数据
+	         zTreeObj=null;
+	         zTreeObjTwo=null;
 		     var title = $("#myModalLabel").html();
 			 var url;
 			 if(title=="重置密码"){
@@ -368,13 +370,13 @@ var paswValidata=function(array){
 var hiAlert=function(title,massege){
 	$("#alertModalLabel").html(title);
 	$("#alertModal .modal-body").html(massege);
-	$("#alertModal").modal("show");
+	$("#alertModal").modal({backdrop: 'static', keyboard: false});
 }
 //选择弹出框
 var hiConfirm=function(title,massege){
 	$("#confirmModalLabel").html(title);
 	$("#confirmModal .modal-body").html(massege);
-	$("#confirmModal").modal("show");
+	$("#confirmModal").modal({backdrop: 'static', keyboard: false});
 //	var confirmV = false;
 //	$(document).one("click","#confirmModal .sureBut",function(){
 //		confirmV=true;

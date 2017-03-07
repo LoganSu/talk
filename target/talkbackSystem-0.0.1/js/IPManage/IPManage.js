@@ -5,7 +5,7 @@ $(function(){
 			//设置标题
             $("#noSureModallLabel").html("详情");
 			$("#noSureModal .modal-body").html(addHtml);
-			$("#noSureModal").modal("show");
+			$("#noSureModal").modal({backdrop: 'static', keyboard: false});
 		});
 	})
 })

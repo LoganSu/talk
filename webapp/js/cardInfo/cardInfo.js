@@ -8,7 +8,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("发卡");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	//挂失
@@ -37,7 +37,7 @@ $(function(){
 		$.post(url,"cardSn="+cardSn,function(addHtml){
             $("#unnormalModalLabel").html("授权地址");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	})
 })
@@ -57,6 +57,6 @@ function cardInfoLossUnlossDestroy(roomId,cardStatus){
         }
         $("#unnormalModalLabel").html(title);
 		$("#unnormalModal .modal-body").html(addHtml);
-		$("#unnormalModal").modal("show");
+		$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 	})
 }

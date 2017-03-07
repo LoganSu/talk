@@ -65,7 +65,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		});
 	})
 	 //保存方法（ 实际保存，跳转到后台保存到数据库）

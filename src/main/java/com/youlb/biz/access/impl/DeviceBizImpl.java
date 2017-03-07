@@ -3,6 +3,7 @@ package com.youlb.biz.access.impl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -240,9 +241,9 @@ public class DeviceBizImpl implements IDeviceBiz {
 	@Override
 	public void setLive(String[] ids) throws BizException {
 		List<String> asList = Arrays.asList(ids);
-		StringBuilder setLive = new StringBuilder("update t_deviceinfo set fdevicestatus=? where 1=1 ");
+		StringBuilder setLive = new StringBuilder("update t_deviceinfo set fdevicestatus=?,flive_time=? where fdevicestatus!='1' ");
 		setLive.append(SearchHelper.jointInSqlOrHql(asList, " id "));
-		deviceSqlDao.updateSQL(setLive.toString(), new Object[]{"1",asList});
+		deviceSqlDao.updateSQL(setLive.toString(), new Object[]{"1",new Date(),asList});
 	}
 
 }

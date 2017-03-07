@@ -7,7 +7,7 @@
 				//设置标题
 	            $("#unnormalModalLabel").html("处理备注");
 				$("#unnormalModal .modal-body").html(addHtml);
-				$("#unnormalModal").modal("show");
+				$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 			})
 	  })
 	  //处理公告备注

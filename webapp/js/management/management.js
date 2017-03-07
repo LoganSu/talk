@@ -61,7 +61,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	})
 		//公司确定按钮
@@ -148,7 +148,7 @@ $(function(){
 			var title = "人员列表";
 	        $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	})
 	 //分组管理  添加人员按钮

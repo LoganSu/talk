@@ -7,7 +7,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("设置密码");
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	 })
 	//修改
@@ -19,7 +19,7 @@ $(function(){
 			//设置标题
             $("#myModalLabel").html("修改");
 			$("#myModal .modal-body").html($data);
-			$("#myModal").modal("show");
+			$("#myModal").modal({backdrop: 'static', keyboard: false});
 		})
 	 })
 		//开卡
@@ -36,9 +36,9 @@ $(function(){
 			var url =$path+"/mc/deviceCount/toSendOrders.do";
 			$.post(url,data,function(addHtml){
 				//设置标题
-	            $("#unnormalModalLabel").html("派单");
+				$("#unnormalModalLabel").html("派单");
 				$("#unnormalModal .modal-body").html(addHtml);
-				$("#unnormalModal").modal("show");
+				$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 			})
 		});
 	//打印

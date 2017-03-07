@@ -33,7 +33,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	
@@ -117,7 +117,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(remarkPage);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 		
 	})
@@ -145,7 +145,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("预览");
 			$("#unnormalModal .modal-body").html(html);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	})
 	//查看审核记录
@@ -156,7 +156,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("审核记录");
 			$("#unnormalModal .modal-body").html(html);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	})
 	
@@ -168,7 +168,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html("添加首页图片");
 			$("#unnormalModal .modal-body").html(html);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 		
 	})

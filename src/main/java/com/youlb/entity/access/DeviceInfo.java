@@ -1,5 +1,8 @@
 package com.youlb.entity.access;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -72,10 +75,37 @@ public class DeviceInfo extends BaseModel{
    /**软件型号*/
    @Column(name="fsoftware_type")
    private String softwareType;
+   /**设备激活时间*/
+   @Column(name="flive_time")
+   private Date liveTime;
    
    
 	public String getOprator() {
 		return "<a class='deviceInfoSetPws' rel='"+getId()+"' href='javascript:void(0)'>设置密码</a>";
+	}
+	
+	public String getCreateTimeStr() {
+		String timeStr="";
+		if(getCreateTime()!=null){
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			timeStr = sd.format(getCreateTime());
+		}
+		return timeStr;
+	}
+	public String getLiveTimeStr() {
+		String timeStr="";
+		if(liveTime!=null){
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			timeStr = sd.format(liveTime);
+		}
+		return timeStr;
+	}
+	public Date getLiveTime() {
+		return liveTime;
+	}
+
+	public void setLiveTime(Date liveTime) {
+		this.liveTime = liveTime;
 	}
 	public String getDeviceNameStr() {
 		String deviceNameStr = "";

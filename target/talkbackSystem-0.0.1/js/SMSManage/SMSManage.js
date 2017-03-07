@@ -19,7 +19,7 @@ $(function(){
 			//设置标题
             $("#unnormalModalLabel").html(title);
 			$("#unnormalModal .modal-body").html(addHtml);
-			$("#unnormalModal").modal("show");
+			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 		})
 	});
 	
@@ -34,7 +34,7 @@ $(function(){
 //			//设置标题
 //            $("#unnormalModalLabel").html(title);
 //			$("#unnormalModal .modal-body").html(addHtml);
-//			$("#unnormalModal").modal("show");
+//			$("#unnormalModal").modal({backdrop: 'static', keyboard: false});
 //		})
 	})
 	
