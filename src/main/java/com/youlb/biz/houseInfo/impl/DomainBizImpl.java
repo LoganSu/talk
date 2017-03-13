@@ -344,12 +344,12 @@ public class DomainBizImpl implements IDomainBiz {
      * @see com.youlb.biz.houseInfo.IDomainBiz#getNeiborKey(java.lang.String)
      */
 	@Override
-	public String getNeiborKey(String roomId) throws BizException {
+	public String getNeiborKey(String domainId) throws BizException {
 		 StringBuilder sb = new StringBuilder();
-		 sb.append("WITH RECURSIVE r AS (SELECT d.* from t_room r INNER JOIN t_domain d on r.id=d.fentityid where r.id=? ")
+		 sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.id=? ")
 		 .append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id  = r.fparentid)")
 		 .append("SELECT n.fuse_key,n.fencode_key from r INNER JOIN t_neighborhoods n on n.id=r.fentityid where r.flayer='1' and n.fuse_key='2'");//启用
-		 List<Object[]> listObj = domainSqlDao.pageFindBySql(sb.toString(), new Object[]{roomId});
+		 List<Object[]> listObj = domainSqlDao.pageFindBySql(sb.toString(), new Object[]{domainId});
 		 if(listObj!=null&&!listObj.isEmpty()){
 			 for(Object[] obj:listObj){
 				 if("2".equals(obj[0])){

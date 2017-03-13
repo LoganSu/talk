@@ -6,8 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -19,19 +17,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.dao.common.BaseDaoBySql;
-import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.common.Domain;
-import com.youlb.entity.common.Pager;
 import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.houseInfo.Room;
 import com.youlb.entity.houseInfo.RoomInfoDto;
@@ -337,7 +329,7 @@ public class RoomBizImpl implements IRoomBiz {
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select * from (select r.id id,r.FROOMNUM roomNum,r.FROOMFLOOR roomFloor,r.FCERTIFICATENUM certificateNum," )
 		 .append("r.FROOMTYPE roomType,r.FPURPOSE purpose,r.FORIENTATION orientation,r.FDECORATIONSTATUS decorationStatus,r.FROOMAREA roomArea,")
-		 .append("r.FUSEAREA useArea,r.FGARDENAREA gardenArea,r.FUSESTATUS useStatus,r.FREMARK remark,r.fcardcount cardCount, r.FCREATETIME createTime")
+		 .append("r.FUSEAREA useArea,r.FGARDENAREA gardenArea,r.FUSESTATUS useStatus,r.FREMARK remark,r.fcardcount cardCount,d.id domainId,r.FCREATETIME createTime ")
 		 .append(" from t_room r inner join t_domain d on d.fentityid = r.id where 1=1 ");
 		 if(StringUtils.isNotBlank(target.getParentId())){
 			 sb.append(" and d.fparentid=? ");
@@ -393,6 +385,7 @@ public class RoomBizImpl implements IRoomBiz {
 					room.setUseStatus(obj[11]==null?"":(String)obj[11]);
 					room.setRemark(obj[12]==null?"":(String)obj[12]);
 					room.setCardCount(obj[13]==null?0:((Integer)obj[13]));
+					room.setDomainId(obj[14]==null?"":(String)obj[14]);
 					list.add(room);
 			 }
 		 }

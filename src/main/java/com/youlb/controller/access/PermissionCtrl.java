@@ -142,13 +142,15 @@ public class PermissionCtrl extends BaseCtrl {
 	
 	@RequestMapping("/getKey.do")
 	@ResponseBody
-	public String getKey(String roomId){
+	public String getKey(String domainId){
 		try {
-			String neiborKey = domainBiz.getNeiborKey(roomId);
+			if(StringUtils.isNotBlank(domainId)){
+				String neiborKey = domainBiz.getNeiborKey(domainId);
+				return neiborKey;
+			}
 //			if(StringUtils.isBlank(neiborKey)){
 //				return (String) servletContext.getAttribute("ic_cardKey");
 //			}else{
-				return neiborKey;
 //			}
 		} catch (BizException e) {
 			e.printStackTrace();
@@ -162,9 +164,9 @@ public class PermissionCtrl extends BaseCtrl {
     @RequestMapping("/toOpenCard.do")
    	public String toOpenCard(CardInfo cardInfo,Model model){
     	//获取人的地址列表
-    	if(StringUtils.isNotBlank(cardInfo.getRoomId())){
+    	if(StringUtils.isNotBlank(cardInfo.getDomainId())){
 			try {
-				String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
+				String address = permissionBiz.findAddressByRoomId(cardInfo.getDomainId());
 				model.addAttribute("address",address);
 			} catch (BizException e) {
 				// TODO Auto-generated catch block
@@ -185,8 +187,8 @@ public class PermissionCtrl extends BaseCtrl {
 		try {
 			Map<String, CardInfo> cardMap = permissionBiz.cardMap(cardInfo);
 			//获取人的地址列表
-			if(StringUtils.isNotBlank(cardInfo.getRoomId())){
-				String address = permissionBiz.findAddressByRoomId(cardInfo.getRoomId());
+			if(StringUtils.isNotBlank(cardInfo.getDomainId())){
+				String address = permissionBiz.findAddressByRoomId(cardInfo.getDomainId());
 				model.addAttribute("address",address);
 			}
 			model.addAttribute("cardInfo",cardInfo);
@@ -296,6 +298,7 @@ public class PermissionCtrl extends BaseCtrl {
     			return super.message;
     		}
     	}else{
+    		cardInfo.setCardBelongs("1");//所属住户
     		int i = permissionBiz.writeCard(cardInfo);
     		super.message=i+"";
     	}
@@ -332,15 +335,15 @@ public class PermissionCtrl extends BaseCtrl {
 	    @RequestMapping("/isInitKey.do")
 	    @ResponseBody
 	    public String isInitKey(CardInfo cardInfo,Model model){
-	    	if(StringUtils.isNotBlank(cardInfo.getCardSn())&&StringUtils.isNotBlank(cardInfo.getRoomId())){
+	    	if(StringUtils.isNotBlank(cardInfo.getCardSn())&&StringUtils.isNotBlank(cardInfo.getDomainId())){
 	    		try {
-					return	permissionBiz.isInitKey(cardInfo.getCardSn(),cardInfo.getRoomId());
+					return	permissionBiz.isInitKey(cardInfo.getCardSn(),cardInfo.getDomainId());
 				} catch (BizException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	    	}else{
-	    		return "卡片id和房间不能为空！";
+	    		return "3";
 	    	}
 	    	return null;
     }

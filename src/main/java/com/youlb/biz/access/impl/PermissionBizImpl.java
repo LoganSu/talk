@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +23,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.youlb.biz.access.IPermissionBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.BlackListData;
@@ -126,8 +129,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 	public List<CardInfo> showList(CardInfo target, Operator loginUser)throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
-		sb.append("select * from(SELECT c.fcardsn cardSn,c.fcardno cardNo,c.fcardtype cardType,c.fcardstatus cardStatus,c.froomid roomId,c.fcreatetime createTime")
-		.append(" from t_cardinfo c left join t_domain d on d.fentityid=c.froomid where 1=1");
+		sb.append("select * from(SELECT c.fcardsn cardSn,c.fcardno cardNo,c.fcardtype cardType,c.fcardstatus cardStatus,c.fdomainid domainId,c.fcreatetime createTime")
+		.append(" from t_cardinfo c left join t_domain d on d.id=c.fdomainid where 1=1");
 		
 		//不是特殊管理员需要过滤域
 		List<String> domainIds = loginUser.getDomainIds();
@@ -194,43 +197,6 @@ public class PermissionBizImpl implements IPermissionBiz {
 	}
 
 
-	/**根据人员信息查询地址信息 可能多条地址
-	 * @param cardInfo
-	 * @return
-	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
-	 */
-	@Override
-	public List<CardInfo> findAddress(CardInfo cardInfo,Map<String, String> domainMap) {
-//		StringBuilder sb = new StringBuilder();
-//		List<Object> values = new ArrayList<Object>();
-//		sb.append("SELECT d.fdomainsn domainsn, h.fcity,h.farea,h.ftown,h.fstreet,h.fstreetnum,r.froomnum from t_person p1 INNER JOIN");
-//		if(SysStatic.one.equals(cardInfo.getOprType())){
-//			sb.append(" t_hostinfo hs ON hs.id=p1.fentityid INNER JOIN t_roommanage r on r.fhostid=hs.id ");
-//		}else if(SysStatic.two.equals(cardInfo.getOprType())){
-//			sb.append(" t_lesseeinfo l on l.id=p1.fentityid INNER JOIN t_room_lessee rl on rl.flesseeid=l.id ")
-//		     .append(" INNER JOIN t_roommanage r on r.id=rl.froomid ");
-//		}
-//			sb.append(" INNER JOIN t_domain d on d.fentityid=r.id INNER JOIN t_housemanage h on h.id=r.fhouseid where p1.id =?");	
-//			values.add(cardInfo.getdwellerId());
-//			List<Object[]> listObj = cardSqlDao.pageFindBySql(sb.toString(), values.toArray());
-//			List<CardInfo> list = new ArrayList<CardInfo>();
-//			if(listObj!=null&&!listObj.isEmpty()){
-//				for(Object[] obj:listObj){
-//					CardInfo icCard = new CardInfo();
-//					icCard.setDomainSn(obj[0]==null?null:(Integer)obj[0]);//房间id
-//					sb = new StringBuilder();
-//					sb.append(domainMap.get(obj[1]))
-//					 .append(domainMap.get(obj[2]))
-//					 .append(domainMap.get(obj[3]))
-//					 .append(domainMap.get(obj[4]))
-//					 .append(obj[5]+"号")
-//					 .append(obj[6]+"室");
-//					  icCard.setAddress(sb.toString());//显示地址
-//					  list.add(icCard);
-//				}
-//			}
-		   return null;
-	}
 
 	/**写卡和入库
 	 * @param cardInfo
@@ -249,7 +215,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 //			if(c!=null){
 //				c.setCardStatus(SysStatic.LIVING);//激活状态
 //				c.setRoomId(cardInfo.getRoomId());
-//				String update = "update CardInfo set cardStatus=? where cardSn=? and roomId=? ";
+//				String update = "update CardInfo set cardStatus=? where cardSn=? and domainId=? ";
 //				cardSqlDao.update(update, new Object[]{"1",cardInfo.getCardSn(),cardInfo.getRoomId()});
 //			}else{
 				//添加ic卡信息
@@ -263,7 +229,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 				List<String> list =  query.list();
 				logger.info("生成序号8位数"+list.get(0));
 				cardInfo.setCardNo(Integer.parseInt(list.get(0)));
-				cardSqlDao.add(cardInfo);
+				String id = (String) cardSqlDao.add(cardInfo);
 //	    Session currSession = cardSqlDao.getCurrSession();
 				session.flush();
 				
@@ -279,13 +245,28 @@ public class PermissionBizImpl implements IPermissionBiz {
 //				cardSqlDao.executeSql(sql1, new Object[]{domainSn,cardInfo.getCardSn()});
 //			}
 //		}
-		//更新办卡次数
-		String update = "update t_room set fcardcount = CASE WHEN fcardcount is null then 0 ELSE fcardcount END+1 where id=?";
-		cardSqlDao.updateSQL(update, new Object[]{cardInfo.getRoomId()});
-		//推送白名单
+				String deviceCount = "";
+		//用户卡
+		if("1".equals(cardInfo.getCardBelongs())){
+			//更新办卡次数
+			String update = "update t_room set fcardcount = CASE WHEN fcardcount is null then 0 ELSE fcardcount END+1 where id=(select d.fentityid from t_domain d where d.id=?)";
+			cardSqlDao.updateSQL(update, new Object[]{cardInfo.getDomainId()});
+			//推送白名单
+			//指定发送设备（找到设备账号）
+			 deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getDomainId());
+		//物业卡	
+		}else if("2".equals(cardInfo.getCardBelongs())){
+//			//查询该物业人员是否已经发过次卡片
+//			String find = "select fcardinfo_id from t_cardinfo_worker where fcardinfo_id=? and fworker_id=?";
+//			List<String> findList = cardSqlDao.pageFindBySql(find,new Object[]{id,cardInfo.getWorkerId()});
+//			if(findList==null||findList.isEmpty()){
+				String insert="insert into t_cardinfo_worker(fcardinfo_id,fworker_id) values(?,?)";
+				cardSqlDao.executeSql(insert, new Object[]{id,cardInfo.getWorkerId()});
+//			}
+			deviceCount=findDeviceCount(cardInfo.getCardSn(),cardInfo.getDomainId());
+		}
 		
-		//指定发送设备（找到设备账号）
-		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getRoomId());
+		
 		logger.info("门口机账号："+deviceCount);
 		//没有设备账号 说明没有安装没口机
 		if(StringUtils.isBlank(deviceCount)){
@@ -322,10 +303,10 @@ public class PermissionBizImpl implements IPermissionBiz {
 	
 	@Override
 	public void updateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
-		String update = "update CardInfo set cardStatus=? where cardSn=? and roomId=? ";
-		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getCardSn(),cardInfo.getRoomId()});
+		String update = "update CardInfo set cardStatus=? where cardSn=? and domainId=? ";
+		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getCardSn(),cardInfo.getDomainId()});
 		//指定发送设备（找到设备账号）
-		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getRoomId());
+		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getDomainId());
 		logger.info("门口机账号："+deviceCount);
 		//没有设备账号 说明没有安装没口机
 		if(StringUtils.isBlank(deviceCount)){
@@ -364,9 +345,10 @@ public class PermissionBizImpl implements IPermissionBiz {
      * @return
      * @throws BizException 
      */
-	private CardInfo getCardInfo(CardInfo cardInfo) throws BizException {
-		String hql = "from CardInfo where cardSn=? and roomId=? "; //双主键
-		return cardSqlDao.findObject(hql, new Object[]{cardInfo.getCardSn(),cardInfo.getRoomId()});
+	@Override
+	public CardInfo checkCardExist(String cardSn) throws BizException {
+		String hql = "from CardInfo where cardSn=? ";  //物业卡只能发一次
+		return cardSqlDao.findObject(hql, new Object[]{cardSn});
 	}
 	/**
 	 * @param cardSn
@@ -376,8 +358,8 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 */
 	@Override
 	public CardInfo checkCardExist(CardInfo cardInf) throws BizException {
-		String hql = "from CardInfo where cardSn=? and roomId=? ";//注销的可以重新发卡
-		return cardSqlDao.findObject(hql, new Object[]{cardInf.getCardSn(),cardInf.getRoomId()});
+		String hql = "from CardInfo where cardSn=? and domainId=? ";//注销的可以重新发卡
+		return cardSqlDao.findObject(hql, new Object[]{cardInf.getCardSn(),cardInf.getDomainId()});
 	}
 
 	/**
@@ -389,10 +371,17 @@ public class PermissionBizImpl implements IPermissionBiz {
 	@Override
 	public Map<String, CardInfo> cardMap(CardInfo cardInfo) throws BizException {
 		 StringBuilder sb = new StringBuilder();
+		 sb.append("select t.fcardsn,t.fcardno,t.fcardtype,t.ffrdate,t.ftodate,t.fdomainid from t_cardinfo t ");
 		 List<Object> values = new ArrayList<Object>();
-		 sb.append("from CardInfo t where t.roomId = ? ");
-		 values.add(cardInfo.getRoomId());
-		 sb.append(" and t.cardStatus =?");
+		 if(StringUtils.isNotBlank(cardInfo.getDomainId())){
+			 sb.append(" where t.fdomainid = ? ");
+			 values.add(cardInfo.getDomainId());
+		 }else if(StringUtils.isNotBlank(cardInfo.getWorkerId())){
+			 sb.append(" inner join t_cardinfo_worker cw on cw.fcardinfo_id=t.fcardsn where cw.fworker_id=? ");
+			 values.add(cardInfo.getWorkerId());
+		 }
+		 
+		 sb.append(" and t.fcardstatus =?");
 		 //需要挂失
 		 if(SysStatic.LOSS.equals(cardInfo.getCardStatus())){
 			 values.add(SysStatic.LIVING);
@@ -403,11 +392,17 @@ public class PermissionBizImpl implements IPermissionBiz {
 		 }else if(SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
 			 values.add(SysStatic.LIVING);
 		 }
-		List<CardInfo> list = cardSqlDao.find(sb.toString(), values.toArray());
-		Map<String,CardInfo> map = new HashMap<String, CardInfo>();
+		List<Object[]> list = cardSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		Map<String,CardInfo> map = new LinkedHashMap<String, CardInfo>();
 		if(list!=null&&!list.isEmpty()){
-			for(CardInfo icCardInfo:list){
-				map.put(icCardInfo.getCardSn(), icCardInfo);
+			for(Object[] obj:list){
+				CardInfo card = new CardInfo();
+				card.setCardNo(obj[1]==null?null:(Integer)obj[1]);
+				card.setCardType(obj[2]==null?null:(String)obj[2]);
+				card.setFrDate(obj[3]==null?null:(String)obj[3]);
+				card.setToDate(obj[4]==null?null:(String)obj[4]);
+				card.setDomainId(obj[5]==null?null:(String)obj[5]);
+				map.put(obj[0]==null?null:(String)obj[0], card);
 			}
 		}
 		return map;
@@ -426,30 +421,22 @@ public class PermissionBizImpl implements IPermissionBiz {
 	public void lossUnlossDestroy(CardInfo cardInfo) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("update CardInfo t set t.cardStatus=?");
-		//如果是注销 需要解除卡跟人和卡跟房子的关联关系(注销需要对房间单独操作)
+		//如果是注销 需要解除卡跟人和卡跟房子的关联关系(注销需要对房间单独操作) 注销不做推送
 		if(SysStatic.CANCEL.equals(cardInfo.getCardStatus())){
 			//解除卡分人的关联
 			sb.append(",t.oprType=null");
-//			//解除卡跟 房子的关联
-//			String delete ="delete from t_domain_card t where t.fcardsn=?";
-//			cardSqlDao.executeSql(delete, new Object[]{cardInfo.getCardSn()});
-			//更新发卡数量-1
-//			String update = "update t_dweller set fcardcount = CASE WHEN fcardcount is null or fcardcount<0 then 0 ELSE fcardcount END-1 where id=?";
-//			cardSqlDao.updateSQL(update, new Object[]{cardInfo.getDwellerId()});
-			sb.append(" where t.cardSn= ? and roomId=?");
-			cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getRoomId()});
-			//注销不做推送
-			//获取最近门口机的域id
-//			String domainId = getNearDevice(cardInfo);
-//			if(StringUtils.isNotBlank(domainId)){
-//				//获取需要推送的设备账号
-//				deviceCount= getDeviceCount(domainId);
-//			}
+			sb.append(" where t.cardSn= ? and domainId=?");
+			cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getDomainId()});
 		}else{
 			 //(对卡操作)
 			 sb.append(" where t.cardSn= ? and t.cardStatus!=? ");
 			 cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),"3"});
-			 String deviceCount = findDomainSn(cardInfo.getCardSn());
+			  String deviceCount ="";
+			 if(StringUtils.isBlank(cardInfo.getWorkerId())){
+				 deviceCount = findDomainSn(cardInfo.getCardSn());
+			 }else{
+				  deviceCount = findDeviceCount(cardInfo.getCardSn(), cardInfo.getDomainId());
+			 }
 			 
 				if(StringUtils.isBlank(deviceCount)){
 					throw new BizException("没有需要推送的设备账号");
@@ -495,11 +482,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 */
 	private String getNearDevice(CardInfo cardInfo) throws BizException {
 		StringBuilder sql = new StringBuilder();
-		sql.append("WITH RECURSIVE r AS (SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.fentityid=ci.froomid where ci.fcardsn=? and d.fentityid=? ")
+		sql.append("WITH RECURSIVE r AS (SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.id=ci.fdomainid where ci.fcardsn=? and d.id=? ")
 		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
 		.append("SELECT r.id FROM r INNER JOIN t_devicecount td on td.fdomainid=r.id where r.fentityid is not null ")
 		.append("GROUP BY r.id,r.flayer  ORDER BY r.flayer desc,r.id ");
-		List<String> domainIds  = cardSqlDao.pageFindBySql(sql.toString(), new Object[]{cardInfo.getCardSn(),cardInfo.getRoomId()});
+		List<String> domainIds  = cardSqlDao.pageFindBySql(sql.toString(), new Object[]{cardInfo.getCardSn(),cardInfo.getDomainId()});
 		if(domainIds!=null&&!domainIds.isEmpty()){
 			return domainIds.get(0);
 		}
@@ -524,7 +511,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 		}
 		return null;
 	}
-	/**通过卡片序列号找到该卡拥有权限的domainsn 多个使用,分隔
+	/**通过卡片序列号获取设备账号   多个使用,分隔
 	 * @param cardSn
 	 * @return
 	 * @throws BizException 
@@ -533,7 +520,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
 		.append("WITH RECURSIVE r AS ( ")
-		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.fentityid=ci.froomid where ci.fcardsn=? ")
+		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.id=ci.fdomainid where ci.fcardsn=? ")
 		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
 		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
 		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn});
@@ -547,19 +534,58 @@ public class PermissionBizImpl implements IPermissionBiz {
 		}
 		return null;
 	}
-	/**通过卡片序列号找到该卡拥有权限的domainsn 多个使用,分隔
+	
+	/**物业员工卡  通过卡片序列号和域id获取设备账号   多个使用,分隔
 	 * @param cardSn
 	 * @return
 	 * @throws BizException 
 	 */
-	private String findDomainSn(String cardSn,String roomId) throws BizException {
+	private String findDeviceCount(String cardSn,String domainId) throws BizException {
+		//向下查询有没有门口机账号
 		StringBuilder sb = new StringBuilder();
 		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
 		.append("WITH RECURSIVE r AS ( ")
-		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.fentityid=ci.froomid where ci.fcardsn=? and ci.froomid=? ")
+		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.id=ci.fdomainid where ci.fcardsn=? and ci.fdomainid=? ")
 		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
 		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
-		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn,roomId});
+		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn,domainId});
+		sb = new StringBuilder();
+		//向上查询有没有门口机账号
+		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
+		.append("WITH RECURSIVE r AS ( ")
+		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.id=ci.fdomainid where ci.fcardsn=? and ci.fdomainid=? ")
+		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.fparentid= r.id ) ")
+		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
+		List<String> updeviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn,domainId});
+		
+		
+		if(deviceCountList!=null&&!deviceCountList.isEmpty()){
+			deviceCountList.addAll(updeviceCountList);
+			StringBuilder deviceCountStr = new StringBuilder();
+			for(String deviceCount:deviceCountList){
+				if(deviceCountStr.indexOf(deviceCount)<0){
+					deviceCountStr.append(deviceCount+",");
+				}
+			}
+			deviceCountStr.deleteCharAt(deviceCountStr.length()-1);
+			return deviceCountStr.toString();
+		}
+		return null;
+	}
+	
+	/**通过卡片序列号和域id获取设备账号   多个使用,分隔
+	 * @param cardSn
+	 * @return
+	 * @throws BizException 
+	 */
+	private String findDomainSn(String cardSn,String domainId) throws BizException {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT t.fdevicecount from t_devicecount t INNER JOIN t_domain dm on dm.id=t.fdomainid where t.fdomainid in ( ")
+		.append("WITH RECURSIVE r AS ( ")
+		.append("SELECT d.* from  t_cardinfo ci INNER JOIN t_domain d ON d.id=ci.fdomainid where ci.fcardsn=? and ci.fdomainid=? ")
+		.append("union SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) ")
+		.append("SELECT r.id FROM r where r.fentityid is not null) and t.fcounttype='1' ");
+		List<String> deviceCountList = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{cardSn,domainId});
 		if(deviceCountList!=null&&!deviceCountList.isEmpty()){
 			StringBuilder deviceCountStr = new StringBuilder();
 			for(String deviceCount:deviceCountList){
@@ -629,11 +655,27 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * @see com.youlb.biz.access.IPermissionBiz#findAddress(com.youlb.entity.access.CardInfo)
 	 */
 	@Override
-	public String findAddressByRoomId(String roomId) throws BizException {
+	public String findAddressByRoomId(String domainId) throws BizException {
 		StringBuffer sb = new StringBuffer();
-		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
+		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
-		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{roomId});
+		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{domainId});
+		 if(listObj!=null&&!listObj.isEmpty()){
+			 return listObj.get(0);
+		 }
+		return null;
+	}
+	/**
+	 * 获取地址信息
+	 */
+	@Override
+	public String findAddressByWorkerId(String cardSn,String workerId) throws BizException {
+		StringBuffer sb = new StringBuffer();
+		sb.append("select array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT d.* FROM t_domain d ")
+		.append(" INNER JOIN t_cardinfo c on c.fdomainid=d.id INNER JOIN t_cardinfo_worker cw  on cw.fcardinfo_id=c.fcardsn ")
+		.append(" WHERE cw.fworker_id =? and cw.fcardinfo_id=?")
+		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')");
+		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{workerId,cardSn});
 		 if(listObj!=null&&!listObj.isEmpty()){
 			 return listObj.get(0);
 		 }
@@ -809,18 +851,18 @@ public class PermissionBizImpl implements IPermissionBiz {
 	 * 判断卡片是否已经初始化秘钥
 	 */
 	@Override
-	public String isInitKey(String cardSn,String roomId) throws BizException { 
-		String sql ="SELECT froomid from t_cardinfo where fcardsn=? and fcardstatus!=?";
+	public String isInitKey(String cardSn,String domainId) throws BizException { 
+		String sql ="SELECT fdomainid from t_cardinfo where fcardsn=? and fcardstatus!=?";
 		List<String> list = cardSqlDao.pageFindBySql(sql, new Object[]{cardSn,SysStatic.CANCEL});
 		//获取房间的社区域id
-		String neibId = getNeibDomainId(roomId);
+		String neibId = getNeibDomainId(domainId);
 		if(list!=null&&!list.isEmpty()){
 			//获取已经绑定房间的社区域id
 			String alreadyNeibId = getNeibDomainId(list.get(0));
 			if(alreadyNeibId!=null&&alreadyNeibId.equals(neibId)){
 				return "1";
 			}else{
-				return "一张卡片只能在一个社区使用！";
+				return "2";
 			}
 		}
 		return "0";
@@ -840,18 +882,31 @@ public class PermissionBizImpl implements IPermissionBiz {
 	
 	/**
 	 * 通过房间id获取社区域id
-	 * @param roomId
+	 * @param domainId
 	 * @return
 	 * @throws BizException
 	 */
-	public String getNeibDomainId(String roomId) throws BizException{
+	public String getNeibDomainId(String domainId) throws BizException{
 		StringBuffer sb = new StringBuffer();
-		sb.append("WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE fentityid = ?")
+		sb.append("WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id = ?")
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  r.id FROM r where flayer=1");
-		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{roomId});
+		 List<String> listObj = cardSqlDao.pageFindBySql(sb.toString(), new Object[]{domainId});
 		 if(listObj!=null&&!listObj.isEmpty()){
 			 return listObj.get(0);
 		 }
 		return "";
 	}
+	/**
+	 * 检查人和卡片的关系是否已经存在
+	 */
+	@Override
+	public Boolean checkWorkerCardExist(CardInfo cardInfo) throws BizException {
+		String find = "select fcardinfo_id from t_cardinfo_worker where fcardinfo_id=? and fworker_id=?";
+		List<String> findList = cardSqlDao.pageFindBySql(find,new Object[]{cardInfo.getCardSn(),cardInfo.getWorkerId()});
+		if(findList!=null&&!findList.isEmpty()){
+			return true;
+		}
+		return false;
+	}
+	
 }

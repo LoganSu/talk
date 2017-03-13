@@ -1,6 +1,8 @@
 package com.youlb.entity.management;
 
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -44,6 +46,11 @@ public class Worker extends BaseModel {
 	/**部门id集合*/
 	@Transient
 	private String departmentIds;
+	/**域id集合*/
+	@Transient
+	private List<String> treecheckbox;
+	
+	
 	public String getSexStr(){
 		String sexStr = "";
 		if(StringUtils.isNotBlank(sex)){
@@ -80,6 +87,14 @@ public class Worker extends BaseModel {
 	}
 	
 	
+	public List<String> getTreecheckbox() {
+		return treecheckbox;
+	}
+
+	public void setTreecheckbox(List<String> treecheckbox) {
+		this.treecheckbox = treecheckbox;
+	}
+
 	public String getDepartmentIds() {
 		return departmentIds;
 	}
@@ -139,6 +154,14 @@ public class Worker extends BaseModel {
 		this.username = username;
 	}
 	
-	
+	 //门禁授权操作
+	   public String getOperate() {
+	  	StringBuilder sb = new StringBuilder();
+	  	sb.append("<a class='workerOpenCard' rel='"+getId()+"' href='javascript:void(0)'>发卡</a>&nbsp;")
+	  	.append("<a class='workerLoss' rel='"+getId()+"' cardStatus='2' href='javascript:void(0)'>挂失</a>&nbsp;")
+	  	.append("<a class='workerUnloss' rel='"+getId()+"' cardStatus='1' href='javascript:void(0)'>解挂</a>&nbsp;")
+	  	.append("<a class='workerDestroy' rel='"+getId()+"' cardStatus='3' href='javascript:void(0)'>注销</a>&nbsp;");
+			return sb.toString();
+		}
 	
 }

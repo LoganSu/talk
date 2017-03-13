@@ -32,11 +32,6 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	String saveOrUpdate(CardInfo cardInfo, Operator loginUser)throws BizException ;
 
 
-	/**根据人员信息查询地址信息
-	 * @param cardInfo
-	 * @return
-	 */
-	List<CardInfo> findAddress(CardInfo cardInfo,Map<String, String> domainMap) throws BizException;
 
 	/**写卡入库
 	 * @param cardInfo
@@ -67,7 +62,7 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param cardInfo
 	 * @return
 	 */
-	String findAddressByRoomId(String roomId) throws BizException;
+	String findAddressByRoomId(String domainId) throws BizException;
 
 
 	/**通过cardSn获取地址信息
@@ -108,7 +103,7 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @return
 	 * @throws BizException
 	 */
-	String isInitKey(String cardSn,String roomId)throws BizException;
+	String isInitKey(String cardSn,String domainId)throws BizException;
 
 	/**
 	 * 判断是不是最后注销的卡
@@ -116,5 +111,16 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @return
 	 */
 	String isLastCard(String cardSn)throws BizException;
+
+
+	String findAddressByWorkerId(String cardSn, String workerId)throws BizException;
+
+
+
+	Boolean checkWorkerCardExist(CardInfo cardInfo)throws BizException;
+
+
+
+	CardInfo checkCardExist(String cardSn)throws BizException;
    
 }

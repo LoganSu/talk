@@ -11,56 +11,11 @@
 </head>
 <script type="text/javascript">
 $(function(){
-	 //时间控件
-// 	  $(".datepicker").datepicker();
-	 //连接发卡器
-// 	  $("#lossAndOpenForm .connectCardMachine").on("click",function(){
-// 		   var url =$path+"/mc/permission/connectCardMachine.do";
-// 		   $.post(url,function($data){
-// 			   if($data){
-// 				   if($data.cardSn==0){
-// 					   hiAlert("提示","请放入卡片！");
-// 				   }else if($data.cardSn==null){
-// 				       hiAlert("提示","发卡器连接异常！");
-// 				   }else{
-// 				      $("#lossAndOpenForm .cardSn").val($data.cardSn);
-// 				   }
-// 			   }else{
-// 				   $("#lossAndOpenForm .cardSn").val($data.cardSn);
-// 				   hiAlert("提示","该卡已经被使用，请放入新卡！");
-// 			   }
-// 		   });
-// 	})
-	
-	//多选框变单选
-// 	$('#lossAndOpenForm .lesseeAddress').each(function(){
-// 		$(this).click(function(){
-// 			if($(this).is(':checked')){
-// 				$('#lossAndOpenForm .lesseeAddress').prop('checked',false);
-// 				$(this).prop('checked',true);
-// 			}
-// 		});
-// 	});
-	 //显示卡片信息
-	 $("#lossAndOpenDiv .cardSn").on("change",function(){
-		 //编号
-		 var cardNo =  $("#lossAndOpenDiv .cardSn option:selected").attr("cardNo");
-		 $("#lossAndOpenDiv .cardNo").val(cardNo);
-		 //卡片类型
-		 var cardTypeStr = $("#lossAndOpenDiv .cardSn option:selected").attr("cardTypeStr");
-		 $("#lossAndOpenDiv .cardTypeStr").val(cardTypeStr);
-		 //开始结束时间
-		 var frDate = $("#lossAndOpenDiv .cardSn option:selected").attr("frDate");
-		 $("#lossAndOpenDiv .frDate").val(frDate);
-		 var toDate = $("#lossAndOpenDiv .cardSn option:selected").attr("toDate");
-		 $("#lossAndOpenDiv .toDate").val(toDate);
-		
-	 });
 	 //确定挂失
-	  $("#lossAndOpenDiv .sure").on("click",function(){
-		   var data = $("#lossAndOpenForm").serialize();
+	  $("#workerLossAndOpenDiv .sure").on("click",function(){
+		   var data = $("#workerLossAndOpenForm").serialize();
 		   //注销需要清空卡片秘钥
-		   var cardStatus = $("#lossAndOpenForm [name='cardStatus']").val();
+		   var cardStatus = $("#workerLossAndOpenDiv [name='cardStatus']").val();
 			   //最后一张卡注销时还原卡片
 			   $.post($path+"/mc/permission/isLastCard.do?a="+Math.random(),data,function($a){
 					   if(cardStatus=='3'&&$a=="0"){
@@ -71,8 +26,10 @@ $(function(){
 							   hiAlert("提示","发卡器连接出错！");
 								return false;
 						   }
+						   //域id
+						   var param = "domainId="+$("#workerLossAndOpenForm [name='domainId']").val();
 						   //加载key
-			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"domainId="+$("#lossAndOpenForm [name='domainId']").val(),function($key){
+			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),param,function($key){
 			            	   if($key){
 				            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
 				        			   if($data){
@@ -110,7 +67,7 @@ $(function(){
 				        				   
 				              			   $("#unnormalModal").modal("hide");
 				              			  $("#tableShowList").bootstrapTable('refresh', {
-				              				url: $path+'/mc/room/showList.do',
+				              				url: $path+'/mc/worker/showList.do',
 				              			});
 				        			   }
 				        		   });
@@ -121,7 +78,7 @@ $(function(){
 				        			   }else{
 				              			    $("#unnormalModal").modal("hide");
 				              			   $("#tableShowList").bootstrapTable('refresh', {
-				              				url: $path+'/mc/room/showList.do',
+				              				url: $path+'/mc/worker/showList.do',
 				              			});
 				        			   }
 				        		   });
@@ -137,7 +94,7 @@ $(function(){
 			    			   }else{
 			          			   $("#unnormalModal").modal("hide");
 			          			  $("#tableShowList").bootstrapTable('refresh', {
-			          				url: $path+'/mc/room/showList.do',
+			          				url: $path+'/mc/worker/showList.do',
 			          			});
 			    			   }
 			    		   });
@@ -146,21 +103,35 @@ $(function(){
 			   })
 		   
 	  })
-	 
+	  
+	  
+	  $("#workerLossAndOpenDiv .cardSn").on("change",function(){
+		  var cardSn = $(this).val();
+		  $("#workerLossAndOpenDiv .address").hide();
+		  $("#workerLossAndOpenDiv ."+cardSn).show();
+		  //设置domainId
+		 initDomainId()
+	  })
+	  initDomainId()
 })
+function initDomainId(){
+	  var domainId = $("#workerLossAndOpenDiv .cardSn option:selected").attr("domainId");
+	  $("#workerLossAndOpenDiv [name='domainId']").val(domainId);
+}
 </script>
 <body>
-  <div  id="lossAndOpenDiv">
-     <form id="lossAndOpenForm" action="">
+  <div  id="workerLossAndOpenDiv">
+     <form id="workerLossAndOpenForm" action="">
          <input type="hidden" name="cardStatus" value="${cardInfo.cardStatus}"/>
-         <input type="hidden" name="domainId" value="${cardInfo.domainId}"/>
+         <input type="hidden" name="workerId" value="${cardInfo.workerId}"/>
+         <input type="hidden" name="domainId" value=""/>
          <table>
             <tr>
                <td><div class="firstFont"><span class="starColor">*</span>卡序列号 ：</div></td>
                <td><div>
                    <select name="cardSn" class="form-control cardSn">
                        <c:forEach items="${cardMap}" var="map">
-                            <option cardNo="${map.value.cardNo}" cardTypeStr="${map.value.cardTypeStr}" frDate="${map.value.frDate}" toDate="${map.value.toDate}" value="${map.key}">${map.key}</option>
+                            <option cardNo="${map.value.cardNo}" cardTypeStr="${map.value.cardTypeStr}" domainId="${map.value.domainId}" frDate="${map.value.frDate}" toDate="${map.value.toDate}" value="${map.key}">${map.key}</option>
                        </c:forEach>
                    </select> 
                </div></td>
@@ -183,30 +154,22 @@ $(function(){
             </tr>
             <tr>
                <td colspan="1"><div class="firstFont">地址：</div></td>
-               <td><div><span class="lefttFont">${address}</span>
+               <td><div> 
+<!--                  <select name="cardSn" class="form-control cardSn"> -->
+                   <c:forEach items="${cardMap}" var="map" varStatus="status">
+                       <c:choose>
+                          <c:when test="${status.index==0}">
+                              <div class="lefttFont address ${map.key}"><span>${map.value.address}</span></div>
+                          </c:when>
+                          <c:otherwise>
+                             <div style="display: none" class="lefttFont address ${map.key}"><span>${map.value.address}</span></div>
+                          </c:otherwise>
+                       </c:choose>
+                   </c:forEach>
+<!--                </select> -->
                </div></td>
             </tr>
           </table>
-<!--           <table> -->
-<!--             <tr> -->
-<!--                <td><div class="firstFont" style="margin-left: 14px">有效期：</div></td> -->
-<!--                <td><div> -->
-<%--                    <c:forEach items="${cardMap}" var="map" varStatus="status"> --%>
-<%--                           <c:if test="${status.index==0}"> --%>
-<%--                             <input name="" readonly="readonly" class="form-control frDate" value="${map.value.frDate}"/> --%>
-<%--                           </c:if> --%>
-<%--                     </c:forEach>  --%>
-<!--                </div></td> -->
-<!--                <td><div>至</div></td> -->
-<!--                <td><div> -->
-<%--                    <c:forEach items="${cardMap}" var="map" varStatus="status"> --%>
-<%--                           <c:if test="${status.index==0}"> --%>
-<%--                             <input name="" readonly="readonly" class="form-control toDate" value="${map.value.toDate}"/> --%>
-<%--                           </c:if> --%>
-<%--                     </c:forEach>  --%>
-<!--                </div></td> -->
-<!--             </tr> -->
-<!--           </table> -->
      </form>
      <div class="modal-footer">
 	         <!--操作按钮 -->

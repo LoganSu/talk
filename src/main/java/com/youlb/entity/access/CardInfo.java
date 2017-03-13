@@ -55,8 +55,11 @@ public class CardInfo extends Model {
    @Column(name="fcreatetime")
    private Date  createTime=new Date();
    /**房间id*/
-   @Column(name="froomid")
-   private String  roomId;
+   @Column(name="fdomainid")
+   private String  domainId;
+   /**卡片所属  1:住户      2：物业员工*/
+   @Column(name="fcard_belongs")
+   private String  cardBelongs;
    
    @Transient
    private String username;
@@ -101,8 +104,25 @@ public class CardInfo extends Model {
    private String path;
    @Transient
    private Integer id;
-   
+   @Transient
+   private String workerId;
  
+
+public String getCardBelongs() {
+	return cardBelongs;
+}
+
+public void setCardBelongs(String cardBelongs) {
+	this.cardBelongs = cardBelongs;
+}
+
+public String getWorkerId() {
+	return workerId;
+}
+
+public void setWorkerId(String workerId) {
+	this.workerId = workerId;
+}
 
 public String getServeraddr() {
 	return serveraddr;
@@ -205,12 +225,15 @@ public void setFtime(Date ftime) {
 	public void setDomainSns(List<Integer> domainSns) {
 		this.domainSns = domainSns;
 	}
-	public String getRoomId() {
-		return roomId;
+	
+	public String getDomainId() {
+		return domainId;
 	}
-	public void setRoomId(String roomId) {
-		this.roomId = roomId;
+
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
 	}
+
 	public String getSex() {
 		return sex;
 	}

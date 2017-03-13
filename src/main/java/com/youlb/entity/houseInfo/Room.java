@@ -74,6 +74,9 @@ public class Room extends BaseModel {
    @Transient
    private String unitId;
    
+   @Transient
+   private String domainId;
+   
     //绑定户主信息
 //    public String getHomeHost(){
 //    	if(StringUtils.isNotBlank(this.hostInfoId)){
@@ -88,10 +91,10 @@ public class Room extends BaseModel {
    //门禁授权操作
    public String getOperate() {
   	StringBuilder sb = new StringBuilder();
-  	sb.append("<a class='cardInfoOpenCard' rel='"+getId()+"' href='javascript:void(0)'>发卡</a>&nbsp;")
-  	.append("<a class='cardInfoLoss' rel='"+getId()+"' cardStatus='2' href='javascript:void(0)'>挂失</a>&nbsp;")
-  	.append("<a class='cardInfoUnloss' rel='"+getId()+"' cardStatus='1' href='javascript:void(0)'>解挂</a>&nbsp;")
-  	.append("<a class='cardInfoDestroy' rel='"+getId()+"' cardStatus='3' href='javascript:void(0)'>注销</a>&nbsp;");
+  	sb.append("<a class='cardInfoOpenCard' rel='"+getDomainId()+"' href='javascript:void(0)'>发卡</a>&nbsp;")
+  	.append("<a class='cardInfoLoss' rel='"+getDomainId()+"' cardStatus='2' href='javascript:void(0)'>挂失</a>&nbsp;")
+  	.append("<a class='cardInfoUnloss' rel='"+getDomainId()+"' cardStatus='1' href='javascript:void(0)'>解挂</a>&nbsp;")
+  	.append("<a class='cardInfoDestroy' rel='"+getDomainId()+"' cardStatus='3' href='javascript:void(0)'>注销</a>&nbsp;");
 
   
 		return sb.toString();
@@ -214,6 +217,12 @@ public class Room extends BaseModel {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public String getDomainId() {
+		return domainId;
+	}
+	public void setDomainId(String domainId) {
+		this.domainId = domainId;
 	}
    
 }

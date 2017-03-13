@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +18,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.youlb.biz.access.IPermissionBiz;
 import com.youlb.biz.management.IDepartmentBiz;
 import com.youlb.biz.management.IWorkerBiz;
 import com.youlb.controller.common.BaseCtrl;
+import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.management.DepartmentTree;
 import com.youlb.entity.management.Worker;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.common.SHAEncrypt;
+import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 
@@ -44,6 +48,12 @@ public class WorkerCtrl extends BaseCtrl{
 	private IDepartmentBiz departmentBiz;
 	public void setDepartmentBiz(IDepartmentBiz departmentBiz) {
 		this.departmentBiz = departmentBiz;
+	}
+	
+	@Autowired
+	private IPermissionBiz permissionBiz;
+	public void setPermissionBiz(IPermissionBiz permissionBiz) {
+		this.permissionBiz = permissionBiz;
 	}
 
 	/**
@@ -206,4 +216,106 @@ public class WorkerCtrl extends BaseCtrl{
 		}
     	return treeList;
 	}
+    
+    /**
+     * 跳转到添加、更新页面
+     * @return
+     */
+    @RequestMapping("/toOpenCard.do")
+   	public String toOpenCard(String workerId,Model model){
+    	if(StringUtils.isNotBlank(workerId)){
+			try {
+				Worker worker = workerBiz.get(workerId);
+				model.addAttribute("worker", worker);
+			} catch (BizException e) {
+				log.error("获取单条数据失败");
+				e.printStackTrace();
+			}
+    	}
+   		return "/worker/openCard";
+   	}
+    
+    	/**
+         * 写卡片信息 和信息入库
+         * @param cardInfo
+         * @param model
+         * @return
+         */
+         
+        @RequestMapping("/writeCard.do")
+        @ResponseBody
+        public String writeCard(CardInfo cardInfo,Model model){
+        	//检查卡片是否已经使用
+        	try {
+        		    //检查人和卡片是否已经存在
+        		    Boolean b = permissionBiz.checkWorkerCardExist(cardInfo);
+        		    if(!b){
+        		    	//检查卡片是否已经存在 cardInfo（一张物业卡只能发一次）
+        		    	CardInfo c = permissionBiz.checkCardExist(cardInfo.getCardSn());
+        		    	if(c!=null){
+        		    		//注销的卡可以重新发卡
+        		    		if(SysStatic.CANCEL.equals(c.getCardStatus())){
+        		    			permissionBiz.updateCardInfo(c);
+        		    			super.message="0";
+        		    			return super.message;
+        		    		}else{
+        		    			super.message="1";
+        		    			return super.message;
+        		    		}
+        		    	}else{
+        		    		cardInfo.setCardBelongs("2");//所属物业员工
+        		    		int i = permissionBiz.writeCard(cardInfo);
+        		    		super.message=i+"";
+        		    	}
+        		    }else{
+        		    	super.message="3";
+		    			return super.message;
+        		    }
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BizException e) {
+					super.message="2";
+					return super.message;
+				}
+        		return super.message;
+        }
+        
+        /**
+         * 跳转挂失注销页面
+         * @return
+         */
+        @RequestMapping("/workerLossUnlossDestroy.do")
+       	public String cardInfoLossUnlossDestroy(CardInfo cardInfo,Model model){
+        	//获取card map  key=cardSn value=CardInfo
+    		try {
+    			Map<String, CardInfo> cardMap = permissionBiz.cardMap(cardInfo);
+    			//获取人的地址列表
+    			if(cardMap!=null&&!cardMap.isEmpty()){
+    				for(String key:cardMap.keySet()){
+    					CardInfo c = cardMap.get(key);
+    				    String address = permissionBiz.findAddressByWorkerId(key,cardInfo.getWorkerId());
+    					c.setAddress(address);
+    				}
+    			}
+    			model.addAttribute("cardInfo",cardInfo);
+    			model.addAttribute("cardMap",cardMap);
+    		} catch (BizException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    		}
+       		return "/worker/cardInfoLossUnlossDestroy";
+       	}
+        
+        
+        
 }
