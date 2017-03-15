@@ -123,6 +123,9 @@ public class DwellerBizImpl implements IDwellerBiz {
 	public void update(Dweller dweller,Operator loginUser) throws BizException {
 		String insert = "insert into t_domain_dweller(fdomainid,fdwellerid,fdwellertype) values (?,?,?)";
 		dwellerSqlDao.update(dweller);
+//		//修改互联网注册用户表的电话号码
+//		String update ="update t_users set fusername=?,fmobile_phone=? where fusername=?";
+//		dwellerSqlDao.updateSQL(update, new Object[]{});
 		//把被叫手机号码置null
 		updateCallednumberById(dweller.getId());
 		if(dweller.getTreecheckbox()!=null&&!dweller.getTreecheckbox().isEmpty()){
@@ -211,6 +214,28 @@ public class DwellerBizImpl implements IDwellerBiz {
 			dwellerSqlDao.executeSql(del.toString(), new Object[]{idList});
 		}
 
+	}
+	
+	@Override
+	public void delete(String[] ids, Operator loginUser)throws BizException {
+		StringBuilder del = new StringBuilder("DELETE from t_users u where u.fusername in (SELECT d.fphone from t_dweller d where 1=1 ");
+		List<String> idList = new ArrayList<String>();
+		StringBuilder delete =new StringBuilder("DELETE from t_domain_dweller where fdwellerid=? ");
+		delete.append(SearchHelper.jointInSqlOrHql(loginUser.getDomainIds(), " fdomainid "));
+		if(ids!=null){
+			for(String id:ids){
+				if(!idList.contains(id)){
+					idList.add(id);
+					//只删除中间表即可
+					dwellerSqlDao.executeSql(delete.toString(),  new Object[]{id,loginUser.getDomainIds()});
+				}
+			}
+			del.append(SearchHelper.jointInSqlOrHql(idList, " d.id "));
+			del.append(")");
+			//删除互联网用户
+			dwellerSqlDao.executeSql(del.toString(), new Object[]{idList});
+		}
+		
 	}
 
 	/**
@@ -624,5 +649,6 @@ public class DwellerBizImpl implements IDwellerBiz {
 		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
 		return dwellerSqlDao.pageFindBySql(sb.toString(), new Object[]{id});
 	}
+
 
 }

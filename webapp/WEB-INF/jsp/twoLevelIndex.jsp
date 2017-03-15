@@ -27,7 +27,8 @@
      <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
      <link href="${path}/css/qiniu/main.css" rel="stylesheet">
      <link href="${path}/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
-     
+     <link href="${path}/css/video/video-js.css" rel="stylesheet" type="text/css">
+    
      
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
@@ -69,7 +70,7 @@
      
      <script src="${path}/js/common/chars/highcharts.js" type="text/javascript"></script>
      <script src="${path}/js/common/chars/chars.js" type="text/javascript"></script>
-     
+     <script src="${path}/js/video/video.min.js"></script>
      
     <!-- 公共js 方法 -->
     <script src="${path}/js/common/common.js" ></script>

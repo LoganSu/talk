@@ -1,5 +1,6 @@
 package com.youlb.entity.access;
 
+
 /** 
  * @ClassName: DeviceInfoDto.java 
  * @Description: 设备信息生成excel 
@@ -10,14 +11,16 @@ package com.youlb.entity.access;
 public class DeviceInfoDto{
 	/**设备sn*/
    private String id;
+   /**设备状态*/
+   private String deviceStatus;
+   /**激活时间*/
+   private String liveTime;
+   /**登记时间*/
+   private String createTime;
    /**设备编码*/
    private String deviceNum;
    /**设备型号*/
    private String deviceModel;
-   /**设备厂家*/
-   private String deviceFactory;
-   /**设备状态*/
-   private String deviceStatus;
    /**应用版本*/
    private String app_version;
    /**内存大小*/
@@ -26,18 +29,49 @@ public class DeviceInfoDto{
    private String storage_capacity;
    /**系统版本*/
    private String system_version;
+   /**版本号*/
+   private String versionNum;
+   /**软件型号*/
+   private String softwareType;
+   /**备注*/
+   private String remark;
    /**处理器*/
    private String processor_type;
    /**固件版本*/
    private String firmware_version;
    /**内核版本*/
    private String kernal_version;
-   /**备注*/
-   private String remark;
-   /**设备出厂日期*/
+   /**设备厂家*/
+   private String deviceFactory;
+   /**出厂日期*/
    private String deviceBorn;
    
-   
+
+ 
+public String getLiveTime() {
+	return liveTime;
+}
+public void setLiveTime(String liveTime) {
+	this.liveTime = liveTime;
+}
+public String getCreateTime() {
+	return createTime;
+}
+public void setCreateTime(String createTime) {
+	this.createTime = createTime;
+}
+public String getVersionNum() {
+	return versionNum;
+}
+public void setVersionNum(String versionNum) {
+	this.versionNum = versionNum;
+}
+public String getSoftwareType() {
+	return softwareType;
+}
+public void setSoftwareType(String softwareType) {
+	this.softwareType = softwareType;
+}
 public String getId() {
 	return id;
 }

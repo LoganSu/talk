@@ -19,6 +19,7 @@ import com.youlb.entity.access.DeviceInfoDto;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SHAEncrypt;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.helper.DateHelper;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -149,8 +150,8 @@ public class DeviceBizImpl implements IDeviceBiz {
 	 */
 	@Override
 	public String saveOrUpdate(DeviceInfo device, Operator loginUser) throws BizException {
-		 String update = "update DeviceInfo set deviceStatus=?,deviceFactory=?,deviceBorn=?,remark=? where id=?";
-		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),device.getDeviceFactory(),device.getDeviceBorn(),device.getRemark(),device.getId()});
+		 String update = "update DeviceInfo set deviceStatus=?,liveTime=?,deviceFactory=?,deviceBorn=?,remark=? where id=?";
+		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),new Date(),device.getDeviceFactory(),device.getDeviceBorn(),device.getRemark(),device.getId()});
 		return null;
 	}
     /**
@@ -163,8 +164,8 @@ public class DeviceBizImpl implements IDeviceBiz {
 	public void saveBatch(List<DeviceInfoDto> readExcelContent) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 sb.append("insert into t_deviceinfo(id,fdevicenum,fdevicemodel,fdevicefactory,fdevicestatus,fappversion,")
-		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn)")
-		 .append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn,flive_time,fcreatetime,fsoftware_type,fversion_num)")
+		 .append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		 if(readExcelContent!=null){
 			 for(DeviceInfoDto dto:readExcelContent){
 				 if(StringUtils.isBlank(dto.getId())){
@@ -179,8 +180,10 @@ public class DeviceBizImpl implements IDeviceBiz {
 				 try {
 					deviceSqlDao.executeSql(sb.toString(), new Object[]{dto.getId(),dto.getDeviceNum(),dto.getDeviceModel(),dto.getDeviceFactory(),deviceStatu,dto.getApp_version(),
 						                                                dto.getMemory_size(),dto.getStorage_capacity(),dto.getSystem_version(),dto.getProcessor_type(),dto.getFirmware_version(),
-						                                                dto.getKernal_version(),dto.getRemark(),dto.getDeviceBorn()});
+						                                                dto.getKernal_version(),dto.getRemark(),dto.getDeviceBorn(),DateHelper.strParseDate(dto.getLiveTime(), "yyyy-MM-dd HH:mm:ss"),
+						                                                DateHelper.strParseDate(dto.getCreateTime(), "yyyy-MM-dd HH:mm:ss"),dto.getSoftwareType(),dto.getVersionNum()});
 				} catch (BizException e) {
+					e.printStackTrace();
 					throw new BizException("设备SN码有重复！");
 //					//已经存在更数据
 //					 sb = new StringBuilder();
@@ -201,7 +204,9 @@ public class DeviceBizImpl implements IDeviceBiz {
 		 StringBuilder sb = new StringBuilder();
 		 List<DeviceInfoDto> dtoList = new ArrayList<DeviceInfoDto>();
 		 sb.append("select id,fdevicenum,fdevicemodel,fdevicefactory,fdevicestatus,fappversion,")
-		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn from t_deviceinfo where 1=1 ");
+		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn,")
+		 .append("to_char(flive_time,'YYYY-MM-DD HH24:MI:SS'),to_char(fcreatetime,'YYYY-MM-DD HH24:MI:SS'),fsoftware_type,fversion_num from t_deviceinfo where 1=1");
+		 
 		 sb.append(SearchHelper.jointInSqlOrHql(Arrays.asList(ids), " id "));
 		 List<Object[]> listObj = deviceSqlDao.pageFindBySql(sb.toString(),ids);
 		 if(listObj!=null&&!listObj.isEmpty()){
@@ -229,6 +234,10 @@ public class DeviceBizImpl implements IDeviceBiz {
 				 dto.setKernal_version(obj[11]==null?"":(String)obj[11]);
 				 dto.setRemark(obj[12]==null?"":(String)obj[12]);
 				 dto.setDeviceBorn(obj[13]==null?"":(String)obj[13]);
+				 dto.setLiveTime(obj[14]==null?"":(String)obj[14]);
+				 dto.setCreateTime(obj[15]==null?"":(String)obj[15]);
+				 dto.setSoftwareType(obj[16]==null?"":(String)obj[16]);
+				 dto.setVersionNum(obj[17]==null?"":(String)obj[17]);
 				 dtoList.add(dto);
 			 }
 		 }

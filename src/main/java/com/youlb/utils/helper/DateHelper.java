@@ -25,7 +25,9 @@ public class DateHelper {
 			SimpleDateFormat sd = new SimpleDateFormat(format);
 			Date date = null;
 			try {
-				 date =  sd.parse(str);
+				if(StringUtils.isNotBlank(str)){
+					date =  sd.parse(str);
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

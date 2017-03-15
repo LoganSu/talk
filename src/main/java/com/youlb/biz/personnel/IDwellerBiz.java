@@ -49,5 +49,11 @@ public interface IDwellerBiz extends IBaseBiz<Dweller> {
 	 * @return
 	 */
 	List<String> getParentIds(String string)throws BizException;
+	/**
+	 * 删除用户需要根据数据权限删除
+	 * @param ids
+	 * @param loginUser
+	 */
+	void delete(String[] ids, Operator loginUser)throws BizException;
 
 }

@@ -79,6 +79,13 @@ var workerTable ={
             width: '60',
             valign: 'middle',
             sortable: true
+        },{
+            field: 'operate',
+            title: '操作',
+            align: 'center',
+            width: '60',
+            valign: 'middle',
+            sortable: true
         }]
 }
 

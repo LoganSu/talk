@@ -72,7 +72,7 @@ $(function(){
 								return false;
 						   }
 						   //加载key
-			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"roomId="+$("#lossAndOpenForm [name='roomId']").val(),function($key){
+			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"domainId="+$("#lossAndOpenForm [name='domainId']").val(),function($key){
 			            	   if($key){
 				            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
 				        			   if($data){
@@ -153,7 +153,7 @@ $(function(){
   <div  id="lossAndOpenDiv">
      <form id="lossAndOpenForm" action="">
          <input type="hidden" name="cardStatus" value="${cardInfo.cardStatus}"/>
-         <input type="hidden" name="roomId" value="${cardInfo.roomId}"/>
+         <input type="hidden" name="domainId" value="${cardInfo.domainId}"/>
          <table>
             <tr>
                <td><div class="firstFont"><span class="starColor">*</span>卡序列号 ：</div></td>

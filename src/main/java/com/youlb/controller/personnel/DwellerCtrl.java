@@ -193,7 +193,7 @@ public class DwellerCtrl extends BaseCtrl {
 	public String delete(String[] ids,Model model){
 		if(ids!=null&&ids.length>0){
 			try {
-				dwellerBiz.delete(ids);
+				dwellerBiz.delete(ids,getLoginUser());
 			} catch (Exception e) {
 				super.message =  "删除出错";
 				e.printStackTrace();

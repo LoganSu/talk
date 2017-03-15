@@ -9,8 +9,6 @@
 </object>
 <script type="text/javascript">
 $(function(){
-	 //时间控件
-	  $(".datepicker").datepicker();
 	   var  connectCardMachine= function(){
 		   var connectReader;
 		   try{
@@ -36,12 +34,12 @@ $(function(){
            var obj = jQuery.parseJSON(connectReader);
 		   if(obj.code=='0'){
 			   //判断卡片是否已经初始化秘钥
-			   $.post($path+"/mc/permission/isInitKey.do?a="+Math.random(),"cardSn="+jQuery.parseJSON(cardId).result.card_id+"&roomId="+$("#openCardForm [name='roomId']").val(),function($a){
+			   $.post($path+"/mc/permission/isInitKey.do?a="+Math.random(),"cardSn="+jQuery.parseJSON(cardId).result.card_id+"&domainId="+$("#openCardForm [name='domainId']").val(),function($a){
 // 				   alert($a);
 				   //没有加载秘钥且是同一社区的的卡
 				   if($a=='0'){
 					   //加载key
-		               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+		               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"domainId="+$("#openCardForm [name='domainId']").val(),function($data){
 // 		            	   alert($data);
 		            	   //有秘钥的初始化key
 		            	   if($data){
@@ -77,8 +75,10 @@ $(function(){
 		               })
 				   }else if($a=='1'){
 						writeCard(cardId);
-				   }else{
-					   hiAlert("提示",$a);
+				   }else if($a=='2'){
+					   hiAlert("提示","一张卡片只能在一个社区使用！");
+				   }else if($a=='3'){
+					   hiAlert("提示","卡片号或房间不能为空！");
 				   }
 			   })
 		   }else{
@@ -110,7 +110,7 @@ $(function(){
 //            var obj = jQuery.parseJSON(connectReader);
 // 		   if(obj.code=='0'){
 // 			   //加载key
-//                $.post($path+"/mc/permission/getKey.do","roomId="+$("#openCardForm [name='roomId']").val(),function($data){
+//                $.post($path+"/mc/permission/getKey.do","domainId="+$("#openCardForm [name='domainId']").val(),function($data){
 //             	   //有秘钥的初始化key
 //             	   if($data){
 // 	            	   var loadKey;
@@ -148,10 +148,10 @@ $(function(){
 	var writeCard=function(cardId){
 		  obj = jQuery.parseJSON(cardId);
 		  var card_id = obj.result.card_id;
-		  var roomId = $("#openCardForm [name='roomId']").val();
+		  var domainId = $("#openCardForm [name='domainId']").val();
 		  if(obj.code=='0'&&card_id){
 		  $("#openCardForm .cardSn").val(card_id);
-			  $.post($path+"/mc/permission/connectCardMachine.do?a="+Math.random(),"cardSn="+card_id+"&roomId="+roomId,function($data){
+			  $.post($path+"/mc/permission/connectCardMachine.do?a="+Math.random(),"cardSn="+card_id+"&domainId="+domainId,function($data){
 				  if(!$data){
 					  hiAlert("提示","该卡已经绑定此房产，请更换新卡！");
  					   return false;
@@ -217,7 +217,7 @@ $(function(){
 <body>
   <div  id="openCardDiv">
      <form id="openCardForm" action="">
-         <input type="hidden" name="roomId" value="${cardInfo.roomId}"/>
+         <input type="hidden" name="domainId" value="${cardInfo.domainId}"/>
          <input type="hidden" class="cardType" name="cardType" value="${cardInfo.cardType}"/>
          <table>
             <tr>

@@ -255,7 +255,7 @@ public class WorkerCtrl extends BaseCtrl{
         		    	if(c!=null){
         		    		//注销的卡可以重新发卡
         		    		if(SysStatic.CANCEL.equals(c.getCardStatus())){
-        		    			permissionBiz.updateCardInfo(c);
+        		    			permissionBiz.workerUpdateCardInfo(cardInfo);
         		    			super.message="0";
         		    			return super.message;
         		    		}else{

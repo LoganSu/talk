@@ -22,13 +22,13 @@ $(function(){
 				  if(treeId=="houseInfoTree"){
 					  //设置单击事件
 						 var zTreeOnClick = function(event, treeId, treeNode){
-							 if(treeNode.level==0){
+							 if(treeNode.level==0&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/neighborhoods/neighborhoodsListshowPage.do?module=neighborhoodsTable&modulePath=/neighborhoods&parentId="+treeNode.id+"&aa="+new Date().getTime());
-							 }else if(treeNode.level==1){
+							 }else if(treeNode.level==1&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/building/buildingListshowPage.do?module=buildingTable&modulePath=/building&parentId="+treeNode.id+"&aa="+new Date().getTime());
-							 }else if(treeNode.level==2){
+							 }else if(treeNode.level==2&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/unit/unitListshowPage.do?module=unitTable&modulePath=/unit&parentId="+treeNode.id+"&aa="+new Date().getTime());
-							 }else if(treeNode.level==3){
+							 }else if(treeNode.level==3&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/room/roomListshowPage.do?module=roomTable&modulePath=/room&parentId="+treeNode.id+"&aa="+new Date().getTime());
 							 }
 						 }

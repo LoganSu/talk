@@ -14,7 +14,6 @@ import com.youlb.entity.privilege.Operator;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
-import com.youlb.utils.helper.OrderHelperUtils;
 
 /** 
  * @ClassName: PrivilegeBizImpl.java 
@@ -132,7 +131,7 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 //		return list;
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
-		 sb.append("SELECT p.id,p.fname from  t_privilege p ");
+		 sb.append("SELECT p.id,p.fname,p.fkey,p.fdescription from  t_privilege p ");
 		 //除了特殊admin其他用户只显示自己拥有的权限
 		 if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())){
 			 if(StringUtils.isNotBlank(privilege.getParentId())){
@@ -164,6 +163,8 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 				   p.setPager(privilege.getPager());
 				   p.setId(obj[0]==null?"":(String)obj[0]);
 				   p.setName(obj[1]==null?"":(String)obj[1]);
+				   p.setKey(obj[2]==null?"":(String)obj[2]);
+				   p.setDescription(obj[3]==null?"":(String)obj[3]);
 				   list.add(p);
 			   }
 		   }

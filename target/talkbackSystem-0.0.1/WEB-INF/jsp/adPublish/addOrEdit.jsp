@@ -8,6 +8,9 @@
 .caption{
 text-align: center;
 }
+.video-js{
+width: 222px
+}
 </style>
 <body>
 <div>
@@ -18,9 +21,9 @@ text-align: center;
 <%-- 		   <input type="hidden" id="adPublishDomainIds" value="${adPublish.treecheckbox}"/> --%>
 		   <input type="hidden" name="carrierId" value="${adPublish.carrierId}"/>
               <div class="firstFont"><span class="starColor">*</span>上传媒体文件：</div>
-              <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div>
-              <div style="padding-left: 45px;color: #33B4EB;">门口机拨号页请选择1080*1440~720*960px比例为3:4的图片</div>
-              <div style="padding-left: 45px;color: #33B4EB;">手机请选择1080*420~720*280px比例为18:7的图片</div>
+<!--               <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div> -->
+<!--               <div style="padding-left: 45px;color: #33B4EB;">门口机拨号页请选择1080*1440~720*960px比例为3:4的图片</div> -->
+<!--               <div style="padding-left: 45px;color: #33B4EB;">手机请选择1080*420~720*280px比例为18:7的图片</div> -->
               <div style="border: 2px solid #ccc;height: 200px;overflow: auto;">
 	                 <div>
 		                <table class="uploadFileTable"> 
@@ -50,7 +53,11 @@ text-align: center;
 <%-- 					         <input type="hidden" name="adPics.relativePath" value="${adPics.relativePath}"/> --%>
 					         <input type="hidden" name="picId" value="${adPics.id}"/>
 					         <a href="#" class="thumbnail">
-					           <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}">
+					           <video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">
+								    <source src="${adPics.serverAddr}${adPics.relativePath}" type='video/mp4' />
+								</video>
+					            
+<%-- 					           <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}"> --%>
 					         </a>
 						     <div class="caption">
 						     <c:if test="${adPublish.opraterType!=1}">
@@ -109,7 +116,13 @@ text-align: center;
  <iframe style="width:0; height:0;display: none;" id="adPublishSubmitFrame" name="adPublishSubmitFrame"></iframe>
 </body>
 <script type="text/javascript">
- //时间控件
+
+// var myPlayer = videojs('adVideo');
+// videojs("adVideo").ready(function(){
+//     var myPlayer = this;
+//     myPlayer.play();
+// }); 
+//时间控件
  $(".datepicker").datepicker();
   $(function(){
 	  var uploader = Qiniu.uploader({
@@ -131,7 +144,7 @@ text-align: center;
 		        max_file_size : '2mb',
 		        prevent_duplicates: true,
 		        mime_types: [
-		 		      {title : "Image files", extensions : "jpg,gif,png"} // 限定jpg,gif,png后
+		 		      {title : "Image files", extensions : "jpg,gif,png,mp4"} // 限定jpg,gif,png后
 		        ]
 		    },
 		    init: {

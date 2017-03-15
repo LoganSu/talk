@@ -302,42 +302,54 @@ public class PermissionBizImpl implements IPermissionBiz {
 	}
 	
 	@Override
-	public void updateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, IOException, ParseException, JsonException {
+	public void updateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, ParseException, IOException, JsonException {
 		String update = "update CardInfo set cardStatus=? where cardSn=? and domainId=? ";
 		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getCardSn(),cardInfo.getDomainId()});
-		//指定发送设备（找到设备账号）
-		String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getDomainId());
-		logger.info("门口机账号："+deviceCount);
-		//没有设备账号 说明没有安装没口机
-		if(StringUtils.isBlank(deviceCount)){
-			logger.info("没有安装门口机，设备账号为空");
-			throw new BizException("没有安装门口机，设备账号为空");
-		}else{
-			CloseableHttpClient httpClient = HttpClients.createDefault();
-			HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");
-			List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-			logger.info("白名单推送设备："+deviceCount);
-			formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
-			BlackListData bcl = new BlackListData();
-			bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn(),new Date().getTime()+""));
-			logger.info("白名单："+JsonUtils.toJson(bcl));
-			formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
-			UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-			request.setEntity(uefEntity);
-			CloseableHttpResponse response = httpClient.execute(request);
-			if(response.getStatusLine().getStatusCode()==200){
-				HttpEntity entity_rsp = response.getEntity();
-				ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
-				if(resultDto!=null){
-					if(!"0".equals(resultDto.getCode())&&!"3001".equals(resultDto.getCode())){//设备没有登录也发卡成功
-						logger.error(resultDto.getMsg());
-						throw new BizException(resultDto.getMsg());
+		pushInfo(cardInfo);
+	}
+	/**
+	 * 推送白名单
+	 * @param cardInfo
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws ParseException
+	 * @throws JsonException
+	 * @throws BizException
+	 */
+	private void pushInfo(CardInfo cardInfo)throws ClientProtocolException, IOException, ParseException, JsonException, BizException{
+		  //指定发送设备（找到设备账号）
+			String deviceCount = findDomainSn(cardInfo.getCardSn(),cardInfo.getDomainId());
+			logger.info("门口机账号："+deviceCount);
+			//没有设备账号 说明没有安装没口机
+			if(StringUtils.isBlank(deviceCount)){
+				logger.info("没有安装门口机，设备账号为空");
+				throw new BizException("没有安装门口机，设备账号为空");
+			}else{
+				CloseableHttpClient httpClient = HttpClients.createDefault();
+				HttpPost request = new HttpPost(SysStatic.HTTP+"/device/web_pull_blacklist.json");
+				List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+				logger.info("白名单推送设备："+deviceCount);
+				formParams.add(new BasicNameValuePair("deviceCount", deviceCount));
+				BlackListData bcl = new BlackListData();
+				bcl.addBc(new BlackListData.BlackCardData(0, cardInfo.getCardSn(),new Date().getTime()+""));
+				logger.info("白名单："+JsonUtils.toJson(bcl));
+				formParams.add(new BasicNameValuePair("content", JsonUtils.toJson(bcl)));
+				UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+				request.setEntity(uefEntity);
+				CloseableHttpResponse response = httpClient.execute(request);
+				if(response.getStatusLine().getStatusCode()==200){
+					HttpEntity entity_rsp = response.getEntity();
+					ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+					if(resultDto!=null){
+						if(!"0".equals(resultDto.getCode())&&!"3001".equals(resultDto.getCode())){//设备没有登录也发卡成功
+							logger.error(resultDto.getMsg());
+							throw new BizException(resultDto.getMsg());
+						}
+					}else{
+						logger.info("白名单推送成功！");
 					}
-				}else{
-					logger.info("白名单推送成功！");
-				}
-			} 
-		}
+				} 
+			}
 	}
     /**
      * 获取卡片信息
@@ -427,6 +439,11 @@ public class PermissionBizImpl implements IPermissionBiz {
 			sb.append(",t.oprType=null");
 			sb.append(" where t.cardSn= ? and domainId=?");
 			cardSqlDao.update(sb.toString(),new Object[]{cardInfo.getCardStatus(),cardInfo.getCardSn(),cardInfo.getDomainId()});
+			//物业卡注销删除人与卡的关系
+			 if(StringUtils.isNotBlank(cardInfo.getWorkerId())){
+				 String delete = "delete from t_cardinfo_worker where fcardinfo_id=? and fworker_id=?";
+				 cardSqlDao.executeSql(delete, new Object[]{cardInfo.getCardSn(),cardInfo.getWorkerId()});
+			 }
 		}else{
 			 //(对卡操作)
 			 sb.append(" where t.cardSn= ? and t.cardStatus!=? ");
@@ -907,6 +924,22 @@ public class PermissionBizImpl implements IPermissionBiz {
 			return true;
 		}
 		return false;
+	}
+	
+	/**物业更新注销卡片  同时更新地址 物业卡不能一卡多发
+	 * @throws BizException 
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws ParseException 
+	 * @throws ClientProtocolException 
+	 * 
+	 */
+	@Override
+	public void workerUpdateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, ParseException, IOException, JsonException {
+		String update = "update CardInfo set cardStatus=?,domainId=? where cardSn=? ";
+		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getDomainId(),cardInfo.getCardSn()});
+		pushInfo(cardInfo);
+		
 	}
 	
 }

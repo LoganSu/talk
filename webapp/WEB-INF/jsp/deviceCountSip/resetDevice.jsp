@@ -32,8 +32,8 @@
                 <td><div>
                    <select name="reset_time" class="form-control">
                      <option value="0">立即重启</option>
-                     <option value="10">10分钟后重启</option>
-                     <option value="30">30分钟后重启</option>
+                     <option value="1">10分钟后重启</option>
+                     <option value="2">30分钟后重启</option>
                    </select>
                 </div></td>
                 <td><div class="leftFont">重启类型：</div></td>

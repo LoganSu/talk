@@ -1,12 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <style>
 .thumbnail{
  margin-bottom: 0px
 }
 .caption{
 text-align: center;
+}
+.video-js{
+width: 222px
 }
 </style>
 <body>
@@ -18,9 +22,9 @@ text-align: center;
 <%-- 		   <input type="hidden" id="adPublishDomainIds" value="${adPublish.treecheckbox}"/> --%>
 		   <input type="hidden" name="carrierId" value="${adPublish.carrierId}"/>
               <div class="firstFont"><span class="starColor">*</span>上传媒体文件：</div>
-              <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div>
-              <div style="padding-left: 45px;color: #33B4EB;">门口机拨号页请选择1080*1440~720*960px比例为3:4的图片</div>
-              <div style="padding-left: 45px;color: #33B4EB;">手机请选择1080*420~720*280px比例为18:7的图片</div>
+<!--               <div style="padding-left: 5px;color: #33B4EB;">说明：门口机首页请选择1080*1920~720*1280px比例为9:16的图片</div> -->
+<!--               <div style="padding-left: 45px;color: #33B4EB;">门口机拨号页请选择1080*1440~720*960px比例为3:4的图片</div> -->
+<!--               <div style="padding-left: 45px;color: #33B4EB;">手机请选择1080*420~720*280px比例为18:7的图片</div> -->
               <div style="border: 2px solid #ccc;height: 200px;overflow: auto;">
 	                 <div>
 		                <table class="uploadFileTable"> 
@@ -50,7 +54,18 @@ text-align: center;
 <%-- 					         <input type="hidden" name="adPics.relativePath" value="${adPics.relativePath}"/> --%>
 					         <input type="hidden" name="picId" value="${adPics.id}"/>
 					         <a href="#" class="thumbnail">
-					           <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}">
+					           <c:choose>
+					             <c:when test="${fn:contains(adPics.relativePath,'adVideo')}">
+						           <video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">
+									    <source src="${adPics.serverAddr}${adPics.relativePath}" type="video/mp4" />
+									</video>
+					                 
+					             </c:when>
+					             <c:otherwise>
+					                    <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}">
+					             </c:otherwise>
+					           </c:choose>
+					            
 					         </a>
 						     <div class="caption">
 						     <c:if test="${adPublish.opraterType!=1}">
@@ -109,7 +124,13 @@ text-align: center;
  <iframe style="width:0; height:0;display: none;" id="adPublishSubmitFrame" name="adPublishSubmitFrame"></iframe>
 </body>
 <script type="text/javascript">
- //时间控件
+
+// var myPlayer = videojs('adVideo');
+// videojs("adVideo").ready(function(){
+//     var myPlayer = this;
+//     myPlayer.play();
+// }); 
+//时间控件
  $(".datepicker").datepicker();
   $(function(){
 	  var uploader = Qiniu.uploader({
@@ -131,7 +152,7 @@ text-align: center;
 		        max_file_size : '2mb',
 		        prevent_duplicates: true,
 		        mime_types: [
-		 		      {title : "Image files", extensions : "jpg,gif,png"} // 限定jpg,gif,png后
+		 		      {title : "Image files", extensions : "jpg,gif,png,mp4"} // 限定jpg,gif,png后
 		        ]
 		    },
 		    init: {
@@ -153,10 +174,21 @@ text-align: center;
 		     			 $.post($path+'/mc/adPublish/uploadFile.do',param,function(data){
 		     				var imgPath = data.serverAddr+data.relativePath;
 		  	            	if(!data.message&&imgPath){
-		 	 	            	var img = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail"><img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'"></a>'+
+		  	            		var img = '<img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'">';
+		  	            		
+		 	 	            	var video = '<video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">'+
+		 	 	            	'<source src="'+imgPath+'" type="video/mp4" /></video>';
+		 	 	            	var subresource;
+		  	            		if(imgPath.indexOf("adVideo")>-1){
+		  	            			subresource=video;
+		  	            		}else if(imgPath.indexOf("adImg")>-1){
+		  	            			subresource=img;
+		  	            		}
+		 	 	            	var resource = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail">'+subresource+'</a>'+
 		 	 	            	'<input type="hidden" name="picId" value="'+data.id+'"/>'+
 		 	 	            	'<div class="caption"><p><a href="javascript:void(0)" class="btn btn-xs btn-danger" role="button">删除</a></p></div></div></div> ';
-		 	 	            	$("#thumbnailDiv").append(img);
+		 	 	            	
+		 	 	            	$("#thumbnailDiv").append(resource);
 		 	 	            	//清空输入框
 		 	 	            	$("#fileInput_id").val("");
 		  	            	}else{
@@ -178,7 +210,15 @@ text-align: center;
 		        'Key': function(up, file) {
 		            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
 		            // 该配置必须要在unique_names: false，save_key: false时才生效
-                	var key = "web/adImg/"+new Date().getTime();
+		            var dir;
+		            if(file.type.indexOf("video")>-1){
+		            	dir="adVideo";
+		            }else if(file.type.indexOf("image")>-1){
+		            	dir="adImg";
+		            }else{
+		            	dir="other";	
+		            }
+                	var key = "web/"+dir+"/"+new Date().getTime();
 		            return key
 		        }
 		    }

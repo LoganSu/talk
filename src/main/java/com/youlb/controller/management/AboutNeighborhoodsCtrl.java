@@ -1,6 +1,5 @@
 package com.youlb.controller.management;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,18 +12,13 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,24 +28,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.infoPublish.IAdPublishBiz;
 import com.youlb.biz.management.IAboutNeighborhoodsBiz;
 import com.youlb.biz.staticParam.IStaticParamBiz;
-import com.youlb.controller.SMSManage.SMSManageCtrl;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.infoPublish.AdPublishPicture;
 import com.youlb.entity.management.AboutNeighborhoods;
 import com.youlb.entity.management.AboutNeighborhoodsRemark;
-import com.youlb.entity.management.Department;
-import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.QiniuUtils;
 import com.youlb.utils.common.RegexpUtils;
-import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.common.Utils;
 import com.youlb.utils.exception.BizException;
 @Controller

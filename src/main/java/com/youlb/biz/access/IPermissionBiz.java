@@ -122,5 +122,12 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 
 
 	CardInfo checkCardExist(String cardSn)throws BizException;
+
+
+	/**
+	 * 物业更新注销卡片  同时更新地址
+	 * @param cardInfo
+	 */
+	void workerUpdateCardInfo(CardInfo cardInfo)throws BizException,UnsupportedEncodingException,IOException, ParseException, JsonException;
    
 }
