@@ -1,6 +1,8 @@
 package com.youlb.biz.houseInfo.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +29,14 @@ import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
+import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.houseInfo.Room;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.DES3;
+import com.youlb.utils.common.JsonUtils;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -72,9 +86,9 @@ public class DomainBizImpl implements IDomainBiz {
 	 * @see com.youlb.biz.common.IBaseBiz#update(java.io.Serializable)
 	 */
 	@Override
-	public void update(String remark,String entityId) throws BizException {
-		String update = "update Domain set remark=? where entityId=?";
-		domainSqlDao.update(update, new Object[]{remark,entityId});
+	public void update(String remark,String createSipNum,String entityId) throws BizException {
+		String update = "update Domain set remark=?,createSipNum=? where entityId=?";
+		domainSqlDao.update(update, new Object[]{remark,createSipNum,entityId});
 	}
 	/**
 	 * @param id
@@ -413,5 +427,98 @@ public class DomainBizImpl implements IDomainBiz {
 			}
 				 
 		return list;
+	}
+	
+	
+	/**
+	 * 创建域sip
+	 * @param neibId
+	 * @param neiborName
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws JsonException
+	 * @throws BizException
+	 */
+	@Override
+	public void createSip(String domainId, String neiborName)
+			throws UnsupportedEncodingException, IOException,
+			ClientProtocolException, JsonException, BizException {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		//同步数据以及平台
+		HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/fir_platform/create_sip_num");
+		List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
+		formParams.add(new BasicNameValuePair("local_sip", domainId));
+		formParams.add(new BasicNameValuePair("sip_type", "4"));
+		formParams.add(new BasicNameValuePair("neibName", neiborName));
+		UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
+		request.setEntity(uefEntity);
+		CloseableHttpResponse response=null;
+		try{
+			 response = httpClient.execute(request);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		if(response.getStatusLine().getStatusCode()==200){
+			HttpEntity entity_rsp = response.getEntity();
+			ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
+			if(resultDto!=null){
+				if(!"0".equals(resultDto.getCode())){
+					throw new BizException(resultDto.getMsg());
+				}else{
+					Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
+					if(map!=null&&!map.isEmpty()){
+						Map<String,Object> user_sipMap = (Map<String, Object>) map.get("user_sip");
+					    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
+					    //{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
+					    domainSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
+					    		user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
+
+					}
+			     }
+			}else{
+				throw new BizException("创建sip账号出错！");
+			}
+      }
+	}
+	
+	/**
+	 * 获取社区名称
+	 * @param entityId
+	 * @return
+	 * @throws BizException 
+	 */
+	@Override
+	public String getNeiborName(String entityId) throws BizException{
+		if(StringUtils.isNotBlank(entityId)){
+			StringBuilder sb = new StringBuilder();
+			sb.append("WITH RECURSIVE r AS (SELECT d.* from t_domain d where d.fentityid=? ")
+			.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id  = r.fparentid)")
+			.append("SELECT r.fremark from r  where r.flayer='1'");
+			List<String> list = domainSqlDao.pageFindBySql(sb.toString(), new Object[]{entityId});
+			if(list!=null&&!list.isEmpty()){
+				return list.get(0);
+			}
+		}
+		return "";
+	}
+
+	@Override
+	public List<String> getNeiborNames(String entityId) throws BizException {
+		//获取地区下面的任意一个社区名称
+		if(StringUtils.isNotBlank(entityId)){
+			String getNeiborName="select sd.fremark from t_domain d INNER JOIN t_domain sd on d.id=sd.fparentid where d.fentityid=?";
+			List<String> list = domainSqlDao.pageFindBySql(getNeiborName,new Object[]{entityId});
+			if(list!=null&&!list.isEmpty()){
+				return list;
+			}
+	     }
+		      return null;
+	}
+
+	@Override
+	public List<Object[]> getDomainIdAndSipByEntityId(String id) throws BizException{
+		String sql="SELECT d.id,u.user_sip from  t_domain d left JOIN users u on u.local_sip=d.id where d.fentityid=?";
+		return domainSqlDao.pageFindBySql(sql, new Object[]{id});
 	}
 }

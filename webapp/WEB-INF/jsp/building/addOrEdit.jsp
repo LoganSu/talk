@@ -47,6 +47,13 @@ $(document).ready(function() {
                     <option <c:if test="${'租赁' eq building.buildType}">selected</c:if> value="租赁">租赁</option>
                     <option <c:if test="${'其他' eq building.buildType}">selected</c:if> value="其他">其他</option>
                 </select></div></td>
+                <td><div class="leftFont">是否启用网关：</div></td>
+                 <td><div>
+                    <select name="createSipNum" class="form-control">
+                      <option value="" <c:if test="${building.createSipNum==null or building.createSipNum==''}">selected="selected"</c:if> >否</option>
+                      <option value="2" <c:if test="${building.createSipNum=='2'}">selected="selected"</c:if>>是</option>
+                    </select>
+                 </div></td>
 <!--                 <td><div class="leftFont">特别授权楼栋：</div></td> -->
 <!--                 <td><div> -->
 <!--                   <select id="example-multiple-selected" multiple="multiple"> -->

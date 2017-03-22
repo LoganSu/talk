@@ -1,10 +1,13 @@
 package com.youlb.biz.houseInfo.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,7 @@ import com.youlb.entity.houseInfo.Area;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -102,7 +106,14 @@ public class AreaBizImpl implements IAreaBiz {
 	 */
 	@Override
 	public Area get(Serializable id) throws BizException {
-		return areaSqlDao.get(id);
+		Area a = areaSqlDao.get(id);
+		//获取parentid
+		String sql = "select d.fcreate_sip_num from t_domain d  where d.fentityid=?";
+		List<String> list = areaSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(list!=null&&!list.isEmpty()){
+			a.setCreateSipNum(list.get(0));
+		}
+		return a;
 	}
 
 	/**
@@ -117,8 +128,9 @@ public class AreaBizImpl implements IAreaBiz {
 		List<Area> list = new ArrayList<Area>();
 		StringBuilder sb =new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
-		sb.append("select * from (select a.FPROVINCE province,a.fcity city,a.FAREANUM areaNum,a.FREMARK remark,a.id id,a.FCREATETIME createTime ")
-		.append(" from t_area a inner join t_domain d on d.fentityid=a.id where 1=1 ");
+		sb.append("select * from (select a.FPROVINCE province,a.fcity city,a.FAREANUM areaNum,a.FREMARK remark,a.id id,a.FCREATETIME createTime,")
+		.append(" d.fcreate_sip_num createSipNum,u.user_sip sipNum,u.user_password sipNumPsw ")
+		.append(" from t_area a inner join t_domain d on d.fentityid=a.id left join users u on u.local_sip=d.id where 1=1 ");
 		if(StringUtils.isNotBlank(target.getProvince())){
 			sb.append("and a.fprovince like ?");
 			values.add("%"+target.getProvince()+"%");
@@ -149,6 +161,10 @@ public class AreaBizImpl implements IAreaBiz {
 				area.setAreaNum(obj[2]==null?"":(String)obj[2]);
 				area.setRemark(obj[3]==null?"":(String)obj[3]);
 				area.setId(obj[4]==null?"":(String)obj[4]);
+				if("2".equals(obj[6])){
+					area.setSipNum(obj[7]==null?null:(Integer)obj[7]+"");
+					area.setSipNumPsw(obj[8]==null?"":(String)obj[8]);
+				}
 				area.setPager(target.getPager());
 				list.add(area);
 			}
@@ -158,10 +174,14 @@ public class AreaBizImpl implements IAreaBiz {
 	 
 	/**
 	 * @param area
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws UnsupportedEncodingException 
 	 * @see com.youlb.biz.houseInfo.IAreaBiz#saveOrUpdate(com.youlb.entity.houseInfo.Area)
 	 */
 	@Override
-	public void saveOrUpdate(Area area,Operator loginUser) throws BizException{
+	public void saveOrUpdate(Area area,Operator loginUser) throws BizException, UnsupportedEncodingException, ClientProtocolException, IOException, JsonException{
 		//只有当id=null时会添加
 		if(StringUtils.isBlank(area.getId())){
 			String areaId = (String) areaSqlDao.add(area);
@@ -171,17 +191,45 @@ public class AreaBizImpl implements IAreaBiz {
 			domain.setParentId(SysStatic.HOUSEINFO);//房产信息域 TODO 需要考虑怎么初始化数据
 			domain.setLayer(SysStatic.AREA);//区域级
 			domain.setRemark(area.getProvince()+area.getCity());//备注
+			//新添加地区没有社区所有不需要设置
+//			if("2".equals(area.getCreateSipNum())){
+//				domain.setCreateSipNum("2");
+//			}
 			String domainId = (String) domainBiz.save(domain);
 			domainSqlDao.getCurrSession().flush();
 			//域跟运营商绑定
 			String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
+			
 			domainSqlDao.executeSql(sql, new Object[]{domainId,loginUser.getCarrier().getId()});
 			//添加到用户域集合
 			loginUser.getDomainIds().add(domainId);
+//			List<String> neiborNames = domainBiz.getNeiborNames(areaId);
+//			if(neiborNames!=null&&!neiborNames.isEmpty()){
+//				//创建sip
+//				domainBiz.createSip(domainId, neiborNames.get(0));
+//			}
 		}else{
 			areaSqlDao.update(area);
+			
+			//老数据没有sip账号需要补上
+			if("2".equals(area.getCreateSipNum())){
+				//查询是否有sip账号
+				List<Object[]> list = domainBiz.getDomainIdAndSipByEntityId(area.getId());
+				if(list!=null&&!list.isEmpty()){
+					if(list.get(0)[1]==null){
+						List<String> neiborNames = domainBiz.getNeiborNames(area.getId());
+						if(neiborNames!=null&&!neiborNames.isEmpty()){
+						   //创建sip
+						  domainBiz.createSip((String)list.get(0)[0], neiborNames.get(0));
+						}else{
+							//下面没有社区不能启用网关
+							area.setCreateSipNum(null);
+						}
+					}
+				}
+			}
 			//更新与对象
-			domainBiz.update(area.getProvince()+area.getCity(),area.getId());
+			domainBiz.update(area.getProvince()+area.getCity(),area.getCreateSipNum(),area.getId());
 		}
 		
 	}

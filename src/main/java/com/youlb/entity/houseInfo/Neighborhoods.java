@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.youlb.entity.common.BaseModel;
 import com.youlb.utils.helper.DateHelper;
 
@@ -59,9 +61,7 @@ public class Neighborhoods extends BaseModel {
 	/**备注*/
 	@Column(name="FREMARK")
 	private String remark;
-	/**是否创建sip账号1否   2是*/
-	@Column(name="fcreate_sip_num")
-	private String createSipNum;
+	
 	/**是否使用秘钥 1否   2是*/
 	@Column(name="fuse_key")
 	private String useKey;
@@ -88,7 +88,9 @@ public class Neighborhoods extends BaseModel {
 	private String sipNum;
 	@Transient
 	private String sipNumPsw;
-	
+	/**是否创建sip账号1否   2是*/
+	@Transient
+	private String createSipNum;
 	
 	
 	public Integer getNeiborFlag() {
@@ -104,11 +106,15 @@ public class Neighborhoods extends BaseModel {
 		this.phone = phone;
 	}
 	public String getSipNumPsw() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("<a href =\"javascript:alert('");
-		sb.append(sipNumPsw);
-		sb.append("')\">查看</a>");
-		return sb.toString();
+		if(StringUtils.isNotBlank(sipNumPsw)){
+			StringBuilder sb = new StringBuilder();
+			sb.append("<a href =\"javascript:alert('");
+			sb.append(sipNumPsw);
+			sb.append("')\">查看</a>");
+			return sb.toString();
+		}else{
+			return "";
+		}
 	}
 	public void setSipNumPsw(String sipNumPsw) {
 		this.sipNumPsw = sipNumPsw;

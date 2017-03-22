@@ -7,9 +7,10 @@
 		 <form id="manageUsersaveForm" action="">
 		   <div>
 			    <input type="hidden" name="id" value="${user.id}"/>
+			    <span style="color: red;">说明：默认登录密码与登录名一致</span>
 	            <table>
 	              <tr>
-	                <td><div class="leftFont"><span class="starColor">*</span>登入名：</div></td>
+	                <td><div class="firstFont"><span class="starColor">*</span>登入名：</div></td>
 	                <td><div>
 	                   <input name="loginName" class="form-control required" title="登入名不能为空" value="${user.loginName}"/>
 	                </div></td>

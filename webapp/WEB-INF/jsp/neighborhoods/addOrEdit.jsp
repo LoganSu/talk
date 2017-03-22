@@ -85,10 +85,10 @@
                 <td colspan="5"><div><input maxlength="100" style="width: 720px" name="remark" class="form-control" value="${neighborhoods.remark}"/></div></td>
               </tr>
               <tr>
-                 <td><div class="firstFont">创建sip账号：</div></td>
+                 <td><div class="firstFont">是否启用网关：</div></td>
                  <td><div>
                     <select name="createSipNum" class="form-control">
-                      <option value="1" <c:if test="${neighborhoods.createSipNum=='1'}">selected="selected"</c:if> >否</option>
+                      <option value="" <c:if test="${neighborhoods.createSipNum==null or neighborhoods.createSipNum==''}">selected="selected"</c:if> >否</option>
                       <option value="2" <c:if test="${neighborhoods.createSipNum=='2'}">selected="selected"</c:if>>是</option>
                     </select>
                  </div></td>

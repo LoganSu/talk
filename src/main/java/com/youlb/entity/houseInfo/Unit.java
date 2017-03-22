@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.youlb.entity.common.BaseModel;
 
 /** 
@@ -28,8 +30,41 @@ public class Unit extends BaseModel {
     private String remark;
     @Transient
     private String parentId;
-    
-     
+    /**是否创建sip账号1否   2是*/
+	@Transient
+	private String createSipNum;
+	@Transient
+	private String sipNum;
+	@Transient
+	private String sipNumPsw;
+	
+	
+	public String getSipNum() {
+		return sipNum;
+	}
+	public void setSipNum(String sipNum) {
+		this.sipNum = sipNum;
+	}
+	public String getSipNumPsw() {
+		if(StringUtils.isNotBlank(sipNumPsw)){
+			StringBuilder sb = new StringBuilder();
+			sb.append("<a href =\"javascript:alert('");
+			sb.append(sipNumPsw);
+			sb.append("')\">查看</a>");
+			return sb.toString();
+		}else{
+			return "";
+		}
+	}
+	public void setSipNumPsw(String sipNumPsw) {
+		this.sipNumPsw = sipNumPsw;
+	}
+	public String getCreateSipNum() {
+		return createSipNum;
+	}
+	public void setCreateSipNum(String createSipNum) {
+		this.createSipNum = createSipNum;
+	}
 	public String getParentId() {
 		return parentId;
 	}

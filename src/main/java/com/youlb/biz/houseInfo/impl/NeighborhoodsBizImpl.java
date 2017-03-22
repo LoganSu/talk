@@ -112,14 +112,15 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
       }
       
       
-      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,createSipNum=?,useKey=?,phone=?,neiborFlag=? where id=?");
+      sb.append("totalBuildArea=?,totalBussnisArea=?,greeningRate=?,plotRatio=?,remark=?,useKey=?,phone=?,neiborFlag=? where id=?");
       list.add(target.getTotalBuildArea());list.add(target.getTotalBussnisArea());list.add(target.getGreeningRate());
-      list.add(target.getPlotRatio());list.add(target.getRemark());list.add(target.getCreateSipNum());
+      list.add(target.getPlotRatio());list.add(target.getRemark());
+//      list.add(target.getCreateSipNum());
       list.add(target.getUseKey());
       list.add(target.getPhone());
       list.add(target.getNeiborFlag());
       list.add(target.getId());
-    	  neighborSqlDao.update(sb.toString(),list.toArray());
+      neighborSqlDao.update(sb.toString(),list.toArray());
 	}
 
 	/**
@@ -164,10 +165,11 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	public Neighborhoods get(Serializable id) throws BizException {
 		Neighborhoods n = neighborSqlDao.get(id);
 		//获取parentid
-		String sql = "select d.fparentid from t_domain d inner join t_neighborhoods n on n.id=d.fentityid where n.id=?";
-		List<String> list = neighborSqlDao.pageFindBySql(sql, new Object[]{id});
+		String sql = "select d.fparentid,d.fcreate_sip_num from t_domain d  where d.fentityid=?";
+		List<Object[]> list = neighborSqlDao.pageFindBySql(sql, new Object[]{id});
 		if(list!=null&&!list.isEmpty()){
-			n.setParentId(list.get(0));
+			n.setParentId(list.get(0)[0]==null?"":(String)list.get(0)[0]);
+			n.setCreateSipNum(list.get(0)[1]==null?"":(String)list.get(0)[1]);
 		}
 		return n;
 	}
@@ -188,10 +190,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		neighborhoods.setUseDate(DateHelper.strParseDate(neighborhoods.getUseDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setStartBuildDate(DateHelper.strParseDate(neighborhoods.getStartBuildDateStr(), "yyyy-mm-dd"));
 		neighborhoods.setEndBuildDate(DateHelper.strParseDate(neighborhoods.getEndBuildDateStr(), "yyyy-mm-dd"));
-		//防止前段恶意传参
-		if(!"2".equals(neighborhoods.getCreateSipNum())){
-			neighborhoods.setCreateSipNum("1");
-		}
+		
 		//只有当id=null时会添加
 		if(StringUtils.isBlank(neighborhoods.getId())){
 			//生成秘钥
@@ -206,11 +205,15 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			domain.setLayer(SysStatic.NEIGHBORHOODS);
 			domain.setRemark(neighborhoods.getNeibName());
 			domain.setParentId(neighborhoods.getParentId());
+			//防止前段恶意传参
+			if("2".equals(neighborhoods.getCreateSipNum())){
+				domain.setCreateSipNum("2");
+			}
 			String domainId = (String) domainBiz.save(domain);
 			//创建sip账号
 //			if("2".equals(neighborhoods.getCreateSipNum())){
 				String neiborName = neighborhoods.getNeibName();
-				createSip(neibId, neiborName);
+				domainBiz.createSip(domainId, neiborName);
 //			}
 			
 			loginUser.getDomainIds().add(domainId);
@@ -231,7 +234,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 			update(neighborhoods);
 //			}
 			//更新域对象
-			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getId());
+			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getCreateSipNum(),neighborhoods.getId());
 			//如果是创建sip账号 判断是否已经存在
 //			if("2".equals(neighborhoods.getCreateSipNum())){
 //				String sql = "select user_sip from users where local_sip=?";
@@ -246,57 +249,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 //			}
 		}
 	}
-	/**
-	 * 创建sip
-	 * @param neibId
-	 * @param neiborName
-	 * @throws UnsupportedEncodingException
-	 * @throws IOException
-	 * @throws ClientProtocolException
-	 * @throws JsonException
-	 * @throws BizException
-	 */
-	private void createSip(String neibId, String neiborName)
-			throws UnsupportedEncodingException, IOException,
-			ClientProtocolException, JsonException, BizException {
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-		//同步数据以及平台
-		HttpPost request = new HttpPost(SysStatic.FIRSTSERVER+"/fir_platform/create_sip_num");
-		List<BasicNameValuePair> formParams = new ArrayList<BasicNameValuePair>();
-		formParams.add(new BasicNameValuePair("local_sip", neibId));
-		formParams.add(new BasicNameValuePair("sip_type", "4"));
-		formParams.add(new BasicNameValuePair("neibName", neiborName));
-		UrlEncodedFormEntity uefEntity = new UrlEncodedFormEntity(formParams, "UTF-8");
-		request.setEntity(uefEntity);
-		CloseableHttpResponse response=null;
-		try{
-			 response = httpClient.execute(request);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		if(response.getStatusLine().getStatusCode()==200){
-			HttpEntity entity_rsp = response.getEntity();
-			ResultDTO resultDto = JsonUtils.fromJson(EntityUtils.toString(entity_rsp), ResultDTO.class);
-			if(resultDto!=null){
-				if(!"0".equals(resultDto.getCode())){
-					throw new BizException(resultDto.getMsg());
-				}else{
-					Map<String,Object> map = (Map<String, Object>) resultDto.getResult();
-					if(map!=null&&!map.isEmpty()){
-						Map<String,Object> user_sipMap = (Map<String, Object>) map.get("user_sip");
-					    String addSip ="insert into users (user_sip,user_password,local_sip,sip_type,fs_ip,fs_port) values(?,?,?,?,?,?)";
-					    //{user_sip=2000000338, userPassword=63d7b817141c4d30840cd24e16200859, sipType=6, linkId=87, fs_ip=192.168.1.222, fs_post=35162}
-					    neighborSqlDao.executeSql(addSip, new Object[]{user_sipMap.get("user_sip"),user_sipMap.get("userPassword"),
-					    		user_sipMap.get("linkId"),user_sipMap.get("sipType"),user_sipMap.get("fs_ip"),user_sipMap.get("fs_post")});//住户sip 6
-
-					}
-			     }
-			}else{
-				throw new BizException("创建sip账号出错！");
-			}
-      }
-	}
-	
+	 
 	/**
 	 * 创建社区的sip账号
 	 * @param domainId
@@ -404,7 +357,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		 sb.append("select * from (select n.id id,n.FNEIBNAME neibName,n.FNEIBNUM neibNum,n.FCONTRACTOR contractor," )
 		 .append(" n.FADDRESS address,n.FSTARTBUILDDATE startBuildDate,n.FENDBUILDDATE endBuildDate,")
 		 .append("n.FUSEDATE useDate,n.FTOTALAREA totalArea,n.FTOTALBUILDAREA totalBuildArea,n.FTOTALBUSSNISAREA totalBussnisArea,")
-		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,n.fcreate_sip_num,u.user_password sipNumPsw,n.fphone phone,n.fneibor_flag neiborFlag")
+		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,d.fcreate_sip_num,u.user_password sipNumPsw,n.fphone phone,n.fneibor_flag neiborFlag")
 		 .append(" from t_neighborhoods n inner join t_domain d on d.fentityid = n.id left join users u on u.local_sip=n.id where d.fparentid=? ");
 		 values.add(target.getParentId());
 		 
@@ -447,8 +400,8 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 					neibor.setCreateTime(obj[14]==null?null:(Date)obj[14]);
 					if("2".equals(obj[16])){
 						neibor.setSipNum(obj[15]==null?null:(Integer)obj[15]+"");
+						neibor.setSipNumPsw(obj[17]==null?"":(String)obj[17]);
 					}
-					neibor.setSipNumPsw(obj[17]==null?"":(String)obj[17]);
 					neibor.setPhone(obj[18]==null?"":(String)obj[18]);
 					neibor.setNeiborFlag(obj[19]==null?null:(Integer)obj[19]);
 					neibor.setPager(pager);

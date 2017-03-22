@@ -33,21 +33,30 @@ var areaTable ={
             field: 'province',
             title: '省份',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: true
         },{
             field: 'city',
             title: '城市',
             align: 'center',
-            width: '60',
             valign: 'middle',
             sortable: true
         },{
             field: 'areaNum',
             title: '呼叫号码',
             align: 'center',
-            width: '60',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'sipNum',
+            title: 'sip账号',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'sipNumPsw',
+            title: 'sip账号密码',
+            align: 'center',
             valign: 'middle',
             sortable: true
         },{

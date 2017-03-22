@@ -20,6 +20,7 @@
 	   $("#neighborhoodssaveForm .neibName").on("change",function(){
 		  $("#neighborhoodssaveForm [name='neiborFlag']").val( $("#neighborhoodssaveForm .neibName option:selected").attr("title"));
 	   })
+	    $("#neighborhoodssaveForm [name='neiborFlag']").val($("#neighborhoodssaveForm .neibName option:selected").attr("title"));
 	   //时间控件
 	     $(".datepicker").datepicker();
    })

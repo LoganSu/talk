@@ -48,6 +48,13 @@
                              <option value="否" <c:if test="${room.useStatus eq '否'}">selected="selected"</c:if>>否</option>
                              <option value="是" <c:if test="${room.useStatus eq '是'}">selected="selected"</c:if>>是</option>
                         </select></div></td>
+                 <td><div class="leftFont">是否启用网关：</div></td>
+                 <td><div>
+                    <select name="createSipNum" class="form-control">
+                      <option value="" <c:if test="${room.createSipNum==null or unit.createSipNum==''}">selected="selected"</c:if>>否</option>
+                      <option value="2" <c:if test="${room.createSipNum=='2'}">selected="selected"</c:if>>是</option>
+                    </select>
+                 </div></td>
               </tr>
               <tr>
                 <td><div class="leftFont">备注：</div></td>

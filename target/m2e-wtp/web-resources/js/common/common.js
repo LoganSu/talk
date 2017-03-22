@@ -22,7 +22,7 @@ $(function(){
 				  if(treeId=="houseInfoTree"){
 					  //设置单击事件
 						 var zTreeOnClick = function(event, treeId, treeNode){
-							 if(treeNode.level==0&&treeNode.isParent){
+							 if(treeNode.level==0){
 								 $("#showRightArea").load($path+"/mc/neighborhoods/neighborhoodsListshowPage.do?module=neighborhoodsTable&modulePath=/neighborhoods&parentId="+treeNode.id+"&aa="+new Date().getTime());
 							 }else if(treeNode.level==1&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/building/buildingListshowPage.do?module=buildingTable&modulePath=/building&parentId="+treeNode.id+"&aa="+new Date().getTime());
@@ -126,28 +126,29 @@ $(function(){
 		 var treecheckbox;
 		 if(zTreeObj){
 			 var nodes = zTreeObj.getCheckedNodes(true);
-	    	  var arr = new Array();
-	    	  $.each(nodes,function(i,obj){
-	    		  arr.push(obj.id);
-	    	  });
-	    	  var parr = arr.join("&treecheckbox=");
-	    	  treecheckbox = "&treecheckbox="+parr;
-	    	  param=param+treecheckbox;
+			 if(nodes.length>0){
+				 var arr = new Array();
+				 $.each(nodes,function(i,obj){
+					 arr.push(obj.id);
+				 });
+				 var parr = arr.join("&treecheckbox=");
+				 treecheckbox = "&treecheckbox="+parr;
+				 param=param+treecheckbox;
+			 }
 	      }
 	      //两个树
 	      if(zTreeObjTwo){
               var nodesTwo = zTreeObjTwo.getCheckedNodes(true);
-	    	  var arr = new Array();
-	    	  $.each(nodesTwo,function(i,obj){
-	    		  arr.push(obj.id);
-	    	  });
-	    	  var parr = arr.join("&domainIds=");
-	    	  treecheckbox = "&domainIds="+parr;
-	    	  param=param+treecheckbox;
-		     }
-	         //用完之后清空数据
-	         zTreeObj=null;
-	         zTreeObjTwo=null;
+              if(nodes.length>0){
+		    	  var arr = new Array();
+		    	  $.each(nodesTwo,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&domainIds=");
+		    	  treecheckbox = "&domainIds="+parr;
+		    	  param=param+treecheckbox;
+			     }
+	          }
 		     var title = $("#myModalLabel").html();
 			 var url;
 			 if(title=="重置密码"){
@@ -205,6 +206,9 @@ $(function(){
 						 refresh();
 						 //如果显示树状的div不隐藏添加或修改完之后刷新一下树
 						 zTreeObj.reAsyncChildNodes(null, "refresh");
+				         //用完之后清空数据
+				         zTreeObj=null;
+				         zTreeObjTwo=null;
 					 }else{
 						 hiAlert("提示",$data);
 					 }

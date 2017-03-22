@@ -124,15 +124,19 @@ $(function(){
 		 var param = $("#myModal").find("form").serialize();
 		 //一个树
 		 var treecheckbox;
+		 alert(zTreeObj);
 		 if(zTreeObj){
+			 alert(6666666);
 			 var nodes = zTreeObj.getCheckedNodes(true);
-	    	  var arr = new Array();
-	    	  $.each(nodes,function(i,obj){
-	    		  arr.push(obj.id);
-	    	  });
-	    	  var parr = arr.join("&treecheckbox=");
-	    	  treecheckbox = "&treecheckbox="+parr;
-	    	  param=param+treecheckbox;
+			 if(nodes.length>0){
+				 var arr = new Array();
+				 $.each(nodes,function(i,obj){
+					 arr.push(obj.id);
+				 });
+				 var parr = arr.join("&treecheckbox=");
+				 treecheckbox = "&treecheckbox="+parr;
+				 param=param+treecheckbox;
+			 }
 	      }
 	      //两个树
 	      if(zTreeObjTwo){
@@ -145,9 +149,7 @@ $(function(){
 	    	  treecheckbox = "&domainIds="+parr;
 	    	  param=param+treecheckbox;
 		     }
-	         //用完之后清空数据
-	         zTreeObj=null;
-	         zTreeObjTwo=null;
+
 		     var title = $("#myModalLabel").html();
 			 var url;
 			 if(title=="重置密码"){
@@ -205,6 +207,9 @@ $(function(){
 						 refresh();
 						 //如果显示树状的div不隐藏添加或修改完之后刷新一下树
 						 zTreeObj.reAsyncChildNodes(null, "refresh");
+				         //用完之后清空数据
+				         zTreeObj=null;
+				         zTreeObjTwo=null;
 					 }else{
 						 hiAlert("提示",$data);
 					 }

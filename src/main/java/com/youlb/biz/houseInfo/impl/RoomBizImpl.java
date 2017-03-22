@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -20,6 +21,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.dao.common.BaseDaoBySql;
@@ -128,8 +130,15 @@ public class RoomBizImpl implements IRoomBiz {
 	 */
 	@Override
 	public Room get(Serializable id) throws BizException {
-		
-		return roomSqlDao.get(id);
+		Room r = roomSqlDao.get(id);
+        //获取parentid
+		String sql = "select d.fparentid,d.fcreate_sip_num from t_domain d  where d.fentityid=?";
+		List<Object[]> list = roomSqlDao.pageFindBySql(sql, new Object[]{id});
+		if(list!=null&&!list.isEmpty()){
+			r.setParentId(list.get(0)[0]==null?"":(String)list.get(0)[0]);
+			r.setCreateSipNum(list.get(0)[1]==null?"":(String)list.get(0)[1]);
+		}
+		return r;
 	}
 
 
@@ -204,6 +213,10 @@ public class RoomBizImpl implements IRoomBiz {
 			domain.setLayer(SysStatic.ROOM);//房间层
 			domain.setRemark(room.getRoomNum());
 			domain.setParentId(room.getParentId());//domain的parentId
+			//防止前段恶意传参
+			if("2".equals(room.getCreateSipNum())){
+				domain.setCreateSipNum("2");
+			}
 			String domainId = (String) domainBiz.save(domain);
 			loginUser.getDomainIds().add(domainId);
 			domainSqlDao.getCurrSession().flush();
@@ -211,10 +224,23 @@ public class RoomBizImpl implements IRoomBiz {
 			String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
 			domainSqlDao.executeSql(sql, new Object[]{domainId,loginUser.getCarrier().getId()});
 			
+			//创建sip
+			domainBiz.createSip(domainId, domainBiz.getNeiborName(roomId));
 		}else{
 			update(room);
+			//老数据没有sip账号需要补上
+			if("2".equals(room.getCreateSipNum())){
+				//查询是否有sip账号
+				List<Object[]> list = domainBiz.getDomainIdAndSipByEntityId(room.getId());
+				if(list!=null&&!list.isEmpty()){
+					if(list.get(0)[1]==null){
+						//创建sip
+						domainBiz.createSip((String)list.get(0)[0], domainBiz.getNeiborName(room.getId()));
+					}
+				}
+			}
 			//更新与对象
-			domainBiz.update(room.getRoomNum(),room.getId());
+			domainBiz.update(room.getRoomNum(),room.getCreateSipNum(),room.getId());
 		}
 		
 	}
@@ -329,8 +355,9 @@ public class RoomBizImpl implements IRoomBiz {
 		 List<Object> values = new ArrayList<Object>();
 		 sb.append("select * from (select r.id id,r.FROOMNUM roomNum,r.FROOMFLOOR roomFloor,r.FCERTIFICATENUM certificateNum," )
 		 .append("r.FROOMTYPE roomType,r.FPURPOSE purpose,r.FORIENTATION orientation,r.FDECORATIONSTATUS decorationStatus,r.FROOMAREA roomArea,")
-		 .append("r.FUSEAREA useArea,r.FGARDENAREA gardenArea,r.FUSESTATUS useStatus,r.FREMARK remark,r.fcardcount cardCount,d.id domainId,r.FCREATETIME createTime ")
-		 .append(" from t_room r inner join t_domain d on d.fentityid = r.id where 1=1 ");
+		 .append("r.FUSEAREA useArea,r.FGARDENAREA gardenArea,r.FUSESTATUS useStatus,r.FREMARK remark,r.fcardcount cardCount,d.id domainId,r.FCREATETIME createTime, ")
+		 .append(" d.fcreate_sip_num createSipNum,u.user_sip sipNum,u.user_password sipNumPsw ")
+		 .append(" from t_room r inner join t_domain d on d.fentityid = r.id left join users u on u.local_sip=d.id where 1=1 ");
 		 if(StringUtils.isNotBlank(target.getParentId())){
 			 sb.append(" and d.fparentid=? ");
 			 values.add(target.getParentId());
@@ -386,6 +413,10 @@ public class RoomBizImpl implements IRoomBiz {
 					room.setRemark(obj[12]==null?"":(String)obj[12]);
 					room.setCardCount(obj[13]==null?0:((Integer)obj[13]));
 					room.setDomainId(obj[14]==null?"":(String)obj[14]);
+					if("2".equals(obj[16])){
+						room.setSipNum(obj[17]==null?null:(Integer)obj[17]+"");
+					}
+					room.setSipNumPsw(obj[18]==null?"":(String)obj[18]);
 					list.add(room);
 			 }
 		 }

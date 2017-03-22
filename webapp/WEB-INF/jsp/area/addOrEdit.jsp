@@ -33,6 +33,17 @@
                 <td><div><input name="areaNum" class="form-control areaNum required number" title="呼叫号码不能为空且为3个数字，请填写区号" readonly="readonly" maxlength="3" value="${area.areaNum}"/></div></td>
               </tr>
               <tr>
+                 <td><div class="firstFont">是否启用网关：</div></td>
+                 <td><div>
+                    <select name="createSipNum" class="form-control">
+                      <option value="" <c:if test="${area.createSipNum==null or building.createSipNum==''}">selected="selected"</c:if> >否</option>
+                      <option value="2" <c:if test="${area.createSipNum=='2'}">selected="selected"</c:if>>是</option>
+                    </select>
+                     
+                 </div></td>
+                 <td><span style="color: red;">注：地区下面没有社区不能启用网关</span></td>
+              </tr>
+              <tr>
                 <td><div>备注：</div></td>
                 <td colspan="5"><div><input style="width: 740px" name="remark" class="form-control" value="${area.remark}"/></div></td>
               </tr>
