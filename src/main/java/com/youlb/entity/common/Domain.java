@@ -17,6 +17,10 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="t_domain")
 public class Domain extends BaseModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -737650740815356765L;
 	/**父域id*/
 	@Column(name="FPARENTID")
     private String parentId;
@@ -32,6 +36,9 @@ public class Domain extends BaseModel {
 	/**域内的实体id*/
 	@Column(name="FENTITYID")
     private String entityId;
+	/**是否创建sip账号（网关）1否   2是*/
+	@Column(name="fcreate_sip_num")
+	private String createSipNum;
 	/**子域集合*/
 	@Transient
 	private List<Domain> children;
@@ -39,6 +46,14 @@ public class Domain extends BaseModel {
 	@Transient
 	private Integer checked;
 	
+	
+	
+	public String getCreateSipNum() {
+		return createSipNum;
+	}
+	public void setCreateSipNum(String createSipNum) {
+		this.createSipNum = createSipNum;
+	}
 	public Integer getDomainSn() {
 		return domainSn;
 	}

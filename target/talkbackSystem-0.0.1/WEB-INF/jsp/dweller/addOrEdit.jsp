@@ -11,7 +11,7 @@
            <table>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>姓名：</div></td>
-                <td><div><input name="fname" class="form-control required" title="居住人姓名必填" value="${dweller.fname}"/></div></td>
+                <td><div><input name="fname" class="form-control required" maxlength="20" title="姓名必填" value="${dweller.fname}"/></div></td>
                 <td><div class="leftFont">性别：</div></td>
                 <td><div><input type="radio" name="sex" <c:if test="${dweller.sex=='1'}">checked="checked"</c:if> value="1" />男
                 <input type="radio" name="sex" <c:if test="${dweller.sex=='2'}">checked="checked"</c:if> value="2"/>女</div></td>

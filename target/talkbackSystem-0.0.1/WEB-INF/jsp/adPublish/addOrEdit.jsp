@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <style>
 .thumbnail{
  margin-bottom: 0px
@@ -53,11 +54,18 @@ width: 222px
 <%-- 					         <input type="hidden" name="adPics.relativePath" value="${adPics.relativePath}"/> --%>
 					         <input type="hidden" name="picId" value="${adPics.id}"/>
 					         <a href="#" class="thumbnail">
-					           <video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">
-								    <source src="${adPics.serverAddr}${adPics.relativePath}" type='video/mp4' />
-								</video>
+					           <c:choose>
+					             <c:when test="${fn:contains(adPics.relativePath,'adVideo')}">
+						           <video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">
+									    <source src="${adPics.serverAddr}${adPics.relativePath}" type="video/mp4" />
+									</video>
+					                 
+					             </c:when>
+					             <c:otherwise>
+					                    <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}">
+					             </c:otherwise>
+					           </c:choose>
 					            
-<%-- 					           <img src="${adPics.serverAddr}${adPics.relativePath}" alt="通用的占位符缩略图" title="${adPics.positionStr}"> --%>
 					         </a>
 						     <div class="caption">
 						     <c:if test="${adPublish.opraterType!=1}">
@@ -166,10 +174,21 @@ width: 222px
 		     			 $.post($path+'/mc/adPublish/uploadFile.do',param,function(data){
 		     				var imgPath = data.serverAddr+data.relativePath;
 		  	            	if(!data.message&&imgPath){
-		 	 	            	var img = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail"><img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'"></a>'+
+		  	            		var img = '<img src="'+imgPath+'" alt="通用的占位符缩略图" title="'+data.positionStr+'">';
+		  	            		
+		 	 	            	var video = '<video id="adVideo" autoplay="autoplay" class="video-js vjs-default-skin" controls preload="none" width="640" height="264">'+
+		 	 	            	'<source src="'+imgPath+'" type="video/mp4" /></video>';
+		 	 	            	var subresource;
+		  	            		if(imgPath.indexOf("adVideo")>-1){
+		  	            			subresource=video;
+		  	            		}else if(imgPath.indexOf("adImg")>-1){
+		  	            			subresource=img;
+		  	            		}
+		 	 	            	var resource = '<div class="col-sm-6 col-md-3"><a href="#" class="thumbnail">'+subresource+'</a>'+
 		 	 	            	'<input type="hidden" name="picId" value="'+data.id+'"/>'+
 		 	 	            	'<div class="caption"><p><a href="javascript:void(0)" class="btn btn-xs btn-danger" role="button">删除</a></p></div></div></div> ';
-		 	 	            	$("#thumbnailDiv").append(img);
+		 	 	            	
+		 	 	            	$("#thumbnailDiv").append(resource);
 		 	 	            	//清空输入框
 		 	 	            	$("#fileInput_id").val("");
 		  	            	}else{
@@ -191,7 +210,15 @@ width: 222px
 		        'Key': function(up, file) {
 		            // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
 		            // 该配置必须要在unique_names: false，save_key: false时才生效
-                	var key = "web/adImg/"+new Date().getTime();
+		            var dir;
+		            if(file.type.indexOf("video")>-1){
+		            	dir="adVideo";
+		            }else if(file.type.indexOf("image")>-1){
+		            	dir="adImg";
+		            }else{
+		            	dir="other";	
+		            }
+                	var key = "web/"+dir+"/"+new Date().getTime();
 		            return key
 		        }
 		    }

@@ -1,10 +1,13 @@
 package com.youlb.biz.houseInfo.impl;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import com.youlb.entity.houseInfo.Unit;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
 
@@ -113,10 +117,11 @@ public class UnitBizImpl implements IUnitBiz {
 	public Unit get(Serializable id) throws BizException {
 		Unit u= unitSqlDao.get(id);
 		//获取parentid
-		String sql = "select d.fparentid from t_domain d inner join t_unit n on n.id=d.fentityid where n.id=?";
-		List<String> list = unitSqlDao.pageFindBySql(sql, new Object[]{id});
+		String sql = "select d.fparentid,d.fcreate_sip_num from t_domain d  where d.fentityid=?";
+		List<Object[]> list = unitSqlDao.pageFindBySql(sql, new Object[]{id});
 		if(list!=null&&!list.isEmpty()){
-			u.setParentId(list.get(0));
+			u.setParentId(list.get(0)[0]==null?"":(String)list.get(0)[0]);
+			u.setCreateSipNum(list.get(0)[1]==null?"":(String)list.get(0)[1]);
 		}
 		return u;
 	}
@@ -125,10 +130,14 @@ public class UnitBizImpl implements IUnitBiz {
 	/**
 	 * @param unit
 	 * @throws BizException 
+	 * @throws JsonException 
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws UnsupportedEncodingException 
 	 * @see com.youlb.biz.unit.IUnitBiz#saveOrUpdate(com.youlb.entity.unit.Unit)
 	 */
 	@Override
-	public void saveOrUpdate(Unit unit,Operator loginUser) throws BizException {
+	public void saveOrUpdate(Unit unit,Operator loginUser) throws BizException, UnsupportedEncodingException, ClientProtocolException, IOException, JsonException {
 		//add
 		if(StringUtils.isBlank(unit.getId())){
 			String unitId = (String) unitSqlDao.add(unit);
@@ -137,16 +146,35 @@ public class UnitBizImpl implements IUnitBiz {
 			domain.setLayer(SysStatic.UNIT);//单元层
 			domain.setRemark(unit.getUnitName());
 			domain.setParentId(unit.getParentId());//domain的parentId
+			//防止前段恶意传参
+			if("2".equals(unit.getCreateSipNum())){
+				domain.setCreateSipNum("2");
+			}
 			String domainId = (String) domainBiz.save(domain);
 			loginUser.getDomainIds().add(domainId);
 			domainSqlDao.getCurrSession().flush();
 			//域跟运营商绑定
 			String sql ="insert into t_carrier_domain (fdomainid,fcarrierid) values(?,?)";
 			domainSqlDao.executeSql(sql, new Object[]{domainId,loginUser.getCarrier().getId()});
+			
+			//创建sip
+			domainBiz.createSip(domainId, domainBiz.getNeiborName(unitId));
 		}else{
 			unitSqlDao.update(unit);
 			//更新与对象
-			domainBiz.update(unit.getUnitName(),unit.getId());
+			domainBiz.update(unit.getUnitName(),unit.getCreateSipNum(),unit.getId());
+			
+			//老数据没有sip账号需要补上
+			if("2".equals(unit.getCreateSipNum())){
+				//查询是否有sip账号
+				List<Object[]> list = domainBiz.getDomainIdAndSipByEntityId(unit.getId());
+				if(list!=null&&!list.isEmpty()){
+					if(list.get(0)[1]==null){
+						//创建sip
+						domainBiz.createSip((String)list.get(0)[0], domainBiz.getNeiborName(unit.getId()));
+					}
+				}
+			}
 		}
 		
 	}
@@ -164,8 +192,9 @@ public class UnitBizImpl implements IUnitBiz {
 		 List<Unit> list = new ArrayList<Unit>();
 		 StringBuilder sb = new StringBuilder();
 		 List<Object> values = new ArrayList<Object>();
-		 sb.append("select * from (select u.id id,u.FUNITNUM unitNum,u.FUNITNAME unitName,u.FREMARK remark,u.fcreatetime createTime" )
-		 .append(" from t_unit u inner join t_domain d on d.fentityid = u.id where d.fparentid=? ");
+		 sb.append("select * from (select u.id id,u.FUNITNUM unitNum,u.FUNITNAME unitName,u.FREMARK remark,u.fcreatetime createTime," )
+		 .append(" d.fcreate_sip_num createSipNum,us.user_sip sipNum,us.user_password sipNumPsw ")
+		 .append(" from t_unit u inner join t_domain d on d.fentityid = u.id left join users us on us.local_sip=d.id where d.fparentid=? ");
 		 values.add(target.getParentId());
 		 List<String> domainIds = loginUser.getDomainIds();
 			if(domainIds!=null&&!domainIds.isEmpty()){
@@ -192,6 +221,10 @@ public class UnitBizImpl implements IUnitBiz {
 					unit.setUnitNum(obj[1]==null?"":(String)obj[1]);
 					unit.setUnitName(obj[2]==null?"":(String)obj[2]);
 					unit.setRemark(obj[3]==null?"":(String)obj[3]);
+					if("2".equals(obj[5])){
+						unit.setSipNum(obj[6]==null?null:(Integer)obj[6]+"");
+					}
+					unit.setSipNumPsw(obj[7]==null?"":(String)obj[7]);
 					unit.setPager(pager);
 					list.add(unit);
 			 }

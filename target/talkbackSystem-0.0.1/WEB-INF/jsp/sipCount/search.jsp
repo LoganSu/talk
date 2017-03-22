@@ -26,8 +26,9 @@
 		              <input type="hidden" class="form-control domainId" name="domainId" style="width: 260px">
 				      <input type="text" class="form-control address" style="width: 260px" readonly="readonly">
 				  </div>
-				  <div style="position: fixed;z-index:1000;width: 260px;height: 400px;overflow: auto;display: none">
-				      <p id="sipCountShowTree"></p>
+				  <div style="position: fixed;z-index:1000;width: 260px;height: 400px;overflow: auto;display: none;background: white;">
+				     <ul id="sipCountShowTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+				      
 				  </div>
                 </td>
                 <td><div class="leftFont"><button class="btn btn-info btn-sm reset">重置</button>
@@ -51,29 +52,17 @@
             	   addressDiv.css("display","none");
                })
     	   })
-    	   $(document).on("click","#sipCountShowTree .treecheckbox",function(){
-    		   $("#sipCountShowTree .treecheckbox").prop('checked',false);
-    			$(this).prop('checked',true);
-    			var domainId = $(this).val();
-    			 $("#sipCountSearchForm .domainId").val(domainId);
-    			$.post($path+"/mc/sipCount/getAddressByDomainId.do","domainId="+domainId,function($address){
-    				 $("#sipCountSearchForm .address").val($address);
-    			})
-    				
-    			
-    	   })
     	   
-    		   $('#sipCountShowTree').bstree({
-	   				url: $path+'/mc/carrier',
-	   				height:'auto',
-	   				open: false,
-	   				checkbox:true,
-	   				checkboxLink:false,//是否联动多选框
-	   				checkboxPartShow:true,//显示部分多选框
-	   				layer: [1,2,3,4],
-	   				showurl:false
-   		     });
+    	   	  zTreeObj = zTree("sipCountShowTree", ["id","name","level"],["nocheckLevel","01234"],$path+"/mc/domain/getNodes.do",true,{"Y": "", "N": ""},zTreeOnClick,null,null, null)
 		
        })
+          function zTreeOnClick(event, treeId, treeNode) {
+// 		   	   if(treeNode.checked){
+			   		$("#sipCountSearchForm .domainId").val(treeNode.id);
+	    			$.post($path+"/mc/sipCount/getAddressByDomainId.do","domainId="+treeNode.id,function($address){
+	    				 $("#sipCountSearchForm .address").val($address);
+	    			}) 
+// 		   	   }
+           };
        </script>
 </body>

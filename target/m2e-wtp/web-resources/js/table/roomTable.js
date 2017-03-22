@@ -41,6 +41,18 @@ var roomTable ={
             align: 'center',
             valign: 'middle',
             sortable: true
+        },{
+            field: 'sipNum',
+            title: 'sip账号',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'sipNumPsw',
+            title: 'sip账号密码',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
         }, {
             field: 'roomType',
             title: '房间归属',

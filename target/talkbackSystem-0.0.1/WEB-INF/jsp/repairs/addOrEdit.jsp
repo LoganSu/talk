@@ -8,7 +8,7 @@ $(function(){
 	
 	  var id = $("#repairssaveForm [name='id']").val();
 	  var treecheckbox = "${repairs.domainId}";
-	  var zTreeObj = zTree("repairsShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox),zTreeOnCheck, null)
+	  zTreeObj = zTree("repairsShowTree", ["id","name","level"],["nocheckLevel","0123"],$path+"/mc/domain/getNodes.do",true,{"Y": "ps", "N": "ps"},null,dataEcho(id,treecheckbox),zTreeOnCheck, null)
 // 	$('#repairsShowTree').bstree({
 // 			url: $path+'/mc/carrier',
 // 			height:'600',

@@ -1,12 +1,17 @@
 package com.youlb.biz.houseInfo;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.houseInfo.Building;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: IBuildingBiz.java 
@@ -20,7 +25,7 @@ public interface IBuildingBiz extends IBaseBiz<Building>{
 	/**
 	 * @param area
 	 */
-	void saveOrUpdate(Building building,Operator loginUser)throws BizException;
+	void saveOrUpdate(Building building,Operator loginUser)throws BizException, UnsupportedEncodingException, ClientProtocolException, IOException, JsonException ;
 
 	/**通过neibId获取buildId
 	 * @param parentId

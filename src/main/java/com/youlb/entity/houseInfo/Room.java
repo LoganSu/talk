@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.youlb.entity.common.BaseModel;
 
 /** 
@@ -76,7 +78,11 @@ public class Room extends BaseModel {
    
    @Transient
    private String domainId;
-   
+   /**是否创建sip账号1否   2是*/
+  	@Transient
+  	private String createSipNum;
+	@Transient
+	private String sipNumPsw;
     //绑定户主信息
 //    public String getHomeHost(){
 //    	if(StringUtils.isNotBlank(this.hostInfoId)){
@@ -88,7 +94,39 @@ public class Room extends BaseModel {
 //    }
    
 
-   //门禁授权操作
+   public String getCreateSipNum() {
+	return createSipNum;
+}
+
+
+
+public void setCreateSipNum(String createSipNum) {
+	this.createSipNum = createSipNum;
+}
+
+
+
+public String getSipNumPsw() {
+	if(StringUtils.isNotBlank(sipNumPsw)){
+		StringBuilder sb = new StringBuilder();
+		sb.append("<a href =\"javascript:alert('");
+		sb.append(sipNumPsw);
+		sb.append("')\">查看</a>");
+		return sb.toString();
+	}else{
+		return "";
+	}
+}
+
+
+
+public void setSipNumPsw(String sipNumPsw) {
+	this.sipNumPsw = sipNumPsw;
+}
+
+
+
+//门禁授权操作
    public String getOperate() {
   	StringBuilder sb = new StringBuilder();
   	sb.append("<a class='cardInfoOpenCard' rel='"+getDomainId()+"' href='javascript:void(0)'>发卡</a>&nbsp;")

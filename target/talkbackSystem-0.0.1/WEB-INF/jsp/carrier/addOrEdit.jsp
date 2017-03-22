@@ -12,7 +12,7 @@
 		    <input type="hidden" name="id" value="${carrier.id}"/>
 		    <input type="hidden" name="isNormal" value="${carrier.isNormal}"/>
 		    <input type="hidden" name="domainNameId" value="${carrier.domainNameId}"/>
-		    <span style="color: red;">说明：登录密码与手机号码一致</span>
+		    <span style="color: red;">说明：默认登录密码与手机号码一致</span>
             <table>
               <tr>
 	                <td><div class="firstFont"><span class="starColor">*</span>运营商名称：</div></td>

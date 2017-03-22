@@ -1,13 +1,18 @@
 package com.youlb.biz.houseInfo;
 
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.houseInfo.Address;
 import com.youlb.entity.houseInfo.Area;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
+import com.youlb.utils.exception.JsonException;
 
 /** 
  * @ClassName: IAreaBiz.java 
@@ -21,7 +26,7 @@ public interface IAreaBiz extends IBaseBiz<Area>{
 	/**
 	 * @param area
 	 */
-	void saveOrUpdate(Area area,Operator loginUser)throws BizException;
+	void saveOrUpdate(Area area,Operator loginUser)throws BizException, UnsupportedEncodingException, ClientProtocolException, IOException, JsonException;
 	
 	/**通过省份获取地区
 	 * @param province
