@@ -22,7 +22,7 @@ $(function(){
 				  if(treeId=="houseInfoTree"){
 					  //设置单击事件
 						 var zTreeOnClick = function(event, treeId, treeNode){
-							 if(treeNode.level==0&&treeNode.isParent){
+							 if(treeNode.level==0){
 								 $("#showRightArea").load($path+"/mc/neighborhoods/neighborhoodsListshowPage.do?module=neighborhoodsTable&modulePath=/neighborhoods&parentId="+treeNode.id+"&aa="+new Date().getTime());
 							 }else if(treeNode.level==1&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/building/buildingListshowPage.do?module=buildingTable&modulePath=/building&parentId="+treeNode.id+"&aa="+new Date().getTime());
@@ -124,9 +124,7 @@ $(function(){
 		 var param = $("#myModal").find("form").serialize();
 		 //一个树
 		 var treecheckbox;
-		 alert(zTreeObj);
 		 if(zTreeObj){
-			 alert(6666666);
 			 var nodes = zTreeObj.getCheckedNodes(true);
 			 if(nodes.length>0){
 				 var arr = new Array();
@@ -141,15 +139,16 @@ $(function(){
 	      //两个树
 	      if(zTreeObjTwo){
               var nodesTwo = zTreeObjTwo.getCheckedNodes(true);
-	    	  var arr = new Array();
-	    	  $.each(nodesTwo,function(i,obj){
-	    		  arr.push(obj.id);
-	    	  });
-	    	  var parr = arr.join("&domainIds=");
-	    	  treecheckbox = "&domainIds="+parr;
-	    	  param=param+treecheckbox;
-		     }
-
+              if(nodes.length>0){
+		    	  var arr = new Array();
+		    	  $.each(nodesTwo,function(i,obj){
+		    		  arr.push(obj.id);
+		    	  });
+		    	  var parr = arr.join("&domainIds=");
+		    	  treecheckbox = "&domainIds="+parr;
+		    	  param=param+treecheckbox;
+			     }
+	          }
 		     var title = $("#myModalLabel").html();
 			 var url;
 			 if(title=="重置密码"){

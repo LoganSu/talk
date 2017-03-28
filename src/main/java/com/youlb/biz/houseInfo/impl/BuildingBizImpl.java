@@ -197,8 +197,8 @@ public class BuildingBizImpl implements IBuildingBiz {
 	public List<Building> getBuildingListByNeibId(String neibId) throws BizException {
 		List<Building> list = new ArrayList<Building>();
 		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT b.id,b.fbuildingnum,b.fbuildingname,b.ftotalFloor,b.fbuildheight,b.fbuildtype,b.fremark,b.fcreatetime ")
-		.append(" d.fcreate_sip_num createSipNum,u.user_sip sipNum,u.user_password sipNumPsw ")
+		sb.append("SELECT b.id,b.fbuildingnum,b.fbuildingname,b.ftotalFloor,b.fbuildheight,b.fbuildtype,b.fremark,b.fcreatetime, ")
+		.append(" sd.fcreate_sip_num createSipNum,u.user_sip sipNum,u.user_password sipNumPsw ")
 		.append("from t_building b INNER JOIN t_domain sd on sd.fentityid=b.id left join users u on u.local_sip=b.id  where sd.fparentid=")
 		.append("(SELECT d.id FROM t_domain d where d.fentityid=?) order by b.fcreatetime ");
 		List<Object[]> listObj = buildingSqlDao.pageFindBySql(sb.toString(), new Object[]{neibId});
