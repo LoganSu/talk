@@ -62,7 +62,12 @@ public class DomainCtrl extends BaseCtrl {
 					if(child!=null&&!child.isEmpty()){
 						hm.put("isParent", true);
 					}else{
-						hm.put("isParent", false);
+						//普通用户在没有子节点的时候 需要显示子节点页面 最末级不显示
+						if(getLoginUser().getIsAdmin()!=2&&level!=4){
+							hm.put("isParent", true);
+						}else{
+						    hm.put("isParent", false);
+						}
 					}
 					hm.put("pId", id);  
 					

@@ -235,12 +235,26 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 //			}
 			//更新域对象
 			domainBiz.update(neighborhoods.getNeibName(),neighborhoods.getCreateSipNum(),neighborhoods.getId());
-			//如果是创建sip账号 判断是否已经存在
+			//兼顾老数据 如果没有关系就新建sip
+			//老数据没有sip账号需要补上
+			if("2".equals(neighborhoods.getCreateSipNum())){
+				//查询是否有sip账号
+				List<Object[]> list = domainBiz.getDomainIdAndSipByEntityId(neighborhoods.getId());
+				if(list!=null&&!list.isEmpty()){
+					if(list.get(0)[1]==null){
+						//创建sip
+						domainBiz.createSip((String)list.get(0)[0], neighborhoods.getNeibName());
+					}
+				}
+			}
+			
 //			if("2".equals(neighborhoods.getCreateSipNum())){
-//				String sql = "select user_sip from users where local_sip=?";
+//				String sql = "select u.user_sip from users u inner join t_domain d on d.id=u.local_sip where d.fentityid=?";
 //				List<Integer> list = domainSqlDao.pageFindBySql(sql, new Object[]{neighborhoods.getId()});
 //				if(list==null||list.isEmpty()){
-//					createSip(neighborhoods.getId(), neighborhoods.getNeibName());
+//					String findDomainId = "select id from t_domain where fentityid=?";
+//					List<String> domainId = domainSqlDao.pageFindBySql(findDomainId, new Object[]{neighborhoods.getId()});
+//					domainBiz.createSip(domainId.get(0), neighborhoods.getNeibName());
 //				}
 //			}
 //			else if("1".equals(neighborhoods.getCreateSipNum())){
@@ -358,7 +372,7 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 		 .append(" n.FADDRESS address,n.FSTARTBUILDDATE startBuildDate,n.FENDBUILDDATE endBuildDate,")
 		 .append("n.FUSEDATE useDate,n.FTOTALAREA totalArea,n.FTOTALBUILDAREA totalBuildArea,n.FTOTALBUSSNISAREA totalBussnisArea,")
 		 .append("n.FGREENINGRATE greeningRate,n.FPLOTRATIO plotRatio,n.FREMARK remark,n.fcreatetime createTime,u.user_sip sipNum,d.fcreate_sip_num,u.user_password sipNumPsw,n.fphone phone,n.fneibor_flag neiborFlag")
-		 .append(" from t_neighborhoods n inner join t_domain d on d.fentityid = n.id left join users u on u.local_sip=n.id where d.fparentid=? ");
+		 .append(" from t_neighborhoods n inner join t_domain d on d.fentityid = n.id left join users u on u.local_sip=d.id where d.fparentid=? ");
 		 values.add(target.getParentId());
 		 
 		 if(StringUtils.isNotBlank(target.getNeibName())){

@@ -34,6 +34,9 @@ public class DomainNameBizImpl implements IDomainNameBiz {
 	@Override
 	public void delete(Serializable id) throws BizException {
 		 domainNameSqlDao.deleteLogic(id);
+//		 清空运营商关联的id
+//		 String update ="update t_carrier set fdomain_name_id = null where fdomain_name_id=?";
+//		 domainNameSqlDao.executeSql(update, new Object[]{id});
 	}
 
 	@Override
@@ -89,7 +92,7 @@ public class DomainNameBizImpl implements IDomainNameBiz {
      */
 	@Override
 	public List<DomainName> getTwoDomainName() throws BizException {
-		 String hql = "from DomainName where parentid='14'";
+		 String hql = "from DomainName where parentid='14' and delFlag=1";
 		 List<DomainName> list = domainNameSqlDao.find(hql);
 		return list;
 	}

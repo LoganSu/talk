@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -220,16 +221,31 @@ public class DwellerBizImpl implements IDwellerBiz {
 	public void delete(String[] ids, Operator loginUser)throws BizException {
 		StringBuilder del = new StringBuilder("DELETE from t_users u where u.fusername in (SELECT d.fphone from t_dweller d where 1=1 ");
 		List<String> idList = new ArrayList<String>();
-		StringBuilder delete =new StringBuilder("DELETE from t_domain_dweller where fdwellerid=? ");
-		delete.append(SearchHelper.jointInSqlOrHql(loginUser.getDomainIds(), " fdomainid "));
+		StringBuilder delete =new StringBuilder("DELETE from t_domain_dweller where 1=1 ");
+		String find = "select fdwellerid from t_domain_dweller where fdwellerid=?";
+		delete.append(SearchHelper.jointInSqlOrHql(Arrays.asList(ids), " fdwellerid "));
+		List<Object> values = new ArrayList<Object>();
 		if(ids!=null){
+			values.add(Arrays.asList(ids));
+			//特殊管理员账号删除住户的时候把所有房产关系都删除
+			if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&loginUser.getDomainIds()!=null&&!loginUser.getDomainIds().isEmpty()){
+				delete.append(SearchHelper.jointInSqlOrHql(loginUser.getDomainIds(), " fdomainid "));
+				values.add(loginUser.getDomainIds());
+			}
+			//只删除中间表即可
+			dwellerSqlDao.executeSql(delete.toString(), values.toArray());
+			dwellerSqlDao.getCurrSession().flush();
 			for(String id:ids){
 				if(!idList.contains(id)){
 					idList.add(id);
-					//只删除中间表即可
-					dwellerSqlDao.executeSql(delete.toString(),  new Object[]{id,loginUser.getDomainIds()});
+				}
+				//判断中间表是否有房产信息 没有就做逻辑删除
+				List<String> list = dwellerSqlDao.pageFindBySql(find, new Object[]{id});
+				if(list==null||list.isEmpty()){
+					dwellerSqlDao.deleteLogic(ids);
 				}
 			}
+			//做逻辑删除
 			del.append(SearchHelper.jointInSqlOrHql(idList, " d.id "));
 			del.append(")");
 			//删除互联网用户
@@ -266,7 +282,7 @@ public class DwellerBizImpl implements IDwellerBiz {
 		List<Object> values = new ArrayList<Object>();
 		sb.append("select * from (select w.id id,w.fname fname,w.fsex sex,w.fidnum idNum,w.fphone phone,w.femail email,w.feducation education,")
 		.append("w.fnativeplace nativePlace,w.fcompanyname companyName,w.fremark remark,w.fcreatetime createTime,dd.fdwellertype dwellerType,d.fentityid entityid")
-		.append(" from t_dweller w left join t_domain_dweller dd on dd.fdwellerid=w.id left join t_domain d on d.id=dd.fdomainid where 1=1 ");
+		.append(" from t_dweller w left join t_domain_dweller dd on dd.fdwellerid=w.id left join t_domain d on d.id=dd.fdomainid where w.fdeleteflag=1 ");
 		//不是特殊管理员需要过滤域
 		List<String> domainIds = loginUser.getDomainIds();
 		if(!SysStatic.SPECIALADMIN.equals(loginUser.getIsAdmin())&&domainIds!=null&&!domainIds.isEmpty()){
