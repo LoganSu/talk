@@ -11,7 +11,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +36,6 @@ import com.youlb.utils.exception.JsonException;
  */
 @Controller
 @RequestMapping("/mc/neighborhoods")
-@Scope("prototype")
 public class NeighborhoodsCtrl extends BaseCtrl {
 	private static Logger log = LoggerFactory.getLogger(NeighborhoodsCtrl.class);
 

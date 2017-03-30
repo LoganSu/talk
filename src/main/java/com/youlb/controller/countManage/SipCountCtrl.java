@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.countManage.SipCount;
 import com.youlb.utils.exception.BizException;
 @Controller
-@Scope("prototype")
 @RequestMapping("/mc/sipCount")
 public class SipCountCtrl extends BaseCtrl {
 	@Autowired

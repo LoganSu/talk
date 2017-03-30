@@ -9,7 +9,6 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.staticParam.StaticParamCtrl;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.houseInfo.Area;
@@ -42,7 +40,6 @@ import com.youlb.utils.exception.BizException;
  
 @Controller
 @RequestMapping("/mc/aboutNeighborhoodsTree")
-@Scope("prototype")
 public class AboutNeighborhoodsTreeCtrl  extends BaseCtrl{
 	private static Logger log = LoggerFactory.getLogger(AboutNeighborhoodsTreeCtrl.class);
 

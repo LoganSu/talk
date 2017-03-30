@@ -2,14 +2,9 @@ package com.youlb.controller.chars;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.sf.json.util.JSONUtils;
-
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.vo.CharVo;
 import com.youlb.entity.vo.Series;
@@ -23,7 +18,6 @@ import com.youlb.utils.common.JsonUtils;
  * 
  */
 @Controller
-@Scope("prototype")
 @RequestMapping("/mc/chars")
 public class CharsCtrl  extends BaseCtrl {
 

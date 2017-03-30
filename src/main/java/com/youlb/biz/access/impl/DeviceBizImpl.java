@@ -150,8 +150,22 @@ public class DeviceBizImpl implements IDeviceBiz {
 	 */
 	@Override
 	public String saveOrUpdate(DeviceInfo device, Operator loginUser) throws BizException {
-		 String update = "update DeviceInfo set deviceStatus=?,liveTime=?,deviceFactory=?,deviceBorn=?,remark=? where id=?";
-		deviceSqlDao.update(update,new Object[]{device.getDeviceStatus(),new Date(),device.getDeviceFactory(),device.getDeviceBorn(),device.getRemark(),device.getId()});
+		 StringBuilder sb = new StringBuilder();
+		 List<Object> values = new ArrayList<Object>();
+		 sb.append("update t_deviceinfo set fdevicestatus=?,fdevicefactory=?,fdeviceborn=?,fremark=?");
+		 values.add(device.getDeviceStatus());
+		 values.add(device.getDeviceFactory());
+		 values.add(device.getDeviceBorn());
+		 values.add(device.getRemark());
+		 if("1".equals(device.getDeviceStatus())){
+			 sb.append(",flive_time=? ");
+			 values.add(new Date());
+		 }else{
+			 sb.append(",flive_time=null ");
+		 }
+		 sb.append("where id=?");
+		 values.add(device.getId());
+		deviceSqlDao.updateSQL(sb.toString(),values.toArray());
 		return null;
 	}
     /**

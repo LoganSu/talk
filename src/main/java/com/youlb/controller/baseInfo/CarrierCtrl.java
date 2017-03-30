@@ -1,7 +1,6 @@
 package com.youlb.controller.baseInfo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,11 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.baseInfo.ICarrierBiz;
@@ -21,11 +18,8 @@ import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.baseInfo.Carrier;
-import com.youlb.entity.common.Domain;
 import com.youlb.entity.domainName.DomainName;
 import com.youlb.entity.privilege.Operator;
-import com.youlb.entity.vo.QJson;
-import com.youlb.entity.vo.QTree;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
@@ -38,7 +32,6 @@ import com.youlb.utils.exception.BizException;
  */
 @Controller
 @RequestMapping("/mc/carrier")
-@Scope("prototype")
 public class CarrierCtrl extends BaseCtrl {
 	private static Logger log = LoggerFactory.getLogger(CarrierCtrl.class);
 	@Autowired

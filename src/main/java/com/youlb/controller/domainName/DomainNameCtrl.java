@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.youlb.biz.domainName.IDomainNameBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.entity.common.Domain;
 import com.youlb.entity.domainName.DomainName;
-import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
 @Controller
-@Scope("prototype")
 @RequestMapping("/mc/domainName")
 public class DomainNameCtrl extends BaseCtrl {
 	@Autowired

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import com.youlb.biz.houseInfo.INeighborhoodsBiz;
 import com.youlb.biz.houseInfo.IRoomBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.houseInfo.Building;
-import com.youlb.entity.houseInfo.Neighborhoods;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 
@@ -31,7 +29,6 @@ import com.youlb.utils.exception.BizException;
  */
 @Controller
 @RequestMapping("/mc/building")
-@Scope("prototype")
 public class BuildingCtrl extends BaseCtrl {
 	
 	@Autowired

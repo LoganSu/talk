@@ -304,9 +304,9 @@
 	                           	    <r:role auth="APP开锁记录">
 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/appRecord/apprecordshowPage.do?module=appRecordTable&modulePath=/apprecord">APP开锁记录</a></li>
 	                           	   </r:role>
-<%-- 	                           	   <r:role auth="考勤管理"> --%>
-<%-- 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/checking/checkingshowPage.do?module=checkingTable&modulePath=/checking">考勤管理</a></li> --%>
-<%-- 	                           	   </r:role> --%>
+	                           	   <r:role auth="考勤管理">
+		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/checking/checkingshowPage.do?module=checkingTable&modulePath=/checking">考勤管理</a></li>
+	                           	   </r:role>
 	                           </ul>
 	                             
 	                       </div>

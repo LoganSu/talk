@@ -19,7 +19,6 @@ import org.apache.http.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,7 +47,6 @@ import com.youlb.utils.exception.JsonException;
  */
 @Controller
 @RequestMapping("/mc/user")
-@Scope("prototype")
 public class OperatorCtrl extends BaseCtrl{
 	/** 日志输出 */
 	private static Logger logger = LoggerFactory.getLogger(OperatorCtrl.class);

@@ -1,35 +1,17 @@
 package com.youlb.controller.appManage;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.youlb.biz.appManage.IAppManageBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.infoPublish.TodayNewsCtrl;
 import com.youlb.entity.appManage.AppManage;
-import com.youlb.utils.common.MatrixToImageWriter;
-import com.youlb.utils.common.SysStatic;
 import com.youlb.utils.exception.BizException;
 
 /** 
@@ -40,7 +22,6 @@ import com.youlb.utils.exception.BizException;
  * 
  */
 @Controller
-@Scope("prototype")
 @RequestMapping("/appManage")
 public class AppDownloadCtrl extends BaseCtrl {
 	@Autowired

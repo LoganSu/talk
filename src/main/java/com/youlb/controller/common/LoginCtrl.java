@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import com.youlb.utils.common.SysStatic;
  */
 @Controller
 @RequestMapping("")
-@Scope("prototype")
 public class LoginCtrl extends BaseCtrl {
 	/**
      * 登录页面跳转
