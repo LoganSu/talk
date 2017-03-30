@@ -187,9 +187,9 @@ public class NeighborhoodsBizImpl implements INeighborhoodsBiz {
 	 */
 	@Override
 	public void saveOrUpdate(Neighborhoods neighborhoods,Operator loginUser) throws BizException, NumberFormatException, ClientProtocolException, UnsupportedEncodingException, IOException, JsonException {
-		neighborhoods.setUseDate(DateHelper.strParseDate(neighborhoods.getUseDateStr(), "yyyy-mm-dd"));
-		neighborhoods.setStartBuildDate(DateHelper.strParseDate(neighborhoods.getStartBuildDateStr(), "yyyy-mm-dd"));
-		neighborhoods.setEndBuildDate(DateHelper.strParseDate(neighborhoods.getEndBuildDateStr(), "yyyy-mm-dd"));
+		neighborhoods.setUseDate(DateHelper.strParseDate(neighborhoods.getUseDateStr(), "yyyy-MM-dd"));
+		neighborhoods.setStartBuildDate(DateHelper.strParseDate(neighborhoods.getStartBuildDateStr(), "yyyy-MM-dd"));
+		neighborhoods.setEndBuildDate(DateHelper.strParseDate(neighborhoods.getEndBuildDateStr(), "yyyy-MM-dd"));
 		
 		//只有当id=null时会添加
 		if(StringUtils.isBlank(neighborhoods.getId())){

@@ -155,7 +155,7 @@ public class PrivilegeBizImpl implements IPrivilegeBiz {
 				}
 		 }
 		 sb.append(" order by p.fgrouporder");
-		 List<Object[]> listObj =  privilegeSqlDao.pageFindBySql(sb.toString(), values.toArray());
+		 List<Object[]> listObj =  privilegeSqlDao.pageFindBySql(sb.toString(), values.toArray(),privilege.getPager());
 		 List<Privilege> list = new ArrayList<Privilege>();
 		   if(listObj!=null&&!listObj.isEmpty()){
 			   for(Object[] obj:listObj){

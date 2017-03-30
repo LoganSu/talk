@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.privilege.IPrivilegeBiz;
 import com.youlb.biz.privilege.IRoleBiz;
 import com.youlb.controller.common.BaseCtrl;
-import com.youlb.controller.personnel.DwellerCtrl;
-import com.youlb.entity.common.Domain;
 import com.youlb.entity.privilege.Privilege;
 import com.youlb.utils.exception.BizException;
 
