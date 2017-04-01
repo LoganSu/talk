@@ -91,6 +91,7 @@
     <script src="${path}/js/SMSManage/SMSManage.js" ></script>
     <script src="${path}/js/houseInfo/area.js" ></script>
     <script src="${path}/js/management/worker.js" ></script>
+    <script src="${path}/js/checking/checking.js" ></script>
     
     
     
@@ -136,7 +137,7 @@
     <script src="${path}/js/table/billManageTable.js"></script>
     <script src="${path}/js/table/doorMachineTable.js"></script>
     <script src="${path}/js/table/domainNameTable.js"></script>
-    
+    <script src="${path}/js/table/checkingTable.js"></script>
     
     
     <!-- 导入自己的js文件-->
@@ -304,9 +305,9 @@
 	                           	    <r:role auth="APP开锁记录">
 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/appRecord/apprecordshowPage.do?module=appRecordTable&modulePath=/apprecord">APP开锁记录</a></li>
 	                           	   </r:role>
-<%-- 	                           	   <r:role auth="考勤管理"> --%>
-<%-- 		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/checking/checkingshowPage.do?module=checkingTable&modulePath=/checking">考勤管理</a></li> --%>
-<%-- 	                           	   </r:role> --%>
+	                           	   <r:role auth="考勤管理">
+		                           	   <li><a class="cardInfo li_a" href="javascript:void(0)" rel="${path}/mc/cardRecord/checkingshowPage.do?module=checkingTable&modulePath=/checking">考勤管理</a></li>
+	                           	   </r:role>
 	                           </ul>
 	                             
 	                       </div>

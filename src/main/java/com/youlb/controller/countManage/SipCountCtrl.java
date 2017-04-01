@@ -133,10 +133,10 @@ public class SipCountCtrl extends BaseCtrl {
     	try {
     		sipCountBiz.restDevice(username,reset_time,reset_type);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     } 
 
 }

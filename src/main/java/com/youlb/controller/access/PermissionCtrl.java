@@ -108,11 +108,11 @@ public class PermissionCtrl extends BaseCtrl {
 //    			domainMap.put(id, cardInfo.getName());
 //    		}
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -132,10 +132,10 @@ public class PermissionCtrl extends BaseCtrl {
 //	    			domainMap.remove(id);
 //				}
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	@RequestMapping("/getKey.do")
@@ -211,28 +211,31 @@ public class PermissionCtrl extends BaseCtrl {
 //    	System.out.println(cardInfo);
     	try{
     		if(StringUtils.isBlank(cardInfo.getCardSn())){
-    			super.message="无操作纪录";
-    			return super.message;
+    			return "无操作纪录";
     		}
     		permissionBiz.lossUnlossDestroy(cardInfo);
     	}catch(BizException e){
     		e.printStackTrace();
-    		super.message="操作失败！";
+    		return "操作失败！";
     	} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (JsonException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "操作失败！";
 		}
 			
-    	return super.message;
+    	return null;
     }
     
     
@@ -289,16 +292,14 @@ public class PermissionCtrl extends BaseCtrl {
     		//注销的卡可以重新发卡
     		if(SysStatic.CANCEL.equals(c.getCardStatus())){
     			permissionBiz.updateCardInfo(c);
-    			super.message="0";
-    			return super.message;
+    			return "0";
     		}else{
-    			super.message="1";
-    			return super.message;
+    			return "1";
     		}
     	}else{
     		cardInfo.setCardBelongs("1");//所属住户
     		int i = permissionBiz.writeCard(cardInfo);
-    		super.message=i+"";
+    		return i+"";
     	}
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
@@ -317,10 +318,9 @@ public class PermissionCtrl extends BaseCtrl {
 			e.printStackTrace();
 		} catch (BizException e) {
 			e.printStackTrace();
-			super.message="2";
-			return super.message;
+			return "2";
 		} 
-    	return super.message;
+    	return null;
     }
     
 		/**

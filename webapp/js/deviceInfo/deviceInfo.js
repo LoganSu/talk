@@ -23,7 +23,9 @@ $(function(){
 			hiAlert("提示","请选择需要导出的数据");
 			return false;
 		}
-		window.location.href=$path+"/mc/device/singleDownfile.do?"+ids;
+//		window.location.href=$path+"/mc/device/singleDownfile.do?"+ids;
+		$("#deviceInfoSubmitFrame").attr("src",$path+"/mc/device/singleDownfile.do?"+ids);
+
 	})
 	
 	

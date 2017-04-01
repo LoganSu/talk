@@ -144,27 +144,23 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     public String save(HttpServletRequest request,AboutNeighborhoods aboutNeighborhoods,Model model){
         	//标题不能为空
         	if(StringUtils.isBlank(aboutNeighborhoods.getHeadline())){
-        		super.message="栏目标题不能为空";
-        		request.setAttribute("message", message);
+        		request.setAttribute("message", "栏目标题不能为空");
         		return INPUT;
         	}else{
     			if(aboutNeighborhoods.getHeadline().length()>4){
-    				super.message="栏目标题不能超过4个字符";
-    				request.setAttribute("message", message);
+    				request.setAttribute("message","栏目标题不能超过4个字符");
     				return INPUT;
         		}
         	}
         	if(StringUtils.isBlank(aboutNeighborhoods.getAboutNeighborhoodsDetail())){
-        		super.message="内容不能为空";
-        		request.setAttribute("message", message);
+        		request.setAttribute("message", "内容不能为空");
         		return INPUT;
         	}
 //        	else{
 //        		//过滤特殊字符
 //        		for(String s:SysStatic.SPECIALSTRING){
 //        			if(aboutNeighborhoods.getAboutNeighborhoodsDetail().contains(s)){
-//        				super.message="您提交的相关表单数据字符含有非法字符!";
-//        				request.setAttribute("message", super.message);
+//        				request.setAttribute("message", "您提交的相关表单数据字符含有非法字符!");
 //                		return INPUT;
 //        			}
 //        		}
@@ -266,10 +262,10 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 			try {
 				aboutNeighborBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	@Override
 	public String showPage(Model model) {
@@ -291,15 +287,14 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 		try {
 			int minOrder = aboutNeighborBiz.getMinOrder(aboutNeighborhoods);
 			if(aboutNeighborhoods.getForder()==minOrder){
-				 super.message="亲，已经到顶了";
-				return super.message;
+				return "亲，已经到顶了";
 			}
 				aboutNeighborBiz.orderUp(aboutNeighborhoods);
 		} catch (BizException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return super.message;
+		return null;
 	}
 	/**
      * 向下箭头排序
@@ -314,15 +309,14 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 			//检查是否已经是最大值
 			int minOrder = aboutNeighborBiz.getMaxOrder(aboutNeighborhoods);
 			if(aboutNeighborhoods.getForder()==minOrder){
-				 super.message="亲，已经到底了";
-				return super.message;
+				return "亲，已经到底了";
 			}
 			aboutNeighborBiz.orderDown(aboutNeighborhoods);
 		} catch (BizException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return super.message;
+		return null;
 	}
 	
 	
@@ -352,14 +346,14 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
 			int i = aboutNeighborBiz.updateCheck(aboutNeighborhoods,getLoginUser());
 		}catch(BizException e){
 			if(RegexpUtils.checkChinese(e.getMessage())){
-				super.message = e.getMessage();
+				return e.getMessage();
 			}else{
 				e.printStackTrace();
-				super.message ="操作失败";
+				return "操作失败";
 			}
 		}
 //		System.out.println(i);
-		return super.message;
+		return null;
 	}
 	/**
      * 预览显示html页面
@@ -466,10 +460,10 @@ public class AboutNeighborhoodsCtrl extends BaseCtrl {
     	try {
 				adPic.setId(adPublishBiz.addPicture(adPic));
     	} catch (IllegalStateException e) {
-			super.message = "媒体文件上传失败！";
+			log.error("媒体文件上传失败！");
 			e.printStackTrace();
 		} catch (BizException e) {
-			super.message = "媒体文件上传失败！";
+			log.error("媒体文件上传失败！");
 			e.printStackTrace();
 		}
     	return adPic;

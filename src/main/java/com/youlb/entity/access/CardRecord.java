@@ -63,10 +63,45 @@ public class CardRecord extends Model implements Serializable {
     /** 结束时间 */
     @Transient
     private String endTime;
+    /** 日期 */
+    @Transient
+    private String fdate;
+    /** 时间 */
+    @Transient
+	private String ftime;
+    /** 姓名 */
+    @Transient
+	private String fname;
+    /** 工号*/
+    @Transient
+	private String workerNum;
     
     
     
-    
+	public String getFdate() {
+		return fdate;
+	}
+	public void setFdate(String fdate) {
+		this.fdate = fdate;
+	}
+	public String getFtime() {
+		return ftime;
+	}
+	public void setFtime(String ftime) {
+		this.ftime = ftime;
+	}
+	public String getFname() {
+		return fname;
+	}
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+	public String getWorkerNum() {
+		return workerNum;
+	}
+	public void setWorkerNum(String workerNum) {
+		this.workerNum = workerNum;
+	}
 	public String getStartTime() {
 		return startTime;
 	}

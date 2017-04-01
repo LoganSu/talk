@@ -96,28 +96,23 @@ public class AreaCtrl extends BaseCtrl {
     			area.setProvince(province.split("_")[1]);
     		}
     		if(StringUtils.isBlank(area.getProvince())){
-    			super.message = "请选择省份！";
-   			    return  super.message;
+    			return "请选择省份！";
     		}
     		if(StringUtils.isBlank(area.getCity())){
-    			super.message = "请选择城市！";
-   			    return  super.message;
+    			return "请选择城市！";
     		}
     		if(StringUtils.isBlank(area.getAreaNum())||area.getAreaNum().length()!=3){
-    			super.message = "呼叫号码不能为空且为3个数字，请填写区号！";
-   			    return  super.message;
+    			return "呼叫号码不能为空且为3个数字，请填写区号！";
     		}else{
     			boolean b = areaBiz.checkAreaNumFromArea(area);
     			if(b){
-    				super.message = "呼叫号码已经存在！";
-       			    return  super.message;
+    				return "呼叫号码已经存在！";
     			}
     		}
     		
 			List<Area> areaList = areaBiz.getAreaList(area);
 			if(areaList!=null&&!areaList.isEmpty()){
-				super.message = "城市已存在！";
-				return  super.message;
+				return "城市已存在！";
 			}
 			
 			//更新操作
@@ -131,11 +126,11 @@ public class AreaCtrl extends BaseCtrl {
 			
     		areaBiz.saveOrUpdate(area,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     
@@ -173,11 +168,11 @@ public class AreaCtrl extends BaseCtrl {
     	try {
     		areaBiz.upate(area);
 		} catch (Exception e) {
-			super.message = "修改失败！";
+			return "修改失败！";
 			e.printStackTrace();
 			//TODO log
 		}
-    	 return  super.message;
+    	 return null;
     }*/
     /**
      * 删除
@@ -193,15 +188,14 @@ public class AreaCtrl extends BaseCtrl {
 				//检查是否有子节点
 				String remark= domainBiz.hasChild(ids);
 				if(StringUtils.isNotBlank(remark)){
-					super.message = "请先删除"+remark+"的子域";
-					return super.message;
+					return "请先删除"+remark+"的子域";
 				}
 				areaBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	

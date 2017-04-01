@@ -92,46 +92,39 @@ public class InfoPublishCtrl extends BaseCtrl {
     @ResponseBody
     public String save(InfoPublish infoPublish,Model model){
     	if(StringUtils.isBlank(infoPublish.getTitle())){
-    		super.message = "标题名称不能为空！";
-			return  super.message;
+    		return "标题名称不能为空！";
     	}
     	if(StringUtils.isBlank(infoPublish.getInfoDetail())){
-    		super.message = "内容不能为空！";
-			return  super.message;
+    		return "内容不能为空！";
     	}else{
     		if(infoPublish.getInfoDetail().length()>200){
-    			super.message = "内容长度超出200字符！";
-    			return  super.message;
+    			return "内容长度超出200字符！";
     		}
     	}
     	if(StringUtils.isBlank(infoPublish.getExpDateStr())){
-    		super.message = "有效期不能为空！";
-			return  super.message;
+    		return "有效期不能为空！";
     	}
     	Date expDate = DateHelper.strParseDate(infoPublish.getExpDateStr(), "yyyy-MM-dd");
     	if(new Date().getTime()>expDate.getTime()){
-    		super.message = "有效期要在今天以后！";
-			return  super.message;
+    		return "有效期要在今天以后！";
     	}
     	if(StringUtils.isBlank(infoPublish.getInfoSign())){
-    		super.message = "署名不能为空！";
-			return  super.message;
+    		return "署名不能为空！";
     	}
     	if("2".equals(infoPublish.getSendType())){
     		List<String> treecheckbox = infoPublish.getTreecheckbox();
     		if(treecheckbox==null||treecheckbox.size()!=1){
-    			super.message = "请选择一个域发布信息！";
-    			return  super.message;
+    			return "请选择一个域发布信息！";
     		}
     	}
     	try {
     		infoPublishBiz.saveOrUpdate(infoPublish,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     	
@@ -148,10 +141,10 @@ public class InfoPublishCtrl extends BaseCtrl {
 			try {
 				infoPublishBiz.publish(ids,getLoginUser());
 			} catch (Exception e) {
-				super.message =  "发布出错";
+				return "发布出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
     /**
      * 删除
@@ -166,9 +159,9 @@ public class InfoPublishCtrl extends BaseCtrl {
 			try {
 				infoPublishBiz.delete(ids,getLoginUser());
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 }

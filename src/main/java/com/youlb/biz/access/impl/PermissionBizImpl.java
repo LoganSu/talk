@@ -34,6 +34,7 @@ import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.BlackListData;
 import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.access.CardRecord;
+import com.youlb.entity.checking.Checking;
 import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
@@ -779,7 +780,9 @@ public class PermissionBizImpl implements IPermissionBiz {
 	public List<CardRecord> cardRecord(CardRecord cardRecord, Operator loginUser) throws BizException {
 		StringBuilder sb = new StringBuilder();
 		List<Object> values = new ArrayList<Object>();
-		sb.append("select * from(SELECT cr.fcardsn cardsn,cr.ftime cardtime,cr.fpath imgpath,cr.id id,cr.fusername username,dc.fdomainid domainid")
+		sb.append("select * from(SELECT cr.fcardsn cardsn,cr.ftime cardtime,cr.fpath imgpath,cr.id id,cr.fusername username,")
+		.append("array_to_string (ARRAY(WITH RECURSIVE r AS (SELECT * FROM t_domain WHERE id =dc.fdomainid ")
+		.append("union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid) SELECT  fremark FROM r where flayer is not null ORDER BY flayer),'')||'-'||dc.fdevice_count_desc ")
 		.append(" from t_cardrecord cr INNER JOIN t_devicecount dc on dc.fdevicecount=cr.fusername where 1=1 ");
 		if("5".equals(cardRecord.getMode())){
 			sb.append(" and cr.fmode in('5','7','8','9') ");
@@ -818,12 +821,12 @@ public class PermissionBizImpl implements IPermissionBiz {
 				info.setImgpath(obj[2]==null?"":(String)obj[2]);
 				info.setId(obj[3]==null?null:((BigInteger)obj[3]).longValue());
 				info.setUsername(obj[4]==null?"":(String)obj[4]);
-				if(obj[5]!=null){
-					 List<String> address = cardSqlDao.pageFindBySql(addressSql, new Object[]{(String)obj[5]});
-					 if(address!=null&&!address.isEmpty()){
-						 info.setAddress(address.get(0));
-					 }
-				}
+//				if(obj[5]!=null){
+//					 List<String> address = cardSqlDao.pageFindBySql(addressSql, new Object[]{(String)obj[5]});
+//					 if(address!=null&&!address.isEmpty()){
+						 info.setAddress(obj[5]==null?"":(String)obj[5]);
+//					 }
+//				}
 				list.add(info);
 			}
 		}
@@ -940,6 +943,50 @@ public class PermissionBizImpl implements IPermissionBiz {
 		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getDomainId(),cardInfo.getCardSn()});
 		pushInfo(cardInfo);
 		
+	}
+	/**
+	 * 考勤管理列表显示
+	 * @throws BizException 
+	 */
+	@Override
+	public List<CardRecord> checkingshowList(CardRecord cardRecord,Operator loginUser) throws BizException {
+		StringBuilder sb = new StringBuilder();
+		List<Object> values = new ArrayList<Object>();
+		 List<CardRecord> returnData = new ArrayList<CardRecord>();
+		sb.append("SELECT * from (select * from(select *,row_number() over(partition by t.workerNum, t.fdate ORDER BY t.fdate,t.ftime desc)rn from ")
+		.append("(SELECT to_char(cd.ftime,'yyyy-MM-dd') fdate,to_char(cd.ftime,'HH24:mi:ss') ftime,d.fremark workerNum,")
+		.append("td.fname fname from t_cardrecord cd INNER JOIN t_cardinfo c on c.fcardsn=cd.fcardsn ")
+		.append("INNER JOIN t_domain d on d.id=c.fdomainid INNER JOIN t_domain_dweller tdd on tdd.fdomainid=d.id ")
+		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1")
+		.append(" UNION ")
+		.append("select * from(select *,row_number() over(partition by t.workerNum, t.fdate ORDER BY t.fdate,t.ftime asc)rn from ")
+		.append("(SELECT to_char(cd.ftime,'yyyy-MM-dd') fdate,to_char(cd.ftime,'HH24:mi:ss') ftime,d.fremark workerNum,")
+		.append("td.fname fname from t_cardrecord cd INNER JOIN t_cardinfo c on c.fcardsn=cd.fcardsn ")
+		.append("INNER JOIN t_domain d on d.id=c.fdomainid INNER JOIN t_domain_dweller tdd on tdd.fdomainid=d.id ")
+		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1 )o where 1=1 ");
+		if(StringUtils.isNotBlank(cardRecord.getStartTime())&&StringUtils.isNotBlank(cardRecord.getEndTime())){
+			sb.append(" and o.fdate>=? and o.fdate<=? ");
+			values.add(cardRecord.getStartTime());
+			values.add(cardRecord.getEndTime());
+		}
+		if(StringUtils.isNotBlank(cardRecord.getWorkerNum())){
+			sb.append(" and o.workerNum like ? ");
+			values.add("%"+cardRecord.getWorkerNum()+"%");
+		}
+		sb.append("order by to_number(o.workerNum, '999999999999'),o.fdate,o.ftime,o.workerNum");
+		List<Object[]> list = cardSqlDao.pageFindBySql(sb.toString(), values.toArray(), cardRecord.getPager());
+		if(list!=null&&!list.isEmpty()){
+			for(Object[] obj:list){
+				CardRecord c = new CardRecord();
+				c.setPager(cardRecord.getPager());
+				c.setFdate(obj[0]==null?"":(String)obj[0]);
+				c.setFtime(obj[1]==null?"":(String)obj[1]);
+				c.setWorkerNum(obj[2]==null?"":(String)obj[2]);
+				c.setFname(obj[3]==null?"":(String)obj[3]);
+				returnData.add(c);
+			}
+		}
+		return returnData;
 	}
 	
 }

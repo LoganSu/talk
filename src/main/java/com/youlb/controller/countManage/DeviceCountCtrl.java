@@ -125,36 +125,30 @@ public class DeviceCountCtrl extends BaseCtrl {
     		
     		if(StringUtils.isNotBlank(deviceCount.getLatitude())){
     			if(!RegexpUtils.checkDecimals(deviceCount.getLatitude())){
-    				super.message = "请填写正确的纬度！";
-    				return super.message;
+    				return "请填写正确的纬度！";
     			}
     			if(deviceCount.getLatitude().length()>20){
-    				super.message = "纬度超出长度范围！";
-    				return super.message;
+    				return "纬度超出长度范围！";
     			}
     		}
     		
     		if(StringUtils.isNotBlank(deviceCount.getLongitude())){
     			if(!RegexpUtils.checkDecimals(deviceCount.getLongitude())){
-    				super.message = "请填写正确的经度！";
-    				return super.message;
+    				return "请填写正确的经度！";
     			}
     			if(deviceCount.getLongitude().length()>20){
-    				super.message = "经度超出长度范围！";
-    				return super.message;
+    				return "经度超出长度范围！";
     			}
     		}
     		
     		if(StringUtils.isNotBlank(deviceCount.getWarnPhone())){
     			if(!RegexpUtils.checkMobile(deviceCount.getWarnPhone())){
-    				super.message = "请填写正确的手机号码！";
-    				return super.message;
+    				return "请填写正确的手机号码！";
     			}
     		}
     		if(StringUtils.isNotBlank(deviceCount.getWarnEmail())){
     			if(!RegexpUtils.checkEmail(deviceCount.getWarnEmail())){
-    				super.message = "请填写正确的邮箱！";
-    				return super.message;
+    				return "请填写正确的邮箱！";
     			}
     		}
     		if(StringUtils.isBlank(deviceCount.getId())&&(deviceCount.getTreecheckbox()==null||deviceCount.getTreecheckbox().size()!=1)){
@@ -168,28 +162,27 @@ public class DeviceCountCtrl extends BaseCtrl {
 //    			deviceCount.setSipNum(d.getSipNum());
 //    		}
     		deviceCountBiz.saveOrUpdate(deviceCount);
-//    		super.message = "添加成功！";
 		} catch (BizException e) {
+			e.printStackTrace();
 			if(RegexpUtils.checkChinese(e.getMessage())){
-				super.message = e.getMessage();
+				return  e.getMessage();
 			}else{
-				super.message = "操作失败！";
+				return "操作失败！";
 			}
-			e.printStackTrace();
 		} catch (ClientProtocolException e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (ParseException e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (IOException e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (JsonException e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     /**
@@ -205,10 +198,10 @@ public class DeviceCountCtrl extends BaseCtrl {
 			try {
 				deviceCountBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	/**
@@ -235,9 +228,9 @@ public class DeviceCountCtrl extends BaseCtrl {
 			try {
 				deviceCountBiz.update(deviceCount);
 			} catch (Exception e) {
-				super.message =  "设置密码出错";
+				return "设置密码出错";
 			}
-		return super.message;
+		return null;
 	}
 	/**
      * 获取账号信息
@@ -266,7 +259,7 @@ public class DeviceCountCtrl extends BaseCtrl {
 				deviceCount.setEndTime(deviceCount.getEndTime().substring(0, 10));
 			}
 		} catch (Exception e) {
-			super.message =  "获取账号信息出错";
+			logger.error("获取账号信息出错");
 		}
 		return deviceCount;
 	}

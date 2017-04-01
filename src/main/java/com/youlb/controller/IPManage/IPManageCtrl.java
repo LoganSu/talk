@@ -80,45 +80,36 @@ public class IPManageCtrl extends BaseCtrl {
     public String save(IPManage iPManage,Model model){
 //    	if(StringUtils.isBlank(iPManage.getIp())||!RegexpUtils.checkIpAddress(iPManage.getIp())){
     	if(StringUtils.isBlank(iPManage.getIp())){
-    		super.message = "访问IP不能为空！";
-    		return  super.message;
+    		return "访问IP不能为空！";
     	}
     	if(iPManage.getPort()!=null){
     		if(iPManage.getPort()>65535||!RegexpUtils.checkNumber(iPManage.getPort()+"")){
-    			super.message = "请填写正确的https端口！";
-    			return  super.message;
+    			return "请填写正确的https端口！";
     		}
     	}else{
-    		super.message = "https端口不能为空！";
-    		return  super.message;
+    		return "https端口不能为空！";
     	}
     	
     	if(StringUtils.isBlank(iPManage.getHttpIp())){
-    		super.message = "服务器真实IP不能为空！";
-    		return  super.message;
+    		return "服务器真实IP不能为空！";
     	}
     	if(iPManage.getHttpPort()!=null){
     		if(iPManage.getHttpPort()>65535||!RegexpUtils.checkNumber(iPManage.getHttpPort()+"")){
-    			super.message = "请填写正确的http端口！";
-    			return  super.message;
+    			return "请填写正确的http端口！";
     		}
     	}else{
-    		super.message = "http端口不能为空！";
-			return  super.message;
+    		return "http端口不能为空！";
     	}
     	if(StringUtils.isBlank(iPManage.getPlatformName())){
-    		super.message = "平台名称不能为空！";
-    		return  super.message;
+    		return "平台名称不能为空！";
     	}
     	if(StringUtils.isBlank(iPManage.getNeibName())){
-    		super.message = "社区名称不能为空！";
-    		return  super.message;
+    		return "社区名称不能为空！";
     	}else{
 			try {
 				boolean b = iPManageBiz.checkNeibName(iPManage);
 				if(b){
-					super.message = "社区名称已经存在！";
-					return  super.message;
+					return "社区名称已经存在！";
 				}
 			} catch (BizException e) {
  				e.printStackTrace();
@@ -127,35 +118,30 @@ public class IPManageCtrl extends BaseCtrl {
     	
 //    	if(StringUtils.isBlank(iPManage.getFsIp())||!RegexpUtils.checkIpAddress(iPManage.getFsIp())){
     	if(StringUtils.isBlank(iPManage.getFsIp())){
-    		super.message = "FS ip地址不能为空！";
-    		return  super.message;
+    		return "FS ip地址不能为空！";
     	}
     	if(iPManage.getFsPort()!=null){
     		if(iPManage.getFsPort()>65535||!RegexpUtils.checkNumber(iPManage.getFsPort()+"")){
-    			super.message = "请填写正确的fs端口！";
-    			return  super.message;
+    			return "请填写正确的fs端口！";
     		}
     	}else{
-    		super.message = "fs端口不能为空！";
-			return  super.message;
+    		return "fs端口不能为空！";
     	}
     	if(iPManage.getFsExternalPort()!=null){
     		if(iPManage.getFsExternalPort()>65535||!RegexpUtils.checkNumber(iPManage.getFsExternalPort()+"")){
-    			super.message = "请填写正确的fs外呼端口！";
-    			return  super.message;
+    			return "请填写正确的fs外呼端口！";
     		}
     	}else{
-    		super.message = "fs外呼端口不能为空！";
-			return  super.message;
+    		return "fs外呼端口不能为空！";
     	}
     	try {
     		
     		iPManageBiz.saveOrUpdate(iPManage,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -170,10 +156,10 @@ public class IPManageCtrl extends BaseCtrl {
 			try {
 				iPManageBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 }

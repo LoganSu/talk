@@ -91,44 +91,37 @@ public class RepairsCtrl extends BaseCtrl{
     		if(StringUtils.isNotBlank(repairs.getId())){
     			Repairs r = repairsBiz.get(repairs.getId());
     			if(!"1".equals(r.getStatus())){
-    				super.message = "只能修改未处理的工单！";
-        			return  super.message;
+    				return "只能修改未处理的工单！";
     			}
     		}
     		
     		if(StringUtils.isBlank(repairs.getLinkman())){
-    			super.message = "联系人不能为空！";
-    			return  super.message;
+    			return "联系人不能为空！";
     		}
     		if(StringUtils.isBlank(repairs.getPhone())){
-    			super.message = "联系电话不能为空！";
-    			return  super.message;
+    			return "联系电话不能为空！";
     		}else{
     			if(!RegexpUtils.checkMobile(repairs.getPhone())){
-    				super.message = "请填写正确的手机号码！";
-    				return  super.message;
+    				return "请填写正确的手机号码！";
     			}
     		}
     		if(StringUtils.isBlank(repairs.getDomainId())){
-    			super.message = "请选择地址！";
-    			return  super.message;
+    			return "请选择地址！";
     		}
     		if(StringUtils.isBlank(repairs.getServiceContent())){
-    			super.message = "内容不能为空！";
-    			return  super.message;
+    			return "内容不能为空！";
     		}else{
     			if(repairs.getServiceContent().length()>200){
-        			super.message = "内容长度超出200字符！";
-        			return  super.message;
+    				return "内容长度超出200字符！";
         		}
     		}
     		repairsBiz.saveOrUpdate(repairs,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }
     @Override
     public String showPage(Model model) {

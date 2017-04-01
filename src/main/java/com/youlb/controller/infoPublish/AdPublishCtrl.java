@@ -154,14 +154,13 @@ public class AdPublishCtrl extends BaseCtrl {
 				adPic.setId(adPublishBiz.addPicture(adPic));
 //    		}
     	} catch (BizException e) {
-			super.message = "操作失败！";
+    		adPic.setMessage("操作失败！");
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			super.message = "媒体文件上传失败！";
+			adPic.setMessage("媒体文件上传失败！");
 			e.printStackTrace();
 		}
     	resp.setContentType("text/html");
-    	adPic.setMessage(super.message);
 		return adPic;
     }
     
@@ -182,50 +181,46 @@ public class AdPublishCtrl extends BaseCtrl {
     	
 			try {
 				if(adPublish.getPicId()==null||adPublish.getPicId().isEmpty()){
-		    		super.message = "请先上传图片！";
-					return  super.message;
+					return "请先上传图片！";
 		    	}
 				if(StringUtils.isBlank(adPublish.getExpDateStr())){
-		    		super.message = "有效期不能为空！";
-					return  super.message;
+					return "有效期不能为空！";
 		    	}
 		    	Date expDate = DateHelper.strParseDate(adPublish.getExpDateStr(), "yyyy-MM-dd");
 		    	if(new Date().getTime()>expDate.getTime()){
-		    		super.message = "有效期要在今天以后！";
-					return  super.message;
+		    		return "有效期要在今天以后！";
 		    	}
 		    	if("2".equals(adPublish.getSendType())){
 		    		List<String> treecheckbox = adPublish.getTreecheckbox();
 		    		if(treecheckbox==null||treecheckbox.size()!=1){
-		    			super.message = "请选择一个域发布信息！";
-		    			return  super.message;
+		    			return "请选择一个域发布信息！";
 		    		}
 		    	}
 				adPublishBiz.saveOrUpdate(adPublish,getLoginUser());
 			} catch (IllegalAccessException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			} catch (InvocationTargetException e) {
-				super.message="发布出错";
-				e.printStackTrace();
+ 				e.printStackTrace();
+				return "发布出错";
 			} catch (UnsupportedEncodingException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			} catch (ParseException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			} catch (JsonException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			} catch (IOException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			} catch (BizException e) {
-				super.message="发布出错";
 				e.printStackTrace();
+				return "发布出错";
 			}
 				 
-    	 return super.message;
+    	 return null;
     }
     /**
      * 发布
@@ -240,10 +235,10 @@ public class AdPublishCtrl extends BaseCtrl {
 			try {
 				adPublishBiz.publish(ids,getLoginUser());
 			} catch (Exception e) {
-				super.message =  "发布出错";
+				return  "发布出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
     
     
@@ -260,10 +255,10 @@ public class AdPublishCtrl extends BaseCtrl {
 			try {
 				adPublishBiz.deletePicture(picId);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
     /**
      * 删除
@@ -278,9 +273,9 @@ public class AdPublishCtrl extends BaseCtrl {
 			try {
 				adPublishBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 }

@@ -69,26 +69,23 @@ public class DoorMachineCtrl extends BaseCtrl {
     public String save(DoorMachine doorMachine,Model model){
     	try {
     		if(StringUtils.isBlank(doorMachine.getSoftwareType())){
-    			super.message="型号不能为空";
-    			return super.message;
+    			return "型号不能为空";
     		}
             if(StringUtils.isBlank(doorMachine.getHardwareModel())){
-            	super.message="硬件型号不能为空";
-    			return super.message;
+            	return "硬件型号不能为空";
     		}
             
             boolean b = doorMachineBiz.checkExist(doorMachine);
             if(b){
-            	super.message="该组合已经存在,请不要重复添加";
-    			return super.message;
+            	return "该组合已经存在,请不要重复添加";
             }
     		doorMachineBiz.saveOrUpdate(doorMachine,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     	 
@@ -105,10 +102,10 @@ public class DoorMachineCtrl extends BaseCtrl {
 			try {
 				doorMachineBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 }

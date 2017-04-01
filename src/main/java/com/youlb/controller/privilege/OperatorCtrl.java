@@ -296,35 +296,29 @@ public class OperatorCtrl extends BaseCtrl{
     		Operator loginUser = getLoginUser();
     			
     		if(StringUtils.isBlank(user.getNewPassword())||StringUtils.isBlank(user.getSurePassword())){
-    			super.message = "密码不能为空！";
-    			 return  super.message;
+    			return "密码不能为空！";
     		}
 			if(user.getNewPassword().length()<5||user.getSurePassword().length()<5){
-				super.message = "新密码不能少于5个字符！！";
-				return  super.message;
+				return "新密码不能少于5个字符！！";
 			}
 			if(!user.getNewPassword().equals(user.getSurePassword())){
-				super.message = "密码输入不一致！";
-				return  super.message;
+				return "密码输入不一致！";
 			}
 			String id = operatorBiz.getUser(user,loginUser);
 			if(StringUtils.isNotBlank(id)){
 				operatorBiz.update(user, id);
-				super.message = "ok";
+				return "ok";
 //				httpSession.invalidate();//设置session失效
-				return  super.message;
 	//    	    	   user = (Operator) httpSession.getAttribute(SysStatic.LOGINUSER);
 	//    	    	   return "redirect:"+getRequest().getContextPath()+"/"+user.getCarrier().getCarrierNum()+"/login.do";
 			}else{
-				super.message = "原始密码错误！";
-				return  super.message;
+				return "原始密码错误！";
 			}
 	    			 
 		} catch (Exception e) {
-			super.message = e.getMessage();
 			e.printStackTrace();
+			return e.getMessage();
 		}
-    	 return  super.message;
     }
     /**
      * 保存
@@ -338,38 +332,33 @@ public class OperatorCtrl extends BaseCtrl{
     	try {
     		Operator loginUser = getLoginUser();
     		if(StringUtils.isBlank(user.getLoginName())||!RegexpUtils.checkNumAndLetter(user.getLoginName(), 6, 11)){
-    			super.message = "登入名必需由6~11个数字或字母组成";
-				return  super.message;
+    			return "登入名必需由6~11个数字或字母组成";
     		}
     		if(StringUtils.isBlank(user.getId())){
     			//添加的时候检查用户名是否存在
     			boolean  b=operatorBiz.chickLoginNameExist(user,loginUser);
     			if(b){
-    				super.message = "用户名已经存在！";
-    				return  super.message;
+    				return "用户名已经存在！";
     			}
     			
     		}
     		if(StringUtils.isBlank(user.getPhone())){
-    			super.message = "手机号码不能为空";
-   			    return  super.message;
+    			return "手机号码不能为空";
     		}else{
     			if(!RegexpUtils.checkMobile(user.getPhone())){
-    				super.message = "请填写正确的手机号码";
-       			    return  super.message;
+    				return "请填写正确的手机号码";
     			}
     		}
     		
     		//创建用户的时候必须绑定至少一个角色
     		if(user.getRoleIds()==null||user.getRoleIds().isEmpty()){
-    			super.message = "请选择至少一个角色，如果没有角色请创建！";
-    			 return  super.message;
+    			return "请选择至少一个角色，如果没有角色请创建！";
     		}
     		operatorBiz.saveOrUpdate(user,loginUser);
 		} catch (Exception e) {
-			super.message = "操作失败！";
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     /**
@@ -385,10 +374,10 @@ public class OperatorCtrl extends BaseCtrl{
 			try {
 				operatorBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	 
 	/**
@@ -450,16 +439,13 @@ public class OperatorCtrl extends BaseCtrl{
     public String updatePasw(Operator user,Model model){
     	try {
     		if(StringUtils.isBlank(user.getNewPassword())||StringUtils.isBlank(user.getPassword())){
-    			super.message = "密码不能为空！";
-    			 return  super.message;
+    			return "密码不能为空！";
     		}
 			if(user.getNewPassword().length()<5||user.getPassword().length()<5){
-				super.message = "新密码不能少于5个字符！！";
-				return  super.message;
+				return "新密码不能少于5个字符！！";
 			}
 			if(!user.getNewPassword().equals(user.getPassword())){
-				super.message = "密码输入不一致！";
-				return  super.message;
+				return "密码输入不一致！";
 			}
     		
     		
@@ -467,15 +453,15 @@ public class OperatorCtrl extends BaseCtrl{
 //    			user.getNewPassword().equals(user.getPassword())){
     			operatorBiz.update(user);
 //    		}else{
-//    			super.message = "密码输入不一致！";
-//    			logger.info(super.message);
+//    			logger.info("密码输入不一致！");
+//    			return "密码输入不一致！";
 //    		}
 		} catch (Exception e) {
-			super.message = "重置密码出错！";
 			e.printStackTrace();
-			logger.error(super.message);
+			logger.error("重置密码出错！");
+			return "重置密码出错！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 获取手机验证码
@@ -489,18 +475,16 @@ public class OperatorCtrl extends BaseCtrl{
     		//判断账号是否存在
     		boolean b = operatorBiz.chickLoginNameExist(user);
     		if(!b){
-    			super.message = "请填写正确的账号";
-    			logger.error(super.message);
-    			return super.message;
+    			logger.error("请填写正确的账号");
+    			return "请填写正确的账号";
     		}
     		//获取验证码
     		String code = operatorBiz.getVerificationCode(user,null);
     		if(StringUtils.isNotBlank(code)){
     			logger.info("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
     			System.out.println("运营商："+user.getCarrier().getCarrierNum()+",账号："+user.getLoginName()+"，验证码为"+code);
-    			super.message = "验证码24小时有效，请稍后再试！";
-    			logger.error(super.message);
-    			return super.message;
+    			logger.error("验证码24小时有效，请稍后再试！");
+    			return "验证码24小时有效，请稍后再试！";
     		}
 			operatorBiz.getVerificationCode(user,"1440");//十分钟有效期(测试一天有效)935133
 			
@@ -509,8 +493,7 @@ public class OperatorCtrl extends BaseCtrl{
     		if(subMap!=null){
     			Integer count = (Integer) subMap.get("count");
     			if(count>5){
-    				super.message = "您发送验证码太频繁，请休息一下再试！";
-    				return super.message;
+    				return "您发送验证码太频繁，请休息一下再试！";
     			}else{
     				++count;
     				subMap.put("count", count);
@@ -525,14 +508,14 @@ public class OperatorCtrl extends BaseCtrl{
     		}
 		} catch (IOException | JsonException e) {
 			e.printStackTrace();
-			super.message = "验证码发送失败！";
-			logger.error(super.message);
+			logger.error("验证码发送失败！");
+			return "验证码发送失败！";
 		} catch (BizException e) {
-			super.message = "验证码发送失败！";
-			logger.error(super.message);
+			logger.error("验证码发送失败！");
 			e.printStackTrace();
+			return "验证码发送失败！";
 		}  
-    	return super.message;
+    	return null;
     }
     
     

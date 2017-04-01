@@ -13,6 +13,10 @@ $(function(){
 		   var connectReader;
 		   try{
 			   connectReader = myactivex.ConnectReader();
+			   if(jQuery.parseJSON(connectReader).code!='0'){
+				   hiAlert("提示","发卡器连接出错！");
+					return false;
+			   }
 		   }catch(e){
 			   hiAlert("提示","发卡器连接出错！");
 				return false;
@@ -20,13 +24,13 @@ $(function(){
 		   var cardId;
 			  try{
 				  cardId = myactivex.GetCardId();
+				  if(jQuery.parseJSON(cardId).code!='0'){
+					  hiAlert("提示","请放入卡片！");
+					  return false;
+				  }
 			  }catch(e){
 				  hiAlert("提示","读取卡片id出错！");
 					     return false;
-			  }
-			  if(jQuery.parseJSON(cardId).code!='0'){
-				  hiAlert("提示","请放入卡片！");
-				  return false;
 			  }
 			  //设置卡片类型
 			  var cardType = jQuery.parseJSON(cardId).result.is_ic;

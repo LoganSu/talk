@@ -92,27 +92,22 @@ public class DwellerCtrl extends BaseCtrl {
     	try {
     		Operator loginUser = getLoginUser();
     		if(dweller.getTreecheckbox()==null||dweller.getTreecheckbox().isEmpty()){
-    			super.message = "请选择地址！";
-    			return  super.message;
+    			return  "请选择地址！";
     		}
     		if(StringUtils.isBlank(dweller.getFname())){
-	    		super.message = "姓名不能为空！";
-	    		return  super.message;
+	    		return  "姓名不能为空！";
     	    }else{
     	    	if(dweller.getFname().length()>10){
-    	    		super.message = "姓名长度超长！";
-    	    		return  super.message;
+    	    		return   "姓名长度超长！";
     	    	}
     	    }
     	    //检查身份证号码
     	    if(StringUtils.isNotBlank(dweller.getIdNum())){
     	    	if(dweller.getIdNum().length()!=18){
-    	    		super.message = "身份证号码不正确！";
-    	    		return  super.message;
+    	    		return  "身份证号码不正确！";
     	    	}
     	    }else{
-    	    	super.message = "身份证号码不能为空！";
-	    		return  super.message;
+	    		return  "身份证号码不能为空！";
     	    }
     	   
     	    //顶级运营商如果指定房间 修改运营商为被指定的域的运营商
@@ -121,8 +116,7 @@ public class DwellerCtrl extends BaseCtrl {
 //    				List<String> carrierId = dwellerBiz.getCarrierByDomainId(dweller.getTreecheckbox());
 //    				//获取两个运营商 不允许一个用户绑定跨域地址，一个域的用户智能绑定一个运营商的房间
 //    				if(carrierId!=null&&carrierId.size()>1){
-//    					super.message = "用户绑定房间不能跨运营商，请创建新的用户绑定！";
-//    					return  super.message;
+//    					return "用户绑定房间不能跨运营商，请创建新的用户绑定！";
 //    				}else if(carrierId!=null&&carrierId.size()==1){
 //    					dweller.setCarrierId(carrierId.get(0));
 //    				}
@@ -135,34 +129,31 @@ public class DwellerCtrl extends BaseCtrl {
     		//判断电话的正确性
     		if(StringUtils.isNotBlank(dweller.getPhone())){
     			if(!RegexpUtils.checkMobile(dweller.getPhone())&&!RegexpUtils.checkPhone(dweller.getPhone())){
-    				super.message = "请填写正确的联系电话";
-    				return  super.message;
+    				return  "请填写正确的联系电话";
     			}
     		}
     		//验证邮箱
     		if(StringUtils.isNotBlank(dweller.getEmail())){
     			if(!RegexpUtils.checkEmail(dweller.getEmail())){
-    				super.message = "请填写正确的邮箱";
-    				return  super.message;
+    				return  "请填写正确的邮箱";
     			}
     		}
     		 //检查手机号码是否已经在同一个运营商里面注册
     	    if(StringUtils.isNotBlank(dweller.getPhone())){
     	    	String b = dwellerBiz.checkPhoneExistWebShow(dweller);
     	    	if(StringUtils.isNotBlank(b)){
-    	    		super.message = "该手机号码已经绑定该"+b+"房产";
-    	    		return  super.message;
+    	    		return  "该手机号码已经绑定该"+b+"房产";
     	    	}
     	    }
     		
 				dwellerBiz.saveOrUpdate(dweller,loginUser);
 			} catch (BizException e) {
 				if(RegexpUtils.checkChinese(e.getMessage())){
-					super.message = e.getMessage();
+					return  e.getMessage();
+
 				}else{
-					super.message = "操作失败";
+					return  "操作失败";
 				}
-	    		return  super.message;
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -177,7 +168,7 @@ public class DwellerCtrl extends BaseCtrl {
 				e.printStackTrace();
 			}
 		
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -192,11 +183,11 @@ public class DwellerCtrl extends BaseCtrl {
 			try {
 				dwellerBiz.delete(ids,getLoginUser());
 			} catch (Exception e) {
-				super.message =  "删除出错";
 				e.printStackTrace();
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	/**
 	 * 关联房间

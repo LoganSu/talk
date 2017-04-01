@@ -112,16 +112,15 @@ public class RoleCtrl extends BaseCtrl{
     		if(role.getDomainIds()==null&&role.getTreecheckbox()==null){
     			boolean b = roleBiz.checkEmptyRole(role,loginUser);
     			if(b){
-    				super.message = "一个运营商有且只能创建一个空角色";
-    				return  super.message;
+    				return "一个运营商有且只能创建一个空角色";
     			}
     		}
     		roleBiz.saveOrUpdate(role,loginUser);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 获取树状结构权限列表
@@ -176,10 +175,10 @@ public class RoleCtrl extends BaseCtrl{
 			try {
 				roleBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	/**

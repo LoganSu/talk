@@ -131,54 +131,46 @@ public class SMSManageCtrl extends BaseCtrl {
     @RequestMapping("/saveOrUpdate.do")
     public String save(HttpServletRequest request,SMSManage SMSManage,Model model){
     	if(StringUtils.isBlank(SMSManage.getIp())||!RegexpUtils.checkIpAddress(SMSManage.getIp())){
-    		super.message = "请填写正确的ip地址！";
-    		model.addAttribute("message", super.message);
+    		model.addAttribute("message","请填写正确的ip地址！");
 			return INPUT;
     	}
     	if(SMSManage.getPort()!=null){
     		if(SMSManage.getPort()>10000||!RegexpUtils.checkNumber(SMSManage.getPort()+"")){
-    			super.message = "请填写正确的端口！";
-    			model.addAttribute("message", super.message);
+    			model.addAttribute("message", "请填写正确的端口！");
     			return INPUT;
     		}
     	}else{
-    		super.message = "端口不能为空！";
-			model.addAttribute("message", super.message);
+			model.addAttribute("message", "端口不能为空！");
 			return INPUT;
     	}
     	
     	if(StringUtils.isBlank(SMSManage.getUsername())){
-    		super.message = "用户名不能为空！";
-    		model.addAttribute("message", super.message);
+    		model.addAttribute("message", "用户名不能为空！");
 			return INPUT;
 
     	}else{
     		//过滤特殊字符
     		for(String s:SysStatic.SPECIALSTRING){
     			if(SMSManage.getUsername().contains(s)){
-    				super.message="您提交的相关表单数据字符含有非法字符!";
-    				model.addAttribute("message", super.message);
+    				model.addAttribute("message", "您提交的相关表单数据字符含有非法字符!");
     				return INPUT;
     			}
     		}
     	}
         if(StringUtils.isBlank(SMSManage.getPwd())){
-        	super.message = "密码不能为空！";
-        	model.addAttribute("message", super.message);
+        	model.addAttribute("message", "密码不能为空！");
 			return INPUT;
 
     	}
         if(StringUtils.isBlank(SMSManage.getSign())){
-        	super.message = "公司签名不能为空！";
-        	model.addAttribute("message", super.message);
+        	model.addAttribute("message", "公司签名不能为空！");
 			return INPUT;
 
     	}else{
     		//过滤特殊字符
     		for(String s:SysStatic.SPECIALSTRING){
     			if(SMSManage.getSign().contains(s)){
-    				super.message="您提交的相关表单数据字符含有非法字符!";
-    				model.addAttribute("message", super.message);
+    				model.addAttribute("message", "您提交的相关表单数据字符含有非法字符!");
     				return INPUT;
     			}
     		}
@@ -192,8 +184,7 @@ public class SMSManageCtrl extends BaseCtrl {
 			String realName = multipartFile.getOriginalFilename();
 			String suffix = realName.substring(realName.lastIndexOf("."));
 			if(!".xls".equalsIgnoreCase(suffix)){
-				super.message = "请选择正确的文件类型！";
-    			model.addAttribute("message", super.message);
+    			model.addAttribute("message", "请选择正确的文件类型！");
     			return INPUT;
 			}
 			try {
@@ -203,8 +194,7 @@ public class SMSManageCtrl extends BaseCtrl {
 					| NoSuchMethodException | SecurityException
 					| ParseException | IOException e) {
 				e.printStackTrace();
-				super.message = "解析excel文件出错！";
-				model.addAttribute("message", super.message);
+				model.addAttribute("message", "解析excel文件出错！");
 				return INPUT;
 			}
 			
@@ -212,9 +202,8 @@ public class SMSManageCtrl extends BaseCtrl {
 		try {
 		     SMSManageBiz.saveOrUpdate(SMSManage,getLoginUser(),readExcelContent);
 		} catch (BizException e) {
-			super.message =  e.getMessage();
-			if(RegexpUtils.checkChinese(super.message)){
-				model.addAttribute("message", super.message);
+			if(RegexpUtils.checkChinese(e.getMessage())){
+				model.addAttribute("message", e.getMessage());
 			}else{
 				model.addAttribute("message", "操作失败");
 			}
@@ -236,10 +225,10 @@ public class SMSManageCtrl extends BaseCtrl {
 			try {
 				SMSManageBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	 /**
      * 下载模板
@@ -313,8 +302,7 @@ public class SMSManageCtrl extends BaseCtrl {
 	    	BufferedOutputStream out = null;
 	    	try {
 		        if(!file.exists()){
-		        	super.message = "该文件不存在！";
-					model.addAttribute("message", super.message);
+					model.addAttribute("message", "该文件不存在！");
 		        	return new ModelAndView("/common/input");
 		        }
 		        long fileLength = file.length();  

@@ -11,6 +11,7 @@ import org.apache.http.client.ClientProtocolException;
 import com.youlb.biz.common.IBaseBiz;
 import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.access.CardRecord;
+import com.youlb.entity.checking.Checking;
 import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
@@ -129,5 +130,14 @@ public interface IPermissionBiz extends IBaseBiz<CardInfo> {
 	 * @param cardInfo
 	 */
 	void workerUpdateCardInfo(CardInfo cardInfo)throws BizException,UnsupportedEncodingException,IOException, ParseException, JsonException;
+
+
+	/**
+	 * 考勤管理列表显示
+	 * @param checking
+	 * @param loginUser
+	 * @return
+	 */
+	List<CardRecord> checkingshowList(CardRecord cardRecord, Operator loginUser)throws BizException ;
    
 }

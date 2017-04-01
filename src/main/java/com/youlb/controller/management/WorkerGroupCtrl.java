@@ -82,20 +82,18 @@ public class WorkerGroupCtrl extends BaseCtrl {
     public String save(WorkerGroup workerGroup,Model model){
     	try {
     		if(StringUtils.isBlank(workerGroup.getDepartmentId())){
-    			super.message = "请选择所属公司！";
-    			return  super.message;
+    			return "请选择所属公司！";
     		}
     		if(StringUtils.isBlank(workerGroup.getGroupName())){
-    			super.message = "组名称不能为空！";
-    			return  super.message;
+    			return "组名称不能为空！";
     		}
     		workerGroupBiz.saveOrUpdate(workerGroup,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return null;
     }
  
     /**
@@ -111,10 +109,10 @@ public class WorkerGroupCtrl extends BaseCtrl {
 			try {
 				workerGroupBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	 /**
@@ -167,15 +165,14 @@ public class WorkerGroupCtrl extends BaseCtrl {
     public String addWorker(WorkerGroup workerGroup,Model model){
     	try {
     		if(StringUtils.isBlank(workerGroup.getId())){
-    			super.message = "请选择组！";
-    			return  super.message;
+    			return "请选择组！";
     		}
     		workerGroupBiz.addWorker(workerGroup,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
 }

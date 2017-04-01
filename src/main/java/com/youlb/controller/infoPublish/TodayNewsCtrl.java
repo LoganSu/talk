@@ -139,20 +139,16 @@ public class TodayNewsCtrl extends BaseCtrl {
     public String save(HttpServletRequest request,TodayNews todayNews,Model model){
     	//标题不能为空
     	if(StringUtils.isBlank(todayNews.getTitle())){
-    		super.message="标题不能为空";
-//    		model.addAttribute("message", super.message);
-        	return super.message;
+    		return "标题不能为空";
     	}
     	//内容不能为空
     	if(StringUtils.isBlank(todayNews.getTodayNewsDetailEditor())){
-    		super.message="内容不能为空";
-    		return super.message;
+    		return "内容不能为空";
     	}
     	if("2".equals(todayNews.getSendType())){
     		List<String> treecheckbox = todayNews.getTreecheckbox();
     		if(treecheckbox==null||treecheckbox.size()!=1){
-    			super.message = "请选择一个域发布信息！";
-    			return  super.message;
+    			return "请选择一个域发布信息！";
     		}
     	}
     	FileReader in = null;
@@ -196,29 +192,29 @@ public class TodayNewsCtrl extends BaseCtrl {
 	    		   todayNews.setNewsUrl(QiniuUtils.URL+"web/todayNews/html/"+htmlFileName);
 	    		   todayNewsBiz.saveOrUpdate(todayNews,getLoginUser());
 	            }else{
-	            	super.message="上传文件到七牛失败";
+	            	return "上传文件到七牛失败";
 	            }
 			} catch (ParseException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (FileNotFoundException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (IOException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (IllegalAccessException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (InvocationTargetException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (JsonException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			} catch (BizException e) {
-				super.message="发布头条出错";
 				e.printStackTrace();
+				return "发布头条出错";
 			}finally{
 				if(in!=null){
 					try {
@@ -256,7 +252,7 @@ public class TodayNewsCtrl extends BaseCtrl {
 				log.info("删除临时文件：："+file.delete());
 
 			}	 
-			return super.message;
+			return null;
     }
     
     /**
@@ -272,10 +268,10 @@ public class TodayNewsCtrl extends BaseCtrl {
 			try {
 				todayNewsBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	 /**
@@ -291,9 +287,9 @@ public class TodayNewsCtrl extends BaseCtrl {
 			try {
 				todayNewsBiz.publish(ids,getLoginUser());
 			} catch (Exception e) {
-				super.message =  "发布出错";
+				return "发布出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 }

@@ -106,27 +106,22 @@ public class WorkerCtrl extends BaseCtrl{
     public String save(Worker worker,Model model){
     	try {
 	    		if(StringUtils.isBlank(worker.getDepartmentId())||worker.getDepartmentId().contains(",")){
-	    			super.message = "请选择一个部门！";
-	    			return  super.message;
+	    			return "请选择一个部门！";
 	    		}
 	    		if(StringUtils.isBlank(worker.getWorkerName())){
-	    			super.message = "姓名不能为空！";
-	    			return  super.message;
+	    			return "姓名不能为空！";
 	    		}
 	    		if(StringUtils.isBlank(worker.getPhone())){
-	    			super.message = "手机号码不能为空！";
-	    			return  super.message;
+	    			return "手机号码不能为空！";
 	    		}else{
 	    			if(!RegexpUtils.checkMobile(worker.getPhone())){
-	    				super.message = "请填写正确的手机号码！";
-	    				return  super.message;
+	    				return "请填写正确的手机号码！";
 	    			}
 	    		}
 	    		//判断手机号是否已经注册
 	    		boolean b = workerBiz.checkPhoneExist(worker.getPhone(),worker.getId());
 	    		if(b){
-	    			super.message = "该手机号码已经被注册！";
-	    			return  super.message;
+	    			return "该手机号码已经被注册！";
 	    		}
 	    		worker.setUsername(worker.getPhone());
 	    		worker.setPassword(SHAEncrypt.digestPassword(worker.getPhone()));
@@ -138,8 +133,7 @@ public class WorkerCtrl extends BaseCtrl{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (BizException e) {
-				super.message=e.getMessage();
-				log.error(super.message);
+				log.error(e.getMessage());
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -149,7 +143,7 @@ public class WorkerCtrl extends BaseCtrl{
 				e.printStackTrace();
 			}
 		 
-    	 return  super.message;
+    	 return  null;
     }
  
     /**
@@ -165,10 +159,10 @@ public class WorkerCtrl extends BaseCtrl{
 			try {
 				workerBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	
@@ -254,20 +248,17 @@ public class WorkerCtrl extends BaseCtrl{
         		    		//注销的卡可以重新发卡
         		    		if(SysStatic.CANCEL.equals(c.getCardStatus())){
         		    			permissionBiz.workerUpdateCardInfo(cardInfo);
-        		    			super.message="0";
-        		    			return super.message;
+        		    			return "0";
         		    		}else{
-        		    			super.message="1";
-        		    			return super.message;
+        		    			return "1";
         		    		}
         		    	}else{
         		    		cardInfo.setCardBelongs("2");//所属物业员工
         		    		int i = permissionBiz.writeCard(cardInfo);
-        		    		super.message=i+"";
+        		    		return i+"";
         		    	}
         		    }else{
-        		    	super.message="3";
-		    			return super.message;
+        		    	return "3";
         		    }
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
@@ -282,10 +273,9 @@ public class WorkerCtrl extends BaseCtrl{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (BizException e) {
-					super.message="2";
-					return super.message;
+					return "2";
 				}
-        		return super.message;
+        		return null;
         }
         
         /**

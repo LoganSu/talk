@@ -114,58 +114,47 @@ public class CarrierCtrl extends BaseCtrl {
     	try {
 	    		
     		if(StringUtils.isBlank(carrier.getCarrierName())){
-    			super.message = "名称不能为空！";
-   			      return  super.message;
+    			return "名称不能为空！";
     		}
     		if(StringUtils.isBlank(carrier.getDomainNameParentId())){
-    			super.message = "二级域名不能为空，请先添加二级域名";
-   			      return  super.message;
+    			return "二级域名不能为空，请先添加二级域名";
     		}
     		
     		 if(StringUtils.isBlank(carrier.getCarrierNum())||!RegexpUtils.checkLetter(carrier.getCarrierNum(), 1, 10)){
-    			 super.message = "运营商简称不能为空且最多为10个字母！";
-    			 return  super.message;
+    			 return "运营商简称不能为空且最多为10个字母！";
     		 }
     		 //检查简称是否已经存在
     		 boolean  b = carrierBiz.checkCarrierNumExist(carrier);
     		 if(b){
-    			 super.message = "该运营商简称已经存在！";
-    			 return  super.message;
+    			 return "该运营商简称已经存在！";
     		 }
     		 if(StringUtils.isBlank(carrier.getTel())){
-	    			super.message = "手机号码不能为空";
-	    			return  super.message;
+    			 return "手机号码不能为空";
 	    		}else{
 	    			if(!RegexpUtils.checkMobile(carrier.getTel())){
-	    				super.message = "请填写正确的手机号码";
-	    				return  super.message;
+	    				return "请填写正确的手机号码";
 	    			}
 	    		}
     		 
     		   if(StringUtils.isNotBlank(carrier.getFax())&&!RegexpUtils.checkPhone(carrier.getFax())){
-	    			super.message = "请填写正确的电话号码！";
-	   			      return  super.message;
+    			   return "请填写正确的电话号码！";
 	    		}
     		   if(StringUtils.isBlank(carrier.getAddress())){
-    			   super.message = "地址不能为空！";
-    			   return  super.message;
+    			   return "地址不能为空！";
     		   }
 //	    		if(StringUtils.isNotBlank(carrier.getPostcode())&&!RegexpUtils.checkNumber(carrier.getPostcode())||carrier.getPostcode().length()>10){
-//	    			super.message = "请填写正确的邮编！";
-//	   			      return  super.message;
+//	    			return "请填写正确的邮编！";
 //	    		}
 	    		//创建运营商时必须绑定域对象 也是就是绑定所属的社区信息
 	    		if(carrier.getTreecheckbox()==null||carrier.getTreecheckbox().isEmpty()){
-	    			super.message = "请选择运营商管辖的区域，如果没有区域信息请先创建！";
-	    			 return  super.message;
+	    			return "请选择运营商管辖的区域，如果没有区域信息请先创建！";
 	    		}
     		 
 	    		if(StringUtils.isBlank(carrier.getId())){
 	    			//判断社区是否已经有绑定运营商
 	    			String neiborName = carrierBiz.checkHasChecked(carrier.getTreecheckbox());
 	    			if(StringUtils.isNotBlank(neiborName)){
-	    				super.message = neiborName+"已经绑定运营商";
-	    				return  super.message;
+	    				return neiborName+"已经绑定运营商";
 	    			}
 	    		}else{
 	    			//更新时查看选择的区域是否已经被别的运营商绑定
@@ -182,8 +171,7 @@ public class CarrierCtrl extends BaseCtrl {
 	    				//判断社区是否已经有绑定运营商
 	    				String neiborName1 = carrierBiz.checkHasChecked(newDomain);
 	    				if(StringUtils.isNotBlank(neiborName1)){
-	    					super.message = neiborName1+"已经绑定运营商";
-	    					return  super.message;
+	    					return neiborName1+"已经绑定运营商";
 	    				}
 	    			}
 	    		}
@@ -191,10 +179,10 @@ public class CarrierCtrl extends BaseCtrl {
     		
     		carrierBiz.saveOrUpdate(carrier);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return  "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     
@@ -211,10 +199,10 @@ public class CarrierCtrl extends BaseCtrl {
 			try {
 				carrierBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	/**
      * 显示域对象

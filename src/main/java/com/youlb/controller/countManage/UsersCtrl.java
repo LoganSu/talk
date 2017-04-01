@@ -88,10 +88,10 @@ public class UsersCtrl extends BaseCtrl {
     	try {
     		usersBiz.saveOrUpdate(users);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     /**
@@ -108,10 +108,10 @@ public class UsersCtrl extends BaseCtrl {
 				usersBiz.delete(ids);
 			} catch (Exception e) {
 				e.printStackTrace();
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	/**
@@ -128,11 +128,11 @@ public class UsersCtrl extends BaseCtrl {
 				usersBiz.update(id,status);
 			} catch (Exception e) {
 				e.printStackTrace();
-				super.message =  "操作失败";
+				return  "操作失败";
 			}
 		}else{
-			super.message =  "参数为空";
+			return  "参数为空";
 		}
-		return super.message;
+		return null;
 	}
 }

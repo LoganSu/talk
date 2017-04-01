@@ -111,11 +111,11 @@ public class DeviceCtrl extends BaseCtrl{
     	try {
     		deviceBiz.saveOrUpdate(device,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -130,10 +130,10 @@ public class DeviceCtrl extends BaseCtrl{
 			try {
 				deviceBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	/**
      * 设置密码
@@ -159,9 +159,9 @@ public class DeviceCtrl extends BaseCtrl{
 			try {
 				deviceBiz.update(device);
 			} catch (Exception e) {
-				super.message =  "设置密码出错";
+				return  "设置密码出错";
 			}
-		return super.message;
+		return null;
 	}
 	
 		/**
@@ -225,8 +225,7 @@ public class DeviceCtrl extends BaseCtrl{
 				String realName = multipartFile.getOriginalFilename();
 				String suffix = realName.substring(realName.lastIndexOf("."));
 				if(!".xlsx".equalsIgnoreCase(suffix)&&!".xls".equalsIgnoreCase(suffix)){
-					super.message = "请选择正确的文件类型！";
-	    			model.addAttribute("message", super.message);
+	    			model.addAttribute("message", "请选择正确的文件类型！");
 	    			return INPUT;
 				}
 				try {
@@ -236,8 +235,7 @@ public class DeviceCtrl extends BaseCtrl{
 						| NoSuchMethodException | SecurityException
 						| ParseException | IOException e) {
 					e.printStackTrace();
-					super.message = "解析excel文件出错！";
-					model.addAttribute("message", super.message);
+					model.addAttribute("message", "解析excel文件出错！");
 					return INPUT;
 				}
 				if(readExcelContent!=null){
@@ -246,8 +244,7 @@ public class DeviceCtrl extends BaseCtrl{
 					} catch (BizException e) {
 						log.error(e.getMessage());
 						e.printStackTrace();
-						super.message = e.getMessage();
-						model.addAttribute("message", super.message);
+						model.addAttribute("message", e.getMessage());
 				    	return INPUT;
 
 					}
@@ -291,8 +288,7 @@ public class DeviceCtrl extends BaseCtrl{
 		    	BufferedOutputStream out = null;
 		    	try {
 			        if(!file.exists()){
-			        	super.message = "该文件不存在！";
-						model.addAttribute("message", super.message);
+						model.addAttribute("message", "该文件不存在！");
 			        	return new ModelAndView("/common/input");
 			        }
 			        long fileLength = file.length();  
@@ -349,9 +345,9 @@ public class DeviceCtrl extends BaseCtrl{
 				try {
 					deviceBiz.setLive(ids);
 				} catch (Exception e) {
-					super.message =  "激活设备出错";
+					return "激活设备出错";
 				}
 			}
-			return super.message;
+			return null;
 		}
 }

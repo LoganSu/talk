@@ -108,24 +108,20 @@ public class UnitCtrl extends BaseCtrl {
     public String save(Unit unit,Model model){
     try {
 	    	if(StringUtils.isBlank(unit.getUnitName())){
-	    		super.message = "单元名称不能为空!";
-	    		 return  super.message;
+	    		return "单元名称不能为空!";
 	    	}else{
 				boolean b = unitBiz.checkUnitName(unit);
 	    		if(b){
-	    			super.message = "单元名称已经存在！";
-	    			return  super.message;
+	    			return "单元名称已经存在！";
 	    		}
 			}
 	    	if(StringUtils.isBlank(unit.getUnitNum())||!RegexpUtils.checkNumber(unit.getUnitNum())||unit.getUnitNum().length()>5){
-	    		super.message = "呼叫号码不能为空且小于5位数字!";
-	    		 return  super.message;
+	    		return "呼叫号码不能为空且小于5位数字!";
 	    	}
 	    	//同一个楼栋 单元编号不能相同
 			boolean b = unitBiz.checkUnitNum(unit);
 			if(b){
-				super.message = "呼叫号码已经存在！";
-				return  super.message;
+				return "呼叫号码已经存在！";
 			}
 			 //更新操作
 			if(StringUtils.isNotBlank(unit.getId())){
@@ -139,11 +135,11 @@ public class UnitCtrl extends BaseCtrl {
 			}
 	    		unitBiz.saveOrUpdate(unit,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -159,15 +155,14 @@ public class UnitCtrl extends BaseCtrl {
 				//检查是否有子节点
 				String remark= domainBiz.hasChild(ids);
 				if(StringUtils.isNotBlank(remark)){
-					super.message = "请先删除"+remark+"的子域";
-					return super.message;
+					return "请先删除"+remark+"的子域";
 				}
 				unitBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 }

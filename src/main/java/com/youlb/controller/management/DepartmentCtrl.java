@@ -118,34 +118,28 @@ public class DepartmentCtrl extends BaseCtrl {
     	try {
     		
     		if(StringUtils.isBlank(department.getDepartmentName())){
-    			super.message = "公司名称不能为空！";
-				 return  super.message;
+    			return "公司名称不能为空！";
     		}
     		if(StringUtils.isBlank(department.getTel())){
-    			super.message = "公司电话不能为空！";
-				 return  super.message;
+    			return "公司电话不能为空！";
     		}else {
 				if(!RegexpUtils.checkPhone(department.getTel())&&!RegexpUtils.checkMobile(department.getTel())){
-					super.message = "请填写正确的电话！";
-					 return  super.message;
+					return "请填写正确的电话！";
 				}
 			}
     		if(StringUtils.isBlank(department.getAddress())){
-    			super.message = "公司地址不能为空！";
-				 return  super.message;
+    			return "公司地址不能为空！";
     		}
     		//范围必须选择
     		if(department.getDomainIds()==null||department.getDomainIds().isEmpty()){
-    			super.message = "请选择区域！";
-				 return  super.message;
+    			return "请选择区域！";
     		}
     		if(StringUtils.isBlank(department.getId())){
     			for(String domainId:department.getDomainIds()){
     				//检查社区是否已经绑定物业公司
     				String neiborName = departmentBiz.checkDomain(domainId);
     				if(StringUtils.isNotBlank(neiborName)){
-    					super.message = neiborName+"已经绑定物业公司！";
-    					return  super.message;
+    					return neiborName+"已经绑定物业公司！";
     				}
     			}
     		}else{
@@ -163,20 +157,18 @@ public class DepartmentCtrl extends BaseCtrl {
         				//检查社区是否已经绑定物业公司
         				String neiborName = departmentBiz.checkDomain(domainId);
         				if(StringUtils.isNotBlank(neiborName)){
-        					super.message = neiborName+"已经绑定物业公司！";
-        					return  super.message;
+        					return neiborName+"已经绑定物业公司！";
         				}
         			}
     			}
     		}
     		
     		departmentBiz.saveOrUpdate(department,getLoginUser());
-//    		super.message = "保存成功！";
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 部门保存或修改
@@ -192,28 +184,23 @@ public class DepartmentCtrl extends BaseCtrl {
     		if(StringUtils.isNotBlank(department.getParentId())){
     			Department parent = departmentBiz.get(department.getParentId());
     			if(parent==null){
-    				super.message = "上级部门不存在！";
-    				 return  super.message;
+    				return "上级部门不存在！";
     			}
     		}else{
-    			super.message = "上级部门不能为空！";
-				 return  super.message;
+    			return "上级部门不能为空！";
     		}
     		if(StringUtils.isBlank(department.getDepartmentName())){
-    			super.message = "部门名称不能为空！";
-				 return  super.message;
+    			return"部门名称不能为空！";
     		}
     		if(StringUtils.isBlank(department.getDescription())){
-    			super.message = "部门描述不能为空！";
-				 return  super.message;
+    			return "部门描述不能为空！";
     		}
     		departmentBiz.saveOrUpdate(department,getLoginUser());
-//    		super.message = "保存成功！";
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
  
     /**
@@ -236,10 +223,10 @@ public class DepartmentCtrl extends BaseCtrl {
 					departmentBiz.delete(ids);
 //				}
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	@RequestMapping("/getNodes.do")
 	@ResponseBody

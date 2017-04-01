@@ -199,30 +199,26 @@ public class RoomCtrl extends BaseCtrl {
     	
     	try {
     		if(!RegexpUtils.checkNumber(room.getRoomNum())){
-    			super.message = "房号不能为空且不大于5个数字";
-    			return  super.message;
+    			return "房号不能为空且不大于5个数字";
     		}
     		if(room.getRoomNum().length()>5){
-    			super.message = "房号不能超过5个数字";
-    			return  super.message;
+    			return "房号不能超过5个数字";
     		}
     		if(!RegexpUtils.checkNumber(room.getRoomFloor()+"")||room.getRoomFloor()<0){
-    			super.message = "楼层不能为空且为正整数";
-    			return  super.message;
+    			return "楼层不能为空且为正整数";
     		}
     		//判断单元下面房间号是否已经存在
     		String roomNum = domainBiz.getDomainByParentId(room);
     		if(StringUtils.isNotBlank(roomNum)){
-    			super.message = "房号"+roomNum+"已经存在";
-    			return  super.message;
+    			return "房号"+roomNum+"已经存在";
     		}
     		roomBiz.saveOrUpdate(room,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     /**
@@ -239,10 +235,10 @@ public class RoomCtrl extends BaseCtrl {
 				roomBiz.delete(ids);
 			} catch (Exception e) {
 				e.printStackTrace();
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
  
@@ -258,12 +254,11 @@ public class RoomCtrl extends BaseCtrl {
 	public String bindingRoom(Room room,Model model){
 		try {
 			roomBiz.bindingRoom(room);
-			super.message =  "绑定成功！";
+			return  "绑定成功！";
 		} catch (Exception e) {
 			e.printStackTrace();
-			super.message =  "绑定出错！";
+			return  "绑定出错！";
 		}
-		return super.message;
 	}
 	
 	
@@ -278,12 +273,11 @@ public class RoomCtrl extends BaseCtrl {
 	public String unbindingHomeHost(Room room,Model model){
 		try {
 			roomBiz.unbindingRoom(room);
-			super.message =  "解除绑定成功！";
+			return  "解除绑定成功！";
 		} catch (Exception e) {
 			e.printStackTrace();
-			super.message =  "接触绑定出错！";
+			return  "接触绑定出错！";
 		}
-		return super.message;
 	}
 	
 	@RequestMapping("/getAddressByDomainId.do")
@@ -360,8 +354,7 @@ public class RoomCtrl extends BaseCtrl {
 			String realName = multipartFile.getOriginalFilename();
 			String suffix = realName.substring(realName.lastIndexOf("."));
 			if(!".xlsx".equalsIgnoreCase(suffix)&&!".xls".equalsIgnoreCase(suffix)){
-				super.message = "请选择正确的文件类型！";
-    			model.addAttribute("message", super.message);
+    			model.addAttribute("message", "请选择正确的文件类型！");
     			return INPUT;
 			}
 			try {
@@ -371,8 +364,7 @@ public class RoomCtrl extends BaseCtrl {
 					| NoSuchMethodException | SecurityException
 					| ParseException | IOException e) {
 				e.printStackTrace();
-				super.message = "解析excel文件出错！";
-				model.addAttribute("message", super.message);
+				model.addAttribute("message", "解析excel文件出错！");
 				return INPUT;
 			}
 			if(readExcelContent!=null){
@@ -381,8 +373,7 @@ public class RoomCtrl extends BaseCtrl {
 				} catch (BizException e) {
 					log.error(e.getMessage());
 					e.printStackTrace();
-					super.message = e.getMessage();
-					model.addAttribute("message", super.message);
+					model.addAttribute("message",e.getMessage());
 			    	return INPUT;
 
 				} catch (IllegalAccessException e) {
@@ -434,8 +425,7 @@ public class RoomCtrl extends BaseCtrl {
     		//查询所有的设备数据
 			List<RoomInfoDto> list = roomBiz.getRoomInfoDto(parentId);
 			if(list==null){
-				super.message = "获取数据失败！";
-				model.addAttribute("message", super.message);
+				model.addAttribute("message", "获取数据失败！");
 	        	return new ModelAndView("/common/input");
 			}
 			String randomUUID = UUID.randomUUID().toString();
@@ -452,8 +442,7 @@ public class RoomCtrl extends BaseCtrl {
 	    	BufferedOutputStream out = null;
 	    	try {
 		        if(!file.exists()){
-		        	super.message = "该文件不存在！";
-					model.addAttribute("message", super.message);
+					model.addAttribute("message", "该文件不存在！");
 		        	return new ModelAndView("/common/input");
 		        }
 		        long fileLength = file.length();  

@@ -99,32 +99,26 @@ public class BuildingCtrl extends BaseCtrl {
     public String save(Building building,Model model){
     	try {
     		if(StringUtils.isBlank(building.getBuildingName())){
-    			super.message = "楼栋名称不能为空！";
-    			return  super.message;
+    			return "楼栋名称不能为空！";
     		}else{
     			boolean b = buildingBiz.checkBuildingName(building);
 	    		if(b){
-	    			super.message = "楼栋名已经存在！";
-	    			return  super.message;
+	    			return "楼栋名已经存在！";
 	    		}
     		}
     		if(!RegexpUtils.checkNumAndLetter(building.getBuildingNum(), 3, 3)){
-    			super.message = "呼叫号码不能为空且为3个字符！";
-    			return  super.message;
+    			return "呼叫号码不能为空且为3个字符！";
     		}
     		//同一个社区 楼栋编号不能相同
     		boolean b = buildingBiz.checkBuildingNum(building);
     		if(b){
-    			super.message = "呼叫号码已经存在！";
-    			return  super.message;
+    			return "呼叫号码已经存在！";
     		}
     		if(!RegexpUtils.checkNumber(building.getTotalFloor()+"")||Integer.parseInt(building.getTotalFloor())<0){
-    			super.message = "层数不能为空且为正整数！";
-    			return  super.message;
+    			return "层数不能为空且为正整数！";
     		}
     		if(StringUtils.isNotBlank(building.getBuildHeight())&&!RegexpUtils.checkDecimals(building.getBuildHeight())){
-    			super.message = "楼高为数字类型！";
-    			return  super.message;
+    			return "楼高为数字类型！";
     		}
     		
     		 //更新操作
@@ -139,11 +133,11 @@ public class BuildingCtrl extends BaseCtrl {
 			}
     		buildingBiz.saveOrUpdate(building,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			//TODO log
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 修改
@@ -157,11 +151,11 @@ public class BuildingCtrl extends BaseCtrl {
     	try {
     		areaBiz.upate(area);
 		} catch (Exception e) {
-			super.message = "修改失败！";
+			return "修改失败！";
 			e.printStackTrace();
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }*/
     /**
      * 删除
@@ -177,15 +171,14 @@ public class BuildingCtrl extends BaseCtrl {
 				//检查是否有子节点
 				String remark= domainBiz.hasChild(ids);
 				if(StringUtils.isNotBlank(remark)){
-					super.message = "请先删除"+remark+"的子域";
-					return super.message;
+					return "请先删除"+remark+"的子域";
 				}
 				buildingBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	 /**
      * 通过neibId获取楼栋列表

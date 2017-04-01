@@ -76,11 +76,11 @@ public class BillManageCtrl extends BaseCtrl {
     	try {
 			billManageBiz.saveOrUpdate(billManage,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -95,9 +95,9 @@ public class BillManageCtrl extends BaseCtrl {
 			try {
 				billManageBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 }

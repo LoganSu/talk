@@ -119,61 +119,53 @@ public class AppManageCtrl extends BaseCtrl {
     	try {
     		if(!"IOS".equals(appManage.getThreeAppType())){
 	    		if(StringUtils.isBlank(appManage.getAppName())){
-	    			super.message = "APP名称不能为空！";
-	    			return super.message;
+	    			return "APP名称不能为空！";
 	    		}
 	    		if(StringUtils.isBlank(appManage.getVersionName())){
-	    			super.message = "版本名称不能为空！";
-	    			return super.message;
+	    			return "版本名称不能为空！";
 	    		}
 	    		if(StringUtils.isBlank(appManage.getVersionCode())){
-	    			super.message = "版本号不能为空！";
-	    			return super.message;
+	    			return "版本号不能为空！";
 	    		}
 	    		if(StringUtils.isBlank(appManage.getAppName())){
-	    			super.message = "APP名称不能为空！";
-	    			return super.message;
+	    			return "APP名称不能为空！";
 	    		}
     		}else{
     			if(StringUtils.isBlank(appManage.getAppName())){
-	    			super.message = "APP名称不能为空！";
-	    			return super.message;
+    				return "APP名称不能为空！";
 	    		}
     		}
     		if(StringUtils.isBlank(appManage.getVersionDes())){
-    			super.message = "版本说明不能为空！";
-    			return super.message;
+    			return "版本说明不能为空！";
     		}else{
     			//过滤特殊字符
         		for(String s:SysStatic.SPECIALSTRING){
         			if(appManage.getVersionDes().contains(s)){
-        				super.message="您提交的相关表单数据字符含有非法字符!";
-        				return super.message;
+        				return "您提交的相关表单数据字符含有非法字符!";
         			}
         		}
     		}
     		if(StringUtils.isBlank(appManage.getId())&&StringUtils.isNotBlank(appManage.getMd5Value())){
     			boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
     			if(b){
-    				super.message = "软件版本已经存在！";
-    				return super.message;
+    				return "软件版本已经存在！";
     			}
     		}
 				appManageBiz.saveOrUpdate(appManage,getLoginUser());
 		} catch (BizException e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		} catch (IllegalStateException e) {
-			super.message = "app上传失败！";
 			e.printStackTrace();
+			return "app上传失败！";
 		} catch (IOException e) {
-			super.message = "app上传失败！";
 			e.printStackTrace();
+			return "app上传失败！";
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	 return super.message;
+    	 return null;
     }
     
     @RequestMapping("/progress.do")
@@ -196,11 +188,11 @@ public class AppManageCtrl extends BaseCtrl {
 			try {
 				appManageBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
 				e.printStackTrace();
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	/**
@@ -214,13 +206,12 @@ public class AppManageCtrl extends BaseCtrl {
 		try {
 			boolean b = appManageBiz.checkVersion(appManage.getMd5Value());
 			if(b){
-				super.message = "软件版本已经存在！";
-				return super.message;
+				return "软件版本已经存在！";
 			}
 		} catch (BizException e) {
 			e.printStackTrace();
 		}
-		return message;
+		return null;
 		
 	}
 	

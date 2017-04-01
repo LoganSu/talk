@@ -389,10 +389,11 @@ public class DwellerBizImpl implements IDwellerBiz {
 				String dwellerId="";
 				String checkPhone = "select id from t_dweller where fphone=? ";
 				List<String> ids= dwellerSqlDao.pageFindBySql(checkPhone, new Object[]{dweller.getPhone()});
-			    if(ids!=null&&!ids.isEmpty()){
+			    if(ids!=null&&!ids.isEmpty()&&StringUtils.isNotBlank(dweller.getPhone())){
 			    	dwellerId=ids.get(0);
 			    	dweller.setId(dwellerId);
 			    	dwellerSqlDao.update(dweller);
+			    	dwellerSqlDao.updateSQL("update t_dweller set fdeleteflag=1 where id=?", new Object[]{dwellerId});
 				}else{
 					 dwellerId = (String) dwellerSqlDao.add(dweller);
 				}

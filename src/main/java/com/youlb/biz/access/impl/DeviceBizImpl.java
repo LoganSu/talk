@@ -178,27 +178,63 @@ public class DeviceBizImpl implements IDeviceBiz {
 	public void saveBatch(List<DeviceInfoDto> readExcelContent) throws BizException {
 		 StringBuilder sb = new StringBuilder();
 		 sb.append("insert into t_deviceinfo(id,fdevicenum,fdevicemodel,fdevicefactory,fdevicestatus,fappversion,")
-		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn,flive_time,fcreatetime,fsoftware_type,fversion_num)")
-		 .append(" values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		 .append("fmemorysize,fstoragecapacity,fsystemversion,fprocessortype,ffirmwareversion,fkernalversion,fremark,fdeviceborn,fsoftware_type,fversion_num");
 		 if(readExcelContent!=null){
 			 for(DeviceInfoDto dto:readExcelContent){
-				 if(StringUtils.isBlank(dto.getId())){
-					 throw new BizException("设备SN码不能为空！");
-				 }
 				 String deviceStatu="";
 				 if("激活".equals(dto.getDeviceStatus())){
 					 deviceStatu="1";
 				 }else if("未激活".equals(dto.getDeviceStatus())){
 					 deviceStatu=null;
 				 }
+				 List<Object> list = new ArrayList<Object>();
+				 list.add(dto.getId());
+				 list.add(dto.getDeviceNum());
+				 list.add(dto.getDeviceModel());
+				 list.add(dto.getDeviceFactory());
+				 list.add(deviceStatu);
+				 list.add(dto.getApp_version());
+				 list.add(dto.getMemory_size());
+				 list.add(dto.getStorage_capacity());
+				 list.add(dto.getSystem_version());
+				 list.add(dto.getProcessor_type());
+				 list.add(dto.getFirmware_version());
+				 list.add(dto.getKernal_version());
+				 list.add(dto.getRemark());
+				 list.add(dto.getDeviceBorn());
+//				 list.add(DateHelper.strParseDate(dto.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+				 list.add(dto.getSoftwareType());
+				 list.add(dto.getVersionNum());
+				 
+				 
+				 if(StringUtils.isNotBlank(dto.getLiveTime())){
+					 sb.append(",flive_time");
+					 list.add(DateHelper.strParseDate(dto.getLiveTime(), "yyyy-MM-dd HH:mm:ss"));
+				 }
+				 if(StringUtils.isNotBlank(dto.getCreateTime())){
+					 sb.append(",fcreatetime");
+					 list.add(DateHelper.strParseDate(dto.getCreateTime(), "yyyy-MM-dd HH:mm:ss"));
+				 }
+				 sb.append(") values(");
+				 for(Object obj:list){
+					 sb.append("?,");
+				 }
+				 sb.deleteCharAt(sb.length()-1);
+				 sb.append(")");
+				 //主键为空跳过
+				 if(StringUtils.isBlank(dto.getId())){
+//					 throw new BizException("设备SN码不能为空！");
+					 continue;
+				 }
 				 try {
-					deviceSqlDao.executeSql(sb.toString(), new Object[]{dto.getId(),dto.getDeviceNum(),dto.getDeviceModel(),dto.getDeviceFactory(),deviceStatu,dto.getApp_version(),
-						                                                dto.getMemory_size(),dto.getStorage_capacity(),dto.getSystem_version(),dto.getProcessor_type(),dto.getFirmware_version(),
-						                                                dto.getKernal_version(),dto.getRemark(),dto.getDeviceBorn(),DateHelper.strParseDate(dto.getLiveTime(), "yyyy-MM-dd HH:mm:ss"),
-						                                                DateHelper.strParseDate(dto.getCreateTime(), "yyyy-MM-dd HH:mm:ss"),dto.getSoftwareType(),dto.getVersionNum()});
+					 deviceSqlDao.executeSql(sb.toString(), list.toArray());
+//					deviceSqlDao.executeSql(sb.toString(), new Object[]{dto.getId(),dto.getDeviceNum(),dto.getDeviceModel(),dto.getDeviceFactory(),deviceStatu,dto.getApp_version(),
+//						                                                dto.getMemory_size(),dto.getStorage_capacity(),dto.getSystem_version(),dto.getProcessor_type(),dto.getFirmware_version(),
+//						                                                dto.getKernal_version(),dto.getRemark(),dto.getDeviceBorn(),DateHelper.strParseDate(dto.getCreateTime(), "yyyy-MM-dd HH:mm:ss"),
+//						                                                dto.getSoftwareType(),dto.getVersionNum(),DateHelper.strParseDate(dto.getLiveTime(), "yyyy-MM-dd HH:mm:ss")});
 				} catch (BizException e) {
 					e.printStackTrace();
-					throw new BizException("设备SN码有重复！");
+					throw new BizException("导入数据出错！");
 //					//已经存在更数据
 //					 sb = new StringBuilder();
 //					 sb.append("update t_deviceinfo set fdevicenum=?,fdevicemodel=?,fdevicefactory=?,fdevicestatus=?,fappversion=?,")

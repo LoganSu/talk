@@ -14,6 +14,7 @@
 <script type="text/javascript">
    function a(b){
 	  var message= document.getElementById("message").innerHTML;
+	  //情空message内容
 // 	  var status= document.getElementById("status").innerHTML;
 	  if(message){
         window.parent.window.hiAlert("提示",message);

@@ -136,16 +136,15 @@ public class RealTimeMonitorCtrl extends BaseCtrl {
     public String save(RealTimeMonitor realTimeMonitor,Model model){
     	try {
     		if(StringUtils.isBlank(realTimeMonitor.getId())||StringUtils.isBlank(realTimeMonitor.getRemark())){
-    			super.message = "内容不能为空！";
-    			return  super.message;
+    			return "内容不能为空！";
     		}
     		realTimeMonitorBiz.update(realTimeMonitor);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
 			logger.error("提交告警备注失败");
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     	/**

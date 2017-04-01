@@ -108,46 +108,37 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     public String save(Neighborhoods neighborhoods,Model model){
     	try {       
 		    		if(StringUtils.isBlank(neighborhoods.getNeibName())){
-		    			super.message = "社区名称不能为空！";
-		    			return  super.message;
+		    			return "社区名称不能为空！";
 		    		}else{
 		    			boolean b = neighborBiz.checkNeighborName(neighborhoods);
 			    		if(b){
-			    			super.message = "社区名称已经存在！";
-			    			return  super.message;
+			    			return "社区名称已经存在！";
 			    		}
 		    		}
 		    		if(!RegexpUtils.checkNumAndLetter(neighborhoods.getNeibNum(), 5, 5)){
-		    			super.message = "呼叫号码不能为空且为5位整数！";
-		    			return  super.message;
+		    			return "呼叫号码不能为空且为5位整数！";
 		    		}
 		    		//同一个地区 社区编号不能相同
 		    		boolean b = neighborBiz.checkNeighborNum(neighborhoods);
 		    		if(b){
-		    			super.message = "呼叫号码已经存在！";
-		    			return  super.message;
+		    			return "呼叫号码已经存在！";
 		    		}
 		    		
 		    		if(StringUtils.isBlank(neighborhoods.getAddress())){
-		    			super.message = "社区地址不能为空！";
-		    			return  super.message;
+		    			return "社区地址不能为空！";
 		    		}
 		    		if(StringUtils.isNotBlank(neighborhoods.getTotalArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalArea())){
-		    			super.message = "总占地面积输入为数字类型！";
-		    			return  super.message;
+		    			return "总占地面积输入为数字类型！";
 		    		}
 		    		if(StringUtils.isNotBlank(neighborhoods.getTotalBuildArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBuildArea())){
-		    			super.message = "总建筑面积输入为数字类型！";
-		    			return  super.message;
+		    			return "总建筑面积输入为数字类型！";
 		    		}
 		    		if(StringUtils.isNotBlank(neighborhoods.getTotalBussnisArea())&&!RegexpUtils.checkDecimals(neighborhoods.getTotalBussnisArea())){
-		    			super.message = "总商业面积输入为数字类型！";
-		    			return  super.message;
+		    			return "总商业面积输入为数字类型！";
 		    		}
     		        if(StringUtils.isNotBlank(neighborhoods.getPhone())){
     		        	if(!RegexpUtils.checkPhone(neighborhoods.getPhone())){
-    		        		super.message = "请填写正确的电话号码！";
-    		    			return  super.message;
+    		        		return "请填写正确的电话号码！";
     		        	}
     		        }
 		      //更新操作
@@ -170,16 +161,16 @@ public class NeighborhoodsCtrl extends BaseCtrl {
  				e.printStackTrace();
 			} catch (BizException e) {
 				if(RegexpUtils.checkChinese(e.getMessage())){
-					super.message=e.getMessage();
+					return e.getMessage();
 				}
-				log.error(super.message);
+				log.error(e.getMessage());
  				e.printStackTrace();
 			} catch (IOException e) {
  				e.printStackTrace();
 			} catch (JsonException e) {
  				e.printStackTrace();
 			}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 修改
@@ -193,11 +184,11 @@ public class NeighborhoodsCtrl extends BaseCtrl {
     	try {
     		neighborBiz.upate(Neighborhoods);
 		} catch (Exception e) {
-			super.message = "修改失败！";
+			return "修改失败！";
 			e.printStackTrace();
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }*/
     /**
      * 删除
@@ -213,15 +204,14 @@ public class NeighborhoodsCtrl extends BaseCtrl {
 				//检查是否有子节点
 				String remark= domainBiz.hasChild(ids);
 				if(StringUtils.isNotBlank(remark)){
-					super.message = "请先删除"+remark+"的子域";
-					return super.message;
+					return "请先删除"+remark+"的子域";
 				}
 				neighborBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	 /**
      * 通过areaId获取社区列表

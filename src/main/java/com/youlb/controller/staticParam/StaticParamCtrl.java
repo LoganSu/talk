@@ -74,23 +74,19 @@ public class StaticParamCtrl extends BaseCtrl{
     		//添加的时候判断key是否有重复
     		if(StringUtils.isBlank(staticParam.getId())){
     			if(StringUtils.isBlank(staticParam.getFkey())){
-    				super.message = "key不能为空！";
-    				return  super.message;
+    				return "key不能为空！";
     			}
     			if(StringUtils.isBlank(staticParam.getFvalue())){
-    				super.message = "参数值不能为空！";
-    				return  super.message;
+    				return "参数值不能为空！";
     			}
     			if(StringUtils.isBlank(staticParam.getFdescr())){
-    				super.message = "参数描述不能为空！";
-    				return  super.message;
+    				return "参数描述不能为空！";
     			}
     			
     			staticParam.setId(null);
     			StaticParam s = staticParamBiz.getParamByKey(staticParam.getFkey());
     			if(s!=null){
-    				super.message = "key值已经存在！";
-    				return  super.message;
+    				return "key值已经存在！";
     			}
     		}
     		//修改参数
@@ -99,11 +95,11 @@ public class StaticParamCtrl extends BaseCtrl{
     		}
     		staticParamBiz.saveOrUpdate(staticParam,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 			//TODO log
 		}
-    	 return  super.message;
+    	 return  null;
     }
     /**
      * 删除
@@ -118,10 +114,10 @@ public class StaticParamCtrl extends BaseCtrl{
 			try {
 				staticParamBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 }

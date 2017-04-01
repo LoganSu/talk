@@ -82,33 +82,29 @@ public class DomainNameCtrl extends BaseCtrl {
     	try {
     		
     		if(StringUtils.isBlank(domainName.getFname())){
-    			super.message = "名称不能为空";
-    			return super.message;
+    			return "名称不能为空";
     		}
     		if(StringUtils.isBlank(domainName.getDomain())){
-    			super.message = "域名不能为空";
-    			return super.message;
+    			return "域名不能为空";
     		}else{
     			if(1>domainName.getDomain().length()||domainName.getDomain().length()>100){
-    				super.message = "域名为1~100个字符组成";
-        			return super.message;
+    				return "域名为1~100个字符组成";
     			}
     		}
 //    		if(StringUtils.isNotBlank(domainName.getId())){
 //    			String s = "11,12,13,14";
 //    			if(s.contains(domainName.getId())){
-//    				super.message = "该条数据不能修改";
-//        			return super.message;
+//    				return "该条数据不能修改";
 //    			}
 //    		}
     		
     		domainNameBiz.saveOrUpdate(domainName,getLoginUser());
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 			//TODO log
 		}
-    	 return  super.message;
+    	 return null;
     }
     
     
@@ -126,16 +122,15 @@ public class DomainNameCtrl extends BaseCtrl {
 				String s = "11,12,13,14";
 				for(String id:ids){
 					if(s.contains(id)){
-						super.message = "该条数据不能修改";
-	        			return super.message;
+						return "该条数据不能修改";
 					}
 				}
 				domainNameBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	@RequestMapping("/getNodes.do")

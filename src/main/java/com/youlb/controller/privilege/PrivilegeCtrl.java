@@ -75,10 +75,10 @@ public class PrivilegeCtrl extends BaseCtrl {
 //    		ManageUser loginUser = getLoginUser();
     		privilegeBiz.saveOrUpdate(privilege);
 		} catch (Exception e) {
-			super.message = "操作失败！";
 			e.printStackTrace();
+			return "操作失败！";
 		}
-    	 return  super.message;
+    	 return  null;
     }
     
     /**
@@ -94,10 +94,10 @@ public class PrivilegeCtrl extends BaseCtrl {
 			try {
 				privilegeBiz.delete(ids);
 			} catch (Exception e) {
-				super.message =  "删除出错";
+				return  "删除出错";
 			}
 		}
-		return super.message;
+		return null;
 	}
 	
 	/**
