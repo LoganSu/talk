@@ -26,15 +26,15 @@
                   <property name="password" value="wjp3557730" />
           <property name="driverClass" value="org.postgresql.Driver"></property>
 
-		  <!-- 最大链接数-->
+		  <!-- �?大链接数-->
 		  <property name="maxPoolSize" value="10" />
-		  <!-- 最少链接数-->
+		  <!-- �?少链接数-->
 		  <property name="minPoolSize" value="5" />
 		  <!-- 初始化链接池 -->
 		  <property name="initialPoolSize" value="10" />
-		  <!-- 连接池每次同时获得的链 接数 -->
+		  <!-- 连接池每次同时获得的�? 接数 -->
 		  <property name="acquireIncrement" value="5" />
-		  <!-- 最大失效时间 -->
+		  <!-- �?大失效时�? -->
 		  <property name="maxIdleTime" value="30000" />
       
     </bean>
@@ -51,7 +51,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 			</props>
 		</property>
-		<!--指定所有hibernate影射文件的地址, -->
+		<!--指定�?有hibernate影射文件的地�?, -->
 		<property name="packagesToScan" value="com.youlb.entity">
 			
 		</property>

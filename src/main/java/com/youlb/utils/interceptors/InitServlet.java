@@ -174,6 +174,9 @@ public class InitServlet extends HttpServlet {
 		String version = (String) proper.get("version");
 		if(StringUtils.isBlank(version)){
 			version = DateHelper.dateFormat(new Date(), "yy.MM.dd.HH");
+//			proper.load(new FileInputStream(path+"version.properties"));
+			//接口服务地址
+//			version = (String) proper.get("version");
 		}
 		
 		SysStatic.VERSION=version;

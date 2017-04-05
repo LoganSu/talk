@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="GBK"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
@@ -11,7 +11,7 @@
   http://www.springframework.org/schema/mvc
   http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
-	<!-- åŠ è½½é…ç½®å±žæ€§æ–‡ä»¶ 
+	<!-- ¼ÓÔØÅäÖÃÊôÐÔÎÄ¼þ 
 	<context:property-placeholder
 		ignore-unresolvable="true" location="classpath*:config/config.properties" />
 
@@ -21,7 +21,7 @@
 	</bean>
 -->
 	   
-	  <!-- spring 3.2ç‰ˆæœ¬ä»¥ä¸Šè§£å†³jsonä¹±ç  -->
+	  <!-- spring 3.2°æ±¾ÒÔÉÏ½â¾öjsonÂÒÂë -->
 	 <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -38,16 +38,16 @@
     </mvc:annotation-driven> 
    <!-- ====================================-->
     
-	<!-- å¯åŠ¨åŒ…æ‰«æåŠŸèƒ½ï¼Œä»¥ä¾¿æ³¨å†Œå¸¦æœ‰@Controllerã€@Serviceã€@repositoryã€@Componentç­‰æ³¨è§£çš„ç±»æˆä¸ºspringçš„bean -->
+	<!-- Æô¶¯°üÉ¨Ãè¹¦ÄÜ£¬ÒÔ±ã×¢²á´øÓÐ@Controller¡¢@Service¡¢@repository¡¢@ComponentµÈ×¢½âµÄÀà³ÉÎªspringµÄbean -->
 	<context:component-scan base-package="com.youlb"></context:component-scan>
 	<aop:aspectj-autoproxy />
-	<!-- åŠ è½½é™æ€url -->
+	<!-- ¼ÓÔØ¾²Ì¬url -->
     <mvc:default-servlet-handler/>
-	<!-- ç»Ÿä¸€å¼‚å¸¸å¤„ç†ç±» 
+	<!-- Í³Ò»Òì³£´¦ÀíÀà 
 	<bean id="apuExceptionHandler" class="com.csair.apu.common.exception.handler.ApuExceptionHandler"></bean>
 -->
 
-	<!-- å¯¹æ¨¡åž‹è§†å›¾åç§°çš„è§£æžï¼Œå³åœ¨æ¨¡åž‹è§†å›¾åç§°æ·»åŠ å‰åŽç¼€ -->
+	<!-- ¶ÔÄ£ÐÍÊÓÍ¼Ãû³ÆµÄ½âÎö£¬¼´ÔÚÄ£ÐÍÊÓÍ¼Ãû³ÆÌí¼ÓÇ°ºó×º -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
@@ -56,35 +56,35 @@
 	</bean>
 <!-- 	 <mvc:interceptors>   -->
 <!--         <mvc:interceptor>   -->
-<!--             è®¾ç½®æƒé™æ‹¦æˆªçš„è·¯å¾„   -->
+<!--             ÉèÖÃÈ¨ÏÞÀ¹½ØµÄÂ·¾¶   -->
 <!--             <mvc:mapping path="/*.do" />   -->
 <!--             <bean class="com.csair.apu.web.interceptors.common.ApuFtpDownInterceptor">   -->
 <!--             </bean>   -->
 <!--         </mvc:interceptor>   -->
 <!--     </mvc:interceptors>   -->
 	
-	<!-- å½“åœ¨web.xml ä¸­   DispatcherServletä½¿ç”¨ <url-pattern>/</url-pattern> æ˜ å°„æ—¶ï¼Œèƒ½æ˜ å°„é™æ€èµ„æº -->
+	<!-- µ±ÔÚweb.xml ÖÐ   DispatcherServletÊ¹ÓÃ <url-pattern>/</url-pattern> Ó³ÉäÊ±£¬ÄÜÓ³Éä¾²Ì¬×ÊÔ´ -->
     <!-- <mvc:default-servlet-handler/>-->
-   <!-- åŠ è½½WEB-INFé‡Œé¢çš„é™æ€èµ„æº 
+   <!-- ¼ÓÔØWEB-INFÀïÃæµÄ¾²Ì¬×ÊÔ´ 
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**" />
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
 	<mvc:resources location="/WEB-INF/view/error" mapping="/error/**" />
 	<mvc:resources location="/WEB-INF/view/module-js" mapping="/module-js/**" />
  -->
-	<!-- japserè§†å›¾åç§°è§£æž -->
+	<!-- japserÊÓÍ¼Ãû³Æ½âÎö -->
 <!-- 	<bean id="jasperReportsViewResolver" -->
 <!-- 		class="org.springframework.web.servlet.view.jasperreports.JasperReportsViewResolver"> -->
-<!-- 		<property name="order" value="0" />	è§†å›¾æ¸²æŸ“ä¼˜å…ˆçº§ï¼Œæ­¤å¤„ä¸º0ï¼Œä¼˜å…ˆäºŽæ¸²æŸ“JSP -->
-<!-- 		<property name="viewClass" value="com.csair.amms2.commons.utils.report.JasperReportView" />  ç»§æ‰¿äºŽJasperReportsMultiFormatView -->
-<!-- 		<property name="prefix" value="${web.report.prefix}" />	æ¨¡æ¿å‰ç¼€ -->
-<!-- 		<property name="suffix" value="${web.report.suffix}" />	æ¨¡æ¿åŽç¼€ -->
-<!-- 		<property name="viewNames" value="${web.report.viewName}" />	è¯•å›¾æ¸²æŸ“æ‰€æœ‰ä»¥"-report"ç»“å°¾çš„è§†å›¾å(viewName) -->
-<!-- 		<property name="cache" value="false" />	ç¼“å­˜æ¨¡æ¿(falseæ—¶ï¼Œæ¯æ¬¡è¯·æ±‚éƒ½ä¼šé‡æ–°åŠ è½½æ¨¡æ¿ï¼Œå»ºè®®debugæ¨¡æ¿æ—¶è®¾ç½®ä¸ºfalse) -->
+<!-- 		<property name="order" value="0" />	ÊÓÍ¼äÖÈ¾ÓÅÏÈ¼¶£¬´Ë´¦Îª0£¬ÓÅÏÈÓÚäÖÈ¾JSP -->
+<!-- 		<property name="viewClass" value="com.csair.amms2.commons.utils.report.JasperReportView" />  ¼Ì³ÐÓÚJasperReportsMultiFormatView -->
+<!-- 		<property name="prefix" value="${web.report.prefix}" />	Ä£°åÇ°×º -->
+<!-- 		<property name="suffix" value="${web.report.suffix}" />	Ä£°åºó×º -->
+<!-- 		<property name="viewNames" value="${web.report.viewName}" />	ÊÔÍ¼äÖÈ¾ËùÓÐÒÔ"-report"½áÎ²µÄÊÓÍ¼Ãû(viewName) -->
+<!-- 		<property name="cache" value="false" />	»º´æÄ£°å(falseÊ±£¬Ã¿´ÎÇëÇó¶¼»áÖØÐÂ¼ÓÔØÄ£°å£¬½¨ÒédebugÄ£°åÊ±ÉèÖÃÎªfalse) -->
 <!-- 		<property name="reportDataKey"> -->
 <!-- 			<value>datasource</value> -->
 <!-- 		</property> -->
-<!-- 		<property name="exporterParameters">	æ¸²æŸ“æ—¶çš„ç›¸å…³å‚æ•° -->
+<!-- 		<property name="exporterParameters">	äÖÈ¾Ê±µÄÏà¹Ø²ÎÊý -->
 <!-- 			<map> -->
 <!-- 				<entry -->
 <!-- 					key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.CHARACTER_ENCODING" -->
@@ -99,14 +99,14 @@
 
 
 
-	<!-- é…ç½®æ—¥å¿—æ‹¦æˆªå™¨ -->
+	<!-- ÅäÖÃÈÕÖ¾À¹½ØÆ÷ -->
 	<!-- <mvc:interceptors>
 		<bean class="com.csair.web.interceptors.LogInterceptor"></bean>
 	</mvc:interceptors> -->
-	<!-- æ—¥å¿— end -->
+	<!-- ÈÕÖ¾ end -->
 
 
-	<!-- ä¸Šä¼ æ–‡ä»¶æ‹¦æˆªï¼Œè®¾ç½®æœ€å¤§ä¸Šä¼ æ–‡ä»¶å¤§å° 10M=10*1024*1024(B)=10485760 bytes-->
+	<!-- ÉÏ´«ÎÄ¼þÀ¹½Ø£¬ÉèÖÃ×î´óÉÏ´«ÎÄ¼þ´óÐ¡ 10M=10*1024*1024(B)=10485760 bytes-->
 	<bean id="multipartResolver" class="com.youlb.utils.extend.CustomMultipartResolver">  
         <!-- set the max upload size100MB -->  
         <property name="maxUploadSize">  

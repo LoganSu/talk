@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="GBK"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
@@ -26,15 +26,15 @@
                   <property name="password" value="wjp3557730" />
           <property name="driverClass" value="org.postgresql.Driver"></property>
 
-		  <!-- æœ€å¤§é“¾æ¥æ•°-->
+		  <!-- ×î´óÁ´½ÓÊı-->
 		  <property name="maxPoolSize" value="10" />
-		  <!-- æœ€å°‘é“¾æ¥æ•°-->
+		  <!-- ×îÉÙÁ´½ÓÊı-->
 		  <property name="minPoolSize" value="5" />
-		  <!-- åˆå§‹åŒ–é“¾æ¥æ±  -->
+		  <!-- ³õÊ¼»¯Á´½Ó³Ø -->
 		  <property name="initialPoolSize" value="10" />
-		  <!-- è¿æ¥æ± æ¯æ¬¡åŒæ—¶è·å¾—çš„é“¾ æ¥æ•° -->
+		  <!-- Á¬½Ó³ØÃ¿´ÎÍ¬Ê±»ñµÃµÄÁ´ ½ÓÊı -->
 		  <property name="acquireIncrement" value="5" />
-		  <!-- æœ€å¤§å¤±æ•ˆæ—¶é—´ -->
+		  <!-- ×î´óÊ§Ğ§Ê±¼ä -->
 		  <property name="maxIdleTime" value="30000" />
       
     </bean>
@@ -51,7 +51,7 @@
 				<prop key="hibernate.format_sql">true</prop>
 			</props>
 		</property>
-		<!--æŒ‡å®šæ‰€æœ‰hibernateå½±å°„æ–‡ä»¶çš„åœ°å€, -->
+		<!--Ö¸¶¨ËùÓĞhibernateÓ°ÉäÎÄ¼şµÄµØÖ·, -->
 		<property name="packagesToScan" value="com.youlb.entity">
 			
 		</property>
@@ -69,13 +69,13 @@
 			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
 		</tx:attributes>
 	</tx:advice>	
-	<!--  é…ç½®äº‹åŠ¡ç®¡ç† -->
+	<!--  ÅäÖÃÊÂÎñ¹ÜÀí -->
 	<aop:config>
 		<aop:pointcut id="bizMethods" expression="execution(* com.youlb.biz..*.*(..))"/>
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="bizMethods"/>
 	</aop:config>
 
-	<!--  é…ç½®BaseDaoTemplet -->
+	<!--  ÅäÖÃBaseDaoTemplet -->
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource"><ref bean="dataSource"/></property>
 	</bean>

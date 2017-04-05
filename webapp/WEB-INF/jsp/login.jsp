@@ -87,7 +87,7 @@
                                 </div>
                              </td>
                              <td>
-                                 <span class="banben">版本号：17.01.11.09</span>
+                                 <span class="banben">版本号：${version}</span>
                              </td>
                            </tr>
                         </table>
