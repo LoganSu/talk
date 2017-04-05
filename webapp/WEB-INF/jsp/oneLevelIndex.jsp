@@ -26,6 +26,8 @@
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
      <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
      <link href="${path}/css/qiniu/main.css" rel="stylesheet">
+     <link href="${path}/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+     <link href="${path}/css/video/video-js.css" rel="stylesheet" type="text/css">
      
 <%--        <link rel="stylesheet" href="${path}/css/common/prettify.css" type="text/css"> --%>
 <!--         <script type="text/javascript" src="docs/js/jquery-2.1.3.min.js"></script> -->
@@ -54,7 +56,7 @@
     <script src="${path}/js/common/bootstrap/bootstrap-datepicker.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-treeview.js"></script>
-<%--     <script src="${path}/js/common/bootstrap/bootstrap-multiselect.js"></script> --%>
+    <script src="${path}/js/common/ztree/jquery.ztree.all-3.5.min.js"></script>
     
     <script src="${path}/js/common/bootstrap/bootstrap-progressbar.js" type="text/javascript"></script>
     <script src="${path}/js/common/jquery.validate.js" type="text/javascript"></script>
@@ -67,7 +69,7 @@
      
      <script src="${path}/js/common/chars/highcharts.js" type="text/javascript"></script>
      <script src="${path}/js/common/chars/chars.js" type="text/javascript"></script>
-     
+     <script src="${path}/js/video/video.min.js"></script>
      
     <!-- 公共js 方法 -->
     <script src="${path}/js/common/common.js" ></script>
@@ -88,6 +90,7 @@
     <script src="${path}/js/SMSManage/SMSManage.js" ></script>
     <script src="${path}/js/houseInfo/area.js" ></script>
     <script src="${path}/js/management/worker.js" ></script>
+    <script src="${path}/js/checking/checking.js" ></script>
     
     
     
@@ -133,6 +136,7 @@
     <script src="${path}/js/table/billManageTable.js"></script>
     <script src="${path}/js/table/doorMachineTable.js"></script>
     <script src="${path}/js/table/domainNameTable.js"></script>
+    <script src="${path}/js/table/checkingTable.js"></script>
     
     
     
@@ -528,29 +532,32 @@
            </div>
           </div>
            <div class="col-md-10 f-article">
-              <!-- 查询条件div 包括功能按钮 -->
-              <div class="row" style="padding-left: 20px">
+                            <!-- 查询条件div 包括功能按钮 -->
+              <div class="row" style="padding-left: 15px">
                   
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="houseInfoTree"></p>
+<!--                      <p id="houseInfoTree"></p> -->
+                     <ul id="houseInfoTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                   </div>
                   <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="authorityTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="managementDepartmentTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="neighborhoodsTree"></p>
-                  </div>
-                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
-                     <p id="domainNameTree"></p>
-                  </div>
-                  
-                  
-                  <div class="col-md-10" id="showRightArea" >
+                     <ul id="authorityTree" class="ztree" style="width:260px; overflow:auto;"></ul>
                      
                   </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="managementDepartmentTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="neighborhoodsTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  <div class="col-md-2 treeDiv" style="display: none;padding-top: 10px">
+                     <ul id="domainNameTree" class="ztree" style="width:260px; overflow:auto;"></ul>
+                  </div>
+                  
+                  
+<!--                       <div class="col-md-10" id="showRightArea" ></div> -->
+<!--                       <iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe> -->
+                     
+                  
                   <!-- 图片显示div -->
                   <div id="personshowImg"  class="col-md-2" style="display: none;padding-top: 50px; overflow: hidden;">
                      <img alt="" style="margin-top: 0px;margin-left: 0px;" height="200px" src="">
@@ -562,6 +569,25 @@
        
    </div>
      <script type="text/javascript">
+     $(function(){
+  	   $(".rongbang_pay").on("click",function(){
+  		  $("#showRightArea").remove();
+  		  var iframe =  $("#showRightAreaIframe");
+  		  if(iframe.size()<1){
+  			  $("#personshowImg").before('<iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe>');
+  		  }
+  		  //隐藏打开的树状结构
+  		  $(".treeDiv").hide();
+  		  //隐藏显示的图片
+  		  $("#personshowImg").hide();
+  		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+  		  
+//   		  $("#showRightAreaIframe").addClass("col-md-10");
+//   		  $("#showRightAreaIframe").attr("src",$(this).attr("rel"));
+  		  
+  	   })
+  	   
+     })
     //2017/1/14
       $('.toggleTag').on('click',function(){
 
