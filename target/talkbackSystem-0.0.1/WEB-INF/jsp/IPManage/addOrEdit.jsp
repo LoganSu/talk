@@ -40,10 +40,27 @@
                 <td><div><input name="fsExternalPort" class="form-control required" title="FS端口不能为空" maxlength="100" value="${iPManage.fsExternalPort}"/></div></td>
               </tr>
               <tr>
-                <td><div class="firstFont"><span class="starColor">*</span>小区名称：</div></td>
+                <td><div class="firstFont"><span class="starColor">*</span>省份：</div></td>
+                <td><div>
+                  <select name="province" class="form-control province">
+                     <option value="">请选择省份</option>
+                    <c:forEach items="${provinceList}" var="province">
+                       <option value="${province.id}_${province.fshortname}" <c:if test="${province.fshortname==iPManage.province}">selected="selected"</c:if>>${province.fshortname}</option>
+                    </c:forEach>
+                  </select>
+                
+                </div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>城市：</div></td>
+                <td><div>
+                   <select name="city" class="form-control city">
+                    <option value="">请选择城市</option>
+                    <c:if test="${iPManage.id!=null}">
+                      <option value="${iPManage.city }" selected="selected">${iPManage.city }</option>
+                    </c:if>
+                  </select>
+                </div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>小区名称：</div></td>
                 <td><div><input name="neibName" class="form-control required" title="小区名称不能为空" maxlength="100" value="${iPManage.neibName}"/></div></td>
-                <td><div class="leftFont">备注：</div></td>
-                <td><div><input name="remark" class="form-control" maxlength="100" value="${iPManage.remark}"/></div></td>
               </tr>
               <tr>
                 <td><div class="firstFont"><span class="starColor">*</span>开通物业功能：</div></td>
@@ -53,6 +70,8 @@
                      <option <c:if test="${iPManage.management eq true}">selected="selected"</c:if> value="true">是</option>
                    </select>
                 </div></td>
+                <td><div class="leftFont">备注：</div></td>
+                <td><div><input name="remark" class="form-control" maxlength="100" value="${iPManage.remark}"/></div></td>
               </tr>
            </table>
          </form>

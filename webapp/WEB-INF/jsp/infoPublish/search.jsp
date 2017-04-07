@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
  <script type="text/javascript">
    //时间控件
-   $(".datepicker").datepicker();
+   $("#infoPublishSearchForm .datepicker").datepicker();
  </script>
 </head>
 <body>

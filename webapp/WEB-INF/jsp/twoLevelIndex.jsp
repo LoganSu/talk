@@ -22,7 +22,7 @@
      <link href="${path}/css/common/bootstrap/bootstrap-treeview.css" rel="stylesheet">
 <%--      <link href="${path}/css/common/bootstrap/bootstrap-multiselect.css" rel="stylesheet"> --%>
      <link href="${path}/css/common/peng.css" rel="stylesheet">
-     <link href="${path}/css/common/bootstrap/bootstrap-datetimepicker.min.css" rel="stylesheet">
+     <link href="${path}/css/common/bootstrap/bootstrap-datetimepicker.css" rel="stylesheet">
      <link href="${path}/css/common/scojs.css" rel="stylesheet">
      <link href="${path}/css/qiniu/highlight.css" rel="stylesheet">
      <link href="${path}/css/qiniu/main.css" rel="stylesheet">
@@ -56,6 +56,7 @@
     <script src="${path}/js/common/bootstrap/bootstrap-table-zh-CN.min.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-datepicker.js"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script src="${path}/js/common/bootstrap/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
     <script src="${path}/js/common/bootstrap/bootstrap-treeview.js"></script>
     <script src="${path}/js/common/ztree/jquery.ztree.all-3.5.min.js"></script>
     

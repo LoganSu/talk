@@ -74,10 +74,10 @@
 <script type="text/javascript">
  //时间控件
 //    $(".datepicker").datepicker();
- $(".datepicker").datetimepicker(
+ $("#infoPublishsaveForm .datepicker").datetimepicker(
 		 {
 			format: 'yyyy-mm-dd hh:ii:ss',
-			language: 'cn', 
+			language: 'zh-CN'
 		 });
   $(function(){
 

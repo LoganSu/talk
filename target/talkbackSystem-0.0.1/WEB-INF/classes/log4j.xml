@@ -1,50 +1,50 @@
-ï»¿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="GBK"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
 
-	<!-- console è¾“å‡º -->
+	<!-- console Êä³ö -->
 	<appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
-		<!-- è®¾ç½®è¾“å‡ºæ ¼å¼ -->
+		<!-- ÉèÖÃÊä³ö¸ñÊ½ -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [%c] %m%n" />
 		</layout>
-		<!--è¿‡æ»¤è®°å½•çš„æ—¥å¿—çº§åˆ« -->
+		<!--¹ýÂË¼ÇÂ¼µÄÈÕÖ¾¼¶±ð -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="trace" />
 			<param name="LevelMax" value="error" />
 		</filter>
 	</appender>
 
-	<!-- file è¾“å‡ºerror -->
+	<!-- file Êä³öerror -->
 	<appender name="errorFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/web_error.log" /><!-- è®¾ç½®æ—¥å¿—è¾“å‡ºæ–‡ä»¶å -->
+		<param name="File" value="${catalina.home}/logs/web_error.log" /><!-- ÉèÖÃÈÕÖ¾Êä³öÎÄ¼þÃû -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
 
-		<!-- è®¾ç½®æ˜¯å¦åœ¨é‡æ–°å¯åŠ¨æœåŠ¡æ—¶ï¼Œåœ¨åŽŸæœ‰æ—¥å¿—çš„åŸºç¡€æ·»åŠ æ–°æ—¥å¿— <param name="Append" value="false" /> -->
-		<!-- å¤‡ä»½æ—¥å¿—æ–‡ä»¶çš„ä¸ªæ•°,default=2 <param name="MaxBackupIndex" value="2" /> -->
-		<!-- è®¾ç½®æ—¥å¿—æ–‡ä»¶å…è®¸æœ€å¤§å­—èŠ‚æ•°ï¼Œdefault=10M <param name="MaxFileSize" value="100" /> -->
+		<!-- ÉèÖÃÊÇ·ñÔÚÖØÐÂÆô¶¯·þÎñÊ±£¬ÔÚÔ­ÓÐÈÕÖ¾µÄ»ù´¡Ìí¼ÓÐÂÈÕÖ¾ <param name="Append" value="false" /> -->
+		<!-- ±¸·ÝÈÕÖ¾ÎÄ¼þµÄ¸öÊý,default=2 <param name="MaxBackupIndex" value="2" /> -->
+		<!-- ÉèÖÃÈÕÖ¾ÎÄ¼þÔÊÐí×î´ó×Ö½ÚÊý£¬default=10M <param name="MaxFileSize" value="100" /> -->
 
-		<!-- è®¾ç½®è¾“å‡ºæ ¼å¼ -->
+		<!-- ÉèÖÃÊä³ö¸ñÊ½ -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [youlb]  [%c] %m%n" />
 		</layout>
-		<!--è¿‡æ»¤è®°å½•çš„æ—¥å¿—çº§åˆ« -->
+		<!--¹ýÂË¼ÇÂ¼µÄÈÕÖ¾¼¶±ð -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="error" />
 		</filter>
 	</appender>
 
-	<!-- file è¾“å‡ºdebug -->
+	<!-- file Êä³ödebug -->
 	<appender name="debugFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/web_debug.log" /><!-- è®¾ç½®æ—¥å¿—è¾“å‡ºæ–‡ä»¶å -->
+		<param name="File" value="${catalina.home}/logs/web_debug.log" /><!-- ÉèÖÃÈÕÖ¾Êä³öÎÄ¼þÃû -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
-		<!-- è®¾ç½®è¾“å‡ºæ ¼å¼ -->
+		<!-- ÉèÖÃÊä³ö¸ñÊ½ -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [youlb]  [%c] %m%n" />
 		</layout>
-		<!--è¿‡æ»¤è®°å½•çš„æ—¥å¿—çº§åˆ« -->
+		<!--¹ýÂË¼ÇÂ¼µÄÈÕÖ¾¼¶±ð -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="debug" />
 			<param name="LevelMax" value="debug" />
@@ -52,15 +52,15 @@
 		</filter>
 	</appender>
 	
-	<!-- file è¾“å‡ºinfo -->
+	<!-- file Êä³öinfo -->
 	<appender name="infoFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="${catalina.home}/logs/web_info.log" /><!-- è®¾ç½®æ—¥å¿—è¾“å‡ºæ–‡ä»¶å -->
+		<param name="File" value="${catalina.home}/logs/web_info.log" /><!-- ÉèÖÃÈÕÖ¾Êä³öÎÄ¼þÃû -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
-		<!-- è®¾ç½®è¾“å‡ºæ ¼å¼ -->
+		<!-- ÉèÖÃÊä³ö¸ñÊ½ -->
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d %-5p [youlb] [%c] %m%n" />
 		</layout>
-		<!--è¿‡æ»¤è®°å½•çš„æ—¥å¿—çº§åˆ« -->
+		<!--¹ýÂË¼ÇÂ¼µÄÈÕÖ¾¼¶±ð -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="info" />
 			<param name="AcceptOnMatch" value="true" />

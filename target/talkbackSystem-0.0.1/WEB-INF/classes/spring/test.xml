@@ -8,7 +8,7 @@
 
     <mvc:annotation-driven/>
     <mvc:default-servlet-handler/>
-    <!-- token保存在缓�? -->
+    <!-- token保存在缓存 -->
     <bean id="tokenStore" class="org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore"/>
     <bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
         <property name="tokenStore" ref="tokenStore"/>
@@ -74,7 +74,7 @@
             </list>
         </constructor-arg>
     </bean>
-    <!-- 受保护资�? -->
+    <!-- 受保护资源 -->
     <security:http pattern="/mc/**" create-session="never" entry-point-ref="clinetAuthenticationEntryPoint"
                    access-decision-manager-ref="accessDecisionManager">
         <security:anonymous enabled="false"/>

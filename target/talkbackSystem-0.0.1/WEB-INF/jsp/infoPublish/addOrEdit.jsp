@@ -22,8 +22,10 @@
            </table>
            <table>
               <tr>
-                <td><div class="firstFont"><span class="starColor">*</span>有效期：&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
-                <td><div><input name="expDateStr" readonly="readonly" class="form-control datepicker" title="有效期不能为空！" value="${infoPublish.expDateStr}"/></div></td>
+                <td><div class="firstFont"><span class="starColor">*</span>生效时间：</div></td>
+                <td><div><input name="startTime" readonly="readonly" class="form-control datepicker" title="生效时间不能为空！" value="${infoPublish.startTime}"/></div></td>
+                <td><div class="leftFont"><span class="starColor">*</span>截止时间：&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+                <td><div><input name="expDateStr" readonly="readonly" class="form-control datepicker" title="截止时间不能为空！" value="${infoPublish.expDateStr}"/></div></td>
               </tr>
            </table>
            <table>
@@ -71,12 +73,12 @@
 </body>
 <script type="text/javascript">
  //时间控件
-   $(".datepicker").datepicker();
-//  $("#infoPublishsaveForm .datepicker").datetimepicker(
-// 		 {
-// 			format: 'yyyy-mm-dd hh:ii',
-// 			language: 'cn', 
-// 		 });
+//    $(".datepicker").datepicker();
+ $("#infoPublishsaveForm .datepicker").datetimepicker(
+		 {
+			format: 'yyyy-mm-dd hh:ii:ss',
+			language: 'zh-CN'
+		 });
   $(function(){
 
 	  var id = $("#infoPublishsaveForm [name='id']").val();

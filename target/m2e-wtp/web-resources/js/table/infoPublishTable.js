@@ -88,14 +88,8 @@ var infoPublishTable ={
             valign: 'middle',
             sortable: true
         },{
-            field: 'startTime',
-            title: '生效时间',
-            align: 'center',
-            valign: 'middle',
-            sortable: true
-        },{
             field: 'expDateStr',
-            title: '截止时间',
+            title: '有效期',
             align: 'center',
             valign: 'middle',
             sortable: true
@@ -107,13 +101,13 @@ var infoPublishTable ={
             sortable: true
         },{
             field: 'publishOperator',
-            title: '操作人',
+            title: '发布人',
             align: 'center',
             valign: 'middle',
             sortable: true
         },{
             field: 'publishTimeStr',
-            title: '操作时间',
+            title: '发布时间',
             align: 'center',
             valign: 'middle',
             sortable: true

@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.ParseException;
@@ -23,18 +22,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.youlb.biz.access.IPermissionBiz;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.access.BlackListData;
 import com.youlb.entity.access.CardInfo;
 import com.youlb.entity.access.CardRecord;
-import com.youlb.entity.checking.Checking;
 import com.youlb.entity.common.ResultDTO;
 import com.youlb.entity.personnel.Dweller;
 import com.youlb.entity.privilege.Operator;
@@ -234,6 +230,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 //	    Session currSession = cardSqlDao.getCurrSession();
 				session.flush();
 //			}
+				//修改需要更新白名单标志
 			
 		//添加所有卡片父类表
 //		String sql  ="insert into t_card(fcardsn,fdwellerId,fcardtype) values(?,?,?)";

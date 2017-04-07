@@ -40,5 +40,9 @@ public interface IDeviceCountBiz extends IBaseBiz<DeviceCount> {
 	 * @return
 	 */
 	DeviceCount getByCount(String deviceCount)throws BizException;
-
+	/**
+	 * 修改门口机需要更新白名单标志
+	 * @param endTime
+	 */
+	void updateNeedUpdate(String domainId)throws BizException;
 }

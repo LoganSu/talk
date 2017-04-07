@@ -68,6 +68,9 @@ public class DeviceCount extends BaseModel {
 	/**告警邮箱*/
 	@Column(name="fwarn_email")
 	private String warnEmail;
+	/**是否需要更新白名单  1需要更新 null或“”不更新*/
+	@Column(name="fneed_update")
+	private String needUpdate;
 	
 	@Transient
 	private String address;
@@ -118,6 +121,14 @@ public class DeviceCount extends BaseModel {
 
 	public void setWarnPhone(String warnPhone) {
 		this.warnPhone = warnPhone;
+	}
+
+	public String getNeedUpdate() {
+		return needUpdate;
+	}
+
+	public void setNeedUpdate(String needUpdate) {
+		this.needUpdate = needUpdate;
 	}
 
 	public String getWarnEmail() {

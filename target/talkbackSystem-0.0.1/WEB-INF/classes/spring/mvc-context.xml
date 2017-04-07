@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="GBK"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
@@ -11,7 +11,7 @@
   http://www.springframework.org/schema/mvc
   http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 
-	<!-- 鍔犺浇閰嶇疆灞炴?ф枃浠? 
+	<!-- 加载配置属性文件 
 	<context:property-placeholder
 		ignore-unresolvable="true" location="classpath*:config/config.properties" />
 
@@ -21,7 +21,7 @@
 	</bean>
 -->
 	   
-	  <!-- spring 3.2鐗堟湰浠ヤ笂瑙ｅ喅json涔辩爜 -->
+	  <!-- spring 3.2版本以上解决json乱码 -->
 	 <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
@@ -38,16 +38,16 @@
     </mvc:annotation-driven> 
    <!-- ====================================-->
     
-	<!-- 鍚姩鍖呮壂鎻忓姛鑳斤紝浠ヤ究娉ㄥ唽甯︽湁@Controller銆丂Service銆丂repository銆丂Component绛夋敞瑙ｇ殑绫绘垚涓簊pring鐨刡ean -->
+	<!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->
 	<context:component-scan base-package="com.youlb"></context:component-scan>
 	<aop:aspectj-autoproxy />
-	<!-- 鍔犺浇闈欐?乽rl -->
+	<!-- 加载静态url -->
     <mvc:default-servlet-handler/>
-	<!-- 缁熶竴寮傚父澶勭悊绫? 
+	<!-- 统一异常处理类 
 	<bean id="apuExceptionHandler" class="com.csair.apu.common.exception.handler.ApuExceptionHandler"></bean>
 -->
 
-	<!-- 瀵规ā鍨嬭鍥惧悕绉扮殑瑙ｆ瀽锛屽嵆鍦ㄦā鍨嬭鍥惧悕绉版坊鍔犲墠鍚庣紑 -->
+	<!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
@@ -56,35 +56,35 @@
 	</bean>
 <!-- 	 <mvc:interceptors>   -->
 <!--         <mvc:interceptor>   -->
-<!--             璁剧疆鏉冮檺鎷︽埅鐨勮矾寰?   -->
+<!--             设置权限拦截的路径   -->
 <!--             <mvc:mapping path="/*.do" />   -->
 <!--             <bean class="com.csair.apu.web.interceptors.common.ApuFtpDownInterceptor">   -->
 <!--             </bean>   -->
 <!--         </mvc:interceptor>   -->
 <!--     </mvc:interceptors>   -->
 	
-	<!-- 褰撳湪web.xml 涓?   DispatcherServlet浣跨敤 <url-pattern>/</url-pattern> 鏄犲皠鏃讹紝鑳芥槧灏勯潤鎬佽祫婧? -->
+	<!-- 当在web.xml 中   DispatcherServlet使用 <url-pattern>/</url-pattern> 映射时，能映射静态资源 -->
     <!-- <mvc:default-servlet-handler/>-->
-   <!-- 鍔犺浇WEB-INF閲岄潰鐨勯潤鎬佽祫婧? 
+   <!-- 加载WEB-INF里面的静态资源 
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**" />
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**" />
 	<mvc:resources location="/WEB-INF/view/error" mapping="/error/**" />
 	<mvc:resources location="/WEB-INF/view/module-js" mapping="/module-js/**" />
  -->
-	<!-- japser瑙嗗浘鍚嶇О瑙ｆ瀽 -->
+	<!-- japser视图名称解析 -->
 <!-- 	<bean id="jasperReportsViewResolver" -->
 <!-- 		class="org.springframework.web.servlet.view.jasperreports.JasperReportsViewResolver"> -->
-<!-- 		<property name="order" value="0" />	瑙嗗浘娓叉煋浼樺厛绾э紝姝ゅ涓?0锛屼紭鍏堜簬娓叉煋JSP -->
-<!-- 		<property name="viewClass" value="com.csair.amms2.commons.utils.report.JasperReportView" />  缁ф壙浜嶫asperReportsMultiFormatView -->
-<!-- 		<property name="prefix" value="${web.report.prefix}" />	妯℃澘鍓嶇紑 -->
-<!-- 		<property name="suffix" value="${web.report.suffix}" />	妯℃澘鍚庣紑 -->
-<!-- 		<property name="viewNames" value="${web.report.viewName}" />	璇曞浘娓叉煋鎵?鏈変互"-report"缁撳熬鐨勮鍥惧悕(viewName) -->
-<!-- 		<property name="cache" value="false" />	缂撳瓨妯℃澘(false鏃讹紝姣忔璇锋眰閮戒細閲嶆柊鍔犺浇妯℃澘锛屽缓璁甦ebug妯℃澘鏃惰缃负false) -->
+<!-- 		<property name="order" value="0" />	视图渲染优先级，此处为0，优先于渲染JSP -->
+<!-- 		<property name="viewClass" value="com.csair.amms2.commons.utils.report.JasperReportView" />  继承于JasperReportsMultiFormatView -->
+<!-- 		<property name="prefix" value="${web.report.prefix}" />	模板前缀 -->
+<!-- 		<property name="suffix" value="${web.report.suffix}" />	模板后缀 -->
+<!-- 		<property name="viewNames" value="${web.report.viewName}" />	试图渲染所有以"-report"结尾的视图名(viewName) -->
+<!-- 		<property name="cache" value="false" />	缓存模板(false时，每次请求都会重新加载模板，建议debug模板时设置为false) -->
 <!-- 		<property name="reportDataKey"> -->
 <!-- 			<value>datasource</value> -->
 <!-- 		</property> -->
-<!-- 		<property name="exporterParameters">	娓叉煋鏃剁殑鐩稿叧鍙傛暟 -->
+<!-- 		<property name="exporterParameters">	渲染时的相关参数 -->
 <!-- 			<map> -->
 <!-- 				<entry -->
 <!-- 					key="net.sf.jasperreports.engine.export.JRHtmlExporterParameter.CHARACTER_ENCODING" -->
@@ -99,14 +99,14 @@
 
 
 
-	<!-- 閰嶇疆鏃ュ織鎷︽埅鍣? -->
+	<!-- 配置日志拦截器 -->
 	<!-- <mvc:interceptors>
 		<bean class="com.csair.web.interceptors.LogInterceptor"></bean>
 	</mvc:interceptors> -->
-	<!-- 鏃ュ織 end -->
+	<!-- 日志 end -->
 
 
-	<!-- 涓婁紶鏂囦欢鎷︽埅锛岃缃渶澶т笂浼犳枃浠跺ぇ灏? 10M=10*1024*1024(B)=10485760 bytes-->
+	<!-- 上传文件拦截，设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes-->
 	<bean id="multipartResolver" class="com.youlb.utils.extend.CustomMultipartResolver">  
         <!-- set the max upload size100MB -->  
         <property name="maxUploadSize">  

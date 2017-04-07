@@ -481,4 +481,12 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 		String hql ="from DeviceCount where deviceCount=?";
 		return deviceCountSqlDao.findObject(hql, new Object[]{deviceCount});
 	}
+    /**
+     * 修改门口机需要更新白名单标志
+     */
+	@Override
+	public void updateNeedUpdate(String domainId) throws BizException {
+		String sql = "update t_devicecount set fneed_update=? where fdomainid=?";
+		deviceCountSqlDao.updateSQL(sql, new Object[]{"1",domainId});
+	}
 }

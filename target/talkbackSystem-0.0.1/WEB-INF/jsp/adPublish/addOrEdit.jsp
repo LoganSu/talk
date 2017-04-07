@@ -152,7 +152,7 @@ width: 222px
 		        max_file_size : '2mb',
 		        prevent_duplicates: true,
 		        mime_types: [
-		 		      {title : "Image files", extensions : "jpg,gif,png,mp4"} // 限定jpg,gif,png后
+		 		      {title : "Image files", extensions : "jpg,png,mp4"} // 限定jpg,gif,png后
 		        ]
 		    },
 		    init: {
