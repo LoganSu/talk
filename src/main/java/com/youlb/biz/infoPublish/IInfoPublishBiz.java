@@ -41,5 +41,11 @@ public interface IInfoPublishBiz extends IBaseBiz<InfoPublish> {
 	 */
 	public void publish(String[] ids, Operator loginUser)throws BizException, IllegalAccessException, InvocationTargetException,UnsupportedEncodingException,ClientProtocolException, IOException, ParseException, JsonException ;
 	public List<String> getParentIds(String string)throws BizException ;
+	/**
+	 * 撤回
+	 * @param ids
+	 * @param loginUser
+	 */
+	public int recall(String[] ids, Operator loginUser)throws BizException ;
 
 }

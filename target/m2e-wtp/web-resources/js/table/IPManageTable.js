@@ -29,6 +29,18 @@ var IPManageTable ={
             valign: 'middle',
             sortable: false
         },{
+            field: 'province',
+            title: '省份',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
+            field: 'city',
+            title: '城市',
+            align: 'center',
+            valign: 'middle',
+            sortable: true
+        },{
             field: 'platformName',
             title: '平台名称',
             align: 'center',
@@ -117,6 +129,6 @@ var IPManageTable ={
 
 
 	function queryParams(params) {
-	   return initSearchParams("",params);
+	   return initSearchParams("IPManageSearchForm",params);
 	}
 

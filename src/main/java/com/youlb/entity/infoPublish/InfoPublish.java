@@ -73,13 +73,16 @@ public class InfoPublish extends BaseModel {
 	/**有效期*/
 	@Column(name="fexpdate")
     public Date expDate;
-	/**状态 0未审核 1已审核 2审核不通过*/
+	/**生效时间*/
+	@Column(name="fstart_time")
+    public Date fstartTime;
+	/**状态 1 发布状态  2 撤回状态  */
 	@Column(name="fstatus")
     public String status;
-	/**发布人*/
+	/**操作人*/
 	@Column(name="fpublish_operator")
     public String publishOperator;
-	/**发布时间*/
+	/**操作时间*/
 	@Column(name="fpublish_time")
     public Date publishTime;
 	/**创建人*/
@@ -107,6 +110,12 @@ public class InfoPublish extends BaseModel {
     public String expDateStr;
 	
 	
+	public Date getFstartTime() {
+		return fstartTime;
+	}
+	public void setFstartTime(Date fstartTime) {
+		this.fstartTime = fstartTime;
+	}
 	public String getSelfStr() {
 		String selfStr="";
 		if(self!=null){
@@ -120,7 +129,7 @@ public class InfoPublish extends BaseModel {
 	}
 	public String getExpDateStr() {
 		if(expDate!=null){
-			expDateStr=DateHelper.dateFormat(expDate, "yyyy-MM-dd");
+			expDateStr=DateHelper.dateFormat(expDate, "yyyy-MM-dd HH:mm:ss");
 		}
 		return expDateStr;
 	}
@@ -137,6 +146,8 @@ public class InfoPublish extends BaseModel {
 		if(StringUtils.isNotBlank(status)){
 			if("1".equals(status)){
 				statusStr="已发布";
+			}else if("2".equals(status)){
+				statusStr="已撤回";
 			}
 		}else{
 			statusStr="未发布";
@@ -288,6 +299,10 @@ public class InfoPublish extends BaseModel {
 		this.carrierId = carrierId;
 	}
 	public String getStartTime() {
+		if(fstartTime!=null){
+			startTime=DateHelper.dateFormat(fstartTime, "yyyy-MM-dd HH:mm:ss");
+
+		}
 		return startTime;
 	}
 	public void setStartTime(String startTime) {

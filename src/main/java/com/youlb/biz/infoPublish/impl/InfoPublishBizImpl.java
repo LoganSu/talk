@@ -147,7 +147,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		List<Object> valuse = new ArrayList<Object>();
 		sb.append("select * from (SELECT i.id id,i.ftitle title,i.finfotype infoType,i.ftargetdevice targetDevice,i.finfosign infoSign,i.finfodetail infoDetail,i.fsendtype sendType,")
 		.append("i.fcreatetime createTime,i.fexpdate expDate,case when i.fcarrierid=? then true else false end self,i.fstatus status,i.fpublish_time publishTime,")
-		.append("i.fpublish_operator publishOperator,i.fadd_operator addOperator ")
+		.append("i.fpublish_operator publishOperator,i.fadd_operator addOperator,i.fstart_time startTime ")
 		.append("from t_infopublish i INNER JOIN t_domain_infopublish tdi on tdi.finfopublishid=i.id where 1=1 ");
 		valuse.add(loginUser.getCarrier().getId());
 		//普通用户过滤运营商
@@ -202,6 +202,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 				info.setPublishTime(obj[11]==null?null:(Date)obj[11]);
 				info.setPublishOperator(obj[12]==null?"":(String)obj[12]);
 				info.setAddOperator(obj[13]==null?"":(String)obj[13]);
+				info.setFstartTime(obj[14]==null?null:(Date)obj[14]);
 				list.add(info);
 			}
 		}
@@ -226,8 +227,14 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		//日期转换
 		String expDateStr = infoPublish.getExpDateStr();
 		if(StringUtils.isNotBlank(expDateStr)){
-			Date expDate = DateHelper.strParseDate(expDateStr, "yyyy-MM-dd");
+			Date expDate = DateHelper.strParseDate(expDateStr, "yyyy-MM-dd HH:mm:ss");
 			infoPublish.setExpDate(expDate);
+		}
+		//日期转换
+		String startTime = infoPublish.getStartTime();
+		if(StringUtils.isNotBlank(startTime)){
+			Date fstartTime = DateHelper.strParseDate(startTime, "yyyy-MM-dd HH:mm:ss");
+			infoPublish.setFstartTime(fstartTime);
 		}
 		 //设置添加人
 		String operator = "";
@@ -323,14 +330,14 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 				}
 				dto.setTagList(tagList);
 				//全部发布 标签就是社区id
-//				if("2".equals(infoPublish.getSendType())){
+				if("2".equals(infoPublish.getSendType())){
 					//获取社区id
 					List<String> neibTagList = getNeibTagList(tagList);
 					dto.setNeibTagList(neibTagList);
 					logger.info("neibTagList："+Arrays.toString(neibTagList.toArray()));
-//				}else{
-//					dto.setNeibTagList(tagList);
-//				}
+				}else{
+					dto.setNeibTagList(tagList);
+				}
 				logger.info("tagList："+Arrays.toString(infoPublish.getTreecheckbox().toArray()));
 				logger.info("infoPublish:"+JsonUtils.toJson(dto));
 				//调用信息推送接口
@@ -478,6 +485,21 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		.append(" union ALL SELECT t_domain.* FROM t_domain, r WHERE t_domain.id = r.fparentid)")
 		.append(" SELECT r.id  FROM r where r.fparentid is not null GROUP BY r.id");
 		return infoPublishSqlDao.pageFindBySql(sb.toString(), new Object[]{id});
+	}
+    /**
+     * 撤回
+     */
+	@Override
+	public int recall(String[] ids, Operator loginUser) throws BizException {
+		 String recall = "update t_infopublish set fpublish_operator=?,fpublish_time=?,fstatus=? where fstatus=? and fexpdate>? and id=?";
+		 String operator;
+		 //普通管理员 的真实姓名已经包含 admin
+		if(SysStatic.NORMALADMIN.equals(loginUser.getIsAdmin())){
+			operator= loginUser.getRealName();
+		}else{
+			operator = loginUser.getRealName()+"("+loginUser.getLoginName()+")";
+		}
+		 return infoPublishSqlDao.updateSQL(recall, new Object[]{operator,new Date(),"2","1",new Date(),ids[0]});//1 发布状态  2 撤回状态  
 	}
 
 

@@ -3,6 +3,7 @@ package com.youlb.controller.IPManage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.youlb.biz.IPManage.IIPManageBiz;
+import com.youlb.biz.houseInfo.IAreaBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.IPManage.IPManage;
+import com.youlb.entity.houseInfo.Address;
 import com.youlb.utils.common.RegexpUtils;
 import com.youlb.utils.exception.BizException;
 /**
@@ -31,8 +35,14 @@ public class IPManageCtrl extends BaseCtrl {
 
 	@Autowired
 	private IIPManageBiz iPManageBiz;
+	@Autowired
+	private IAreaBiz areaBiz;
 	public void setiPManageBiz(IIPManageBiz iPManageBiz) {
 		this.iPManageBiz = iPManageBiz;
+	}
+    
+	public IAreaBiz getAreaBiz() {
+		return areaBiz;
 	}
 
 	/**
@@ -67,6 +77,15 @@ public class IPManageCtrl extends BaseCtrl {
 				e.printStackTrace();
 			}
     	}
+		try {
+			List<Address> list = areaBiz.getAddressByParentId(null);
+	    	model.addAttribute("provinceList", list);
+
+		} catch (BizException e) {
+			log.error("获取地区列表数据失败");
+			e.printStackTrace();
+		}
+
    		return "/IPManage/addOrEdit";
    	}
     /**
@@ -103,6 +122,16 @@ public class IPManageCtrl extends BaseCtrl {
     	if(StringUtils.isBlank(iPManage.getPlatformName())){
     		return "平台名称不能为空！";
     	}
+		String province = iPManage.getProvince();
+    	if(StringUtils.isNotBlank(province)){
+    		iPManage.setProvince(province.split("_")[1]);
+		}
+		if(StringUtils.isBlank(iPManage.getProvince())){
+			return "请选择省份！";
+		}
+		if(StringUtils.isBlank(iPManage.getCity())){
+			return "请选择城市！";
+		}
     	if(StringUtils.isBlank(iPManage.getNeibName())){
     		return "社区名称不能为空！";
     	}else{

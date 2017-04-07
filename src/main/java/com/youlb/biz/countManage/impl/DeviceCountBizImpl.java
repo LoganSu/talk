@@ -36,6 +36,7 @@ import com.youlb.utils.exception.BizException;
 import com.youlb.utils.exception.JsonException;
 import com.youlb.utils.helper.OrderHelperUtils;
 import com.youlb.utils.helper.SearchHelper;
+import com.youlb.utils.sms.SmsUtil;
 
 /** 
  * @ClassName: DeviceCountBizImpl.java 
@@ -243,6 +244,7 @@ public class DeviceCountBizImpl implements IDeviceCountBiz {
 			SQLQuery query = session.createSQLQuery("SELECT '1'||substring('000000'||nextval('tbl_devicecount_seq'),length(currval('tbl_devicecount_seq')||'')) ");
 			List<String> list =  query.list();
 			deviceCount.setDeviceCount(list.get(0));
+			deviceCount.setCountPsw(SHAEncrypt.digestPassword(SmsUtil.random()));
 			deviceCountSqlDao.add(deviceCount);
 			//添加真正的sip账号fs拨号使用
 			String sipType = deviceCount.getCountType();

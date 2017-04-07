@@ -233,7 +233,6 @@ public class PermissionBizImpl implements IPermissionBiz {
 				String id = (String) cardSqlDao.add(cardInfo);
 //	    Session currSession = cardSqlDao.getCurrSession();
 				session.flush();
-				
 //			}
 			
 		//添加所有卡片父类表

@@ -31,9 +31,9 @@ public class IPManageBizImpl implements IIPManageBiz {
 
 	@Override
 	public void update(IPManage target) throws BizException {
-		String update ="update IPManage set ip=?,port=?,platformName=?,remark=?,platformType=?,neibName=?,management=?,fsIp=?,fsPort=?,httpPort=?,httpIp=?,fsExternalPort=? where id=?";
+		String update ="update IPManage set ip=?,port=?,platformName=?,remark=?,platformType=?,neibName=?,management=?,fsIp=?,fsPort=?,httpPort=?,httpIp=?,fsExternalPort=?,province=?,city=? where id=?";
 		iPManageDao.update(update, new Object[]{target.getIp(),target.getPort(),target.getPlatformName(),target.getRemark(),target.getPlatformType(),
-				target.getNeibName(),target.getManagement(),target.getFsIp(),target.getFsPort(),target.getHttpPort(),target.getHttpIp(),target.getFsExternalPort(),target.getId()});
+target.getNeibName(),target.getManagement(),target.getFsIp(),target.getFsPort(),target.getHttpPort(),target.getHttpIp(),target.getFsExternalPort(),target.getProvince(),target.getCity(),target.getId()});
 		
 
 	}
@@ -62,9 +62,17 @@ public class IPManageBizImpl implements IIPManageBiz {
 
 	@Override
 	public List<IPManage> showList(IPManage target, Operator loginUser)throws BizException {
-		String hql = "from IPManage";
-		
-		return iPManageDao.pageFind(hql,target.getPager());
+		StringBuilder hql = new StringBuilder("from IPManage where 1=1");
+		List<Object> values = new ArrayList<Object>();
+		if(StringUtils.isNotBlank(target.getProvince())){
+			hql.append(" and province like ? ");
+			values.add("%"+target.getProvince()+"%");
+		}
+        if(StringUtils.isNotBlank(target.getCity())){
+        	hql.append(" and city like ? ");
+        	values.add("%"+target.getCity()+"%");
+		}
+		return iPManageDao.pageFind(hql.toString(), values.toArray(),target.getPager());
 	}
 
 	@Override

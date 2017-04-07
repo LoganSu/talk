@@ -101,12 +101,19 @@ public class InfoPublishCtrl extends BaseCtrl {
     			return "内容长度超出200字符！";
     		}
     	}
-    	if(StringUtils.isBlank(infoPublish.getExpDateStr())){
-    		return "有效期不能为空！";
+    	if(StringUtils.isBlank(infoPublish.getStartTime())){
+    		return "生效时间不能为空！";
     	}
-    	Date expDate = DateHelper.strParseDate(infoPublish.getExpDateStr(), "yyyy-MM-dd");
+    	Date startTime = DateHelper.strParseDate(infoPublish.getStartTime(), "yyyy-MM-dd HH:mm:ss");
+    	if(new Date().getTime()>startTime.getTime()){
+    		return "生效时间要在今天以后！";
+    	}
+    	if(StringUtils.isBlank(infoPublish.getExpDateStr())){
+    		return "截止时间不能为空！";
+    	}
+    	Date expDate = DateHelper.strParseDate(infoPublish.getExpDateStr(), "yyyy-MM-dd HH:mm:ss");
     	if(new Date().getTime()>expDate.getTime()){
-    		return "有效期要在今天以后！";
+    		return "截止时间要在今天以后！";
     	}
     	if(StringUtils.isBlank(infoPublish.getInfoSign())){
     		return "署名不能为空！";
@@ -146,6 +153,27 @@ public class InfoPublishCtrl extends BaseCtrl {
 		}
 		return null;
 	}
+	 /**
+     * 撤回
+     * @param ids
+     * @param model
+     * @return
+     */
+	@RequestMapping("/recall.do")
+	@ResponseBody
+	public String recall(String[] ids,Model model){
+		if(ids!=null&&ids.length>0){
+			try {
+				int i = infoPublishBiz.recall(ids,getLoginUser());
+				if(i<1){
+					return "撤回失败";
+				}
+			} catch (Exception e) {
+				return "撤回出错";
+			}
+		}
+		return null;
+	}
     /**
      * 删除
      * @param ids
@@ -164,4 +192,5 @@ public class InfoPublishCtrl extends BaseCtrl {
 		}
 		return null;
 	}
+	
 }

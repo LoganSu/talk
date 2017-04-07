@@ -81,8 +81,9 @@ public class DeviceCount extends BaseModel {
 	private String printTime;
 	
 	public String getOprator() {
-		return "<a class='deviceCountSetPsw' rel='"+getId()+"' href='javascript:void(0)'>设置密码</a>&nbsp;" +
-				"<a class='deviceCountUpdate' rel='"+getId()+"' href='javascript:void(0)'>修改</a>";
+//		return "<a class='deviceCountSetPsw' rel='"+getId()+"' href='javascript:void(0)'>设置密码</a>&nbsp;" +
+//				"<a class='deviceCountUpdate' rel='"+getId()+"' href='javascript:void(0)'>修改</a>";
+		return "<a class='deviceCountUpdate' rel='"+getId()+"' href='javascript:void(0)'>修改</a>";
 	}
 	
 	public String getCountTypeStr() {

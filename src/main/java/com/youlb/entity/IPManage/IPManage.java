@@ -58,9 +58,26 @@ public class IPManage extends BaseModel {
    @Column(name="fhttp_ip")
    private String httpIp;
    
+   /**省份*/
+   @Column(name="fprovince")
+   private String province;
+   /**市*/
+   @Column(name="fcity")
+   private String city;
    
    
-   
+	public String getProvince() {
+		return province;
+	}
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
 	public String getHttpIp() {
 		return httpIp;
 	}

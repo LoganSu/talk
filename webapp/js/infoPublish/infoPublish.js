@@ -14,7 +14,7 @@ $(function(){
 				 hiAlert("提示","请选择一条操作数据！");
 				 return false;
 			 }
-			 if(selects[0].publishOperator){
+			 if(selects[0].statusStr=='已发布'){
 				 hiAlert("提示","已发布内容不能修改！");
 				 return false;
 			 }
@@ -84,6 +84,45 @@ $(function(){
 //		  $(document).on("click","#confirm_modal .cancel",function(){
 //			  s.close();
 //		  })
+	});
+	
+	//撤回
+	$(document).on("click",".infoPulishRecall",function(){
+		var url =$path+"/mc/infoPublish/recall.do";
+		var but = $(this);
+		var title = $(this).html();
+		//获取选择的id
+		var selects = $("#tableShowList").bootstrapTable('getSelections');
+		//ids= 长度小于4说明没有id
+		 if(selects.length!=1){
+			 hiAlert("提示","请选择一条操作数据！");
+			 return false;
+		 }
+		 if(selects[0].statusStr!='已发布'){
+			 hiAlert("提示","只有已发布内容才能撤回！");
+			 return false;
+		 }
+		 for(var i=0;i<selects.length;i++){
+			 var item = selects[i];
+			 alert(item.toSource());
+			if(item.selfStr=="否"){
+				 hiAlert("提示","请选择本运营商发布的公告撤回！");
+				 return false;
+			}
+		 }
+		 var ids = getSelectedIds();
+		 
+		 bootstrapQ.confirm('<span style="color:black;font-size:16px">您确定要撤回吗？</span>',function(){
+			 $.post(url,ids,function($data){
+	            	if(!$data){
+						refresh();
+					}else{
+						hiAlert("提示",$data);
+					}
+	            });
+		},function(){
+		});
+		 
 	});
 	
 	//行内详情

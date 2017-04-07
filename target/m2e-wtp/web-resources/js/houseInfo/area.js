@@ -1,5 +1,5 @@
 $(function(){
-	$(document).on("change","#areasaveForm .province",function(){
+	$(document).on("change",".province",function(){
 		  var value = $(this).val();
 		  var arr = value.split("_");
 		  var id = arr[0];
@@ -9,7 +9,7 @@ $(function(){
 	});
 	
 	//获取社区编号
-	$(document).on("change","#areasaveForm .city",function(){
+	$(document).on("change",".city",function(){
 		  var city = $(this).val();
 		  if(city){
 			  $.post($path+"/mc/area/getAreaCode.do","city="+city,function($data){

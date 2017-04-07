@@ -21,4 +21,20 @@
             </r:role>
          </ul>
 	 </div>
+	  <!-- 查询form div  --> 
+    <div class="searchInfoDiv">
+          <form id="IPManageSearchForm" action="" method="post">
+           <input type="hidden" class="hiddenId" name="id" value="${id}"/>
+           <table>
+              <tr>
+                <td><div class="firstFont">省份：</div></td>
+                <td><div><input name="province" class="form-control"/></div></td>
+                <td><div class="leftFont">城市：</div></td>
+                <td><div><input name="city" class="form-control"/></div></td>
+                <td><div class="leftFont"><button class="btn btn-info btn-sm reset">重置</button></div></td>
+                <td><div class="leftFont"><button class="btn btn-info btn-sm search" rel="${path}/mc/IPManage/showList.do">查询</button></div></td>
+              </tr>
+           </table>
+        </form>
+       </div>  
 </body>
