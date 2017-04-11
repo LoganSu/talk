@@ -13,7 +13,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.crypto.Cipher;
+
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
@@ -212,7 +214,6 @@ public class RSAUtils {
 	    //用私钥加密需要公钥解，公钥加密需要私钥解
 	    public static void main(String[] args) {
 	    	
-	    	String sign = "2d67bcb2807283ad3ccc142e9b184380b3957a65f39046dbef60a6991a19eef76db5081aa407bbb908bdf2bece75cb4c41ac4835721c5450a2d92cc47abe24f9c7ecae36b47c4ec0d83de12f4ee274b804c8030cfbb7436dac90b8f0eaf20456df9b671003cdbc9bb8a97cdfee5b0195829e6b2d34b4eaab2159c3f98c726356";
 			
 	    	try {
 				String sss = "hello world";
@@ -220,16 +221,16 @@ public class RSAUtils {
 				//获取私钥
 				String privateKey = getPrivateKey(keyMap);
 				 privateKey = "2385d83466f96c62e085917a03570d674b4341201b347026ace759acb87c3e9b3214e81c675b1907fc3b0d1e3d67d221b0f54e773717cd2b7f37c41279924f209bf0c4f1b653e849cd7a1855c04967ae30e244d2ff8bc988400711016d65a9787f3492670ec3aec1a23bee9edb8c169c8e1fd1c9dee659378f32d35c4b6cc7b16993fe916b77cfa3bab1991b9d604320b45106017e6b67e29f102283ae4fbc1fc93e553d8a4c580d9c5aedee684ea67f3721e24ffe674efbd6984c6e981983d6fa9d4c6521a3dbcf3d09d6b8cf97b29a5cb262c0b1a861510228bf0fa6028704eb223f9188ce0b4bdec409be8ba92d458a5ca8d3caa01bdb514c70bbb94967d5433a748f7621c49223bd8008f99ab98073801714528e245263e1bbe2c1e068776beda6aa3a991727114966ddfe12ff511e04b1d47e88d40d9cb28e96aa55a78181f0fc3784294b1be483fa85283bfcf310e712d5e049984e50b4788dc0bcc1606e851827dc13588333b731fe67e6b4cc5b7bc42229556c3cec88dae9d5e7c0aa7b27999fd9cca761ca0c3001ab15c2ca3028fe8b62bf531b857b2d545bd72702bc9aa8690cc3d3f2098924bcf3e886075351651864a9687bb45b24c5928b7a534ea283175bd1b320b06d228c64a6d4affc63f51cd83974bc334dbd8c6ce442f306f8a6a961959418738671057d44faf273454629f0f57964e634a8b3cd597ff4a40eb46063a01d6d8a57fcd4a7c1d7ec6fc86e2f8d77ac8c86c6ca0efb19386a633eb379232539cb4dff375247f87a9a7a5acffdd238f61c1bfab9e59f25cd4ba13722ee376576e1ce6bd556e315529d57af27d5f5b8cea08ef70cc3cc1dc20b853d106ff1fba957140b6122d2925fd5bc3fcce07b51e0d75100a93b3604ff97";
-//				System.out.println(privateKey);
-				byte[] encryptByPrivateKey = encryptByPrivateKey(sss.getBytes(), privateKey,SysStatic.KEYBYTES);
+				System.out.println(privateKey);
+				byte[] encryptByPrivateKey = encryptByPrivateKey(sss.getBytes(), privateKey,DES3.hexStringToBytes("11224c568813403828257951cbdd556677297498304036e2"));
 				String s = DES3.bytesToHexString(encryptByPrivateKey);
 				System.out.println(s);
                 System.out.println("加密:"+new String(encryptByPrivateKey));
                 //获取公钥
                 String publicKey = getPublicKey(keyMap);
                 publicKey="64bec213c6ca3321543a3d3b2a5fdbf3b911dee6e2f40fe89be6e4fa1ec8d0d7fc3b0d1e3d67d221b0f54e773717cd2b7f37c41279924f209bf0c4f1b653e849cd7a1855c04967ae30e244d2ff8bc988400711016d65a9787f3492670ec3aec1a23bee9edb8c169c8e1fd1c9dee659378f32d35c4b6cc7b16993fe916b77cfa3bab1991b9d604320b45106017e6b67e29f102283ae4fbc1fc93e553d8a4c580dae377730b3f35963";
-//                System.out.println(publicKey);
-                byte[] decryptByPrivateKey = decryptByPublicKey(DES3.hexStringToBytes(s), publicKey,SysStatic.KEYBYTES);
+                System.out.println(publicKey);
+                byte[] decryptByPrivateKey = decryptByPublicKey(DES3.hexStringToBytes(s), publicKey,DES3.hexStringToBytes("11224c568813403828257951cbdd556677297498304036e2"));
                 System.out.println("解密:"+new String(decryptByPrivateKey));
 				
 //                byte[] encryptByPublicKey = encryptByPublicKey(sss.getBytes(), publicKey);

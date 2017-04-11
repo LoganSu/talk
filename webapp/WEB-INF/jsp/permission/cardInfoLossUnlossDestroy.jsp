@@ -71,6 +71,24 @@ $(function(){
 							   hiAlert("提示","发卡器连接出错！");
 								return false;
 						   }
+						   sleep(100);
+						   //判断记录的卡号是不是注销的卡
+						   var cardSn = $("#lossAndOpenForm .cardSn").val();
+							  try{
+								  var cardId = myactivex.GetCardId();
+								  if(jQuery.parseJSON(cardId).code!='0'){
+									  hiAlert("提示","请放入卡片！");
+									  return false;
+								  }
+                                  if(jQuery.parseJSON(cardId).result.card_id!=cardSn){
+                                	  hiAlert("提示","请放入正确的卡片！");
+									  return false;
+								  }
+								  
+							  }catch(e){
+								  hiAlert("提示","读取卡片id出错！");
+									     return false;
+							  }
 						   //加载key
 			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"domainId="+$("#lossAndOpenForm [name='domainId']").val(),function($key){
 			            	   if($key){

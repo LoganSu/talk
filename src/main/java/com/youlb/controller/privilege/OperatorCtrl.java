@@ -77,7 +77,10 @@ public class OperatorCtrl extends BaseCtrl{
     	//爱社区特殊处理页面
     	if("asq".equals(carrierNum)){
     		model.addAttribute("module", "dweller");
-    		return "/asqIndex";
+    		return "/partner/asqIndex";
+    	}else if("huaan".equals(carrierNum)){
+    		model.addAttribute("module", "dweller");
+    		return "/partner/huaanIndex";
     	}
     	if("1".equals(SysStatic.PLATFORMLEVEL)){
     		return "/oneLevelIndex";
@@ -112,12 +115,12 @@ public class OperatorCtrl extends BaseCtrl{
     			String encodeStr = DES3.bytesToHexString(encode);
     			String md5 = DigestUtils.md5Hex(encodeStr+username+carrierNum);
     			//验证token
-//    			if(!md5.equalsIgnoreCase(token)){
-//    				retMap.put("code", "4");
-//        			retMap.put("message", "非法请求");
-//        			writer.write(JsonUtils.toJson(retMap));
-//        			return null;
-//    			}
+    			if(!md5.equalsIgnoreCase(token)){
+    				retMap.put("code", "4");
+        			retMap.put("message", "非法请求");
+        			writer.write(JsonUtils.toJson(retMap));
+        			return null;
+    			}
 				//设置默认的运营商
 				Carrier carrier = new Carrier();
 				carrier.setCarrierNum(carrierNum);

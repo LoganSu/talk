@@ -25,4 +25,12 @@ public class GuidePageCtrl extends BaseCtrl {
    	public String asqGuidePage(String[] ids,Model model){
    		return "/guidePage/asqGuidePage";
    	}
+    /**
+     * 跳转到华安区引导页
+     * @return
+     */
+    @RequestMapping("/huaanGuidePage.do")
+   	public String huaanGuidePage(String[] ids,Model model){
+   		return "/guidePage/huaanGuidePage";
+   	}
 }

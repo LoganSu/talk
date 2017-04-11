@@ -282,3 +282,15 @@ div.fixed-table-scroll-outer {
     height: 150px;
     overflow: hidden;
 }
+
+.table-striped > tbody tr.selected > td {
+    background: #0075FE;
+    color: #ccc;
+}
+.table.table-hover > tbody > tr:hover > td, .table.table-hover > tbody > tr:hover > th {
+    background: #ddd;
+}
+
+.table.table-hover.table-striped > tbody tr.selected > td a {
+    color: #fff;
+}

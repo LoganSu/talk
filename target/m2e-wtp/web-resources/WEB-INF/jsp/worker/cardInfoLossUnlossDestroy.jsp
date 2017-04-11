@@ -52,6 +52,7 @@ $(function(){
 				        	       				     return false;
 				        	            	   }
 				        	            	 }
+				                    	   sleep(100);
 				        	            	   try {
 				        	            		    RestoreCardKey = myactivex.RestoreCardKey();
 				        	            		    obj = jQuery.parseJSON(RestoreCardKey);

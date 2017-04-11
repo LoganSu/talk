@@ -15,7 +15,7 @@
 			</a>
 			<ul class="dropdown-menu">
 			  <r:role auth="房产信息"> 
-				<li><a tree_id="houseInfoTree" class="li_a tree" href="javascript:void(0)" rel="${path}/mc/area/areaListshowPage.do?module=areaTable&modulePath=/area">房产信息</a></li>
+                  <li><a tree_id="houseInfoTree" class="li_a tree" href="javascript:void(0)" rel="${path}/mc/area/areaListshowPage.do?module=areaTable&modulePath=/area">房产信息</a></li>
 			  </r:role>
 			</ul>
 			

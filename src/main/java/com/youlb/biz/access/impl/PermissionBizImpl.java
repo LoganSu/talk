@@ -937,6 +937,9 @@ public class PermissionBizImpl implements IPermissionBiz {
 	public void workerUpdateCardInfo(CardInfo cardInfo) throws BizException, ClientProtocolException, ParseException, IOException, JsonException {
 		String update = "update CardInfo set cardStatus=?,domainId=? where cardSn=? ";
 		cardSqlDao.update(update, new Object[]{SysStatic.LIVING,cardInfo.getDomainId(),cardInfo.getCardSn()});
+		//插入中间表
+		String insert="insert into t_cardinfo_worker(fcardinfo_id,fworker_id) values(?,?)";
+		cardSqlDao.executeSql(insert, new Object[]{cardInfo.getCardSn(),cardInfo.getWorkerId()});
 		pushInfo(cardInfo);
 		
 	}

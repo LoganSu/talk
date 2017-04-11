@@ -519,8 +519,8 @@
                   </div>
                   
                   
-<!--                       <div class="col-md-10" id="showRightArea" ></div> -->
-<!--                       <iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe> -->
+                      <div class="col-md-10" id="showRightArea" ></div>
+                      <iframe style="width: 1500px; height: 800px; margin:0 auto;" id="showRightAreaIframe" src="" frameborder="0"></iframe>
                      
                   
                   <!-- 图片显示div -->

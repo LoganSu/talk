@@ -27,15 +27,25 @@
 				物业服务 <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-			   <r:role auth="组织架构"> 
-				  <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/departmentCompany">组织架构</a></li>
-			   </r:role>
-			   <r:role auth="员工管理"> 
-				  <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/worker/workershowPage.do?module=workerTable&modulePath=/worker">员工管理</a></li>
-				</r:role>
-				<r:role auth="分组管理"> 
-				   <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
-				</r:role>
+			   <r:role auth="关于小区">
+                   <li><a tree_id="neighborhoodsTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?1=1">关于小区</a></li>
+               </r:role>
+               <r:role auth="物业投诉">
+                   <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=2">物业投诉</a></li>
+               </r:role>
+               <r:role auth="物业报修">
+                   <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/repairs/repairsshowPage.do?module=repairsTable&modulePath=/repairs&orderNature=1">物业报修</a></li>
+               </r:role>
+               <r:role auth="组织架构">
+                   <li><a tree_id="managementDepartmentTree" class="tree li_a" href="javascript:void(0)" rel="${path}/mc/department/departmentshowPage.do?module=managementCompanyTable&modulePath=/departmentCompany">组织架构</a></li>
+               </r:role>
+               <r:role auth="员工管理">
+                   <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/worker/workershowPage.do?module=workerTable&modulePath=/worker">员工管理</a></li>
+               </r:role>
+               <r:role auth="分组管理">
+                   <li><a class="li_a" href="javascript:void(0)" rel="${path}/mc/workerGroup/workerGroupshowPage.do?module=workerGroupTable&modulePath=/workerGroup">分组管理</a></li>
+               </r:role>
+
 			</ul>
 			
 		</li>

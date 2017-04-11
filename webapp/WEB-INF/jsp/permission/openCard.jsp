@@ -21,6 +21,7 @@ $(function(){
 			   hiAlert("提示","发卡器连接出错！");
 				return false;
 		   }
+		   sleep(100);
 		   var cardId;
 			  try{
 				  cardId = myactivex.GetCardId();
