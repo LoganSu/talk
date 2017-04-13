@@ -95,3 +95,10 @@ ul.ztree.zTreeDragUL {margin:0; padding:0; position:absolute; width:auto; height
 	padding:0;
 	background:none;
 }*/
+.table.table-hover.table-striped > tbody tr.selected > td {
+    background: #2d8bf9;
+    color: #fff;
+}
+.table.table-hover > tbody > tr:hover > td, .table.table-hover > tbody > tr:hover > th {
+    background: #ddd;
+}

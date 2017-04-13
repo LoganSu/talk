@@ -88,6 +88,7 @@ $(function(){
 	
 	//撤回
 	$(document).on("click",".infoPulishRecall",function(){
+//		alert(6666);
 		var url =$path+"/mc/infoPublish/recall.do";
 		var but = $(this);
 		var title = $(this).html();
@@ -104,7 +105,7 @@ $(function(){
 		 }
 		 for(var i=0;i<selects.length;i++){
 			 var item = selects[i];
-			 alert(item.toSource());
+//			 alert(item.toSource());
 			if(item.selfStr=="否"){
 				 hiAlert("提示","请选择本运营商发布的公告撤回！");
 				 return false;

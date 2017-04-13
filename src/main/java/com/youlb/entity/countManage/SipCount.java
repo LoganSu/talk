@@ -65,7 +65,7 @@ public class SipCount extends BaseModel {
 			}else if("3".equals(countType)){
 				countTypeStr="物业员工sip";
 			}else if("4".equals(countType)){
-				countTypeStr="社区账号sip";
+				countTypeStr="网关";
 			}else if("5".equals(countType)){
 				countTypeStr="管理机";
 			}else if("6".equals(countType)){

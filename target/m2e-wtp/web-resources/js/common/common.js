@@ -54,8 +54,10 @@ $(function(){
 				  }else if(treeId=="neighborhoodsTree"){
 					   //设置单击事件
 					  var zTreeOnClick =  function(event, treeId, treeNode){
-							$("#showRightArea").load($path+"/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?module=aboutNeighborhoodsTable&modulePath=/aboutNeighborhoods&neighborDomainId="+treeNode.id+"&aa="+new Date().getTime());
-						 }
+						  if(treeNode.level!=0){
+							  $("#showRightArea").load($path+"/mc/aboutNeighborhoods/aboutNeighborhoodsshowPage.do?module=aboutNeighborhoodsTable&modulePath=/aboutNeighborhoods&neighborDomainId="+treeNode.id+"&aa="+new Date().getTime());
+						  }
+					     }
 						 //初始化顶级节点
 //						 var zTreeNodes = {"id":"", "name":"社区列表", isParent:true,nocheck:true};
 					  zTreeObj = zTree("neighborhoodsTree", ["id","name","level"],[],$path+"/mc/aboutNeighborhoods/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)

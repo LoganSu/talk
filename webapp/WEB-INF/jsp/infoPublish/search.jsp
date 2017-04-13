@@ -22,9 +22,9 @@
             <r:role auth="公告通知发布/发布">
                 <li><button class="btn btn-success btn-sm infoPulishPush">发布</button></li>
             </r:role>
-<%--             <r:role auth="公告通知发布/撤回"> --%>
-<!--                 <li><button class="btn btn-warning btn-sm infoPulishRecall">撤回</button></li> -->
-<%--             </r:role> --%>
+            <r:role auth="公告通知发布/撤回">
+                <li><button class="btn btn-warning btn-sm infoPulishRecall">撤回</button></li>
+            </r:role>
             <r:role auth="公告通知发布/删除">
 	            <!--delete类 公共删除  -->
 	            <li><button class="btn btn-danger btn-sm infoPublishDelete">删除</button></li>

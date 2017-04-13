@@ -12,7 +12,7 @@
 	              <tr>
 	                <td><div class="firstFont"><span class="starColor">*</span>登入名：</div></td>
 	                <td><div>
-	                   <input name="loginName" class="form-control required" title="登入名不能为空" value="${user.loginName}"/>
+	                   <input name="loginName" class="form-control required" maxlength="11" title="登入名不能为空" value="${user.loginName}"/>
 	                </div></td>
 	                <td><div class="leftFont"><span class="starColor">*</span>姓名：</div></td>
 	                <td><div><input name="realName" class="form-control required" title="姓名不能为空" value="${user.realName}"/></div></td>

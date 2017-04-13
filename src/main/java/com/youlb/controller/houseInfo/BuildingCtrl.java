@@ -106,9 +106,12 @@ public class BuildingCtrl extends BaseCtrl {
 	    			return "楼栋名已经存在！";
 	    		}
     		}
-    		if(!RegexpUtils.checkNumAndLetter(building.getBuildingNum(), 3, 3)){
-    			return "呼叫号码不能为空且为3个字符！";
-    		}
+//    		if(!RegexpUtils.checkNumber(building.getBuildingNum())){
+//    			return "呼叫号码不能为空且为3个字符！";
+//    		}
+    		if(StringUtils.isBlank(building.getBuildingNum())||!RegexpUtils.checkNumber(building.getBuildingNum())||building.getBuildingNum().length()!=3){
+	    		return "呼叫号码不能为空且为3位数字!";
+	    	}
     		//同一个社区 楼栋编号不能相同
     		boolean b = buildingBiz.checkBuildingNum(building);
     		if(b){

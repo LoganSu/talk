@@ -98,9 +98,9 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 .append(" )=tdd.fdepartmentid  where u.sip_type ='3' ")
 		 .append(" UNION ")
 		 .append(" SELECT sr.reg_user sipUser,sr.realm sip_host,sr.network_proto status,sr.expires expires,")
-		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,d.id domainid,n.fneibname username")
+		 .append(" sr.network_ip network_ip,sr.network_port network_port,u.sip_type sip_type,d.id domainid,d.fremark username")
 		 .append(" from registrations sr INNER JOIN users u on u.user_sip=to_number(sr.reg_user, '9999999999999999999999999')")
-		 .append(" left JOIN t_neighborhoods n on n.id=u.local_sip INNER JOIN t_domain d on d.fentityid=n.id  where u.sip_type ='4' ) t where 1=1");
+		 .append(" INNER JOIN t_domain d on d.id=u.local_sip  where u.sip_type ='4' ) t where 1=1");
 		 if(StringUtils.isNotBlank(target.getSipUser())){
 			 sb.append(" and t.sipUser like ? ");
 			 values.add("%"+target.getSipUser()+"%");
@@ -173,8 +173,8 @@ public class SipCountBizImpl implements ISipCountBiz {
 		 .append(" (WITH RECURSIVE r AS (SELECT * FROM t_department WHERE id = w.fdepartmentid union ALL SELECT t_department.* FROM t_department, r WHERE t_department.id = r.fparentid) ")
 		 .append(" SELECT r.id FROM r where r.fparentid is null )=tdd.fdepartmentid  where u.sip_type ='3'")
 		 .append(" UNION ")
-		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,n.fneibname username, d.id domainId,u.sip_type sip_type ")
-		 .append(" from users u INNER JOIN t_neighborhoods n on n.id=u.local_sip INNER JOIN t_domain d on d.fentityid=n.id  where u.sip_type ='4')t where 1=1");
+		 .append(" SELECT to_char(u.user_sip,'999999999999999') sipUser,d.fremark username, d.id domainId,u.sip_type sip_type ")
+		 .append(" from users u INNER JOIN t_domain d on d.id=u.local_sip  where u.sip_type ='4')t where 1=1");
 		 if(StringUtils.isNotBlank(target.getSipUser())){
 			 sb.append(" and t.sipUser like ? ");
 			 values.add("%"+target.getSipUser()+"%");

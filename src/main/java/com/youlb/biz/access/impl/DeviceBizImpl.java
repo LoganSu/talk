@@ -300,9 +300,10 @@ public class DeviceBizImpl implements IDeviceBiz {
 	@Override
 	public void setLive(String[] ids) throws BizException {
 		List<String> asList = Arrays.asList(ids);
-		StringBuilder setLive = new StringBuilder("update t_deviceinfo set fdevicestatus=?,flive_time=? where (fdevicestatus=null or fdevicestatus='') ");
+		StringBuilder setLive = new StringBuilder("update t_deviceinfo set fdevicestatus=?,flive_time=? where (fdevicestatus is null or fdevicestatus='') ");
 		setLive.append(SearchHelper.jointInSqlOrHql(asList, " id "));
-		deviceSqlDao.updateSQL(setLive.toString(), new Object[]{"1",new Date(),asList});
+		int i= deviceSqlDao.updateSQL(setLive.toString(), new Object[]{"1",new Date(),asList});
+		System.out.println(i);
 	}
 
 }

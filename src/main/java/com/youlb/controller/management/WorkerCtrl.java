@@ -239,6 +239,7 @@ public class WorkerCtrl extends BaseCtrl{
         public String writeCard(CardInfo cardInfo,Model model){
         	//检查卡片是否已经使用
         	try {
+        		cardInfo.setCardBelongs("2");//所属物业员工
         		    //检查人和卡片是否已经存在
         		    Boolean b = permissionBiz.checkWorkerCardExist(cardInfo);
         		    if(!b){
@@ -253,7 +254,6 @@ public class WorkerCtrl extends BaseCtrl{
         		    			return "1";
         		    		}
         		    	}else{
-        		    		cardInfo.setCardBelongs("2");//所属物业员工
         		    		int i = permissionBiz.writeCard(cardInfo);
         		    		return i+"";
         		    	}
