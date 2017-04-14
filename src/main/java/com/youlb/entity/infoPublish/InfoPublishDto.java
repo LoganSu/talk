@@ -46,13 +46,22 @@ public class InfoPublishDto{
 //    public String iconUrl;
     /**署名人 */
     public String infoSign;
-    /**有效期*/
-    public Date expDate;
+    /**开始时间*/
+    public Date fstartTime;
+    /**截至时间*/
+    public Date new_expdate;
+    /**发布时间*/
     public Date publishTime;
     /**社区标签集合 */
     public List<String> neibTagList;
 	
     
+	public Date getFstartTime() {
+		return fstartTime;
+	}
+	public void setFstartTime(Date fstartTime) {
+		this.fstartTime = fstartTime;
+	}
 	public List<String> getNeibTagList() {
 		return neibTagList;
 	}
@@ -72,13 +81,14 @@ public class InfoPublishDto{
 	public void setPublishTime(Date publishTime) {
 		this.publishTime = publishTime;
 	}
-	public Date getExpDate() {
-		return expDate;
+	 
+    public Date getNew_expdate() {
+		return new_expdate;
 	}
-	public void setExpDate(Date expDate) {
-		this.expDate = expDate;
+	public void setNew_expdate(Date new_expdate) {
+		this.new_expdate = new_expdate;
 	}
-    public String getInfoSign() {
+	public String getInfoSign() {
 		return infoSign;
 	}
 	public void setInfoSign(String infoSign) {

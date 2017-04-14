@@ -235,6 +235,7 @@ private String htmlspecialchars(String str) {
 		uploadJson : $path+'/js/editor/jsp/upload_json.jsp',
 		fileManagerJson : $path+'/js/editor/jsp/file_manager_json.jsp',
 		allowFileManager : true,
+		allowImageRemote:false,
 		items : [
 		 		'undo', 'redo', '|', 'preview','cut', 'copy', 'paste',
 		 		'|', 'justifyleft', 'justifycenter', 'justifyright',
@@ -242,7 +243,7 @@ private String htmlspecialchars(String str) {
 		 		'superscript', 'clearhtml', 'quickformat', 'selectall', '|', 'fullscreen', 
 		 		'formatblock', 'fontname', 'fontsize', '/', 'forecolor', 'hilitecolor', 'bold',
 		 		'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image',// 'multiimage',
-		 		'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+		 		 'table', 'hr', 'emoticons',  'pagebreak',
 		 		'anchor', 'link', 'unlink', '|', 'about'
 		 	],
 		afterBlur: function(){this.sync();},

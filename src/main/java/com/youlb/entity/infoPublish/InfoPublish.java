@@ -73,6 +73,9 @@ public class InfoPublish extends BaseModel {
 	/**有效期*/
 	@Column(name="fexpdate")
     public Date expDate;
+	/**有效期（新加）*/
+	@Column(name="fnew_expdate")
+    public Date new_expdate;
 	/**生效时间*/
 	@Column(name="fstart_time")
     public Date fstartTime;
@@ -88,6 +91,7 @@ public class InfoPublish extends BaseModel {
 	/**创建人*/
 	@Column(name="fadd_operator")
     public String addOperator;
+	
 	
 	/**是否是本运营商发布的公告*/
 	@Transient
@@ -155,6 +159,12 @@ public class InfoPublish extends BaseModel {
 		return statusStr;
 	}
 	
+	public Date getNew_expdate() {
+		return new_expdate;
+	}
+	public void setNew_expdate(Date new_expdate) {
+		this.new_expdate = new_expdate;
+	}
 	public Date getPublishTime() {
 		return publishTime;
 	}

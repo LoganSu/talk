@@ -28,13 +28,14 @@ $(function(){
 								 $("#showRightArea").load($path+"/mc/building/buildingListshowPage.do?module=buildingTable&modulePath=/building&parentId="+treeNode.id+"&aa="+new Date().getTime());
 							 }else if(treeNode.level==2&&treeNode.isParent){
 								 $("#showRightArea").load($path+"/mc/unit/unitListshowPage.do?module=unitTable&modulePath=/unit&parentId="+treeNode.id+"&aa="+new Date().getTime());
-							 }else if(treeNode.level==3&&treeNode.isParent){
+							 }else if(treeNode.level==3){
 								 $("#showRightArea").load($path+"/mc/room/roomListshowPage.do?module=roomTable&modulePath=/room&parentId="+treeNode.id+"&aa="+new Date().getTime());
 							 }
 						 }
+						 
 						 //初始化顶级节点
 //						 var zTreeNodes = {"id":"1", "name":"区域信息", isParent:true,nocheck:true};
-						 zTreeObj = zTree("houseInfoTree", ["id","name","level"],["isAll",false],$path+"/mc/domain/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
+						 zTreeObj = zTree("houseInfoTree", ["id","name","level"],["isAll",false,"showLast",false],$path+"/mc/domain/getNodes.do",false,{"Y": "ps", "N": "ps"},zTreeOnClick, null)
 				  }else if(treeId=="authorityTree"){
 					    //设置单击事件
 					  var zTreeOnClick =function(event, treeId, treeNode){

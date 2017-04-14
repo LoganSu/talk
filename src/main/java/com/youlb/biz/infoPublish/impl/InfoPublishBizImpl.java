@@ -147,7 +147,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		List<Object> valuse = new ArrayList<Object>();
 		sb.append("select * from (SELECT i.id id,i.ftitle title,i.finfotype infoType,i.ftargetdevice targetDevice,i.finfosign infoSign,i.finfodetail infoDetail,i.fsendtype sendType,")
 		.append("i.fcreatetime createTime,i.fexpdate expDate,case when i.fcarrierid=? then true else false end self,i.fstatus status,i.fpublish_time publishTime,")
-		.append("i.fpublish_operator publishOperator,i.fadd_operator addOperator,i.fstart_time startTime ")
+		.append("i.fpublish_operator publishOperator,i.fadd_operator addOperator,i.fstart_time startTime,i.fnew_expdate new_expdate ")
 		.append("from t_infopublish i INNER JOIN t_domain_infopublish tdi on tdi.finfopublishid=i.id where 1=1 ");
 		valuse.add(loginUser.getCarrier().getId());
 		//普通用户过滤运营商
@@ -196,7 +196,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 				info.setInfoDetail(obj[5]==null?"":(String)obj[5]);
 				info.setSendType(obj[6]==null?"":(String)obj[6]);
 				info.setCreateTime(obj[7]==null?null:(Date)obj[7]);
-				info.setExpDate(obj[8]==null?null:(Date)obj[8]);
+				info.setExpDate(obj[8]==null?obj[15]==null?null:(Date)obj[15]:(Date)obj[8]);
 				info.setSelf(obj[9]==null?null:(Boolean)obj[9]);
 				info.setStatus(obj[10]==null?"":(String)obj[10]);
 				info.setPublishTime(obj[11]==null?null:(Date)obj[11]);
@@ -228,7 +228,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		String expDateStr = infoPublish.getExpDateStr();
 		if(StringUtils.isNotBlank(expDateStr)){
 			Date expDate = DateHelper.strParseDate(expDateStr, "yyyy-MM-dd HH:mm:ss");
-			infoPublish.setExpDate(expDate);
+			infoPublish.setNew_expdate(expDate);
 		}
 		//日期转换
 		String startTime = infoPublish.getStartTime();
@@ -491,7 +491,7 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
      */
 	@Override
 	public int recall(String[] ids, Operator loginUser) throws BizException {
-		 String recall = "update t_infopublish set fpublish_operator=?,fpublish_time=?,fstatus=? where fstatus=? and fexpdate>? and id=?";
+		 String recall = "update t_infopublish set fpublish_operator=?,fpublish_time=?,fstatus=? where fstatus=? and fnew_expdate>? and id=?";
 		 String operator;
 		 //普通管理员 的真实姓名已经包含 admin
 		if(SysStatic.NORMALADMIN.equals(loginUser.getIsAdmin())){

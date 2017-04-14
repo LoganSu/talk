@@ -964,13 +964,13 @@ public class PermissionBizImpl implements IPermissionBiz {
 		.append("(SELECT to_char(cd.ftime,'yyyy-MM-dd') fdate,to_char(cd.ftime,'HH24:mi:ss') ftime,d.fremark workerNum,")
 		.append("td.fname fname from t_cardrecord cd INNER JOIN t_cardinfo c on c.fcardsn=cd.fcardsn ")
 		.append("INNER JOIN t_domain d on d.id=c.fdomainid INNER JOIN t_domain_dweller tdd on tdd.fdomainid=d.id ")
-		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1")
+		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid where fcardstatus='1' GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1")
 		.append(" UNION ")
 		.append("select * from(select *,row_number() over(partition by t.workerNum, t.fdate ORDER BY t.fdate,t.ftime asc)rn from ")
 		.append("(SELECT to_char(cd.ftime,'yyyy-MM-dd') fdate,to_char(cd.ftime,'HH24:mi:ss') ftime,d.fremark workerNum,")
 		.append("td.fname fname from t_cardrecord cd INNER JOIN t_cardinfo c on c.fcardsn=cd.fcardsn ")
 		.append("INNER JOIN t_domain d on d.id=c.fdomainid INNER JOIN t_domain_dweller tdd on tdd.fdomainid=d.id ")
-		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1 )o where 1=1 ");
+		.append("INNER JOIN t_dweller td on td.id=tdd.fdwellerid where fcardstatus='1' GROUP BY cd.ftime,d.fremark,td.fname )t )a where rn=1 )o where 1=1 ");
 		if(StringUtils.isNotBlank(cardRecord.getStartTime())&&StringUtils.isNotBlank(cardRecord.getEndTime())){
 			sb.append(" and o.fdate>=? and o.fdate<=? ");
 			values.add(cardRecord.getStartTime());
