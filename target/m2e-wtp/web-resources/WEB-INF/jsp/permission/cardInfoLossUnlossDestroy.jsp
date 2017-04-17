@@ -92,40 +92,43 @@ $(function(){
 						   //加载key
 			               $.post($path+"/mc/permission/getKey.do?a="+Math.random(),"domainId="+$("#lossAndOpenForm [name='domainId']").val(),function($key){
 			            	   if($key){
+			            		   //有秘钥的初始化key
+		                    	   if($key){
+		        	            	   var loadKey,RestoreCardKey,obj;
+	// 	        	            	   alert($key);
+		        	            	   var indata = "{\"key\":\""+$key+"\"}";
+		        	          	       try{
+		        	          	    	     sleep(100);
+		        	          		          loadKey = myactivex.LoadKey(indata);
+		        	          		         obj = jQuery.parseJSON(loadKey);
+		        	          		         if(obj.code!='0'){
+		        						    	  hiAlert("提示","秘钥不正确！");
+		        			       				     return false;
+		        						      }
+		        	            	   }catch(e){
+		        	            		   hiAlert("提示","加载密钥出错！");
+		        	       				     return false;
+		        	            	   }
+		        	            	 
+		        	            	   try {
+		        	            		   sleep(100);
+		        	            		    RestoreCardKey = myactivex.RestoreCardKey();
+		        	            		    obj = jQuery.parseJSON(RestoreCardKey);
+	// 	        	            		    alert(obj.toSource());
+		        	            		    if(obj.code!='0'){
+		        						    	  hiAlert("提示","注销卡片失败！");
+		        			       				     return false;
+		        						      }
+		        		       			} catch (e) {
+		        		       			   hiAlert("提示","卡片秘钥还原失败！");
+		        		       			   return false;
+		        		       			}
+		                    	   }
 				            	   $.post($path+"/mc/permission/lossUnlossDestroy.do",data,function($data){
 				        			   if($data){
 				        			        hiAlert("提示",$data);
+				        			        return false;
 				        			   }else{
-				        				   //有秘钥的初始化key
-				                    	   if($key){
-				        	            	   var loadKey,RestoreCardKey,obj;
-			// 	        	            	   alert($key);
-				        	            	   var indata = "{\"key\":\""+$key+"\"}";
-				        	          	       try{
-				        	          		          loadKey = myactivex.LoadKey(indata);
-				        	          		         obj = jQuery.parseJSON(loadKey);
-				        	          		         if(obj.code!='0'){
-				        						    	  hiAlert("提示","秘钥不正确！");
-				        			       				     return false;
-				        						      }
-				        	            	   }catch(e){
-				        	            		   hiAlert("提示","加载密钥出错！");
-				        	       				     return false;
-				        	            	   }
-				        	            	 }
-				        	            	   try {
-				        	            		    RestoreCardKey = myactivex.RestoreCardKey();
-				        	            		    obj = jQuery.parseJSON(RestoreCardKey);
-			// 	        	            		    alert(obj.toSource());
-				        	            		    if(obj.code!='0'){
-				        						    	  hiAlert("提示","注销卡片失败！");
-				        			       				     return false;
-				        						      }
-				        		       			} catch (e) {
-				        		       			   hiAlert("提示","卡片秘钥还原失败！");
-				        		       			   return false;
-				        		       			}
-				        				   
 				              			   $("#unnormalModal").modal("hide");
 				              			  $("#tableShowList").bootstrapTable('refresh', {
 				              				url: $path+'/mc/room/showList.do',

@@ -227,15 +227,15 @@ public class InfoPublishBizImpl implements IInfoPublishBiz {
 		//日期转换
 		String expDateStr = infoPublish.getExpDateStr();
 		if(StringUtils.isNotBlank(expDateStr)){
-			Date expDate = DateHelper.strParseDate(expDateStr, "yyyy-MM-dd HH:mm:ss");
-			infoPublish.setNew_expdate(expDate);
+			Date expDate = DateHelper.strParseDate(expDateStr, "yyyy-MM-dd");
+			infoPublish.setExpDate(expDate);
 		}
 		//日期转换
-		String startTime = infoPublish.getStartTime();
-		if(StringUtils.isNotBlank(startTime)){
-			Date fstartTime = DateHelper.strParseDate(startTime, "yyyy-MM-dd HH:mm:ss");
-			infoPublish.setFstartTime(fstartTime);
-		}
+//		String startTime = infoPublish.getStartTime();
+//		if(StringUtils.isNotBlank(startTime)){
+//			Date fstartTime = DateHelper.strParseDate(startTime, "yyyy-MM-dd HH:mm:ss");
+//			infoPublish.setFstartTime(fstartTime);
+//		}
 		 //设置添加人
 		String operator = "";
 		//普通管理员 的真实姓名已经包含 admin

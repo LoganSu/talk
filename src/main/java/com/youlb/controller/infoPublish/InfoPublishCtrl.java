@@ -101,17 +101,17 @@ public class InfoPublishCtrl extends BaseCtrl {
     			return "内容长度超出200字符！";
     		}
     	}
-    	if(StringUtils.isBlank(infoPublish.getStartTime())){
-    		return "生效时间不能为空！";
-    	}
-    	Date startTime = DateHelper.strParseDate(infoPublish.getStartTime(), "yyyy-MM-dd HH:mm:ss");
-    	if(new Date().getTime()>startTime.getTime()){
-    		return "生效时间要在今天以后！";
-    	}
+//    	if(StringUtils.isBlank(infoPublish.getStartTime())){
+//    		return "生效时间不能为空！";
+//    	}
+//    	Date startTime = DateHelper.strParseDate(infoPublish.getStartTime(), "yyyy-MM-dd HH:mm:ss");
+//    	if(new Date().getTime()>startTime.getTime()){
+//    		return "生效时间要在今天以后！";
+//    	}
     	if(StringUtils.isBlank(infoPublish.getExpDateStr())){
     		return "截止时间不能为空！";
     	}
-    	Date expDate = DateHelper.strParseDate(infoPublish.getExpDateStr(), "yyyy-MM-dd HH:mm:ss");
+    	Date expDate = DateHelper.strParseDate(infoPublish.getExpDateStr(), "yyyy-MM-dd");
     	if(new Date().getTime()>expDate.getTime()){
     		return "截止时间要在今天以后！";
     	}

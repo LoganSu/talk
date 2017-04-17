@@ -116,6 +116,7 @@ $(function(){
 				            	   var loadKey;
 				            	   var indata = "{\"key\":\""+$data+"\"}";
 				          	       try{ 
+				          	    	     sleep(100);
 				          		          loadKey = myactivex.LoadKey(indata);
 				            	   }catch(e){
 				            		   hiAlert("提示","加载密钥出错！");
@@ -123,11 +124,13 @@ $(function(){
 				            	   }
 			//             	       obj = jQuery.parseJSON(loadKey);
 								   //验证卡片是否合法
+								   sleep(100);
 								   obj = jQuery.parseJSON(myactivex.IsValidCard());
 			// 					   alert(myactivex.IsValidCard());
 								   if(obj.code!='0'){
 									   try{
 			// 							   alert(myactivex.InitCardKey_1());
+			                               sleep(100);
 										   obj = jQuery.parseJSON(myactivex.InitCardKey_1());
 									      if(obj.code!='0'){
 									    	  hiAlert("提示","此为非法卡片，请更换卡片！");

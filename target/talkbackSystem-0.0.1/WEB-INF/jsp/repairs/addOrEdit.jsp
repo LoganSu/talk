@@ -40,6 +40,8 @@ $(function(){
 // 	})
 })
 		  function zTreeOnCheck(event, treeId, treeNode){
+	           zTreeObj.checkAllNodes(false);
+	           zTreeObj.checkNode(treeNode,true,false);
 			  var nodes = zTreeObj.getCheckedNodes(true);
 			  $("#repairssaveForm .domainId").val(treeNode.id);
 			  $.post($path+"/mc/room/getAddressByDomainId.do","domainId="+treeNode.id,function($address){
@@ -85,7 +87,7 @@ $(function(){
                          <span class="address">${repairs.address}</span></div></td>
               </tr>
                <tr>
-                <td><div class="firstFont">内容：</div></td>
+                <td><div class="firstFont"><span class="starColor">*</span>内容：</div></td>
                 <td><div>
                       <textarea name="serviceContent" class="form-control" rows="6" cols="10" style="width: 300px" maxlength="200">${repairs.serviceContent}</textarea>
                 </div></td>

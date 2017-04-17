@@ -27,11 +27,11 @@
           <property name="driverClass" value="org.postgresql.Driver"></property>
 
 		  <!-- 最大链接数-->
-		  <property name="maxPoolSize" value="10" />
+		  <property name="maxPoolSize" value="5" />
 		  <!-- 最少链接数-->
 		  <property name="minPoolSize" value="5" />
 		  <!-- 初始化链接池 -->
-		  <property name="initialPoolSize" value="10" />
+		  <property name="initialPoolSize" value="5" />
 		  <!-- 连接池每次同时获得的链 接数 -->
 		  <property name="acquireIncrement" value="5" />
 		  <!-- 最大失效时间 -->

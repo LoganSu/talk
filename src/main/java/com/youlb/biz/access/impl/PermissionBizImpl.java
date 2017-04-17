@@ -242,7 +242,7 @@ public class PermissionBizImpl implements IPermissionBiz {
 //				cardSqlDao.executeSql(sql1, new Object[]{domainSn,cardInfo.getCardSn()});
 //			}
 //		}
-				String deviceCount = "";
+//				String deviceCount = "";
 		//用户卡
 		if("1".equals(cardInfo.getCardBelongs())){
 			//更新办卡次数

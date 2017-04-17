@@ -40,7 +40,7 @@
                 <td><div>
                    <select name="targetDevice" class="form-control">
                       <option value="">--全部--</option>
-                      <option value="1">门口机</option>
+<!--                       <option value="1">门口机</option> -->
                       <option value="2">移动端</option>
                    </select>
                 </div></td>

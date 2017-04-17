@@ -133,7 +133,7 @@ public class InfoPublish extends BaseModel {
 	}
 	public String getExpDateStr() {
 		if(expDate!=null){
-			expDateStr=DateHelper.dateFormat(expDate, "yyyy-MM-dd HH:mm:ss");
+			expDateStr=DateHelper.dateFormat(expDate, "yyyy-MM-dd");
 		}
 		return expDateStr;
 	}

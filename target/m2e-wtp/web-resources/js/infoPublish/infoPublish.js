@@ -50,6 +50,10 @@ $(function(){
 				 hiAlert("提示","请选择本运营商发布的公告发布！");
 				 return false;
 			}
+			if(item.statusStr=="已发布"){
+				 hiAlert("提示","请选择未发布公告发布！");
+				 return false;
+			}
 		 }
 		 var ids = getSelectedIds();
 		 
