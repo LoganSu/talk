@@ -18,7 +18,7 @@ import com.youlb.utils.exception.BizException;
 
 /**
  * 荣邦银联数据提供接口
- * @author Administrator
+ * @author Pengjingyu
  *
  */
 @Controller

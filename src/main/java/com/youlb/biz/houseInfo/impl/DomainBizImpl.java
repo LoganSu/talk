@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.youlb.biz.houseInfo.IDomainBiz;
+import com.youlb.controller.access.HouseTree;
 import com.youlb.dao.common.BaseDaoBySql;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
@@ -520,5 +521,14 @@ public class DomainBizImpl implements IDomainBiz {
 	public List<Object[]> getDomainIdAndSipByEntityId(String id) throws BizException{
 		String sql="SELECT d.id,u.user_sip from  t_domain d left JOIN users u on u.local_sip=d.id where d.fentityid=?";
 		return domainSqlDao.pageFindBySql(sql, new Object[]{id});
+	}
+    
+	/**
+	 * 其他公司需要用到赛翼的门口机需要同步房产数据和住户数据
+	 */
+	@Override
+	public void insertHouseInfo(HouseTree houseTree) {
+		//删除
+		
 	}
 }

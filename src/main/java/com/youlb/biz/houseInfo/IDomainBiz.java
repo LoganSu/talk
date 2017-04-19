@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.http.client.ClientProtocolException;
 
 import com.youlb.biz.common.IBaseBiz;
+import com.youlb.controller.access.HouseTree;
 import com.youlb.entity.baseInfo.Carrier;
 import com.youlb.entity.common.Domain;
 import com.youlb.entity.houseInfo.Room;
@@ -115,4 +116,9 @@ public interface IDomainBiz extends IBaseBiz<Domain> {
      * @return
      */
 	List<Object[]> getDomainIdAndSipByEntityId(String id)throws BizException;
+	/**
+	 * 
+	 * @param houseTree
+	 */
+	void insertHouseInfo(HouseTree houseTree);
 }
