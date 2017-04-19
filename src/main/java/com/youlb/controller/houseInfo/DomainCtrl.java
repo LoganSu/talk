@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.youlb.biz.houseInfo.IDomainBiz;
 import com.youlb.controller.common.BaseCtrl;
 import com.youlb.entity.common.Domain;
+import com.youlb.entity.privilege.Operator;
 import com.youlb.utils.exception.BizException;
 @Controller
 @RequestMapping("/mc/domain")
@@ -49,7 +50,8 @@ public class DomainCtrl extends BaseCtrl {
 		}
 		level = level==null?0:level+1;
 		try {
-			List<Domain> domainList = domainBiz.getDomainByParentId(id,getLoginUser(),isAll);
+			Operator loginUser = getLoginUser();
+			List<Domain> domainList = domainBiz.getDomainByParentId(id,loginUser,isAll);
 			if(domainList!=null&&!domainList.isEmpty()){
 				for(Domain domain:domainList){
 					HashMap<String,Object> hm = new HashMap<String,Object>();   
@@ -61,13 +63,13 @@ public class DomainCtrl extends BaseCtrl {
 						   hm.put("nocheck", true);
 						}
 					}
-					List<Domain> child = domainBiz.getDomainByParentId(domain.getId(),getLoginUser(),isAll);
+					List<Domain> child = domainBiz.getDomainByParentId(domain.getId(),loginUser,isAll);
 					if(showLast){
 						if(child!=null&&!child.isEmpty()){
 							hm.put("isParent", true);
 						}else{
 							//普通用户在没有子节点的时候 需要显示子节点页面 最末级不显示
-							if(getLoginUser().getIsAdmin()!=2&&level!=4){
+							if(loginUser.getIsAdmin()!=null&&loginUser.getIsAdmin()!=2&&level!=4){
 								hm.put("isParent", true);
 							}else{
 								hm.put("isParent", false);
@@ -78,7 +80,7 @@ public class DomainCtrl extends BaseCtrl {
 							hm.put("isParent", true);
 						}else{
 							//普通用户在没有子节点的时候 需要显示子节点页面 最末级不显示
-							if(getLoginUser().getIsAdmin()!=2&&level!=3){
+							if(loginUser.getIsAdmin()!=null&&loginUser.getIsAdmin()!=2&&level!=3){
 								hm.put("isParent", true);
 							}else{
 								hm.put("isParent", false);
